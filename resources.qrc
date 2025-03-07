@@ -1,0 +1,15 @@
+<RCC>
+  <qresource prefix="icon">
+    <file>resources/icon/less_than_hover.svg</file>
+    <file>resources/icon/more_than_hover.svg</file>
+    <file>resources/icon/multiply_hover.svg</file>
+    <file>resources/icon/less_than.svg</file>
+    <file>resources/icon/app_icon.ico</file>
+    <file>resources/icon/icons8_file_explorer.ico</file>
+    <file>resources/icon/icons8_opened_folder.ico</file>
+    <file>resources/icon/icons8_rotate_left.ico</file>
+    <file>resources/icon/icons8_rotate_right.ico</file>
+    <file>resources/icon/more_than.svg</file>
+    <file>resources/icon/multiply.svg</file>
+  </qresource>
+</RCC>

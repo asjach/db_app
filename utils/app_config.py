@@ -1,0 +1,8 @@
+ROOT_FOLDER = "D:/OneDrive - MI Persis Rahayu/Database/dokumen"
+FOLDER_SISWA = "siswa"
+FOLDER_GURU = "guru"
+FOLDER_MADRASAH = "madrasah"
+DEBUG_GET = False
+DEBUG_UPDATE = False
+DEBUG_ONE = False
+DEBUG_LIST = False

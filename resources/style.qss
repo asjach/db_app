@@ -1,0 +1,126 @@
+/* RESET EVERYTHING 
+QAbstractScrollArea,QCheckBox,QColumnView,QComboBox,QDateEdit,QDateTimeEdit,QDialog,QDialogButtonBox,
+QDockWidget,QDoubleSpinBox,QFrame,QGroupBox,QHeaderView,QLabel,QLineEdit,QListView,QListWidget,
+QMainWindow,QMenu,QMenuBar,QMessageBox,QProgressBar,QPushButton,QRadioButton,QScrollBar,
+QSizeGrip,QSlider,QSpinBox,QSplitter,QStatusBar,QTabBar,QTabWidget,QTableView,QTableWidget,
+QTextEdit,QTimeEdit,QToolBar,QToolButton,QToolBox,QToolTip,QTreeView,QTreeWidget,QWidget {
+    padding: 0px;
+    margin: 0px;
+    border: 0px;
+    border-style: none;
+    background-color: #e6e6e6;  
+    
+}  */
+
+
+#prev_jenjang, #prev_tapel, #prev_tingkat, #prev_kelas, #prev_keaktifan, #prev_order_by, #prev_data, #prev_kolom {
+    image: url(:/icon/resources/icon/less_than.svg);
+    width: 15px;
+    height: 15px;
+    padding: 5px;
+    border-radius: 1px;
+}
+
+#prev_jenjang:hover, #prev_tapel:hover, #prev_tingkat:hover, #prev_kelas:hover, #prev_keaktifan:hover, #prev_order_by:hover, #prev_data:hover, #prev_kolom:hover  {
+    image: url(:/icon/resources/icon/less_than_hover.svg);
+	background-color: #1EFFFFFF;
+}
+
+#prev_jenjang:pressed, #prev_tapel:pressed, #prev_tingkat:pressed, #prev_kelas:pressed, #prev_keaktifan:pressed, #prev_order_by:pressed, #prev_data:pressed, #prev_kolom:pressed{
+   background-color: #28FFFFFF;
+}
+
+
+#next_jenjang, #next_tapel, #next_tingkat, #next_kelas, #next_keaktifan, #next_order_by, #next_data, #next_kolom {
+   	image: url(:/icon/resources/icon/more_than.svg);
+       width: 15px;
+       height: 15px;
+       padding: 5px;
+       border-radius: 1px;
+}
+
+#next_jenjang:hover, #next_tapel:hover, #next_tingkat:hover, #next_kelas:hover, #next_keaktifan:hover, #next_order_by:hover, #next_data:hover,  #next_kolom:hover {
+    image: url(:/icon/resources/icon/more_than_hover.svg);
+	background-color: #1EFFFFFF;
+}
+
+#next_jenjang:pressed, #next_tapel:pressed, #next_tingkat:pressed, #next_kelas:pressed, #next_keaktifan:pressed, #next_order_by:pressed {
+   background-color: #28FFFFFF;
+}
+
+
+#label_jenjang, #label_tapel, #label_tingkat, #label_kelas
+{
+	border:none;
+	background-color:transparent;
+	margin:0px 5px;
+}
+
+
+
+
+
+QTabWidget{
+    margin-top:10px;
+    border: 1px solid red;
+}
+
+/* QTabWidget::pane{
+  border: 1px dashed green;
+} */
+
+QTabWidget::tab-bar {
+    left: 10px;
+}
+
+/* QTabBar{
+  background-color: #1e1e1e;
+} */
+
+QTabBar::tab {
+    background: blue;
+    border: 1px solid yellow;
+    padding: 3px 3px;   
+}
+QTabBar::tab:hover {
+    background: green;
+}
+
+QTabBar::tab:selected {
+    background: rgb(142, 135, 207);
+    color:green;
+}
+QTabBar::tab:pressed {
+    background: cyan;
+}
+QTabBar::tab:focus {
+    border-color: magenta;
+}
+
+/* QTabBar::tab:top{
+  background-color: aqua;
+  border-top-color: red;
+  border-top-width: 3px;
+} */
+QTabBar::tab:top:selected{
+  background-color: aqua;
+  border-top-color: red;
+  border-top-width: 3px;
+}
+
+
+
+QTabBar::close-button {
+  border: 0;
+  margin-right: -10px;
+  padding: 3px;
+  image: url(":/icon/resources/icon/multiply.svg");
+}
+
+QTabBar::close-button:hover {
+  image: url(":/icon/resources/icon/multiply_hover.svg");
+}
+
+QTabBar::close-button:pressed {
+  image: url(":/icon/resources/icon/multiply.svg");
+}
