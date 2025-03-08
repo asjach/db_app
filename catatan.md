@@ -8,6 +8,7 @@ pip install mysql-connector-python PySide6 openpyxl python-dateutil python-doten
 ## convert ui to py
 
 pyside6-uic -o ui/ui_main.py ui/sources/main.ui
+pyside6-uic -o ui/ui_page_with_table_widget.py ui/sources/page_with_table_widget.ui
 
 
 ## PAGE

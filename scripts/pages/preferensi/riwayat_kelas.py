@@ -10,6 +10,7 @@ class PageRiwayatKelas(QWidget, Ui_Form):
         self.parent = parent
         self.jenjang= None
         self.tapel = None
+        self.id_kelas = None
         self.cbo_jenjang = self.parent.cbo_jenjang
         self.cbo_tapel = self.parent.cbo_tapel
         self.SQL = RiwayatKelas()
@@ -58,7 +59,6 @@ class PageRiwayatKelas(QWidget, Ui_Form):
     def delete_jenjang(self):
         sukses = delete_by_id('jenjang', 'id', self.id)
         if sukses: self.fill_tabel_jenjang()
-
 
     def fill_tabel_tapel(self):
         data = self.SQL.get_tapel()

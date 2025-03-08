@@ -1,5 +1,5 @@
 from PySide6.QtWidgets import QWidget, QMainWindow
-from ui.ui_page_daftar_kelas import Ui_Form
+from ui.ui_page_with_table_widget import Ui_Form
 from models.siswa.daftar_kelas import DaftarKelas
 from utils.fungsi.general_functions import *
 from utils.key_value.kolom_sql import *
@@ -24,9 +24,9 @@ class PageDaftarKelas(QWidget, Ui_Form):
         self.txt_kolom = self.parent.cbo_kolom.currentText()
 
     def _signals_slots(self):
-        self.tbl_daftar_kelas.itemSelectionChanged.connect(
-            lambda: table_selected(self.tbl_daftar_kelas, self, self.parent))
-        self.tbl_daftar_kelas.itemChanged.connect(self.update_table)
+        self.tbl_widget.itemSelectionChanged.connect(
+            lambda: table_selected(self.tbl_widget, self, self.parent))
+        self.tbl_widget.itemChanged.connect(self.update_table)
     
     def show_page(self):
         self._dynamic_attributs()
@@ -34,28 +34,27 @@ class PageDaftarKelas(QWidget, Ui_Form):
 
     # @measure_time
     def fill_table_widget(self):
-        fill_table(
-            table_name=self.tbl_daftar_kelas,
-            get_function=self.SQL.get_daftar_kelas,
-            table_params={},
-            get_params={
-                'jenjang' : self.txt_jenjang,
-                'tapel' : self.txt_tapel,
-                'tingkat' : self.txt_tingkat,
-                'kelas' : self.txt_kelas,
-                # 'opsi_kolom':self.opsi_kolom,
-                'search_by':self.txt_search_by,
-                'search' : self.txt_search,
-                'order_by' : self.txt_order,
-            },
+        data = self.SQL.get_daftar_kelas(
+            jenjang= self.txt_jenjang,
+            tapel = self.txt_tapel,
+            tingkat = self.txt_tingkat,
+            kelas = self.txt_kelas,
+            opsi_kolom=self.opsi_kolom,
+            search_by=self.txt_search_by,
+            search = self.txt_search,
+            order_by = self.txt_order,
+        )
+        generate_table(
+            data=data,
+            table=self.tbl_widget,
+
         )
 
+
     def update_table(self):
-        tabel = self.tbl_daftar_kelas
+        tabel = self.tbl_widget
         current_column = tabel.currentColumn()
         header_item = tabel.horizontalHeaderItem(current_column)
-        
-        
         if header_item is not None:
             nama_kolom = header_for_db(header_item.text())
             nilai = tabel.item(tabel.currentRow(), tabel.currentColumn()).text().strip()

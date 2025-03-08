@@ -36,25 +36,6 @@ class ConnectDB:
         if self.my_connector is None or not self.my_connector.is_connected():
             self.connect()
 
-    # def get_data(self, sql, params=None):
-    #     """Mengambil semua data berdasarkan query"""
-    #     if DEBUG_GET:
-    #         print(sql, params)
-    #     try:
-    #         self.reconnect_if_needed()
-    #         with self.my_connector.cursor(dictionary=True) as cursor:
-    #             cursor.execute(sql, params or ())
-    #             return cursor.fetchall()
-
-    #     except Exception as E:
-    #         print("ERROR get_data:", E)
-    #         return []
-    #     finally:
-    #         if self.my_cursor:
-    #             self.my_cursor.close()
-    #         if self.my_connector:
-    #             self.my_connector.close()
-
     def get_data(self, sql, params=None, return_fields=False):
         """Mengambil semua data berdasarkan query, dengan opsi untuk mengembalikan nama field"""
         if DEBUG_GET:

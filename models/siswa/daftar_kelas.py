@@ -5,14 +5,13 @@ class DaftarKelas(ConnectDB):
     def __init__(self, database_name=None):
         super().__init__(database_name)
     
-    
-#DAFTAR KELAS
-    def get_daftar_kelas(self, jenjang, tapel, tingkat, kelas, search_by, search, order_by):
+    def get_daftar_kelas(self, jenjang, tapel, tingkat, kelas, search_by, search, order_by, opsi_kolom):
         order_by = opsi_order(order_by)
         search_by = opsi_search(search_by)
         sql = f"""
-            SELECT      * 
-            FROM        daftar_kelas_default
+            SELECT      {opsi_kolom} 
+            FROM        siswa_riwayat r
+            JOIN        siswa s ON s.nis_lokal = r.nis_lokal
             WHERE       jenjang = %s
                 AND     tapel = %s
                 AND     tingkat LIKE %s
