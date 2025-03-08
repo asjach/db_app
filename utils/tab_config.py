@@ -112,5 +112,10 @@ TAB_CONFIG = {
         "show_page"     : "ALAMAT",
 
     },
+    "Sekolah": {
+        "search_by": ['Nama Sekolah', ],
+        "hidden_frame": ['jenjang', 'tapel', 'tingkat', 'kelas'],
+        "show_page": "SEKOLAH",
+    }
 }
 

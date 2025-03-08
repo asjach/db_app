@@ -76,6 +76,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
 
         self.actionRiwayatKelas.triggered.connect(lambda: self.add_tab(self.RIWAYAT_KELAS, "Riwayat Kelas"))
         self.actionAlamat.triggered.connect(lambda: self.add_tab(self.ALAMAT, "Alamat"))
+        self.actionSekolah.triggered.connect(lambda: self.add_tab(self.SEKOLAH, "Sekolah"))
         self.actionInput_By_Excel.triggered.connect(self.show_input_excel)
         self.actionCari.triggered.connect(self.show_detail_siswa)
         self.actionInput_Preferensi.triggered.connect(self.show_input_preferensi)
@@ -122,6 +123,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         # PREFERENSI
         self.RIWAYAT_KELAS = PageRiwayatKelas(self)
         self.ALAMAT = PageAlamat(self)
+        self.SEKOLAH = PageSekolah(self)
 
 
     def add_combo_value(self):
