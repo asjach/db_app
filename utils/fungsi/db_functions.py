@@ -35,7 +35,10 @@ def delete_by_id(table_sql, id_name, id_value):
     msg.setText(f"Pilih \"Ya\" untuk menghapus data terpiilh\nID\t: {id_name} value: {id_value}")
     aksi = msg.exec()
     if aksi == QMessageBox.Ok:
-        sql = "DELETE FROM {} WHERE {} = {}".format(table_sql, id_name, id_value)
+        if id_name == 'id':
+            sql = "DELETE FROM {} WHERE {} = {}".format(table_sql, id_name, id_value)
+        elif id_name in ['id_guru', 'nis_lokal']:
+            sql = "DELETE FROM {} WHERE {} = '{}'".format(table_sql, id_name, id_value)
         return con.update_data(sql)
     else:
         return False

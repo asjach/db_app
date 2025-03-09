@@ -132,8 +132,8 @@ class DialogDetailSiswa(QDialog, Ui_Form):
         data = self.SQL.get_dokumen_path(nis_lokal)
         if data:
             for item in data:
-                folder = value_from_db("FOLDER_DOKUMEN_SISWA")
-                filepath = f"{folder}/{item['namafile']}"
+                folder = value_from_db("DOKUMEN_PATH")
+                filepath = f"{folder}/siswa/{item['namafile']}"
                 combo.blockSignals(True)
                 combo.addItem(f'{item['jenis_dokumen']}', userData=filepath)
                 combo.blockSignals(False)

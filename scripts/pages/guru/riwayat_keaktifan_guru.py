@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import QWidget, QMainWindow
 from ui.ui_page_riwayat_keaktifan_guru import Ui_Form
-from models.guru.guru import ModelGuru
+from models.guru.riwayat_keaktifan import RiwayatKeaktifan
 from utils.fungsi.general_functions import *
 from utils.key_value.kolom_sql import GURU
 
@@ -9,7 +9,7 @@ class PageKeaktifanGuru(QWidget, Ui_Form):
         super().__init__(parent)
         self.setupUi(self)
         self.parent = parent
-        self.SQL = ModelGuru()
+        self.SQL = RiwayatKeaktifan()
         self.tbl_keaktifan.currentItemChanged.connect(lambda: 
             table_selected(self.tbl_keaktifan, self, self.parent))
         self.tbl_keaktifan.itemChanged.connect(self.update_from_table)

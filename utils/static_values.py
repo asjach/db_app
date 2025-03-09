@@ -83,7 +83,7 @@ LEFT_COLUMN = [
     "ibu_nama", "nama_ibu", "ibu", "alamat_sekolah_asal", "kepala_keluarga", "jalan",
     "kampung", "alamat", "alamat_full", "nama_sekolah_asal", "value", "key", "orangtua",
     "namafile", "jenis_dok", "alamat_sekolah_tujuan", "alamat_sekolah", "nama_dokumen",
-    "wali_kelas", "catatan_walas", "pelajaran", "mata_pelajaran", "nama_sekolah"
+    "wali_kelas", "catatan_walas", "pelajaran", "mata_pelajaran", "nama_sekolah", "nilai", "kunci"
 ]
 DK_ORDER = ('Nama', 'JK', 'Urutan', 'Ayah', 'Ibu', 'Alamat')
 DK_SEARCH = ('nama_lengkap', 'ayah_nama', 'ibu_nama', 'alamat', 'status_awal', 'status_akhir')

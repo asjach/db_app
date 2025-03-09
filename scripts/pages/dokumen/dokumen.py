@@ -1,11 +1,10 @@
 from PySide6.QtWidgets import QWidget, QMainWindow
 from ui.ui_page_dokumen import Ui_Form
 from models.dokumen import ModelDokumen
-from utils.app_config import *
+# from utils.app_config import *
 from scripts.widgets.dokumen_viewer import DokumenViewer
-from utils.fungsi.functions import *
+from utils.fungsi.general_functions import *
 from utils.static_values import TEMPLATE_KETERANGAN
-from utils.fungsi.table_functions import generate_table, set_attributes_values
 
 
 class PageDokumen(QWidget, Ui_Form):
@@ -143,7 +142,7 @@ class PageDokumen(QWidget, Ui_Form):
             self.line_input_keterangan.setText(self.keterangan)
             self.line_namafile_db.setText(self.namafile)
             target = self.cbo_target.currentText().lower()
-            self.path = f"{ROOT_FOLDER}/{target}/{self.namafile}"
+            self.path = f"{value_from_db('DOKUMEN_PATH')}/{target}/{self.namafile}"
             self.plain_path_db.setPlainText(self.path)
             if not self.radio_input.isChecked():
                 self.dokumen_viewer.loadFile(self.path)
@@ -385,8 +384,8 @@ class PageDokumen(QWidget, Ui_Form):
         keterangan_input = self.line_input_keterangan.text()
         source = self.plain_path_source.toPlainText()
         target = self.cbo_target.currentText().lower()
-        folder_tujuan_save = f"{ROOT_FOLDER}/{target}/"
-        folder_tujuan_delete = f"{ROOT_FOLDER}/{target}/delete/"
+        folder_tujuan_save = f"{value_from_db('DOKUMEN_PATH')}/{target}/"
+        folder_tujuan_delete = f"{value_from_db('DOKUMEN_PATH')}/{target}/delete/"
         nama_baru = self.cbo_daftar2.currentText()
         path_browse_input = source
         jenis_dok = self.cbo_jenis_dokumen.currentText()
@@ -457,7 +456,6 @@ class PageDokumen(QWidget, Ui_Form):
                 self.create_attributes(namafile_db, path_asal, namafile_tujuan, path_tujuan, None, None)
                 self.btn_eksekusi.setEnabled(True)
         elif self.radio_move.isChecked():
-            # self.move_selected()
             if self.cbo_daftar.currentText() != self.cbo_daftar2.currentText():
                 path_asal = folder_tujuan_save + namafile_db
                 namafile_tujuan = create_filename(nama_baru,jenis_dok_db,
@@ -466,7 +464,6 @@ class PageDokumen(QWidget, Ui_Form):
                 self.create_attributes(namafile_db, path_asal, namafile_tujuan, path_tujuan, None, None)
                 self.btn_eksekusi.setEnabled(True)
         elif self.radio_delete.isChecked():
-            # self.delete_selected()
             if self.plain_path_db.toPlainText() != '':
                 path_delete = folder_tujuan_delete + namafile_db
                 self.create_attributes(namafile_db, path_db, None, None, namafile_db, path_delete)

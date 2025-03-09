@@ -83,15 +83,26 @@ TAB_CONFIG = {
     },
 
     "Dokumen": {
+        "show_page"     : "DOKUMEN",
         "order_by"      : ['Nama', 'JK',],
         "search_by"     : ['Nama', ],
-        "show_page"     : "DOKUMEN",
     },
 
-    "Pengaturan Kegiatan": {
-        "hidden_frame"  : [ 'jenjang', 'tingkat', 'kelas'], 
-        "show_page"     : "PENGATURAN_KEGIATAN",
-    },
+    # "Pengaturan Kegiatan": {
+    #     "hidden_frame"  : [ 'jenjang', 'tingkat', 'kelas'], 
+    #     "show_page"     : "PENGATURAN_KEGIATAN",
+    # },
+
+    "Riwayat Kegiatan": {
+            "show_page"     : "RIWAYAT_KEGIATAN",
+            "hidden_frame"  : [ 'jenjang', 'tingkat', 'kelas'], 
+        },
+
+    "Peserta": {
+            "show_page"     : "PESERTA",
+            "search_by"     : ['Nama', ],
+            "order_by"      : ['Nama', 'JK',],
+        },
 
     "Input Nilai": {
         "show_page"     : "INPUT_NILAI",
@@ -116,6 +127,12 @@ TAB_CONFIG = {
         "search_by": ['Nama Sekolah', ],
         "hidden_frame": ['jenjang', 'tapel', 'tingkat', 'kelas'],
         "show_page": "SEKOLAH",
-    }
+    },
+    "Key Value": {
+        "search_by": ['kunci', ],
+        "hidden_frame": ['jenjang', 'tapel', 'tingkat', 'kelas'],
+        "show_page": "KEY_VALUE",
+    },
+
 }
 

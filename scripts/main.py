@@ -70,16 +70,19 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.actionRiwayatKeaktifan.triggered.connect(lambda: self.add_tab(self.KEAKTIFANGURU, "Keaktifan Guru"))
         self.actionRiwayat_Mengajar.triggered.connect(lambda: self.add_tab(self.RIWAYAT_MENGAJAR, "Riwayat Mengajar"))
         self.actionInput_Dokumen.triggered.connect(lambda: self.add_tab(self.DOKUMEN, "Dokumen"))
-        self.actionPengaturanKegiatan.triggered.connect(lambda:self.add_tab(self.PENGATURAN_KEGIATAN, "Pengaturan Kegiatan"))
+        # self.actionPengaturanKegiatan.triggered.connect(lambda:self.add_tab(self.PENGATURAN_KEGIATAN, "Pengaturan Kegiatan"))
+        self.actionKegiatan_Evaluatif.triggered.connect(lambda: self.add_tab(self.RIWAYAT_KEGIATAN, "Riwayat Kegiatan"))
+        self.actionPeserta.triggered.connect(lambda: self.add_tab(self.PESERTA, "Peserta"))
         self.actionInput_Nilai.triggered.connect(lambda: self.add_tab(self.INPUT_NILAI, "Input Nilai"))
         self.actionRekap.triggered.connect(lambda: self.add_tab(self.REKAP_NILAI, 'Rekap Nilai'))
 
         self.actionRiwayatKelas.triggered.connect(lambda: self.add_tab(self.RIWAYAT_KELAS, "Riwayat Kelas"))
         self.actionAlamat.triggered.connect(lambda: self.add_tab(self.ALAMAT, "Alamat"))
         self.actionSekolah.triggered.connect(lambda: self.add_tab(self.SEKOLAH, "Sekolah"))
+        self.actionKey_Value.triggered.connect(lambda: self.add_tab(self.KEY_VALUE, "Key Value"))
+
         self.actionInput_By_Excel.triggered.connect(self.show_input_excel)
         self.actionCari.triggered.connect(self.show_detail_siswa)
-        self.actionInput_Preferensi.triggered.connect(self.show_input_preferensi)
     
     def filter_connections(self):
         fungsi_filter_buttons(self.cbo_jenjang, self.prev_jenjang, self.next_jenjang,self.label_jenjang)
@@ -116,7 +119,8 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.DOKUMEN = PageDokumen(self)
 
         #PAGE NILAI
-        self.PENGATURAN_KEGIATAN = PagePengaturanKegiatan(self)
+        self.RIWAYAT_KEGIATAN = PageRiwayatKegiatan(self)
+        self.PESERTA = PagePeserta(self)
         self.INPUT_NILAI = PageInputNilai(self)
         self.REKAP_NILAI = PageRekapNilai(self)
 
@@ -124,6 +128,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.RIWAYAT_KELAS = PageRiwayatKelas(self)
         self.ALAMAT = PageAlamat(self)
         self.SEKOLAH = PageSekolah(self)
+        self.KEY_VALUE = PageKeyValue(self)
 
 
     def add_combo_value(self):
@@ -142,17 +147,15 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.requery_kelas()
 
     def requery_kelas(self):
-        data_kelas = self.model_main.get_list_kelas(
+        data_kelas = self.model_main.get_kelas(
             jenjang=self.cbo_jenjang.currentText(),
             tapel=self.cbo_tapel.currentText(),
-            tingkat=self.cbo_tingkat.currentText()
-        )
-        # self.cbo_kelas.blockSignals(True)
+            tingkat=self.cbo_tingkat.currentText())
         self.cbo_kelas.clear()
-        self.cbo_kelas.addItem("")
-        self.cbo_kelas.addItems(data_kelas or [self.cbo_tingkat.currentText()])
+        self.cbo_kelas.addItem("", userData=None)
+        for kelas in data_kelas:
+            self.cbo_kelas.addItem(kelas['kelas'], userData=kelas['id'])
         self.cbo_kelas.setCurrentIndex(0)
-        # self.cbo_kelas.blockSignals(False)
 
     def add_tab(self, page_class, title):
         existing_tabs = [self.main_tab.tabText(i) for i in range(self.main_tab.count())]
@@ -214,7 +217,6 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         if config and hasattr(self, config["show_page"]):
             getattr(self, config["show_page"]).show_page()
 
-
     def delayed_action(self, interval=200, update_text=None, is_search=False):
         if is_search and update_text != self.last_search_text:
             self.last_search_text = update_text
@@ -258,11 +260,6 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.INPUT_EXCEL = DialogInputExcel(self)
         self.INPUT_EXCEL.show_dialog()
         self.INPUT_EXCEL.show()
-
-    def show_input_preferensi(self):
-        self.INPUT_PREFERENSI = DialogInputPreferensi(self)
-        self.INPUT_PREFERENSI.show_dialog()
-        self.INPUT_PREFERENSI.show()
 
     def eventFilter(self, source, event):
         if event.type() == QEvent.ContextMenu:
@@ -308,7 +305,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         for parent_class in sub_class_guru:
             self.tabel_guru.extend(parent_class.findChildren(QTableWidget))
 
-        sub_class_nilai = [self.PENGATURAN_KEGIATAN, self.INPUT_NILAI]
+        sub_class_nilai = [self.INPUT_NILAI]
         self.tabel_nilai = []
         for parent_class in sub_class_nilai:
             self.tabel_nilai.extend(parent_class.findChildren(QTableWidget))

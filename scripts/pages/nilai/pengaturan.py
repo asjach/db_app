@@ -15,7 +15,6 @@ class PagePengaturanKegiatan(QWidget, Ui_Form):
         self.tingkat=None
         self.kegiatan=None
         self.tapel=None
-        # self.execute_insert_btn.setEnabled(False)
         self.kegiatan_tbl.itemSelectionChanged.connect(self.tbl_kegiatan_selected)
         self.kegiatan_tbl.itemChanged.connect(self.update_kegiatan)
         self.kelas_tbl.itemSelectionChanged.connect(self.kelas_tbl_selected)
@@ -40,6 +39,7 @@ class PagePengaturanKegiatan(QWidget, Ui_Form):
         self.kegiatan_cbo.setCurrentIndex(-1)
 
     def show_page(self):
+        print("PENGATURAN KEGIATAN")
         self.fill_riwayat_kegiatan()
 
     # TABEL RIWAYAT KEGIATAN
@@ -50,7 +50,7 @@ class PagePengaturanKegiatan(QWidget, Ui_Form):
             table=self.kegiatan_tbl,
             icon_akhir=":/icon/resources/icon/multiply.svg",
             fungsi_akhir=self.delete_kegiatan_riwayat,
-            hidden_column=[0,8, 9]
+            hidden_column=[]
         )
 
     def tbl_kegiatan_selected(self):
@@ -60,9 +60,6 @@ class PagePengaturanKegiatan(QWidget, Ui_Form):
         self.fill_kelas_riwayat()
         self.fill_peserta_tbl()
         self.fill_preview_tbl()
-        
-    def unused(self):
-        ...
         
     def update_kegiatan(self):
         sukses=handle_item_changed(
@@ -134,8 +131,6 @@ class PagePengaturanKegiatan(QWidget, Ui_Form):
                 self.id_kelas_line.clear()
                 self.wali_kelas_cbo.setCurrentIndex(-1)
 
-        
-
     #TABEL PESERTA
     def fill_peserta_tbl(self): 
         data = self.SQL.get_peserta_kegiatan(
@@ -198,7 +193,6 @@ class PagePengaturanKegiatan(QWidget, Ui_Form):
             if sukses:
                 self.fill_kelas_riwayat()
                 self.fill_peserta_tbl()
-
 
     #MAPEL
     def fill_tabel_mapel(self):

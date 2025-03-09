@@ -21,6 +21,8 @@ class PageSekolah(QWidget, Ui_Form):
             data = data,
             table=self.tbl_widget,
             column_names=fields,
+            icon_akhir=":/icon/resources/icon/multiply.svg",
+            fungsi_akhir=self.delete_sekolah,
         )
 
     def tbl_selected(self):

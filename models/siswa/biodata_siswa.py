@@ -47,4 +47,4 @@ class BiodataSiswa(ConnectDB):
         placeholders = ", ".join(["{} = %s".format(column) for column in data.keys()])
         sql = "UPDATE siswa SET {} WHERE nis_lokal= %s".format(placeholders)
         params = tuple(data.values()) + (data["nis_lokal"],)
-        return self.sql.update_data(sql, params)
+        return self.update_data(sql, params)

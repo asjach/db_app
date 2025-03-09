@@ -67,8 +67,6 @@ class InputNilai(ConnectDB):
     def cek_nilai_bulk(self, keys):
         if not keys:
             return {}
-        
-        # Keys = list of (id_peserta, mapel)
         placeholders = ",".join(["(%s, %s)" for _ in keys])
         sql = f"""
             SELECT id, id_peserta, mapel, nilai
@@ -77,8 +75,6 @@ class InputNilai(ConnectDB):
         """
         params = [item for key in keys for item in key]  # Flatten keys
         results = self.get_data(sql, params)
-        
-        # Buat dictionary dengan kunci (id_peserta, mapel)
         existing_dict = {(r['id_peserta'], r['mapel']): (r['id'], r['nilai']) for r in results}
         return existing_dict
 
@@ -91,7 +87,7 @@ class InputNilai(ConnectDB):
             VALUES (%s, %s, %s)
         """
         print("Insert data:", data)
-        row_count = self.update_data(sql, data)  # update_data akan pakai executemany
+        row_count = self.update_data(sql, data)
         return row_count
 
     def update_nilai_bulk(self, data):
@@ -104,7 +100,7 @@ class InputNilai(ConnectDB):
             WHERE id = %s
         """
         print("Update data:", data)
-        row_count = self.update_data(sql, data)  # update_data akan pakai executemany
+        row_count = self.update_data(sql, data)
         return row_count
     
     def cek_peserta_bulk(self, keys):
@@ -117,7 +113,7 @@ class InputNilai(ConnectDB):
             FROM kegiatan_peserta
             WHERE id IN ({placeholders})
         """
-        params = keys  # Keys sudah dalam format list of id_peserta
+        params = keys
         results = self.get_data(sql, params)
 
         existing_dict = {r['id']: {

@@ -31,8 +31,7 @@ pyside6-uic -o ui/ui_page_riwayat_mengajar.py ui/sources/page_riwayat_mengajar.u
 pyside6-uic -o ui/ui_page_dokumen.py ui/sources/page_dokumen.ui
 
 ### NILAI
-pyside6-uic -o ui/ui_page_pengaturan_kegiatan.py ui/sources/page_pengaturan_kegiatan.ui
-pyside6-uic -o ui/ui_page_input_peserta.py ui/sources/page_input_peserta.ui
+pyside6-uic -o ui/ui_page_peserta.py ui/sources/page_peserta.ui
 pyside6-uic -o ui/ui_page_legger.py ui/sources/page_legger.ui
 pyside6-uic -o ui/ui_page_input_nilai.py ui/sources/page_input_nilai.ui
 pyside6-uic -o ui/ui_page_rekap_nilai.py ui/sources/page_rekap_nilai.ui
