@@ -128,6 +128,7 @@ def fill_table(table_name, get_function, get_params={}, table_params={}, ):
 
 def table_selected(table_name, objek, parent=None, atribut=[]):
     set_attributes_values(objek, table_name, parent, *atribut)
+    return get_selected_table_data(table_name)
 
 
 def add_icon_button(table:QTableWidget, row_num, col_num, icon, fungsi):
@@ -431,6 +432,37 @@ def get_row_data(tabel_ui: QTableWidget, numeric_fields, date_fields, row):
 
     return row_data
 
+def get_selected_table_data(table: QTableWidget, target_columns=None):
+    tabel = table
+    selected_ranges = tabel.selectedRanges()
+    if not selected_ranges:
+        return None
+    if target_columns is None:
+        target_columns = []
+        for col in range(tabel.columnCount()):
+            header_item = tabel.horizontalHeaderItem(col)
+            if header_item:
+                target_columns.append(header_for_db(header_item.text()))
+    if not isinstance(target_columns, list):
+        raise ValueError("target_columns harus berupa list atau None.")
+    index_kolom = {}
+    for col in range(tabel.columnCount()):
+        header_item = tabel.horizontalHeaderItem(col)
+        if header_item and header_for_db(header_item.text()) in target_columns:
+            index_kolom[header_for_db(header_item.text())] = col
+    if not index_kolom:
+        raise ValueError(f"Tidak ada kolom yang sesuai dengan target_columns: {target_columns}")
+    result = []
+    for selected_range in selected_ranges:
+        top_row = selected_range.topRow()
+        bottom_row = selected_range.bottomRow()
+        for row in range(top_row, bottom_row + 1):
+            row_data = {}
+            for col_name, col_index in index_kolom.items():
+                item = tabel.item(row, col_index)
+                row_data[col_name] = item.text() if item else None
+            result.append(row_data)
+    return result
 
 def update_from_table(
         tabel_ui: QTableWidget, 

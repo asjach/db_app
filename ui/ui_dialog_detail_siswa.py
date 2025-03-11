@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'dialog_detail_siswa.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.8.1
+## Created by: Qt User Interface Compiler version 6.8.2
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -176,7 +176,7 @@ class Ui_Form(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 619, 1629))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, -1017, 619, 1629))
         self.verticalLayout = QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout.setSpacing(20)
         self.verticalLayout.setContentsMargins(5, 5, 5, 5)
@@ -1021,7 +1021,7 @@ class Ui_Form(object):
         self.btn_kepala_ibu.setObjectName(u"btn_kepala_ibu")
         self.btn_kepala_ibu.setMinimumSize(QSize(0, 25))
         self.btn_kepala_ibu.setMaximumSize(QSize(50, 16777215))
-        self.btn_kepala_ibu.setStyleSheet(u"image: none;")
+        self.btn_kepala_ibu.setStyleSheet(u"")
 
         self.gridLayout_9.addWidget(self.btn_kepala_ibu, 0, 2, 1, 1)
 
@@ -2147,6 +2147,7 @@ class Ui_Form(object):
         self.pilihan_jenjang_cbo2 = QComboBox(self.widget_50)
         self.pilihan_jenjang_cbo2.setObjectName(u"pilihan_jenjang_cbo2")
         self.pilihan_jenjang_cbo2.setMinimumSize(QSize(120, 0))
+        self.pilihan_jenjang_cbo2.setEditable(True)
 
         self.gridLayout_46.addWidget(self.pilihan_jenjang_cbo2, 0, 1, 1, 1)
 

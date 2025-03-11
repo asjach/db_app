@@ -1311,9 +1311,6 @@
      <property name="title">
       <string>Cetak</string>
      </property>
-     <addaction name="actionRekap"/>
-     <addaction name="actionRapor_MI"/>
-     <addaction name="actionRapor_MD"/>
      <addaction name="actionKartu_Peserta"/>
      <addaction name="actionLabel_Sampul"/>
     </widget>
@@ -1321,14 +1318,18 @@
      <property name="title">
       <string>Pengaturan</string>
      </property>
-     <addaction name="actionKegiatan_Evaluatif"/>
-     <addaction name="actionPeserta"/>
-     <addaction name="actionMata_Pelajaran"/>
-     <addaction name="actionEkstrakurikuler"/>
+     <addaction name="actionEkskulKegiatan"/>
     </widget>
     <addaction name="menuPengaturan"/>
+    <addaction name="actionRiwayatKegiatan"/>
+    <addaction name="actionPesertaKegiatan"/>
+    <addaction name="actionMapelKegiatan"/>
+    <addaction name="separator"/>
     <addaction name="actionInput_Nilai"/>
+    <addaction name="separator"/>
     <addaction name="menuCetak"/>
+    <addaction name="actionRapor"/>
+    <addaction name="actionRekap"/>
    </widget>
    <widget class="QMenu" name="menuDokumen">
     <property name="title">
@@ -1360,6 +1361,12 @@
    <addaction name="menuView"/>
   </widget>
   <action name="actionDaftar_Kelas">
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Daftar Kelas</string>
    </property>
@@ -1425,9 +1432,9 @@
     <string>Rekap</string>
    </property>
   </action>
-  <action name="actionRapor_MI">
+  <action name="actionRapor">
    <property name="text">
-    <string>Rapor MI</string>
+    <string>Rapor</string>
    </property>
   </action>
   <action name="actionKartu_Peserta">
@@ -1458,11 +1465,6 @@
   <action name="actionInput_Dokumen">
    <property name="text">
     <string>Input Dokumen</string>
-   </property>
-  </action>
-  <action name="actionRapor_MD">
-   <property name="text">
-    <string>Rapor MD</string>
    </property>
   </action>
   <action name="actionInput_By_Excel">
@@ -1521,24 +1523,24 @@
     <string>Key Value</string>
    </property>
   </action>
-  <action name="actionKegiatan_Evaluatif">
+  <action name="actionRiwayatKegiatan">
    <property name="text">
-    <string>Kegiatan Evaluatif</string>
+    <string>Riwayat Kegiatan</string>
    </property>
   </action>
-  <action name="actionPeserta">
+  <action name="actionPesertaKegiatan">
    <property name="text">
     <string>Peserta</string>
    </property>
   </action>
-  <action name="actionMata_Pelajaran">
+  <action name="actionMapelKegiatan">
    <property name="text">
-    <string>Mata Pelajaran</string>
+    <string>Mapel Kegiatan</string>
    </property>
   </action>
-  <action name="actionEkstrakurikuler">
+  <action name="actionEkskulKegiatan">
    <property name="text">
-    <string>Ekstrakurikuler</string>
+    <string>Ekskul Kegiatan</string>
    </property>
   </action>
  </widget>

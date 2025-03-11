@@ -6,8 +6,10 @@ from PySide6.QtGui import QAction
 from scripts import *
 from utils.fungsi.general_functions import *
 from models.main import ModelMain
-from utils.tab_config import *
 from PySide6.QtCore import QEvent, Qt
+from scripts.tab_config import TAB_CONFIG
+from utils.static_values import *
+from functools import partial
 
 class MainWindow(Ui_MainWindow, QMainWindow):
     def __init__(self, parent=None):
@@ -16,21 +18,12 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.set_property_for_qss()
         self.showMaximized()
         self.apply_style()
-        self._is_processing_tab_change = False 
-        self.is_window_maximized = True
-        self.nis_lokal = None
-        self.nis_index = None
-        self.id_guru = None
-        # Properties
         self._last_search_text = ''
         self.model_main = ModelMain()
-        # Context menu
         self.cmenu = QMenu()
         self.hideshow_frame_action = QAction("Show/Hide Left Frame")
         self.detail_siswa_action = QAction("Detail Siswa")
         self.detail_guru_action = QAction("Detail Guru")
-        
-        # Initialize components
         self.initialize_components()
         
     def initialize_components(self):
@@ -41,48 +34,42 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.add_combo_value()
         self.connect_signals()
         self.actionDaftar_Kelas.trigger()
-        # self.actionInput_By_Excel.trigger()
-        
+    
     def connect_signals(self):
-        # Combobox signals
-        for combo in [self.cbo_order_by, self.cbo_kolom, self.cbo_kelas]:
-            combo.currentIndexChanged.connect(self.delayed_requery)
-        for combo in [self.cbo_jenjang, self.cbo_tapel, self.cbo_tingkat]:
-            combo.currentIndexChanged.connect(self.requery_kelas)
+        combobox_mapping = {
+            "delayed_requery": [self.cbo_order_by, self.cbo_kolom, self.cbo_kelas],
+            "requery_kelas": [self.cbo_jenjang, self.cbo_tapel, self.cbo_tingkat]
+        }
+        for signal, combos in combobox_mapping.items():
+            for combo in combos:
+                combo.currentIndexChanged.connect(getattr(self, signal))
+
+        for title, config in TAB_CONFIG.items():
+            attr_name = config["show_page"]
+            action_name = config["action"]
+            page = getattr(self, attr_name)
+            action = getattr(self, action_name)
+            
+            # Gunakan partial untuk mengikat parameter secara langsung
+            action.triggered.connect(partial(self.add_tab, page, title))
 
         # Tab and search signals
         self.line_search.textChanged.connect(self.delayed_search)
         self.main_tab.currentChanged.connect(self.tab_index_changed)
         self.main_tab.tabCloseRequested.connect(self.close_tab)
-        self.actionShow_Filter.toggled.connect(self.show_hide_filter)
 
-        # Action signals
-        self.actionDaftar_Kelas.triggered.connect(lambda: self.add_tab(self.DK, "Daftar Kelas"))
-        self.actionRekap_Santri.triggered.connect(lambda: self.add_tab(self.REKAP_SISWA, "Rekap Siswa"))
-        self.actionPindah_Kelas.triggered.connect(lambda: self.add_tab(self.PINDAH_KELAS, "Pindah Kelas"))
-        self.actionMutasiMasuk.triggered.connect(lambda: self.add_tab(self.MUTASI_MASUK, "Mutasi Masuk"))
-        self.actionMutasiKeluar.triggered.connect(lambda: self.add_tab(self.MUTASI_KELUAR, "Mutasi Keluar"))
-        self.actionKenaikan.triggered.connect(lambda: self.add_tab(self.NAIK, "Kenaikan"))
-        self.actionKelulusan.triggered.connect(lambda: self.add_tab(self.LULUS, "Kelulusan"))
-        self.actionMI_ke_MD.triggered.connect(lambda: self.add_tab(self.MI2MD, "MI ke MD"))
-        
-        self.actionBukuIndukGuru.triggered.connect(lambda: self.add_tab(self.BUKUINDUKGURU, "Buku Induk Guru"))
-        self.actionRiwayatKeaktifan.triggered.connect(lambda: self.add_tab(self.KEAKTIFANGURU, "Keaktifan Guru"))
-        self.actionRiwayat_Mengajar.triggered.connect(lambda: self.add_tab(self.RIWAYAT_MENGAJAR, "Riwayat Mengajar"))
-        self.actionInput_Dokumen.triggered.connect(lambda: self.add_tab(self.DOKUMEN, "Dokumen"))
-        # self.actionPengaturanKegiatan.triggered.connect(lambda:self.add_tab(self.PENGATURAN_KEGIATAN, "Pengaturan Kegiatan"))
-        self.actionKegiatan_Evaluatif.triggered.connect(lambda: self.add_tab(self.RIWAYAT_KEGIATAN, "Riwayat Kegiatan"))
-        self.actionPeserta.triggered.connect(lambda: self.add_tab(self.PESERTA, "Peserta"))
-        self.actionInput_Nilai.triggered.connect(lambda: self.add_tab(self.INPUT_NILAI, "Input Nilai"))
-        self.actionRekap.triggered.connect(lambda: self.add_tab(self.REKAP_NILAI, 'Rekap Nilai'))
-
-        self.actionRiwayatKelas.triggered.connect(lambda: self.add_tab(self.RIWAYAT_KELAS, "Riwayat Kelas"))
-        self.actionAlamat.triggered.connect(lambda: self.add_tab(self.ALAMAT, "Alamat"))
-        self.actionSekolah.triggered.connect(lambda: self.add_tab(self.SEKOLAH, "Sekolah"))
-        self.actionKey_Value.triggered.connect(lambda: self.add_tab(self.KEY_VALUE, "Key Value"))
-
+        # DIALOG
         self.actionInput_By_Excel.triggered.connect(self.show_input_excel)
         self.actionCari.triggered.connect(self.show_detail_siswa)
+
+        # VIEW
+        self.actionShow_Filter.toggled.connect(self.show_hide_filter)
+
+    def class_init(self):
+        for config in TAB_CONFIG.values():
+            attr_name = config["show_page"]
+            page_class = config["page_class"]
+            setattr(self, attr_name, page_class(self))
     
     def filter_connections(self):
         fungsi_filter_buttons(self.cbo_jenjang, self.prev_jenjang, self.next_jenjang,self.label_jenjang)
@@ -98,38 +85,6 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.requery_timer.setSingleShot(True)
         # self.requery_timer.timeout.connect(self.tab_index_changed)
         self.requery_timer.timeout.connect(self.requery_page)
-
-    def class_init(self):
-        # PAGE SISWA
-        self.DK = PageDaftarKelas(self)
-        self.REKAP_SISWA = PageRekapSiswa(self)
-        self.PINDAH_KELAS = PagePindahKelas(self)
-        self.MUTASI_MASUK = PageMutasiMasuk(self)
-        self.MUTASI_KELUAR = PageMutasiKeluar(self)
-        self.NAIK = PageKenaikan(self)
-        self.LULUS = PageKelulusan(self)
-        self.MI2MD = PageMI2MD(self)
-        
-        #PAGE GURU
-        self.BUKUINDUKGURU=PageBukuIndukGuru(self)
-        self.KEAKTIFANGURU=PageKeaktifanGuru(self)
-        self.RIWAYAT_MENGAJAR = PageRiwayatMengajar(self)
-
-        #PAGE DOKUMEN
-        self.DOKUMEN = PageDokumen(self)
-
-        #PAGE NILAI
-        self.RIWAYAT_KEGIATAN = PageRiwayatKegiatan(self)
-        self.PESERTA = PagePeserta(self)
-        self.INPUT_NILAI = PageInputNilai(self)
-        self.REKAP_NILAI = PageRekapNilai(self)
-
-        # PREFERENSI
-        self.RIWAYAT_KELAS = PageRiwayatKelas(self)
-        self.ALAMAT = PageAlamat(self)
-        self.SEKOLAH = PageSekolah(self)
-        self.KEY_VALUE = PageKeyValue(self)
-
 
     def add_combo_value(self):
         combo_values = {
@@ -242,7 +197,6 @@ class MainWindow(Ui_MainWindow, QMainWindow):
             self._last_search_text = value
 
     def show_detail_siswa(self, tabel):
-        print(self.nis_lokal)
         self.EDIT_BIODATA = DialogDetailSiswa(self)
         self.EDIT_BIODATA.setStyleSheet(self.style)
         self.EDIT_BIODATA.show_dialog(

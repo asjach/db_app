@@ -5,6 +5,7 @@ from utils.fungsi.general_functions import *
 from models.siswa.biodata_siswa import BiodataSiswa
 from scripts.widgets.image_viewer import Widget_Image_Viewer
 from PySide6.QtCore import QEvent, Qt
+from utils.static_values import *
 
 
 class CustomCompleter(QCompleter):
@@ -66,7 +67,6 @@ class DialogDetailSiswa(QDialog, Ui_Form):
         self.cbo_nama_lengkap.textActivated.connect(self.cbo_nama_lengkap_item_selected)
         self.prev_btn.clicked.connect(self.btn_prev_table_item_clicked)
         self.next_btn.clicked.connect(self.btn_next_table_item_clicked)
-        
         self.cbo_daftar_dokumen.currentIndexChanged.connect(self.show_dokumen)
         self.btn_prev_dok.clicked.connect(lambda: prev_item(self.cbo_daftar_dokumen))
         self.btn_next_dok.clicked.connect(lambda: next_item(self.cbo_daftar_dokumen))
@@ -153,6 +153,9 @@ class DialogDetailSiswa(QDialog, Ui_Form):
             self.cbo_daftar_sekolah.addItem(nama_sekolah)
             self.cbo_daftar_sekolah.setItemData(self.cbo_daftar_sekolah.count() - 1, item)
         self.cbo_daftar_sekolah.setCurrentIndex(-1)
+
+    # def fill_cbo_jenjang_pilihan(self):
+    #     ...
 
     def show_dokumen(self):
         index = self.cbo_daftar_dokumen.currentIndex()
@@ -394,29 +397,29 @@ class DialogDetailSiswa(QDialog, Ui_Form):
 
     def fill_combobox(self):
         combo_edit_biodata = {
-            self.jk_cbo:list_from_db("JK"),
-            self.agama_cbo:list_from_db("AGAMA"),
-            self.cita_cita_cbo:list_from_db("CITA_CITA"),
-            self.hobi_cbo:list_from_db("HOBI"),
-            self.pembiayaan_cbo:list_from_db("BIAYA"),
-            self.keb_khusus_cbo:list_from_db("KEB_KHUSUS"),
-            self.ayah_status_cbo:list_from_db("STATUS_ORTU"),
-            self.ayah_pendidikan_cbo:list_from_db("PENDIDIKAN"),
-            self.ayah_pekerjaan_cbo:list_from_db("PEKERJAAN"),
-            self.ayah_penghasilan_cbo:list_from_db("PENGHASILAN"),
-            self.ibu_status_cbo:list_from_db("STATUS_ORTU"),
-            self.ibu_pendidikan_cbo:list_from_db("PENDIDIKAN"),
-            self.ibu_pekerjaan_cbo:list_from_db("PEKERJAAN"),
-            self.ibu_penghasilan_cbo:list_from_db("PENGHASILAN"),
-            self.wali_status_cbo:list_from_db("STATUS_WALI"),
-            self.wali_pendidikan_cbo:list_from_db("PENDIDIKAN"),
-            self.wali_pekerjaan_cbo:list_from_db("PEKERJAAN"),
-            self.transportasi_cbo:list_from_db("TRANSPORTASI"),
-            self.jarak_cbo:list_from_db("JARAK"),
-            self.waktu_cbo:list_from_db("WAKTU_TEMPUH"),
-            self.jenis_sekolah_cbo:list_from_db("JENIS_SEKOLAH"),
-            self.pilihan_jenjang_cbo:list_from_db("PILIHAN_JENJANG"),
-            self.pilihan_jenjang_cbo2:list_from_db("PILIHAN_JENJANG"),
+            self.jk_cbo:JK,
+            self.agama_cbo:AGAMA,
+            self.cita_cita_cbo:CITA_CITA,
+            self.hobi_cbo:HOBI,
+            self.pembiayaan_cbo:BIAYA,
+            self.keb_khusus_cbo:KEB_KHUSUS,
+            self.ayah_status_cbo:STATUS_ORTU,
+            self.ayah_pendidikan_cbo:PENDIDIKAN,
+            self.ayah_pekerjaan_cbo:PEKERJAAN,
+            self.ayah_penghasilan_cbo:PENGHASILAN,
+            self.ibu_status_cbo:STATUS_ORTU,
+            self.ibu_pendidikan_cbo:PENDIDIKAN,
+            self.ibu_pekerjaan_cbo:PEKERJAAN,
+            self.ibu_penghasilan_cbo:PENGHASILAN,
+            self.wali_status_cbo:STATUS_WALI,
+            self.wali_pendidikan_cbo:PENDIDIKAN,
+            self.wali_pekerjaan_cbo:PEKERJAAN,
+            self.transportasi_cbo:TRANSPORTASI,
+            self.jarak_cbo:JARAK,
+            self.waktu_cbo:WAKTU_TEMPUH,
+            self.jenis_sekolah_cbo:JENIS_SEKOLAH,
+            self.pilihan_jenjang_cbo:PILIHAN_JENJANG,
+            self.pilihan_jenjang_cbo2:PILIHAN_JENJANG,
         }
         for combo, values in combo_edit_biodata.items():
             combo.clear()

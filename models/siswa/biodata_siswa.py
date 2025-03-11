@@ -1,5 +1,4 @@
 from utils.database import ConnectDB
-# from utils.fungsi.general_functions import *
 
 class BiodataSiswa(ConnectDB):
     def __init__(self, database_name=None):

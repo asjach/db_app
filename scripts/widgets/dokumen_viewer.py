@@ -89,10 +89,19 @@ class DokumenViewer(Ui_Dokumen_Viewer, QWidget):
         else:
             print("Failed to load image!")
 
-    def loadPDF(self, pdfPath):
-        self.pdf_document = fitz.open(pdfPath)
+    # def loadPDF(self, pdfPath):
+    #     self.pdf_document = fitz.open(pdfPath)
+    #     self.current_page = 0
+    #     self.render_pdf_page(self.current_page)
+    def loadPDF(self, pdf_source):
+        if isinstance(pdf_source, bytes):
+            self.pdf_document = fitz.open("pdf", pdf_source)  # Load dari bytes
+        else:
+            self.pdf_document = fitz.open(pdf_source)  # Load dari file path
+        
         self.current_page = 0
         self.render_pdf_page(self.current_page)
+
 
     def close_file(self):
         """Menutup file yang sedang dibuka (image atau PDF)."""
@@ -120,7 +129,7 @@ class DokumenViewer(Ui_Dokumen_Viewer, QWidget):
             return
 
         page = self.pdf_document[page_number]
-        pix = page.get_pixmap(dpi=150)  # Render page at 150 DPI
+        pix = page.get_pixmap(dpi=300)  # Render page at 150 DPI
         qimage = QImage(
             pix.samples, pix.width, pix.height, pix.stride, QImage.Format_RGB888
         )

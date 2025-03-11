@@ -32,9 +32,11 @@ pyside6-uic -o ui/ui_page_dokumen.py ui/sources/page_dokumen.ui
 
 ### NILAI
 pyside6-uic -o ui/ui_page_peserta.py ui/sources/page_peserta.ui
-pyside6-uic -o ui/ui_page_legger.py ui/sources/page_legger.ui
+pyside6-uic -o ui/ui_page_mapel_kegiatan.py ui/sources/page_mapel_kegiatan.ui
 pyside6-uic -o ui/ui_page_input_nilai.py ui/sources/page_input_nilai.ui
 pyside6-uic -o ui/ui_page_rekap_nilai.py ui/sources/page_rekap_nilai.ui
+pyside6-uic -o ui/ui_page_rekap_nilai.py ui/sources/page_rekap_nilai.ui
+pyside6-uic -o ui/ui_page_cetak_rapor.py ui/sources/page_cetak_rapor.ui
 
 ## PREF
 pyside6-uic -o ui/ui_page_pref_riwayat_kelas.py ui/sources/page_pref_riwayat_kelas.ui

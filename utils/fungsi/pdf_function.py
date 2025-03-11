@@ -8,6 +8,8 @@ from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfbase import pdfmetrics
 from pathlib import Path
 from PySide6.QtPdf import QPdfDocument
+import sys, os
+from reportlab.lib.utils import ImageReader
 
 pdfmetrics.registerFont(TTFont("TNR", "times.ttf"))
 pdfmetrics.registerFont(TTFont("TNRB", "timesbd.ttf"))
@@ -169,3 +171,44 @@ def tabel_style_nogrid():
         ]
     )
     return style
+
+def paragraf(c, height, text, x=0, y=0, w=100, h=5, font= 'TNRB',size=11, alignment=1, leading=0, showBoundary= 0):
+    style = ParagraphStyle(name='Normal', fontName=font, fontSize=size, leading=leading, alignment=alignment)
+    paragraph = Paragraph(text, style)
+    frame = Frame(x*mm, height - y*mm, w*mm, h*mm, showBoundary=showBoundary, topPadding=0, bottomPadding=0)
+    frame.addFromList([paragraph], c)
+
+def gambar(c, height, path, x=0, y=0, h=20):
+    if hasattr(sys, '_MEIPASS'):
+        base_path = sys._MEIPASS
+    else: 
+        base_path = os.path.abspath(".")
+    path = os.path.join(base_path, path)
+    x = x * mm
+    y = height - y * mm
+    h = h * mm
+    image = ImageReader(path)
+    image_w, image_h = image.getSize()
+    ratio = h / (image_h*mm)
+    w = (image_w *mm)*ratio
+    gambar = c.drawImage(path, x, y, w, h)
+    return gambar
+
+def tabel(c, width, height, x, y, data, col_width = None, row_height=None, styles=None):
+    table = Table(data, colWidths=col_width, rowHeights=row_height)
+    if styles is None:
+        styles = TableStyle([
+            ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+            ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+            ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+            ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+            ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+            ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+            ('GRID', (0, 0), (-1, -1), 1, colors.black)
+        ])
+    table.setStyle(styles)
+    table.wrapOn(c, aW=width, aH=height)
+    table_height = table._height
+    y_new = height - (y * mm) - table_height
+    table.drawOn(c, x = x*mm, y = y_new)
+    return table_height

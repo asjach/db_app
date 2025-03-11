@@ -42,7 +42,7 @@ class RekapNilai(ConnectDB):
                 ORDER BY    m.no
             """
         params = (jenjang, tapel, kegiatan, f'%{tingkat}%', f'%{kelas}%')
-        return self.sql.get_data(sql, params)
+        return self.get_data(sql, params)
 
     def get_nilai_by_kegiatan(self, kolom_mapel, jenjang, tapel, tingkat, kelas, kegiatan):
         sql = """

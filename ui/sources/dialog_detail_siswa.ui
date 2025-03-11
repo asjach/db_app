@@ -357,7 +357,7 @@
                  <property name="geometry">
                   <rect>
                    <x>0</x>
-                   <y>-588</y>
+                   <y>-1017</y>
                    <width>619</width>
                    <height>1629</height>
                   </rect>
@@ -5059,6 +5059,9 @@
                   <width>120</width>
                   <height>0</height>
                  </size>
+                </property>
+                <property name="editable">
+                 <bool>true</bool>
                 </property>
                </widget>
               </item>

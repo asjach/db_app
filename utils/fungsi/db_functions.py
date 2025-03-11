@@ -82,22 +82,7 @@ def get_field_list(table_name):
 
 
 def save_to_db(controls, db_data, update_function):
-    """
-    Menyimpan data ke database jika ada perubahan.
-
-    Parameters:
-        controls (list): Daftar pasangan (kontrol, key).
-        db_data (dict): Data saat ini yang ada di database.
-        update_function (callable): Fungsi untuk memperbarui data di database.
-            Contoh: `update_function(**new_data)`.
-
-    Returns:
-        bool: True jika data berhasil diperbarui, False jika tidak berubah atau terjadi kesalahan.
-    """
-    # Ambil data baru dari kontrol
     new_data = extract_data_from_controls(controls)
-
-    # Validasi perubahan data
     is_changed = False
     changed_data = {}  # Menyimpan data yang berubah
     for key, value in new_data.items():
@@ -107,23 +92,13 @@ def save_to_db(controls, db_data, update_function):
         if db_value != value:
             changed_data[key] = (db_value, value)  # Simpan data lama dan baru
             is_changed = True
-
     if is_changed:
-        #untuk keperluan debug
-        print("Data yang berubah:")
-        for key, (old_value, new_value) in changed_data.items():
-            print(f"{key}: {old_value} ({type(old_value)}) -> {new_value} ({type(new_value)})")
-        
-        # Lakukan update ke database
         success = update_function(**new_data)
         if success:
-            print("DETAIL BERHASIL DI UPDATE")
             return True
         else:
-            print("GAGAL MEMPERBARUI DATA")
             return False
     else:
-        print("DATA TIDAK BERUBAH")
         return False
     
 
