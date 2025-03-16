@@ -17,9 +17,14 @@ def measure_time(func):
 
 
 # TEXT FUNCTIONS
-def date_to_text(tanggal, format='YMD'):
+def date_to_text(tanggal, format=None):
     if not tanggal:
         return ""
+    if isinstance(tanggal, str):
+        try:
+            tanggal = datetime.strptime(tanggal, '%Y-%m-%d')
+        except ValueError:
+            raise ValueError("Format tanggal string harus 'YYYY-MM-DD' (contoh: '2024-12-21').")
     if isinstance(tanggal, datetime):
         tanggal = tanggal.date()
     nama_bulan = {
@@ -32,13 +37,13 @@ def date_to_text(tanggal, format='YMD'):
         }
     hari = tanggal.day
     tahun = tanggal.year
-    if format == None:
+    if format == 'lengkap':
         bulan = nama_bulan[tanggal.month]
         tanggal_formatted = f"{hari:02d} {bulan} {tahun}"
     elif format == "singkat":
         bulan = nama_bulan_singkat[tanggal.month]
         tanggal_formatted = f"{hari:02d} {bulan} {tahun}"
-    elif format == 'YMD':
+    else:
         tanggal_formatted = tanggal.strftime('%Y-%m-%d')
     return tanggal_formatted
 
@@ -329,4 +334,82 @@ def read_excel(path, sheet_name=None):
     except Exception as e:
         print(f"Error membaca File: {e}")
         return []
+    
+
+def angka_ke_teks(angka):
+    # Kamus angka untuk digit 0-9
+    kamus_angka = {
+        "0": "nol",
+        "1": "satu",
+        "2": "dua",
+        "3": "tiga",
+        "4": "empat",
+        "5": "lima",
+        "6": "enam",
+        "7": "tujuh",
+        "8": "delapan",
+        "9": "sembilan",
+    }
+
+    # Konversi angka menjadi string untuk memisahkan digit
+    angka_str = str(angka)
+
+    # Hasil akhir teks
+    teks_akhir = []
+
+    # Loop melalui setiap karakter dalam string angka
+    for char in angka_str:
+        if char == ".":
+            teks_akhir.append("koma")
+        else:
+            teks_akhir.append(kamus_angka[char])
+
+    # Gabungkan list teks menjadi string dengan spasi sebagai pemisah
+    return " ".join(teks_akhir)
+
+
+def terbilang_peringkat(angka):
+    if angka in (None, ""):
+        return ""
+    angka = int(angka)
+    satuan = ["", "pertama", "kedua", "ketiga", "keempat", "kelima", "keenam", "ketujuh", "kedelapan", "kesembilan"]
+    satuan_puluhan = ["", "satu", "dua", "tiga", "empat", "lima", "enam", "tujuh", "delapan", "sembilan"]
+    belasan = [
+        "kesepuluh",
+        "kesebelas",
+        "keduabelas",
+        "ketigabelas",
+        "keempatbelas",
+        "kelimabelas",
+        "keenambelas",
+        "ketujuhbelas",
+        "kedelapanbelas",
+        "kesembilanbelas",
+    ]
+    puluhan = [
+        "",
+        "",
+        "kedua puluh",
+        "ketiga puluh",
+        "keempat puluh",
+        "kelima puluh",
+        "keenam puluh",
+        "ketujuh puluh",
+        "kedelapan puluh",
+        "kesembilan puluh",
+    ]
+
+    if angka < 10:
+        return satuan[angka]
+    elif 10 <= angka < 20:
+        return belasan[angka - 10]
+    elif 20 <= angka < 100:
+        puluhan_index = angka // 10
+        satuan_index = angka % 10
+        if satuan_index == 0:
+            return puluhan[puluhan_index]
+        else:
+            return f"{puluhan[puluhan_index]} {satuan_puluhan[satuan_index]}"
+    else:
+        return "Angka diluar jangkauan"
     

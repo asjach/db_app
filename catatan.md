@@ -38,17 +38,20 @@ pyside6-uic -o ui/ui_page_rekap_nilai.py ui/sources/page_rekap_nilai.ui
 pyside6-uic -o ui/ui_page_rekap_nilai.py ui/sources/page_rekap_nilai.ui
 pyside6-uic -o ui/ui_page_cetak_rapor.py ui/sources/page_cetak_rapor.ui
 
-## PREF
+### PEMBAYARAN
+pyside6-uic -o ui/ui_page_transaksi_pembayaran.py ui/sources/page_transaksi_pembayaran.ui
+
+### PREF
 pyside6-uic -o ui/ui_page_pref_riwayat_kelas.py ui/sources/page_pref_riwayat_kelas.ui
 pyside6-uic -o ui/ui_page_pref_alamat.py ui/sources/page_pref_alamat.ui
 
-## DIALOG
+### DIALOG
 pyside6-uic -o ui/ui_dialog_detail_siswa.py ui/sources/dialog_detail_siswa.ui
 pyside6-uic -o ui/ui_dialog_detail_guru.py ui/sources/dialog_detail_guru.ui
 pyside6-uic -o ui/ui_dialog_input_excel.py ui/sources/dialog_input_excel.ui
 pyside6-uic -o ui/ui_dialog_input_preferensi.py ui/sources/dialog_input_preferensi.ui
 
-## WIDGET
+### WIDGET
 pyside6-uic -o ui/ui_widget_image_viewer.py ui/sources/widget_image_viewer.ui
 pyside6-uic -o ui/ui_widget_dokumen_viewer.py ui/sources/widget_dokumen_viewer.ui
 

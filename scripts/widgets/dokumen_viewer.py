@@ -1,7 +1,7 @@
 from PySide6.QtWidgets import QWidget
 from ui.ui_widget_dokumen_viewer import Ui_Dokumen_Viewer
 import os
-from PySide6.QtGui import QImage, QPixmap, QPainter, QImageWriter
+from PySide6.QtGui import QImage, QPixmap, QPainter
 from PySide6 import QtCore, QtWidgets
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QApplication, QWidget
@@ -16,11 +16,13 @@ class DokumenViewer(Ui_Dokumen_Viewer, QWidget):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+        self.pdf_document = None  # Objek PDF
+        self.image_labels = []
         self.qimage = QImage()
         self.qlabel_image = self.image_viwer_label
+        
         self.label_width = self.image_viwer_label.width()
         self.label_height = self.image_viwer_label.height()
-
         self.qimage_scaled = QImage()
         self.qpixmap = QPixmap()
         self.zoomX = 1
@@ -29,7 +31,7 @@ class DokumenViewer(Ui_Dokumen_Viewer, QWidget):
         self.image_path = ""
         self.pdf_document = None
         self.current_page = 0
-
+        
         self.qlabel_image.setSizePolicy(
             QtWidgets.QSizePolicy.Ignored, QtWidgets.QSizePolicy.Ignored
         )
@@ -53,6 +55,7 @@ class DokumenViewer(Ui_Dokumen_Viewer, QWidget):
         self.btn_explorer.clicked.connect(lambda: open_in_explorer(self.image_path))
         self.btn_next_page.clicked.connect(self.next_page)
         self.btn_prev_page.clicked.connect(self.previous_page)
+        self.spin_page.valueChanged.connect(self.spin_page_changed)
 
     def loadFile(self, filePath, zoom_factor=1):
         if not filePath:
@@ -89,19 +92,20 @@ class DokumenViewer(Ui_Dokumen_Viewer, QWidget):
         else:
             print("Failed to load image!")
 
-    # def loadPDF(self, pdfPath):
-    #     self.pdf_document = fitz.open(pdfPath)
-    #     self.current_page = 0
-    #     self.render_pdf_page(self.current_page)
     def loadPDF(self, pdf_source):
         if isinstance(pdf_source, bytes):
             self.pdf_document = fitz.open("pdf", pdf_source)  # Load dari bytes
         else:
             self.pdf_document = fitz.open(pdf_source)  # Load dari file path
-        
         self.current_page = 0
+        self.spin_page.setValue(self.current_page+1)
         self.render_pdf_page(self.current_page)
 
+    def spin_page_changed(self):
+        if self.spin_page.value() > len(self.pdf_document):
+            self.spin_page.setValue(len(self.pdf_document))
+        self.current_page = self.spin_page.value() - 1
+        self.render_pdf_page(self.current_page)
 
     def close_file(self):
         """Menutup file yang sedang dibuka (image atau PDF)."""
@@ -121,6 +125,7 @@ class DokumenViewer(Ui_Dokumen_Viewer, QWidget):
         # Reset tampilan
         self.update()
         self.image_path = ""  # Reset path file
+        self.image_viwer_label.clear()
         # print("File viewer has been reset.")
 
 
@@ -130,9 +135,7 @@ class DokumenViewer(Ui_Dokumen_Viewer, QWidget):
 
         page = self.pdf_document[page_number]
         pix = page.get_pixmap(dpi=300)  # Render page at 150 DPI
-        qimage = QImage(
-            pix.samples, pix.width, pix.height, pix.stride, QImage.Format_RGB888
-        )
+        qimage = QImage(pix.samples, pix.width, pix.height, pix.stride, QImage.Format_RGB888)
         self.qimage = qimage
         self.qpixmap = QPixmap(self.qlabel_image.size())
         self.zoomX = 1
@@ -147,12 +150,14 @@ class DokumenViewer(Ui_Dokumen_Viewer, QWidget):
     def next_page(self):
         if self.pdf_document and self.current_page < len(self.pdf_document) - 1:
             self.current_page += 1
-            self.render_pdf_page(self.current_page)
+            # self.render_pdf_page(self.current_page)
+            self.spin_page.setValue(self.current_page+1)
 
     def previous_page(self):
         if self.pdf_document and self.current_page > 0:
             self.current_page -= 1
-            self.render_pdf_page(self.current_page)
+            # self.render_pdf_page(self.current_page)
+            self.spin_page.setValue(self.current_page+1)
 
     def update(self):
         if not self.qimage_scaled.isNull():
@@ -173,6 +178,7 @@ class DokumenViewer(Ui_Dokumen_Viewer, QWidget):
             self.qpixmap.fill(QtCore.Qt.transparent)
             painter = QPainter()
             painter.begin(self.qpixmap)
+            # painter.setRenderHint(QPainter.SmoothPixmapTransform, True)
             painter.drawImage(
                 QtCore.QPoint(0, 0),
                 self.qimage_scaled,
@@ -244,27 +250,50 @@ class DokumenViewer(Ui_Dokumen_Viewer, QWidget):
         )
         self.update()
 
-
     def wheelEvent(self, event):
-        if QApplication.keyboardModifiers() == Qt.ControlModifier:
-            delta = event.angleDelta().y()
-            if delta > 0:
-                self.zoom_in()
-            elif delta < 0:
-                self.zoom_out()
-        elif QApplication.keyboardModifiers() == Qt.AltModifier:
-            delta = event.angleDelta().x()
-            if delta > 0:
-                self.position = self.position[0] - 100, self.position[1]
-            elif delta < 0:
-                self.position = self.position[0] + 100, self.position[1]
+        delta_x, delta_y = event.angleDelta().x(), event.angleDelta().y()
+        modifiers = QApplication.keyboardModifiers()
+
+        if modifiers == Qt.ControlModifier:  # Zoom dengan Ctrl + Scroll
+            self.zoom_in() if delta_y > 0 else self.zoom_out()
+
+        elif modifiers == Qt.AltModifier:  # Panning horizontal dengan Alt + Scroll
+            self.position = (self.position[0] + (100 if delta_x < 0 else -100), self.position[1])
             self.update()
-        else:
-            delta = event.angleDelta().y()
-            if delta > 0:
-                self.position = self.position[0], self.position[1] - 100
-            elif delta < 0:
-                self.position = self.position[0], self.position[1] + 100
+
+        elif self.pdf_document:  # Scroll untuk PDF
+            current_y = self.position[1]
+            max_y = max(0, self.qimage_scaled.height() - self.qlabel_image.height())
+            wheel_tolerance = 3
+
+            # Inisialisasi akumulator jika belum ada
+            self.wheel_count_up = getattr(self, 'wheel_count_up', 0)
+            self.wheel_count_down = getattr(self, 'wheel_count_down', 0)
+
+            if delta_y > 0:  # Scroll ke atas
+                if current_y > 0:
+                    self.position = (self.position[0], max(0, current_y - 100))
+                elif self.current_page > 0:
+                    self.wheel_count_up += 1
+                    if self.wheel_count_up >= wheel_tolerance:
+                        self.previous_page()
+                        self.wheel_count_up = 0
+                self.wheel_count_down = 0  # Reset akumulator lawan arah
+
+            elif delta_y < 0:  # Scroll ke bawah
+                if current_y < max_y:
+                    self.position = (self.position[0], min(max_y, current_y + 100))
+                elif self.current_page < len(self.pdf_document) - 1:
+                    self.wheel_count_down += 1
+                    if self.wheel_count_down >= wheel_tolerance:
+                        self.next_page()
+                        self.wheel_count_down = 0
+                self.wheel_count_up = 0  # Reset akumulator lawan arah
+
+            self.update()
+
+        else:  # Panning vertikal untuk gambar (non-PDF)
+            self.position = (self.position[0], self.position[1] + (-100 if delta_y > 0 else 100))
             self.update()
 
 
@@ -290,3 +319,11 @@ class DokumenViewer(Ui_Dokumen_Viewer, QWidget):
                 QtCore.Qt.KeepAspectRatio,
             )
             self.update()
+
+    def gotoPage(self, page_number):
+        if self.pdf_document:
+            max_page = len(self.pdf_document) - 1
+            if 0 <= page_number <= max_page:
+                self.current_page = page_number
+                self.spin_page.setValue(self.current_page + 1)  # Sinkronisasi dengan spinbox
+                self.render_pdf_page(self.current_page)

@@ -1352,10 +1352,19 @@
     <addaction name="actionSekolah"/>
     <addaction name="actionKey_Value"/>
    </widget>
+   <widget class="QMenu" name="menuPembayaran">
+    <property name="title">
+     <string>Pembayaran</string>
+    </property>
+    <addaction name="actionTransaksi_Pembayaran"/>
+    <addaction name="actionJenis_Pembayaran"/>
+    <addaction name="actionDispensasi"/>
+   </widget>
    <addaction name="menuSantri"/>
    <addaction name="menuGuru"/>
    <addaction name="menuNilai"/>
    <addaction name="menuDokumen"/>
+   <addaction name="menuPembayaran"/>
    <addaction name="menuSetting"/>
    <addaction name="menuPreferensi_2"/>
    <addaction name="menuView"/>
@@ -1541,6 +1550,21 @@
   <action name="actionEkskulKegiatan">
    <property name="text">
     <string>Ekskul Kegiatan</string>
+   </property>
+  </action>
+  <action name="actionTransaksi_Pembayaran">
+   <property name="text">
+    <string>Transaksi Pembayaran</string>
+   </property>
+  </action>
+  <action name="actionJenis_Pembayaran">
+   <property name="text">
+    <string>Jenis Pembayaran</string>
+   </property>
+  </action>
+  <action name="actionDispensasi">
+   <property name="text">
+    <string>Dispensasi</string>
    </property>
   </action>
  </widget>

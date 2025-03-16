@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'widget_dokumen_viewer.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.8.1
+## Created by: Qt User Interface Compiler version 6.8.2
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -15,8 +15,9 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QGridLayout, QHBoxLayout, QLabel,
-    QPushButton, QSizePolicy, QSpacerItem, QWidget)
+from PySide6.QtWidgets import (QAbstractSpinBox, QApplication, QGridLayout, QHBoxLayout,
+    QLabel, QPushButton, QSizePolicy, QSpacerItem,
+    QSpinBox, QWidget)
 import resources_rc
 
 class Ui_Dokumen_Viewer(object):
@@ -97,13 +98,32 @@ class Ui_Dokumen_Viewer(object):
 
         self.btn_prev_page = QPushButton(self.widget)
         self.btn_prev_page.setObjectName(u"btn_prev_page")
+        self.btn_prev_page.setMinimumSize(QSize(0, 25))
+        self.btn_prev_page.setMaximumSize(QSize(50, 16777215))
 
         self.horizontalLayout.addWidget(self.btn_prev_page)
 
+        self.spin_page = QSpinBox(self.widget)
+        self.spin_page.setObjectName(u"spin_page")
+        self.spin_page.setMinimumSize(QSize(80, 25))
+        self.spin_page.setAlignment(Qt.AlignCenter)
+        self.spin_page.setButtonSymbols(QAbstractSpinBox.NoButtons)
+        self.spin_page.setMinimum(1)
+        self.spin_page.setMaximum(99999)
+        self.spin_page.setValue(1)
+
+        self.horizontalLayout.addWidget(self.spin_page)
+
         self.btn_next_page = QPushButton(self.widget)
         self.btn_next_page.setObjectName(u"btn_next_page")
+        self.btn_next_page.setMinimumSize(QSize(0, 25))
+        self.btn_next_page.setMaximumSize(QSize(50, 16777215))
 
         self.horizontalLayout.addWidget(self.btn_next_page)
+
+        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout.addItem(self.horizontalSpacer)
 
         self.btn_open = QPushButton(self.widget)
         self.btn_open.setObjectName(u"btn_open")
@@ -144,6 +164,7 @@ class Ui_Dokumen_Viewer(object):
         sizePolicy1.setHeightForWidth(self.image_viwer_label.sizePolicy().hasHeightForWidth())
         self.image_viwer_label.setSizePolicy(sizePolicy1)
         self.image_viwer_label.setStyleSheet(u"")
+        self.image_viwer_label.setAlignment(Qt.AlignCenter)
 
         self.gridLayout.addWidget(self.image_viwer_label, 0, 0, 1, 1)
 
@@ -163,8 +184,9 @@ class Ui_Dokumen_Viewer(object):
         self.btn_3x.setText(QCoreApplication.translate("Dokumen_Viewer", u"3x", None))
         self.btn_rotate_left.setText("")
         self.btn_rotate_right.setText("")
-        self.btn_prev_page.setText(QCoreApplication.translate("Dokumen_Viewer", u"Previous", None))
-        self.btn_next_page.setText(QCoreApplication.translate("Dokumen_Viewer", u"Next", None))
+        self.btn_prev_page.setText(QCoreApplication.translate("Dokumen_Viewer", u"<", None))
+        self.spin_page.setPrefix("")
+        self.btn_next_page.setText(QCoreApplication.translate("Dokumen_Viewer", u">", None))
 #if QT_CONFIG(statustip)
         self.btn_open.setStatusTip(QCoreApplication.translate("Dokumen_Viewer", u"Open File", None))
 #endif // QT_CONFIG(statustip)
