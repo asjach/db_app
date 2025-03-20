@@ -27,11 +27,12 @@ class PageBukuIndukGuru(QWidget, Ui_Form):
             search_by=self.txt_search_by,
             search=self.txt_search
         )
-        fill_table_with_input(
+        generate_table(
             data=data,
             table=self.tbl_widget,
             icon_akhir=":/icon/resources/icon/multiply.svg",
             fungsi_akhir=self.delete_guru,
+            mode_input=True
         )
 
     def table_selected(self):

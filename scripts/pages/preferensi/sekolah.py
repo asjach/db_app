@@ -17,12 +17,13 @@ class PageSekolah(QWidget, Ui_Form):
 
     def fill_tbl_sekolah(self):
         data, fields = self.SQL.get_daftar_sekolah(self.parent.line_search.text())
-        fill_table_with_input(
+        generate_table(
             data = data,
             table=self.tbl_widget,
             column_names=fields,
             icon_akhir=":/icon/resources/icon/multiply.svg",
             fungsi_akhir=self.delete_sekolah,
+            mode_input=True
         )
 
     def tbl_selected(self):

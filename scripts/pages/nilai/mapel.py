@@ -86,12 +86,13 @@ class PageMapel(QWidget, Ui_Form):
             self.txt_kelas,
             self.cbo_kegiatan.currentText()
             )
-        fill_table_with_input(
+        generate_table(
             data=data, 
             table=self.tbl_mapel, 
             column_names=fields,
             icon_akhir=":/icon/resources/icon/multiply.svg",
             fungsi_akhir=self.delete_mapel,
+            mode_input=True
             )
 
     def tbl_mapel_selected(self):

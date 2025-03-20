@@ -33,11 +33,12 @@ class PageRiwayatKelas(QWidget, Ui_Form):
 
     def fill_tabel_jenjang(self):
         data = self.SQL.get_jenjang()
-        fill_table_with_input(
+        generate_table(
             data=data,
             table=self.tbl_jenjang,
             icon_akhir=":/icon/resources/icon/multiply.svg",
             fungsi_akhir=self.delete_jenjang,
+            mode_input=True
         )
     
     def tabel_jenjang_selected(self):
@@ -62,11 +63,12 @@ class PageRiwayatKelas(QWidget, Ui_Form):
 
     def fill_tabel_tapel(self):
         data = self.SQL.get_tapel()
-        fill_table_with_input(
+        generate_table(
             data=data,
             table=self.tbl_tapel,
             icon_akhir=":/icon/resources/icon/multiply.svg",
             fungsi_akhir=self.delete_tapel,
+            mode_input=True
         )
 
     def tabel_tapel_selected(self):
@@ -91,12 +93,13 @@ class PageRiwayatKelas(QWidget, Ui_Form):
 
     def fill_tabel_kelas(self):
         data, kolom = self.SQL.get_kelas(self.jenjang, self.tapel)
-        fill_table_with_input(
+        generate_table(
             data=data,
             table=self.tbl_kelas,
             column_names=kolom,
             icon_akhir=":/icon/resources/icon/multiply.svg",
             fungsi_akhir=self.delete_kelas,
+            mode_input=True
         )
 
     def tabel_kelas_selected(self):

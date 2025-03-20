@@ -1351,13 +1351,14 @@
     <addaction name="actionAlamat"/>
     <addaction name="actionSekolah"/>
     <addaction name="actionKey_Value"/>
+    <addaction name="actionBiaya"/>
    </widget>
    <widget class="QMenu" name="menuPembayaran">
     <property name="title">
      <string>Pembayaran</string>
     </property>
     <addaction name="actionTransaksi_Pembayaran"/>
-    <addaction name="actionJenis_Pembayaran"/>
+    <addaction name="actionRiwayat_Biaya"/>
     <addaction name="actionDispensasi"/>
    </widget>
    <addaction name="menuSantri"/>
@@ -1557,14 +1558,19 @@
     <string>Transaksi Pembayaran</string>
    </property>
   </action>
-  <action name="actionJenis_Pembayaran">
+  <action name="actionBiaya">
    <property name="text">
-    <string>Jenis Pembayaran</string>
+    <string>Jenis Biaya</string>
    </property>
   </action>
   <action name="actionDispensasi">
    <property name="text">
     <string>Dispensasi</string>
+   </property>
+  </action>
+  <action name="actionRiwayat_Biaya">
+   <property name="text">
+    <string>Riwayat Biaya</string>
    </property>
   </action>
  </widget>

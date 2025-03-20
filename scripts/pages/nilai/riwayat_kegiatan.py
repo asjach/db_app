@@ -17,12 +17,13 @@ class PageRiwayatKegiatan(QWidget, Ui_Form):
 
     def fill_table(self):
         data, fields = self.SQL.get_kegiatan_riwayat(self.parent.cbo_tapel.currentText())
-        fill_table_with_input(
+        generate_table(
             data=data,
             column_names=fields,
             table=self.tbl_widget,
             icon_akhir=":/icon/resources/icon/multiply.svg",
             fungsi_akhir=self.delete_riwayat_kegiatan,
+            mode_input=True
         )
 
     def table_selected(self):

@@ -17,12 +17,13 @@ class PageKeyValue(QWidget, Ui_Form):
 
     def fill_table(self):
         data, fields = self.SQL.get_key_value(self.parent.line_search.text())
-        fill_table_with_input(
+        generate_table(
             data=data,
             column_names=fields,
             table=self.tbl_widget,
             icon_akhir=":/icon/resources/icon/multiply.svg",
             fungsi_akhir=self.delete_key_value,
+            mode_input=True
 
         )
 

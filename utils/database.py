@@ -69,8 +69,8 @@ class ConnectDB:
             print("ERROR get_one_data:", E)
             return 
         finally:
-            if self.my_cursor:
-                self.my_cursor.close()
+            # if self.my_cursor:
+            #     self.my_cursor.close()
             if self.my_connector:
                 self.my_connector.close()
 
@@ -92,8 +92,8 @@ class ConnectDB:
             print("ERROR update_data:", E)
             return False
         finally:
-            if self.my_cursor:
-                self.my_cursor.close()
+            # if self.my_cursor:
+            #     self.my_cursor.close()
             if self.my_connector:
                 self.my_connector.close()
 

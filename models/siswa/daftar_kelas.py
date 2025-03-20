@@ -16,6 +16,7 @@ class DaftarKelas(ConnectDB):
                 AND     tapel = %s
                 AND     tingkat LIKE %s
                 AND     kelas LIKE %s
+                AND     is_active = 'Ya'
                 AND     {search_by} LIKE %s
             ORDER BY    jenjang, tapel, tingkat, kelas, {order_by}
         """

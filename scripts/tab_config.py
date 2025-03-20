@@ -163,4 +163,25 @@ TAB_CONFIG = {
         "action": "actionKey_Value",
         "page_class": PageKeyValue,
     },
+    "Biaya": {
+        "search_by": ['nama_biaya'],
+        "hidden_frame": ['jenjang', 'tingkat', 'kelas'],
+        "show_page": "KEY_VALUE",
+        "action": "actionBiaya",
+        "page_class": PageBiaya,
+    },
+    "Transaksi Pembayaran": {
+        "search_by": [],
+        "hidden_frame": ['jenjang',],
+        "show_page": "TRANSAKSI",
+        "action": "actionTransaksi_Pembayaran",
+        "page_class": PageTransaksi,
+    },
+    "Riwayat Biaya": {
+        "search_by": [],
+        "hidden_frame": ['jenjang',],
+        "show_page": "RIWAYAT_BIAYA",
+        "action": "actionRiwayat_Biaya",
+        "page_class": PageRiwayatBiaya,
+    },
 }

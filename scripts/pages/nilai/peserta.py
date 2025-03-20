@@ -37,12 +37,13 @@ class PagePeserta(QWidget, Ui_Form):
             id_kegiatan=self.cbo_kegiatan.currentData(),
             id_kelas=self.parent.cbo_kelas.currentData()
         )
-        fill_table_with_input(
+        generate_table(
             data=data,
             column_names=fields, 
             table=self.tbl_widget,
             icon_akhir=":/icon/resources/icon/multiply.svg",
             fungsi_akhir=self.delete_peserta,
+            mode_input=True
         )
     
     def table_selected(self):

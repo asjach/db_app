@@ -45,12 +45,13 @@ class PagePengaturanKegiatan(QWidget, Ui_Form):
     # TABEL RIWAYAT KEGIATAN
     def fill_riwayat_kegiatan(self):
         data = self.SQL.get_kegiatan_riwayat(self.parent.cbo_tapel.currentText())
-        fill_table_with_input(
+        generate_table(
             data=data,
             table=self.kegiatan_tbl,
             icon_akhir=":/icon/resources/icon/multiply.svg",
             fungsi_akhir=self.delete_kegiatan_riwayat,
-            hidden_column=[]
+            hidden_column=[],
+            mode_input=True
         )
 
     def tbl_kegiatan_selected(self):
@@ -77,7 +78,7 @@ class PagePengaturanKegiatan(QWidget, Ui_Form):
     # TABEL KELAS
     def fill_kelas_riwayat(self):
         data = self.SQL.get_kelas_riwayat_with_peserta(self.jenjang, self.tapel, self.id_kegiatan_line.text())
-        fill_table_with_input(data, self.kelas_tbl, zero=0)
+        generate_table(data, self.kelas_tbl, zero=0, mode_input=True)
 
     def kelas_tbl_selected(self):
         table_selected(self.kelas_tbl,self, self.parent, ['id'])
@@ -137,12 +138,13 @@ class PagePengaturanKegiatan(QWidget, Ui_Form):
             id_kegiatan=self.id_kegiatan_line.text(),
             id_kelas = self.id_kelas_line.text(),
         )
-        fill_table_with_input(
+        generate_table(
             data=data,
             table=self.peserta_tbl,
             icon_akhir=":/icon/resources/icon/multiply.svg",
             fungsi_akhir=self.delete_peserta,
-            hidden_column=[]
+            hidden_column=[],
+            mode_input=True
         )
 
     def tbl_peserta_selected(self):
@@ -199,12 +201,14 @@ class PagePengaturanKegiatan(QWidget, Ui_Form):
         data = self.SQL.get_mapel(
             id_kelas=self.id_kelas_line.text(),
             id_kegiatan=self.id_kegiatan_line.text())
-        fill_table_with_input(
+        generate_table(
             data=data,
             table=self.mapel_tbl,
             icon_akhir=":/icon/resources/icon/multiply.svg",
             fungsi_akhir=self.delete_mapel,
-            hidden_column=[0])
+            hidden_column=[0],
+            mode_input=True
+            )
 
     def tabel_mapel_selected(self):
         table_selected(self.mapel_tbl, self, self.parent,['id'])
@@ -251,12 +255,13 @@ class PagePengaturanKegiatan(QWidget, Ui_Form):
         data = self.SQL.get_ekskul(
             id_kelas=self.id_kelas_line.text(),
             id_kegiatan=self.id_kegiatan_line.text())
-        fill_table_with_input(
+        generate_table(
             data=data,
             table=self.ekskul_tbl,
             icon_akhir=":/icon/resources/icon/multiply.svg",
             fungsi_akhir=self.delete_ekskul,
-            hidden_column=[0])
+            hidden_column=[0],
+            mode_input=True)
             
     def tabel_ekskul_selected(self):
         table_selected(self.ekskul_tbl, self, self.parent,['id'])

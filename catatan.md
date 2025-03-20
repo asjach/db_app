@@ -40,10 +40,12 @@ pyside6-uic -o ui/ui_page_cetak_rapor.py ui/sources/page_cetak_rapor.ui
 
 ### PEMBAYARAN
 pyside6-uic -o ui/ui_page_transaksi_pembayaran.py ui/sources/page_transaksi_pembayaran.ui
+pyside6-uic -o ui/ui_page_riwayat_biaya.py ui/sources/page_riwayat_biaya.ui
 
 ### PREF
 pyside6-uic -o ui/ui_page_pref_riwayat_kelas.py ui/sources/page_pref_riwayat_kelas.ui
 pyside6-uic -o ui/ui_page_pref_alamat.py ui/sources/page_pref_alamat.ui
+pyside6-uic -o ui/ui_page_biaya.py ui/sources/page_biaya.ui
 
 ### DIALOG
 pyside6-uic -o ui/ui_dialog_detail_siswa.py ui/sources/dialog_detail_siswa.ui

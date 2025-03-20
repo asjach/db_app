@@ -15,9 +15,10 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QFrame, QGridLayout, QHeaderView,
-    QLabel, QLineEdit, QPushButton, QSizePolicy,
-    QSpacerItem, QTableWidget, QTableWidgetItem, QWidget)
+from PySide6.QtWidgets import (QAbstractItemView, QApplication, QFrame, QGridLayout,
+    QHeaderView, QLabel, QLineEdit, QPushButton,
+    QRadioButton, QSizePolicy, QSpacerItem, QTableWidget,
+    QTableWidgetItem, QWidget)
 
 class Ui_Form(object):
     def setupUi(self, Form):
@@ -28,6 +29,7 @@ class Ui_Form(object):
         self.gridLayout_5.setObjectName(u"gridLayout_5")
         self.widget_2 = QWidget(Form)
         self.widget_2.setObjectName(u"widget_2")
+        self.widget_2.setMaximumSize(QSize(500, 16777215))
         self.gridLayout_3 = QGridLayout(self.widget_2)
         self.gridLayout_3.setObjectName(u"gridLayout_3")
         self.gridLayout_3.setContentsMargins(0, 0, 0, 0)
@@ -43,6 +45,7 @@ class Ui_Form(object):
 
         self.tbl_tagihan = QTableWidget(self.widget_4)
         self.tbl_tagihan.setObjectName(u"tbl_tagihan")
+        self.tbl_tagihan.setSelectionBehavior(QAbstractItemView.SelectRows)
 
         self.gridLayout_2.addWidget(self.tbl_tagihan, 1, 0, 1, 1)
 
@@ -59,10 +62,26 @@ class Ui_Form(object):
 
         self.gridLayout.addWidget(self.label, 0, 0, 1, 1)
 
+        self.radio_siswa_aktif = QRadioButton(self.widget_3)
+        self.radio_siswa_aktif.setObjectName(u"radio_siswa_aktif")
+        self.radio_siswa_aktif.setChecked(True)
+
+        self.gridLayout.addWidget(self.radio_siswa_aktif, 1, 0, 1, 1)
+
+        self.radio_buku_induk = QRadioButton(self.widget_3)
+        self.radio_buku_induk.setObjectName(u"radio_buku_induk")
+
+        self.gridLayout.addWidget(self.radio_buku_induk, 1, 1, 1, 1)
+
+        self.horizontalSpacer_4 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.gridLayout.addItem(self.horizontalSpacer_4, 1, 2, 1, 1)
+
         self.tbl_siswa = QTableWidget(self.widget_3)
         self.tbl_siswa.setObjectName(u"tbl_siswa")
+        self.tbl_siswa.setSelectionBehavior(QAbstractItemView.SelectRows)
 
-        self.gridLayout.addWidget(self.tbl_siswa, 1, 0, 1, 1)
+        self.gridLayout.addWidget(self.tbl_siswa, 2, 0, 1, 3)
 
 
         self.gridLayout_3.addWidget(self.widget_3, 0, 0, 1, 1)
@@ -77,6 +96,7 @@ class Ui_Form(object):
         self.gridLayout_4.setContentsMargins(0, 0, 0, 0)
         self.tbl_transaksi = QTableWidget(self.widget)
         self.tbl_transaksi.setObjectName(u"tbl_transaksi")
+        self.tbl_transaksi.setSelectionBehavior(QAbstractItemView.SelectRows)
 
         self.gridLayout_4.addWidget(self.tbl_transaksi, 1, 0, 1, 2)
 
@@ -99,90 +119,90 @@ class Ui_Form(object):
         self.widget_7.setObjectName(u"widget_7")
         self.gridLayout_8 = QGridLayout(self.widget_7)
         self.gridLayout_8.setObjectName(u"gridLayout_8")
-        self.label_3 = QLabel(self.widget_7)
-        self.label_3.setObjectName(u"label_3")
+        self.label_id_tagihan = QLabel(self.widget_7)
+        self.label_id_tagihan.setObjectName(u"label_id_tagihan")
+        self.label_id_tagihan.setMinimumSize(QSize(120, 24))
+        font = QFont()
+        font.setPointSize(9)
+        font.setBold(True)
+        self.label_id_tagihan.setFont(font)
+        self.label_id_tagihan.setFrameShape(QFrame.StyledPanel)
 
-        self.gridLayout_8.addWidget(self.label_3, 0, 0, 1, 1)
+        self.gridLayout_8.addWidget(self.label_id_tagihan, 0, 1, 1, 1)
 
         self.label_9 = QLabel(self.widget_7)
         self.label_9.setObjectName(u"label_9")
 
         self.gridLayout_8.addWidget(self.label_9, 1, 0, 1, 1)
 
-        self.txt_nama_tagihan = QLabel(self.widget_7)
-        self.txt_nama_tagihan.setObjectName(u"txt_nama_tagihan")
-        self.txt_nama_tagihan.setMinimumSize(QSize(120, 24))
-        font = QFont()
-        font.setPointSize(9)
-        font.setBold(True)
-        self.txt_nama_tagihan.setFont(font)
-        self.txt_nama_tagihan.setFrameShape(QFrame.StyledPanel)
+        self.label_3 = QLabel(self.widget_7)
+        self.label_3.setObjectName(u"label_3")
 
-        self.gridLayout_8.addWidget(self.txt_nama_tagihan, 1, 1, 1, 1)
+        self.gridLayout_8.addWidget(self.label_3, 0, 0, 1, 1)
 
-        self.txt_nama_tagihan_2 = QLabel(self.widget_7)
-        self.txt_nama_tagihan_2.setObjectName(u"txt_nama_tagihan_2")
-        self.txt_nama_tagihan_2.setMinimumSize(QSize(120, 24))
-        self.txt_nama_tagihan_2.setFont(font)
-        self.txt_nama_tagihan_2.setFrameShape(QFrame.StyledPanel)
+        self.label_nama_biaya = QLabel(self.widget_7)
+        self.label_nama_biaya.setObjectName(u"label_nama_biaya")
+        self.label_nama_biaya.setMinimumSize(QSize(120, 24))
+        self.label_nama_biaya.setFont(font)
+        self.label_nama_biaya.setFrameShape(QFrame.StyledPanel)
 
-        self.gridLayout_8.addWidget(self.txt_nama_tagihan_2, 0, 1, 1, 1)
+        self.gridLayout_8.addWidget(self.label_nama_biaya, 1, 1, 1, 1)
 
-        self.txt_status_tagihan = QLabel(self.widget_7)
-        self.txt_status_tagihan.setObjectName(u"txt_status_tagihan")
-        self.txt_status_tagihan.setMinimumSize(QSize(120, 24))
-        self.txt_status_tagihan.setFont(font)
-        self.txt_status_tagihan.setFrameShape(QFrame.StyledPanel)
+        self.txt_status_dispensasi = QLabel(self.widget_7)
+        self.txt_status_dispensasi.setObjectName(u"txt_status_dispensasi")
+        self.txt_status_dispensasi.setMinimumSize(QSize(120, 24))
+        self.txt_status_dispensasi.setFont(font)
+        self.txt_status_dispensasi.setFrameShape(QFrame.StyledPanel)
 
-        self.gridLayout_8.addWidget(self.txt_status_tagihan, 2, 1, 1, 1)
-
-        self.label_11 = QLabel(self.widget_7)
-        self.label_11.setObjectName(u"label_11")
-
-        self.gridLayout_8.addWidget(self.label_11, 2, 0, 1, 1)
-
-        self.label_14 = QLabel(self.widget_7)
-        self.label_14.setObjectName(u"label_14")
-
-        self.gridLayout_8.addWidget(self.label_14, 2, 3, 1, 1)
-
-        self.label_nama_3 = QLabel(self.widget_7)
-        self.label_nama_3.setObjectName(u"label_nama_3")
-        self.label_nama_3.setMinimumSize(QSize(120, 24))
-        self.label_nama_3.setFont(font)
-        self.label_nama_3.setFrameShape(QFrame.StyledPanel)
-
-        self.gridLayout_8.addWidget(self.label_nama_3, 0, 4, 1, 1)
+        self.gridLayout_8.addWidget(self.txt_status_dispensasi, 2, 4, 1, 1)
 
         self.label_10 = QLabel(self.widget_7)
         self.label_10.setObjectName(u"label_10")
 
-        self.gridLayout_8.addWidget(self.label_10, 0, 3, 1, 1)
+        self.gridLayout_8.addWidget(self.label_10, 1, 3, 1, 1)
+
+        self.label_periode = QLabel(self.widget_7)
+        self.label_periode.setObjectName(u"label_periode")
+        self.label_periode.setMinimumSize(QSize(120, 24))
+        self.label_periode.setFont(font)
+        self.label_periode.setFrameShape(QFrame.StyledPanel)
+
+        self.gridLayout_8.addWidget(self.label_periode, 2, 1, 1, 1)
+
+        self.label_nominal_tagihan = QLabel(self.widget_7)
+        self.label_nominal_tagihan.setObjectName(u"label_nominal_tagihan")
+        self.label_nominal_tagihan.setMinimumSize(QSize(120, 24))
+        self.label_nominal_tagihan.setFont(font)
+        self.label_nominal_tagihan.setFrameShape(QFrame.StyledPanel)
+
+        self.gridLayout_8.addWidget(self.label_nominal_tagihan, 1, 4, 1, 1)
 
         self.label_13 = QLabel(self.widget_7)
         self.label_13.setObjectName(u"label_13")
 
-        self.gridLayout_8.addWidget(self.label_13, 1, 3, 1, 1)
-
-        self.txt_status_tagihan_3 = QLabel(self.widget_7)
-        self.txt_status_tagihan_3.setObjectName(u"txt_status_tagihan_3")
-        self.txt_status_tagihan_3.setMinimumSize(QSize(120, 24))
-        self.txt_status_tagihan_3.setFont(font)
-        self.txt_status_tagihan_3.setFrameShape(QFrame.StyledPanel)
-
-        self.gridLayout_8.addWidget(self.txt_status_tagihan_3, 1, 4, 1, 1)
-
-        self.txt_status_tagihan_2 = QLabel(self.widget_7)
-        self.txt_status_tagihan_2.setObjectName(u"txt_status_tagihan_2")
-        self.txt_status_tagihan_2.setMinimumSize(QSize(120, 24))
-        self.txt_status_tagihan_2.setFont(font)
-        self.txt_status_tagihan_2.setFrameShape(QFrame.StyledPanel)
-
-        self.gridLayout_8.addWidget(self.txt_status_tagihan_2, 2, 4, 1, 1)
+        self.gridLayout_8.addWidget(self.label_13, 2, 3, 1, 1)
 
         self.horizontalSpacer_3 = QSpacerItem(15, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
 
         self.gridLayout_8.addItem(self.horizontalSpacer_3, 1, 2, 1, 1)
+
+        self.label_15 = QLabel(self.widget_7)
+        self.label_15.setObjectName(u"label_15")
+
+        self.gridLayout_8.addWidget(self.label_15, 2, 0, 1, 1)
+
+        self.label_11 = QLabel(self.widget_7)
+        self.label_11.setObjectName(u"label_11")
+
+        self.gridLayout_8.addWidget(self.label_11, 0, 3, 1, 1)
+
+        self.label_status = QLabel(self.widget_7)
+        self.label_status.setObjectName(u"label_status")
+        self.label_status.setMinimumSize(QSize(120, 24))
+        self.label_status.setFont(font)
+        self.label_status.setFrameShape(QFrame.StyledPanel)
+
+        self.gridLayout_8.addWidget(self.label_status, 0, 4, 1, 1)
 
 
         self.gridLayout_9.addWidget(self.widget_7, 0, 1, 1, 1)
@@ -298,11 +318,8 @@ class Ui_Form(object):
 
         self.gridLayout_4.setColumnStretch(0, 1)
 
-        self.gridLayout_5.addWidget(self.widget, 0, 1, 3, 1)
+        self.gridLayout_5.addWidget(self.widget, 0, 1, 4, 1)
 
-        self.gridLayout_5.setRowStretch(2, 1)
-        self.gridLayout_5.setColumnStretch(1, 1)
-        self.gridLayout_5.setColumnMinimumWidth(0, 400)
 
         self.retranslateUi(Form)
 
@@ -313,18 +330,20 @@ class Ui_Form(object):
         Form.setWindowTitle(QCoreApplication.translate("Form", u"Form", None))
         self.label_2.setText(QCoreApplication.translate("Form", u"Daftar Tagihan/Tunggakan", None))
         self.label.setText(QCoreApplication.translate("Form", u"Daftar Santri", None))
-        self.label_3.setText(QCoreApplication.translate("Form", u"ID Tagihan", None))
+        self.radio_siswa_aktif.setText(QCoreApplication.translate("Form", u"Siswa Aktif", None))
+        self.radio_buku_induk.setText(QCoreApplication.translate("Form", u"Buku Induk", None))
+        self.label_id_tagihan.setText("")
         self.label_9.setText(QCoreApplication.translate("Form", u"Nama Tagihan", None))
-        self.txt_nama_tagihan.setText("")
-        self.txt_nama_tagihan_2.setText("")
-        self.txt_status_tagihan.setText("")
-        self.label_11.setText(QCoreApplication.translate("Form", u"Status Tagihan", None))
-        self.label_14.setText(QCoreApplication.translate("Form", u"Total Setelah Dispensasi", None))
-        self.label_nama_3.setText("")
+        self.label_3.setText(QCoreApplication.translate("Form", u"ID Tagihan", None))
+        self.label_nama_biaya.setText("")
+        self.txt_status_dispensasi.setText("")
         self.label_10.setText(QCoreApplication.translate("Form", u"Nominal Tagihan", None))
-        self.label_13.setText(QCoreApplication.translate("Form", u"Dispensasi", None))
-        self.txt_status_tagihan_3.setText("")
-        self.txt_status_tagihan_2.setText("")
+        self.label_periode.setText("")
+        self.label_nominal_tagihan.setText("")
+        self.label_13.setText(QCoreApplication.translate("Form", u"Status Dispensasi", None))
+        self.label_15.setText(QCoreApplication.translate("Form", u"Periode", None))
+        self.label_11.setText(QCoreApplication.translate("Form", u"Status Tagihan", None))
+        self.label_status.setText("")
         self.label_4.setText(QCoreApplication.translate("Form", u"Nominal Pembayaran", None))
         self.pushButton_2.setText(QCoreApplication.translate("Form", u">>", None))
         self.pushButton.setText(QCoreApplication.translate("Form", u"BAYAR", None))

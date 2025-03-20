@@ -17,12 +17,13 @@ class PageAlamat(QWidget, Ui_Form):
 
     def fill_table_alamat(self):
         data, fields = self.SQL.get_alamat(self.parent.line_search.text())
-        fill_table_with_input(
+        generate_table(
             data=data,
             table=self.tbl_widget,
             column_names=fields,
             icon_akhir=":/icon/resources/icon/multiply.svg",
             fungsi_akhir=self.delete_alamat,
+            mode_input=True
         )
     
     def tbl_alamat_selected(self):
