@@ -1,7 +1,8 @@
 
 from PySide6.QtWidgets import (QLineEdit, QLabel, QPlainTextEdit, QComboBox,  QApplication,QMessageBox,)
 from datetime import datetime
-import time
+from decimal import Decimal
+import time, re
 import pandas as pd
 from utils.static_values import KOLOM_TANGGAL
 
@@ -412,4 +413,60 @@ def terbilang_peringkat(angka):
             return f"{puluhan[puluhan_index]} {satuan_puluhan[satuan_index]}"
     else:
         return "Angka diluar jangkauan"
+
+
+def terbilang(n):
+    # Validasi input agar hanya angka
+    if isinstance(n, (int, float, Decimal)):
+        n_str = f"{n:,}".replace(",", ".")
+    elif isinstance(n, str):
+        if not re.match(r"^[0-9.,]+$", n):
+            return "Input harus angka"
+        n_str = n.replace(".", "").replace(",", ".")
+    else:
+        return "Input harus angka"
     
+    # Memisahkan angka desimal jika ada
+    if "." in n_str:
+        angka_bulat, angka_desimal = n_str.split(".")
+    else:
+        angka_bulat, angka_desimal = n_str, None
+    
+    try:
+        n = int(angka_bulat)  # Konversi bagian bulat ke integer
+    except ValueError:
+        return "Input harus angka"
+    
+    angka = ["", "satu", "dua", "tiga", "empat", "lima", "enam", "tujuh", "delapan", "sembilan", "sepuluh", "sebelas"]
+    
+    if n < 12:
+        hasil = angka[n]
+    elif n < 20:
+        hasil = terbilang(n - 10) + " belas"
+    elif n < 100:
+        hasil = terbilang(n // 10) + " puluh" + (" " + terbilang(n % 10) if n % 10 != 0 else "")
+    elif n < 200:
+        hasil = "seratus" + (" " + terbilang(n - 100) if n > 100 else "")
+    elif n < 1000:
+        hasil = terbilang(n // 100) + " ratus" + (" " + terbilang(n % 100) if n % 100 != 0 else "")
+    elif n < 2000:
+        hasil = "seribu" + (" " + terbilang(n - 1000) if n > 1000 else "")
+    elif n < 1000000:
+        hasil = terbilang(n // 1000) + " ribu" + (" " + terbilang(n % 1000) if n % 1000 != 0 else "")
+    elif n < 1000000000:
+        hasil = terbilang(n // 1000000) + " juta" + (" " + terbilang(n % 1000000) if n % 1000000 != 0 else "")
+    elif n < 1000000000000:
+        hasil = terbilang(n // 1000000000) + " milyar" + (" " + terbilang(n % 1000000000) if n % 1000000000 != 0 else "")
+    elif n < 1000000000000000:
+        hasil = terbilang(n // 1000000000000) + " triliun" + (" " + terbilang(n % 1000000000000) if n % 1000000000000 != 0 else "")
+    elif n < 1000000000000000000:
+        hasil = terbilang(n // 1000000000000000) + " kuadriliun" + (" " + terbilang(n % 1000000000000000) if n % 1000000000000000 != 0 else "")
+    else:
+        return "Angka terlalu besar"
+    
+    # Menangani bagian desimal jika ada
+    if angka_desimal:
+        angka_desimal = ".".join([angka[int(digit)] for digit in angka_desimal])
+        hasil += " koma " + angka_desimal.replace(".", " ")
+    
+    return hasil

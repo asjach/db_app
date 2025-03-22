@@ -171,7 +171,7 @@ TAB_CONFIG = {
         "page_class": PageBiaya,
     },
     "Transaksi Pembayaran": {
-        "search_by": [],
+        "search_by": ['Nama Lengkap'],
         "hidden_frame": ['jenjang',],
         "show_page": "TRANSAKSI",
         "action": "actionTransaksi_Pembayaran",

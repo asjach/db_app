@@ -24,6 +24,7 @@ def generate_table(
     hidden_column=None,
     stretch_column=None,
     margin=20,
+    row_height=24,
     max_column_size=1000,
     font_family="Segoe UI",
     font_size=9,
@@ -160,6 +161,7 @@ def prepare_table(table: QTableWidget, clear=True):
 
 def finalize_table(table: QTableWidget):
     table.resizeRowsToContents()
+    table.verticalHeader().setMinimumSectionSize(24)
     table.setUpdatesEnabled(True)
     table.blockSignals(False)
 
@@ -271,10 +273,10 @@ def format_cell_data(item_data, zero=None, separator_ribuan=None, separator_desi
     
     if item_data is None:
         return ""
-    if separator_ribuan is None:
-        separator_ribuan=SEPARATOR_RIBUAN
-    if separator_desimal is None:
-        separator_desimal=SEPARATOR_DESIMAL
+    # if separator_ribuan is None:
+    #     separator_ribuan=SEPARATOR_RIBUAN
+    # if separator_desimal is None:
+    #     separator_desimal=SEPARATOR_DESIMAL
     if isinstance(item_data, (datetime, date)):
         return date_to_text(item_data, 'YMD')
     elif isinstance(item_data, int):
@@ -391,7 +393,6 @@ def get_row_data(tabel_ui: QTableWidget, numeric_fields, date_fields, row):
             except ValueError:
                 cell_value = None
         row_data[headers[col]] = cell_value
-
     return row_data
 
 
