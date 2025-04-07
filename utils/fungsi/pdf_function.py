@@ -170,6 +170,22 @@ def gambar(obj, path, x=0, y=0, h=20):
     image_w, image_h = image.getSize()
     ratio = h / (image_h*mm)
     w = (image_w *mm)*ratio
+    gambar = obj.c.drawImage(path, x, y, w, h, mask='auto')
+    return gambar
+
+def gambar_mid(obj, path, x=0, y=0, h=20):
+    if hasattr(sys, '_MEIPASS'):
+        base_path = sys._MEIPASS
+    else: 
+        base_path = os.path.abspath(".")
+    path = os.path.join(base_path, path)
+    x = x * mm
+    y = obj.height - y * mm
+    h = h * mm
+    image = ImageReader(path)
+    image_w, image_h = image.getSize()
+    ratio = h / (image_h*mm)
+    w = (image_w *mm)*ratio
     gambar = obj.c.drawImage(path, x-w/2, y, w, h, mask='auto')
     return gambar
 

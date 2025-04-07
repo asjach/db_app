@@ -78,11 +78,8 @@ class PagePeserta(QWidget, Ui_Form):
             kls = kelas['kelas']
             id_kegiatan = self.cbo_kegiatan.currentData()
             kegiatan = self.cbo_kegiatan.currentText()
-            if kegiatan in ['PAS', 'AS Ganjil']:
+            if kegiatan in ['PAS', 'AS Ganjil',  'PAT', 'AS Genap']:
                 sukses = self.SQL.generate_peserta(jenjang, tapel, id_kelas, kls, id_kegiatan)
-            elif kegiatan in ['PAT', 'AS Genap']:
-                if tingkat not in ['6', '9', '12']:
-                    sukses = self.SQL.generate_peserta(jenjang, tapel, id_kelas, kls, id_kegiatan)
             elif kegiatan in ['UAP', 'RTR', 'NA', 'US', 'AM']:
                 if tingkat in ['6', '9', '12']:
                     sukses = self.SQL.generate_peserta(jenjang, tapel, id_kelas, kls, id_kegiatan)

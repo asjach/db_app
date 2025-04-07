@@ -129,6 +129,7 @@ def extract_data_from_controls(controls):
 def opsi_order(opsi_order):
     order_mapping = {
         "Nama": 'nama_lengkap',
+        "Nama Lengkap": 'nama_lengkap',
         "JK": 'jk, nama_lengkap',
         "Urutan": 'r.no_urut',
         "No Urut": 'no_urut',
@@ -147,6 +148,7 @@ def opsi_order(opsi_order):
 def opsi_search(opsi_search):
     mapping = {
         "Nama": "nama_lengkap",
+        "Nama Lengkap": 'nama_lengkap',
         "Ayah": "ayah_nama",
         "Ibu": "ibu_nama",
         "Alamat": "kampung",

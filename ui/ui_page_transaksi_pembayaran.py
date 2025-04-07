@@ -25,7 +25,7 @@ class Ui_Form(object):
     def setupUi(self, Form):
         if not Form.objectName():
             Form.setObjectName(u"Form")
-        Form.resize(1425, 623)
+        Form.resize(1503, 623)
         self.gridLayout_5 = QGridLayout(Form)
         self.gridLayout_5.setObjectName(u"gridLayout_5")
         self.widget_2 = QWidget(Form)
@@ -104,16 +104,8 @@ class Ui_Form(object):
         self.widget_11.setObjectName(u"widget_11")
         self.gridLayout_12 = QGridLayout(self.widget_11)
         self.gridLayout_12.setObjectName(u"gridLayout_12")
-        self.label_16 = QLabel(self.widget_11)
-        self.label_16.setObjectName(u"label_16")
-
-        self.gridLayout_12.addWidget(self.label_16, 1, 0, 1, 1)
-
-        self.label_17 = QLabel(self.widget_11)
-        self.label_17.setObjectName(u"label_17")
-
-        self.gridLayout_12.addWidget(self.label_17, 2, 0, 1, 1)
-
+        self.gridLayout_12.setHorizontalSpacing(0)
+        self.gridLayout_12.setContentsMargins(0, 0, 0, 0)
         self.date_awal = QDateEdit(self.widget_11)
         self.date_awal.setObjectName(u"date_awal")
         self.date_awal.setMinimumSize(QSize(0, 24))
@@ -122,7 +114,12 @@ class Ui_Form(object):
         self.date_awal.setCalendarPopup(True)
         self.date_awal.setTimeSpec(Qt.LocalTime)
 
-        self.gridLayout_12.addWidget(self.date_awal, 1, 1, 1, 1)
+        self.gridLayout_12.addWidget(self.date_awal, 1, 2, 1, 1)
+
+        self.label_16 = QLabel(self.widget_11)
+        self.label_16.setObjectName(u"label_16")
+
+        self.gridLayout_12.addWidget(self.label_16, 1, 0, 1, 1)
 
         self.date_akhir = QDateEdit(self.widget_11)
         self.date_akhir.setObjectName(u"date_akhir")
@@ -132,13 +129,77 @@ class Ui_Form(object):
         self.date_akhir.setCalendarPopup(True)
         self.date_akhir.setTimeSpec(Qt.LocalTime)
 
-        self.gridLayout_12.addWidget(self.date_akhir, 2, 1, 1, 1)
+        self.gridLayout_12.addWidget(self.date_akhir, 2, 2, 1, 1)
+
+        self.label_17 = QLabel(self.widget_11)
+        self.label_17.setObjectName(u"label_17")
+
+        self.gridLayout_12.addWidget(self.label_17, 2, 0, 1, 1)
 
         self.label_21 = QLabel(self.widget_11)
         self.label_21.setObjectName(u"label_21")
 
-        self.gridLayout_12.addWidget(self.label_21, 0, 0, 1, 2)
+        self.gridLayout_12.addWidget(self.label_21, 0, 0, 1, 3)
 
+        self.btn_tgl_awal_prev = QPushButton(self.widget_11)
+        self.btn_tgl_awal_prev.setObjectName(u"btn_tgl_awal_prev")
+        self.btn_tgl_awal_prev.setMinimumSize(QSize(0, 24))
+        self.btn_tgl_awal_prev.setMaximumSize(QSize(20, 16777215))
+
+        self.gridLayout_12.addWidget(self.btn_tgl_awal_prev, 1, 1, 1, 1)
+
+        self.btn_tgl_awal_next = QPushButton(self.widget_11)
+        self.btn_tgl_awal_next.setObjectName(u"btn_tgl_awal_next")
+        self.btn_tgl_awal_next.setMinimumSize(QSize(0, 24))
+        self.btn_tgl_awal_next.setMaximumSize(QSize(20, 16777215))
+
+        self.gridLayout_12.addWidget(self.btn_tgl_awal_next, 1, 3, 1, 1)
+
+        self.btn_tgl_akhir_prev = QPushButton(self.widget_11)
+        self.btn_tgl_akhir_prev.setObjectName(u"btn_tgl_akhir_prev")
+        self.btn_tgl_akhir_prev.setMinimumSize(QSize(0, 24))
+        self.btn_tgl_akhir_prev.setMaximumSize(QSize(20, 16777215))
+
+        self.gridLayout_12.addWidget(self.btn_tgl_akhir_prev, 2, 1, 1, 1)
+
+        self.btn_tgl_akhir_next = QPushButton(self.widget_11)
+        self.btn_tgl_akhir_next.setObjectName(u"btn_tgl_akhir_next")
+        self.btn_tgl_akhir_next.setMinimumSize(QSize(0, 24))
+        self.btn_tgl_akhir_next.setMaximumSize(QSize(20, 16777215))
+
+        self.gridLayout_12.addWidget(self.btn_tgl_akhir_next, 2, 3, 1, 1)
+
+        self.widget_12 = QWidget(self.widget_11)
+        self.widget_12.setObjectName(u"widget_12")
+        self.gridLayout_13 = QGridLayout(self.widget_12)
+        self.gridLayout_13.setObjectName(u"gridLayout_13")
+        self.gridLayout_13.setHorizontalSpacing(0)
+        self.gridLayout_13.setContentsMargins(0, 0, 0, 0)
+        self.btn_clear_biaya = QPushButton(self.widget_12)
+        self.btn_clear_biaya.setObjectName(u"btn_clear_biaya")
+        self.btn_clear_biaya.setMinimumSize(QSize(0, 24))
+        self.btn_clear_biaya.setMaximumSize(QSize(20, 24))
+
+        self.gridLayout_13.addWidget(self.btn_clear_biaya, 0, 2, 1, 1)
+
+        self.label_24 = QLabel(self.widget_12)
+        self.label_24.setObjectName(u"label_24")
+        self.label_24.setMinimumSize(QSize(60, 0))
+        self.label_24.setMaximumSize(QSize(65, 16777215))
+
+        self.gridLayout_13.addWidget(self.label_24, 0, 0, 1, 1)
+
+        self.cbo_filter_biaya = QComboBox(self.widget_12)
+        self.cbo_filter_biaya.setObjectName(u"cbo_filter_biaya")
+        self.cbo_filter_biaya.setMinimumSize(QSize(120, 24))
+
+        self.gridLayout_13.addWidget(self.cbo_filter_biaya, 0, 1, 1, 1)
+
+
+        self.gridLayout_12.addWidget(self.widget_12, 4, 0, 1, 4)
+
+        self.gridLayout_12.setColumnStretch(1, 1)
+        self.gridLayout_12.setColumnMinimumWidth(0, 60)
 
         self.gridLayout_9.addWidget(self.widget_11, 0, 2, 1, 1)
 
@@ -151,82 +212,24 @@ class Ui_Form(object):
 
         self.gridLayout_11.addWidget(self.label_20, 0, 0, 1, 1)
 
-        self.radio_rentang = QRadioButton(self.widget_10)
-        self.radio_rentang.setObjectName(u"radio_rentang")
-        self.radio_rentang.setChecked(True)
+        self.radio_bulan = QRadioButton(self.widget_10)
+        self.radio_bulan.setObjectName(u"radio_bulan")
 
-        self.gridLayout_11.addWidget(self.radio_rentang, 1, 0, 1, 1)
+        self.gridLayout_11.addWidget(self.radio_bulan, 2, 0, 1, 1)
 
-        self.radio_filter = QRadioButton(self.widget_10)
-        self.radio_filter.setObjectName(u"radio_filter")
+        self.radio_tahun = QRadioButton(self.widget_10)
+        self.radio_tahun.setObjectName(u"radio_tahun")
 
-        self.gridLayout_11.addWidget(self.radio_filter, 2, 0, 1, 1)
+        self.gridLayout_11.addWidget(self.radio_tahun, 3, 0, 1, 1)
 
-        self.radio_rentang_filter = QRadioButton(self.widget_10)
-        self.radio_rentang_filter.setObjectName(u"radio_rentang_filter")
+        self.radio_hari = QRadioButton(self.widget_10)
+        self.radio_hari.setObjectName(u"radio_hari")
+        self.radio_hari.setChecked(True)
 
-        self.gridLayout_11.addWidget(self.radio_rentang_filter, 3, 0, 1, 1)
+        self.gridLayout_11.addWidget(self.radio_hari, 1, 0, 1, 1)
 
 
         self.gridLayout_9.addWidget(self.widget_10, 0, 0, 2, 1)
-
-        self.widget_12 = QWidget(self.widget_8)
-        self.widget_12.setObjectName(u"widget_12")
-        self.gridLayout_13 = QGridLayout(self.widget_12)
-        self.gridLayout_13.setObjectName(u"gridLayout_13")
-        self.label_24 = QLabel(self.widget_12)
-        self.label_24.setObjectName(u"label_24")
-
-        self.gridLayout_13.addWidget(self.label_24, 2, 0, 1, 1)
-
-        self.cbo_filter_biaya = QComboBox(self.widget_12)
-        self.cbo_filter_biaya.setObjectName(u"cbo_filter_biaya")
-        self.cbo_filter_biaya.setMinimumSize(QSize(0, 24))
-
-        self.gridLayout_13.addWidget(self.cbo_filter_biaya, 2, 1, 1, 1)
-
-        self.label_25 = QLabel(self.widget_12)
-        self.label_25.setObjectName(u"label_25")
-
-        self.gridLayout_13.addWidget(self.label_25, 3, 0, 1, 1)
-
-        self.cbo_filter_petugas = QComboBox(self.widget_12)
-        self.cbo_filter_petugas.setObjectName(u"cbo_filter_petugas")
-        self.cbo_filter_petugas.setMinimumSize(QSize(0, 24))
-
-        self.gridLayout_13.addWidget(self.cbo_filter_petugas, 3, 1, 1, 1)
-
-        self.label_23 = QLabel(self.widget_12)
-        self.label_23.setObjectName(u"label_23")
-
-        self.gridLayout_13.addWidget(self.label_23, 1, 0, 1, 1)
-
-        self.label_22 = QLabel(self.widget_12)
-        self.label_22.setObjectName(u"label_22")
-
-        self.gridLayout_13.addWidget(self.label_22, 0, 0, 1, 1)
-
-        self.btn_clear_biaya = QPushButton(self.widget_12)
-        self.btn_clear_biaya.setObjectName(u"btn_clear_biaya")
-        self.btn_clear_biaya.setMaximumSize(QSize(24, 24))
-
-        self.gridLayout_13.addWidget(self.btn_clear_biaya, 2, 2, 1, 1)
-
-        self.line_filter_nama = QLineEdit(self.widget_12)
-        self.line_filter_nama.setObjectName(u"line_filter_nama")
-        self.line_filter_nama.setMinimumSize(QSize(0, 24))
-        self.line_filter_nama.setClearButtonEnabled(True)
-
-        self.gridLayout_13.addWidget(self.line_filter_nama, 1, 1, 1, 2)
-
-        self.btn_clear_petugas = QPushButton(self.widget_12)
-        self.btn_clear_petugas.setObjectName(u"btn_clear_petugas")
-        self.btn_clear_petugas.setMaximumSize(QSize(24, 24))
-
-        self.gridLayout_13.addWidget(self.btn_clear_petugas, 3, 2, 1, 1)
-
-
-        self.gridLayout_9.addWidget(self.widget_12, 0, 4, 1, 1)
 
         self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
@@ -243,7 +246,7 @@ class Ui_Form(object):
         self.widget_9.setObjectName(u"widget_9")
         sizePolicy.setHeightForWidth(self.widget_9.sizePolicy().hasHeightForWidth())
         self.widget_9.setSizePolicy(sizePolicy)
-        self.widget_9.setMaximumSize(QSize(500, 16777215))
+        self.widget_9.setMinimumSize(QSize(500, 0))
         self.gridLayout_10 = QGridLayout(self.widget_9)
         self.gridLayout_10.setObjectName(u"gridLayout_10")
         self.gridLayout_10.setVerticalSpacing(30)
@@ -314,13 +317,13 @@ class Ui_Form(object):
 
         self.gridLayout_8.addWidget(self.label_13, 4, 2, 1, 1)
 
-        self.txt_status_dispensasi = QLabel(self.widget_7)
-        self.txt_status_dispensasi.setObjectName(u"txt_status_dispensasi")
-        self.txt_status_dispensasi.setMinimumSize(QSize(120, 0))
-        self.txt_status_dispensasi.setFont(font)
-        self.txt_status_dispensasi.setFrameShape(QFrame.StyledPanel)
+        self.label_sudah_bayar = QLabel(self.widget_7)
+        self.label_sudah_bayar.setObjectName(u"label_sudah_bayar")
+        self.label_sudah_bayar.setMinimumSize(QSize(120, 0))
+        self.label_sudah_bayar.setFont(font)
+        self.label_sudah_bayar.setFrameShape(QFrame.StyledPanel)
 
-        self.gridLayout_8.addWidget(self.txt_status_dispensasi, 4, 3, 1, 1)
+        self.gridLayout_8.addWidget(self.label_sudah_bayar, 4, 3, 1, 1)
 
         self.label_10 = QLabel(self.widget_7)
         self.label_10.setObjectName(u"label_10")
@@ -472,13 +475,13 @@ class Ui_Form(object):
 
         self.gridLayout_6.addWidget(self.label_7, 0, 2, 1, 1)
 
-        self.label_12 = QLabel(self.widget_5)
-        self.label_12.setObjectName(u"label_12")
-        self.label_12.setMinimumSize(QSize(60, 0))
-        self.label_12.setFont(font)
-        self.label_12.setFrameShape(QFrame.StyledPanel)
+        self.label_kelas = QLabel(self.widget_5)
+        self.label_kelas.setObjectName(u"label_kelas")
+        self.label_kelas.setMinimumSize(QSize(60, 0))
+        self.label_kelas.setFont(font)
+        self.label_kelas.setFrameShape(QFrame.StyledPanel)
 
-        self.gridLayout_6.addWidget(self.label_12, 0, 3, 1, 1)
+        self.gridLayout_6.addWidget(self.label_kelas, 0, 3, 1, 1)
 
         self.label_ortu = QLabel(self.widget_5)
         self.label_ortu.setObjectName(u"label_ortu")
@@ -537,21 +540,21 @@ class Ui_Form(object):
         self.label.setText(QCoreApplication.translate("Form", u"Daftar Santri", None))
         self.radio_siswa_aktif.setText(QCoreApplication.translate("Form", u"Siswa Aktif", None))
         self.radio_buku_induk.setText(QCoreApplication.translate("Form", u"Buku Induk", None))
-        self.label_16.setText(QCoreApplication.translate("Form", u"Tgl Awal", None))
-        self.label_17.setText(QCoreApplication.translate("Form", u"Tgll Akhir", None))
         self.date_awal.setDisplayFormat(QCoreApplication.translate("Form", u"dd MMMM yyyy", None))
+        self.label_16.setText(QCoreApplication.translate("Form", u"Tgl Awal", None))
         self.date_akhir.setDisplayFormat(QCoreApplication.translate("Form", u"dd MMMM yyyy", None))
+        self.label_17.setText(QCoreApplication.translate("Form", u"Tgll Akhir", None))
         self.label_21.setText(QCoreApplication.translate("Form", u"Rentang Tanggal", None))
-        self.label_20.setText(QCoreApplication.translate("Form", u"Tampilkan Berdasarkan:", None))
-        self.radio_rentang.setText(QCoreApplication.translate("Form", u"Rentang Tanggal", None))
-        self.radio_filter.setText(QCoreApplication.translate("Form", u"Filter", None))
-        self.radio_rentang_filter.setText(QCoreApplication.translate("Form", u"Rentang Tanggal dan Filter", None))
-        self.label_24.setText(QCoreApplication.translate("Form", u"Jenis Biaya", None))
-        self.label_25.setText(QCoreApplication.translate("Form", u"Petugas", None))
-        self.label_23.setText(QCoreApplication.translate("Form", u"Nama Siswa", None))
-        self.label_22.setText(QCoreApplication.translate("Form", u"Pencarian/Filter", None))
+        self.btn_tgl_awal_prev.setText(QCoreApplication.translate("Form", u"<", None))
+        self.btn_tgl_awal_next.setText(QCoreApplication.translate("Form", u">", None))
+        self.btn_tgl_akhir_prev.setText(QCoreApplication.translate("Form", u"<", None))
+        self.btn_tgl_akhir_next.setText(QCoreApplication.translate("Form", u">", None))
         self.btn_clear_biaya.setText(QCoreApplication.translate("Form", u"X", None))
-        self.btn_clear_petugas.setText(QCoreApplication.translate("Form", u"X", None))
+        self.label_24.setText(QCoreApplication.translate("Form", u"Jenis Biaya", None))
+        self.label_20.setText(QCoreApplication.translate("Form", u"Rentang Tanggal:", None))
+        self.radio_bulan.setText(QCoreApplication.translate("Form", u"Bulan Ini", None))
+        self.radio_tahun.setText(QCoreApplication.translate("Form", u"Tahun Berjalan", None))
+        self.radio_hari.setText(QCoreApplication.translate("Form", u"Hari ini", None))
         self.label_3.setText(QCoreApplication.translate("Form", u"ID Tagihan", None))
         self.label_id_tagihan.setText("")
         self.label_9.setText(QCoreApplication.translate("Form", u"Nama Tagihan", None))
@@ -560,8 +563,8 @@ class Ui_Form(object):
         self.label_status.setText("")
         self.label_15.setText(QCoreApplication.translate("Form", u"Periode", None))
         self.label_periode.setText("")
-        self.label_13.setText(QCoreApplication.translate("Form", u"Status Dispensasi", None))
-        self.txt_status_dispensasi.setText("")
+        self.label_13.setText(QCoreApplication.translate("Form", u"Sudah Bayar", None))
+        self.label_sudah_bayar.setText("")
         self.label_10.setText(QCoreApplication.translate("Form", u"Nominal Tagihan", None))
         self.label_nominal_tagihan.setText("")
         self.btn_bayar.setText(QCoreApplication.translate("Form", u"BAYAR", None))
@@ -579,7 +582,7 @@ class Ui_Form(object):
         self.label_nis_lokal.setText("")
         self.label_8.setText(QCoreApplication.translate("Form", u"Orang Tua", None))
         self.label_7.setText(QCoreApplication.translate("Form", u"Kelas", None))
-        self.label_12.setText("")
+        self.label_kelas.setText("")
         self.label_ortu.setText("")
         self.label_nama.setText("")
         self.label_2.setText(QCoreApplication.translate("Form", u"Daftar Tagihan/Tunggakan", None))

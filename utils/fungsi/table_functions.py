@@ -15,11 +15,10 @@ from PySide6.QtWidgets import (
 )
 from PySide6.QtGui import QFont, QFontMetrics
 from PySide6.QtCore import Qt
-
 def generate_table(
     data,
     table: QTableWidget,
-    column_names=None,  # Nama kolom opsional untuk kasus data kosong (hanya jika mode_input=True)
+    column_names=None,
     left_column=None,
     hidden_column=None,
     stretch_column=None,
@@ -36,7 +35,7 @@ def generate_table(
     separator_ribuan=None,
     separator_desimal=None,
     kolom_currency=None,
-    mode_input=False,  # Parameter baru untuk mengaktifkan logika baris kosong
+    mode_input=False,
 ):
     """
     Mengisi tabel dengan data. Jika mode_input=True, tambahkan baris kosong untuk input baru.
@@ -57,11 +56,15 @@ def generate_table(
         data = data.to_dict(orient="records")
     if not isinstance(data, (list, tuple)) or not all(isinstance(row, dict) for row in data):
         raise ValueError("Parameter 'data' harus berupa list atau tuple berisi dictionary.")
+
+    # Selalu bersihkan tabel sepenuhnya sebelum memulai
     prepare_table(table)
+    table.clear()  # Hapus isi dan header
+
     if not data:
         if mode_input:
             if column_names is None:
-                # Tidak ada data dan tidak ada column_names: tabel kosong tanpa baris
+                # Tabel kosong tanpa baris atau header lama
                 table.setRowCount(0)
                 num_columns = (1 if icon_awal else 0) + (1 if icon_akhir else 0) or 1
                 table.setColumnCount(num_columns)
@@ -69,7 +72,7 @@ def generate_table(
                 table.setHorizontalHeaderLabels(headers)
                 table.setFont(QFont(font_family, font_size))
             else:
-                # Data kosong tapi column_names ada: tambah satu baris kosong
+                # Tambah satu baris kosong
                 table.setRowCount(1)
                 num_columns = len(column_names) + (1 if icon_awal else 0) + (1 if icon_akhir else 0)
                 table.setColumnCount(num_columns)
@@ -83,20 +86,17 @@ def generate_table(
                 table.setFont(QFont(font_family, font_size))
                 add_empty_row(table, 0, headers, icon_awal, icon_akhir, fungsi_awal, fungsi_akhir)
         else:
-            # Mode generate_table asli: hapus tabel jika data kosong
-            table.clear()
+            # Mode biasa: hapus tabel sepenuhnya
             table.setRowCount(0)
             table.setColumnCount(0)
+            finalize_table(table)
             return
-
-    # Kasus ada data
     else:
-        # Tentukan jumlah baris: tambah 1 untuk baris kosong jika mode_input=True
+        # Logika untuk data tidak kosong (tidak diubah karena tidak relevan dengan bug)
         table.setRowCount(len(data) + (1 if mode_input else 0))
         num_columns = len(data[0]) + (1 if icon_awal else 0) + (1 if icon_akhir else 0)
         table.setColumnCount(num_columns)
 
-        # Buat header dari kunci data
         headers = []
         if icon_awal:
             headers.append("")
@@ -109,7 +109,6 @@ def generate_table(
         metrics = QFontMetrics(table.font())
         column_widths = [0] * len(headers)
 
-        # Isi data
         for row_num, row_data in enumerate(data):
             if icon_awal:
                 add_icon_button(table, row_num, 0, icon_awal, fungsi_awal)
@@ -136,11 +135,9 @@ def generate_table(
             if icon_akhir:
                 add_icon_button(table, row_num, len(headers) - 1, icon_akhir, fungsi_akhir)
 
-        # Tambah baris kosong di akhir jika mode_input=True
         if mode_input:
             add_empty_row(table, len(data), headers, icon_awal, icon_akhir, fungsi_awal, fungsi_akhir)
 
-        # Pengaturan tambahan
         if hidden_column:
             for col_index in hidden_column:
                 table.setColumnHidden(col_index, True)
@@ -151,6 +148,7 @@ def generate_table(
                 for col_index in stretch_column:
                     table.horizontalHeader().setSectionResizeMode(col_index, QHeaderView.Stretch)
         adjust_column_widths(table, column_widths, headers, metrics, margin)
+
     finalize_table(table)
 
 def prepare_table(table: QTableWidget, clear=True):

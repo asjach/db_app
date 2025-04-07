@@ -166,7 +166,7 @@ class TemplateRapor:
         self.c.setLineWidth(1)
         self.c.rect(77*mm, 30*mm, 30*mm, 40*mm)
         tabel(self, 120, 228, data2,[70*mm], self.setting['tinggi_baris']*10, styles=style2)
-        gambar(self, self.ttd_mudir, 143 + self.setting['x_mudir']*10, 258 + self.setting['y_mudir']*10, self.setting['size_mudir']*10)
+        gambar_mid(self, self.ttd_mudir, 143 + self.setting['x_mudir']*10, 258 + self.setting['y_mudir']*10, self.setting['size_mudir']*10)
         
         self.c.showPage()
 
@@ -278,8 +278,8 @@ class TemplateRapor:
                             #  self.setting['tinggi_baris']*10
                             None
                              , style1)
-        gambar(self, self.ttd_mudir, 50+setting['x_mudir']*10, tinggi_tabel/mm + 133 + setting['y_mudir']*10, setting['size_mudir']*10)
-        gambar(self, self.ttd_walikelas, 155+setting['x_walas']*10, tinggi_tabel/mm + 133 + setting['y_walas']*10, setting['size_walas']*10)
+        gambar_mid(self, self.ttd_mudir, 50+setting['x_mudir']*10, tinggi_tabel/mm + 133 + setting['y_mudir']*10, setting['size_mudir']*10)
+        gambar_mid(self, self.ttd_walikelas, 155+setting['x_walas']*10, tinggi_tabel/mm + 133 + setting['y_walas']*10, setting['size_walas']*10)
         tabel(self, 30, tinggi_tabel/mm+100, data_tabel_ttd, [60 * mm, 37 * mm, 60 * mm], None, style2)
         self.c.showPage()
         
@@ -392,14 +392,14 @@ class TemplateRapor:
         self.c.setLineWidth(1)
         self.c.rect(22*mm, self.height-165*mm-tinggi_catatan, 173*mm, 15*mm)
 
-        gambar(
+        gambar_mid(
             self, self.ttd_mudir, 
             90 + setting['x_mudir']*10, 
             239 + tinggi_catatan/mm + setting['y_mudir']*10, 
             setting['size_mudir']*10
         )
 
-        gambar(self, self.ttd_walikelas, 
+        gambar_mid(self, self.ttd_walikelas, 
                155+ setting['x_walas']*10, 
                203 + setting['y_walas']*10 + tinggi_catatan/mm, 
                setting['size_walas']*10
