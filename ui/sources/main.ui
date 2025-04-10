@@ -1307,29 +1307,23 @@
     <property name="title">
      <string>Nilai</string>
     </property>
-    <widget class="QMenu" name="menuCetak">
-     <property name="title">
-      <string>Cetak</string>
-     </property>
-     <addaction name="actionKartu_Peserta"/>
-     <addaction name="actionLabel_Sampul"/>
-    </widget>
     <widget class="QMenu" name="menuPengaturan">
      <property name="title">
       <string>Pengaturan</string>
      </property>
-     <addaction name="actionEkskulKegiatan"/>
     </widget>
     <addaction name="menuPengaturan"/>
     <addaction name="actionRiwayatKegiatan"/>
     <addaction name="actionPesertaKegiatan"/>
     <addaction name="actionMapelKegiatan"/>
+    <addaction name="actionEkskulKegiatan"/>
     <addaction name="separator"/>
     <addaction name="actionInput_Nilai"/>
     <addaction name="separator"/>
-    <addaction name="menuCetak"/>
-    <addaction name="actionRapor"/>
+    <addaction name="actionKartu_Peserta"/>
+    <addaction name="actionLabel_Sampul"/>
     <addaction name="actionRekap"/>
+    <addaction name="actionRapor"/>
    </widget>
    <widget class="QMenu" name="menuDokumen">
     <property name="title">

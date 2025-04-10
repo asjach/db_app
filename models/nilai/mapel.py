@@ -106,7 +106,6 @@ class Mapel(ConnectDB):
             WHERE k.kegiatan = 'PAS'
                 AND k.jenjang = %s
                 AND k.tapel = %s
-                AND kr.tingkat NOT IN ('6', '9', '12')
                 AND m2.mapel IS NULL
         """
         params = (id_kegiatan, id_kegiatan, jenjang, tapel)

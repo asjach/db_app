@@ -73,18 +73,18 @@ def open_with_default_app(filepath):
         return
 
 def open_in_explorer(filepath):
-    if not filepath:  # Cek apakah filepath kosong atau None
+    if not filepath:
         print("Path tidak valid")
         return
-
-    file_path = os.path.normpath(filepath)  # Sesuaikan path dengan OS
+    file_path = os.path.normpath(filepath)
     if not os.path.exists(file_path):
         print("File tidak ditemukan")
         return
-
     try:
-        # Gunakan File Explorer yang sudah terbuka jika ada
-        subprocess.Popen(f'explorer /select,"{file_path}"', shell=True)
+        if os.path.isfile(file_path):
+            subprocess.Popen(f'explorer /select,"{file_path}"', shell=True)
+        else:
+            subprocess.Popen(f'explorer "{file_path}"', shell=True)
     except Exception as e:
         print(f"Gagal membuka file: {e}")
 
