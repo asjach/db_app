@@ -65,7 +65,7 @@ class Ui_Form(object):
 
         self.tbl_widget = QTableWidget(Form)
         self.tbl_widget.setObjectName(u"tbl_widget")
-        self.tbl_widget.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.tbl_widget.setSelectionBehavior(QAbstractItemView.SelectItems)
 
         self.gridLayout_2.addWidget(self.tbl_widget, 1, 0, 1, 1)
 

@@ -132,13 +132,13 @@ class DokumenViewer(Ui_Dokumen_Viewer, QWidget):
     def render_pdf_page(self, page_number):
         if not self.pdf_document:
             return
-
+ 
         page = self.pdf_document[page_number]
         pix = page.get_pixmap(dpi=300)  # Render page at 150 DPI
         qimage = QImage(pix.samples, pix.width, pix.height, pix.stride, QImage.Format_RGB888)
         self.qimage = qimage
         self.qpixmap = QPixmap(self.qlabel_image.size())
-        self.zoomX = 1
+        
         self.position = [0, 0]
         self.qimage_scaled = self.qimage.scaled(
             int(self.qlabel_image.width() * self.zoomX),
@@ -150,7 +150,6 @@ class DokumenViewer(Ui_Dokumen_Viewer, QWidget):
     def next_page(self):
         if self.pdf_document and self.current_page < len(self.pdf_document) - 1:
             self.current_page += 1
-            # self.render_pdf_page(self.current_page)
             self.spin_page.setValue(self.current_page+1)
 
     def previous_page(self):

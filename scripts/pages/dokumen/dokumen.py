@@ -20,7 +20,6 @@ class PageDokumen(QWidget, Ui_Form):
             self.frame_dokumen, self.frame_parameter, self.frame_browse,
             self.frame_copy_move, self.frame_eksekusi
         ]
-        
         self._setup_connections()
         self.update_cbo_daftar2()
 

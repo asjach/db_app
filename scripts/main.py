@@ -18,6 +18,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.set_property_for_qss()
         self.showMaximized()
         self.apply_style()
+        register_all_windows_fonts()
         self._last_search_text = ''
         self.model_main = ModelMain()
         self.cmenu = QMenu()
@@ -34,6 +35,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.add_combo_value()
         self.connect_signals()
         self.actionDaftar_Kelas.trigger()
+        # self.actionKartu_Peserta.trigger()
     
     def connect_signals(self):
         combobox_mapping = {
@@ -227,6 +229,10 @@ class MainWindow(Ui_MainWindow, QMainWindow):
             if event.key() == Qt.Key_C and event.modifiers() == Qt.ControlModifier:
                 copyCells(source)
                 print("COPIED")
+                return True
+            elif event.key() == Qt.Key_V and event.modifiers() == Qt.ControlModifier:
+                pasteCells(source)
+                print("PASTED")
                 return True
         return super().eventFilter(source, event)
     

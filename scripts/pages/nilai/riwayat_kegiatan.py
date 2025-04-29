@@ -23,7 +23,8 @@ class PageRiwayatKegiatan(QWidget, Ui_Form):
             table=self.tbl_widget,
             icon_akhir=":/icon/resources/icon/multiply.svg",
             fungsi_akhir=self.delete_riwayat_kegiatan,
-            mode_input=True
+            mode_input=True,
+            max_column_size=400
         )
 
     def table_selected(self):

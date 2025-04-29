@@ -126,6 +126,11 @@ TAB_CONFIG = {
         "action": "actionInput_Nilai",
         "page_class": PageInputNilai,
     },
+    "Kartu Peserta": {
+        "show_page": "KARTU_PESERTA",
+        "action": "actionKartu_Peserta",
+        "page_class": PageKartuPeserta,
+    },
     "Rekap Nilai": {
         "show_page": "REKAP_NILAI",
         "action": "actionRekap",

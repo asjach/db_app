@@ -9,11 +9,6 @@ import json
 
 class PageCetakRapor(QWidget, Ui_Form):
     def __init__(self, parent: QMainWindow):
-        """Initialize the PageCetakRapor widget.
-
-        Args:
-            parent (QMainWindow): The parent widget.
-        """
         super().__init__(parent)
         self.setupUi(self)
         self.parent = parent
@@ -57,14 +52,12 @@ class PageCetakRapor(QWidget, Ui_Form):
                 opsi.toggled.connect(self.opsi_selected)
 
     def show_page(self):
-        """Show the page and initialize its contents."""
         self.fill_cbo_kelas()
         self.set_setting()
         self.fill_cbo_kegiatan()
         self.fill_tbl_siswa()
         
     def fill_cbo_kelas(self):
-        """Fill the class combo box with data."""
         data = self.SQL.get_kelas(self.parent.cbo_jenjang.currentText(), self.parent.cbo_tapel.currentText())
         populate_combobox(self.cbo_kelas, data, 'kelas', 'id')
 

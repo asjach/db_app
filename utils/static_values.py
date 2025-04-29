@@ -101,3 +101,4 @@ KOLOM_TANGGAL = ('tgl_lahir', 'tgl_daftar', 'tgl_mulai', 'tgl_masuk', 'tgl_ijaza
                  'ayah_tgl_lahir', 'ibu_tgl_lahir', 'wali_tgl_lahir', 
                  'tgl_kk', 'tmt_pegawai', 'tmt_guru', 'tgl_lulus_sertifikasi', 'tgl_keluar', 'tgl_lulus', 'tgl_bayar', 'tgl_selesai', 'tgl_transaksi')
 KOLOM_CURRENCY = ('nominal', 'nominal_tagihan', 'nominal_bayar', 'sudah_bayar')
+

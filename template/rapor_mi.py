@@ -439,10 +439,10 @@ class TemplateRapor:
         )
         center = self.width/2/mm-50
         gambar(self, path=self.logo_persis, x=self.width/2/mm-20, y=90, h=40)
-        paragraf(self, teks1, x = center, y=110, w= 100, h=10, font='TNRB', size=22, alignment=TA_CENTER)
-        paragraf(self, teks2, x = center, y=120, w= 100, h=10, font='TNRB', size=22, alignment=TA_CENTER)
-        paragraf(self, teks3, x = center, y=130, w= 100, h=10, font='TNRB', size=22, alignment=TA_CENTER)
-        paragraf(self, teks4, x = center, y=140, w= 100, h=10, font='TNRB', size=22, alignment=TA_CENTER)
+        paragraf(self, teks1, x = center, y=110, w= 100, h=10, font='Times New Roman Bold', size=22, alignment=TA_CENTER)
+        paragraf(self, teks2, x = center, y=120, w= 100, h=10, font='Times New Roman Bold', size=22, alignment=TA_CENTER)
+        paragraf(self, teks3, x = center, y=130, w= 100, h=10, font='Times New Roman Bold', size=22, alignment=TA_CENTER)
+        paragraf(self, teks4, x = center, y=140, w= 100, h=10, font='Times New Roman Bold', size=22, alignment=TA_CENTER)
         tabel(self, x=30, y=150, data=data_tabel1, col_width=[60*mm, 5*mm, 90*mm], styles=style_table1)
         self.c.showPage()
     
@@ -462,8 +462,8 @@ class TemplateRapor:
         gambar(self, logo_persis, 170, 38, 24)
         paragraf(self, teks1, self.w_center/mm-57.5, 18, 120, 6, size= 14)
         paragraf(self, teks2, self.w_center/mm-57.5, 28, 120, 10, size=24)
-        paragraf(self, teks3, self.w_center/mm-57.5, 35, 120, 6, size=11, font='TNRI')
-        paragraf(self, teks4, self.w_center/mm-57.5, 40, 120, 6, size=11, font='TNRI')
+        paragraf(self, teks3, self.w_center/mm-57.5, 35, 120, 6, size=11, font='Times New Roman Italic')
+        paragraf(self, teks4, self.w_center/mm-57.5, 40, 120, 6, size=11, font='Times New Roman Italic')
         self.c.setLineWidth(2)
         self.c.line(x1=20*mm, y1=self.height-42*mm, x2=195*mm, y2=self.height - 42*mm)
 

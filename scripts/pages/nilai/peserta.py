@@ -47,18 +47,38 @@ class PagePeserta(QWidget, Ui_Form):
         )
     
     def table_selected(self):
-        table_selected(self.tbl_widget, self, self.parent)
+        self.selected_data = table_selected(self.tbl_widget, self, self.parent)
 
+    # def update_peserta(self, item: QTableWidgetItem):
+    #     row = item.row()
+    #     key_column_index = findColumnByName(self.tbl_widget, "id")
+    #     if key_column_index == -1:
+    #         print("Kolom ID tidak ditemukan.")
+    #         return
 
-    def update_peserta(self):
-        sukses = handle_item_changed(
+    #     key_item = self.tbl_widget.item(row, key_column_index)
+    #     if key_item is None:
+    #         print(f"Baris {row} tidak punya ID.")
+    #         return
+
+    #     key_value = key_item.text()
+    #     update_from_table_v2(
+    #         tabel_ui=self.tbl_widget,
+    #         tabel_sql='kegiatan_peserta',
+    #         item=item,  # Kirim item yang diubah
+    #         not_updatable_column=['id'],
+    #         key='id',
+    #         key_value=key_value
+    #     )
+    def update_peserta(self, item: QTableWidgetItem):
+        handle_item_changed_v2(
             tabel_ui=self.tbl_widget,
             tabel_sql='kegiatan_peserta',
+            item=item,
             primary_key='id',
-            must_insert=['id_kelas', 'id_kegiatan', 'nis_lokal'],
+            must_insert=['nama', 'tanggal'],  # Kolom wajib untuk insert
             not_updatable_column=['id']
         )
-        if sukses: self.fill_table()
 
     def delete_peserta(self):
         sukses = delete_by_id('kegiatan_peserta','id', self.id)
@@ -80,6 +100,7 @@ class PagePeserta(QWidget, Ui_Form):
             kegiatan = self.cbo_kegiatan.currentText()
             if kegiatan in ['PAS', 'AS Ganjil',  'PAT', 'AS Genap']:
                 sukses = self.SQL.generate_peserta(jenjang, tapel, id_kelas, kls, id_kegiatan)
+                self.SQL.generate_no_peserta(tapel, kegiatan)
             elif kegiatan in ['UAP', 'RTR', 'NA', 'US', 'AM']:
                 if tingkat in ['6', '9', '12']:
                     sukses = self.SQL.generate_peserta(jenjang, tapel, id_kelas, kls, id_kegiatan)

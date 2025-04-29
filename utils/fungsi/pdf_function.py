@@ -15,16 +15,22 @@ from reportlab.lib.utils import ImageReader
 from PySide6.QtWidgets import QFileDialog
 from PySide6.QtCore import QByteArray
 
-pdfmetrics.registerFont(TTFont("TNR", "times.ttf"))
-pdfmetrics.registerFont(TTFont("TNRB", "timesbd.ttf"))
-pdfmetrics.registerFont(TTFont("TNRI", "timesi.ttf"))
-pdfmetrics.registerFont(TTFont("Aptos Bold", "C:/APP/DB App/resources/font/Aptos Bold.ttf"))
-pdfmetrics.registerFont(TTFont("Aptos Narrow", "C:/APP/DB App/resources/font/Aptos Narrow.ttf"))
-pdfmetrics.registerFont(TTFont("Aptos Narrow Bold", "C:/APP/DB App/resources/font/Aptos Narrow Bold.ttf"))
-pdfmetrics.registerFont(TTFont("Aptos", "C:/APP/DB App/resources/font/Aptos.ttf"))
-pdfmetrics.registerFont(TTFont("Aptos Italic", "C:/APP/DB App/resources/font/Aptos Italic.ttf"))
-pdfmetrics.registerFont(TTFont("Aptos Narrow Italic", "C:/APP/DB App/resources/font/Aptos Narrow Italic.ttf"))
+# pdfmetrics.registerFont(TTFont("TNR", "times.ttf"))
+# pdfmetrics.registerFont(TTFont("TNRB", "timesbd.ttf"))
+# pdfmetrics.registerFont(TTFont("TNRI", "timesi.ttf"))
 
+
+
+def register_all_windows_fonts():
+    font_dir = "C:/APP/DB App/resources/font"
+    for file in os.listdir(font_dir):
+        if file.lower().endswith('.ttf'):
+            font_path = os.path.join(font_dir, file)
+            font_name = os.path.splitext(file)[0]  # nama file tanpa .ttf
+            try:
+                pdfmetrics.registerFont(TTFont(font_name, font_path))
+            except Exception as e:
+                print(f"Gagal register {font_name}: {e}")
 
 def para(teks, font='Aptos', size=12, leading=12, color=colors.black, bg_color=colors.white, alignment=0):
     '''
@@ -147,7 +153,7 @@ def tabel_style_nogrid():
     )
     return style
 
-def paragraf(obj, text, x=0, y=0, w=100, h=5, font= 'TNRB',size=11, alignment=1, leading=0, showBoundary= 0):
+def paragraf(obj, text, x=0, y=0, w=100, h=5, font= 'Times New Roman',size=11, alignment=1, leading=0, showBoundary= 0):
     """
     Digunakan dalam canvas, sehingga posisi paragraf bisa diatur di mana saja 
     

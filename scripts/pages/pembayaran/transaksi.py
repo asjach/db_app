@@ -75,6 +75,7 @@ class PageTransaksi(QWidget, Ui_Form):
     def fill_tbl_tagihan(self):
         if self.nis_lokal:
             data = self.SQL.tagihan_siswa(self.nis_lokal)
+            print(data)
             generate_table(
                 data=data,
                 table=self.tbl_tagihan,

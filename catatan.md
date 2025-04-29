@@ -34,6 +34,7 @@ pyside6-uic -o ui/ui_page_dokumen.py ui/sources/page_dokumen.ui
 pyside6-uic -o ui/ui_page_peserta.py ui/sources/page_peserta.ui
 pyside6-uic -o ui/ui_page_mapel_kegiatan.py ui/sources/page_mapel_kegiatan.ui
 pyside6-uic -o ui/ui_page_input_nilai.py ui/sources/page_input_nilai.ui
+pyside6-uic -o ui/ui_page_kartu_peserta.py ui/sources/page_kartu_peserta.ui
 pyside6-uic -o ui/ui_page_rekap_nilai.py ui/sources/page_rekap_nilai.ui
 pyside6-uic -o ui/ui_page_cetak_rapor.py ui/sources/page_cetak_rapor.ui
 

@@ -106,7 +106,7 @@
    <item row="1" column="0">
     <widget class="QTableWidget" name="tbl_widget">
      <property name="selectionBehavior">
-      <enum>QAbstractItemView::SelectRows</enum>
+      <enum>QAbstractItemView::SelectItems</enum>
      </property>
     </widget>
    </item>
