@@ -555,11 +555,11 @@
            <property name="alignment">
             <set>Qt::AlignCenter</set>
            </property>
+           <property name="buttonSymbols">
+            <enum>QAbstractSpinBox::PlusMinus</enum>
+           </property>
            <property name="suffix">
             <string> cm</string>
-           </property>
-           <property name="decimals">
-            <number>2</number>
            </property>
            <property name="minimum">
             <double>-100.000000000000000</double>

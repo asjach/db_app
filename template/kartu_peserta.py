@@ -43,7 +43,7 @@ class TemplateKartuPeserta:
         """Menggambar satu kartu peserta pada posisi x,y"""
         setting = self.data.get('setting_kartu')
         # Gambar border kartu
-        c.rect(x, y, self.lebar_kartu, self.tinggi_kartu)
+        
 
         if setting['font'] != '':
             font = setting['font']
@@ -59,6 +59,8 @@ class TemplateKartuPeserta:
                         height=self.tinggi_kartu, 
                         preserveAspectRatio=True
             )
+        else:
+            c.rect(x, y, self.lebar_kartu, self.tinggi_kartu)
 
         # NAMA
         if setting['nama']:
@@ -93,7 +95,6 @@ class TemplateKartuPeserta:
             if peserta.get('foto'):
                 path = f'{value_from_db('DOKUMEN_PATH')}/siswa/{peserta.get('foto')}'
                 foto = ImageReader(path)
-                print(foto.getSize())
                 c.drawImage(foto, 
                             x + setting['x_foto']*cm, 
                             y + self.tinggi_kartu - setting['y_foto']*cm - setting['h_foto']*cm, 
@@ -101,9 +102,6 @@ class TemplateKartuPeserta:
                             height= setting['h_foto']*cm, 
                             preserveAspectRatio=True)
 
-            
-
-    
     def build_pdf(self):
         """Membuat PDF dengan semua kartu peserta"""
         if self.peserta_data:
@@ -111,19 +109,15 @@ class TemplateKartuPeserta:
             if self.page_size.upper() == 'A4':
                 page_size = A4
             elif self.page_size.upper() == 'F4':
-                page_size = (210*mm, 330*mm)  # Ukuran F4
+                page_size = (215*mm, 330*mm)
             else:
-                page_size = letter  # Default ke letter jika tidak dikenal
-            
-            # Tentukan orientasi
+                page_size = letter
             if self.orientation == 'landscape':
                 page_width, page_height = landscape(page_size)
             else:
                 page_width, page_height = portrait(page_size)
-            
             buffer = BytesIO()
             c = canvas.Canvas(buffer, pagesize=(page_width, page_height))
-            # c.drawImage(=)
             
             # Hitung jumlah kartu per halaman
             cards_per_row, cards_per_col = self.calculate_grid(page_width, page_height)

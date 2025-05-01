@@ -10,13 +10,12 @@ def fill_combobox(ui_combo:QComboBox, values, *parameter):
 
 def populate_combobox(cbo_widget: QComboBox, data, text_data=None, user_data=None):
     """
-    Mengisi QComboBox dengan data berdasarkan parameter yang diberikan.
-    
-    Args:
-        cbo_widget (QComboBox): Widget QComboBox yang akan diisi.
-        data: Data yang akan digunakan untuk mengisi QComboBox (list atau list of dict).
-        text_data (str, optional): Kunci dalam dictionary untuk teks yang ditampilkan.
-        user_data (str, optional): Kunci dalam dictionary untuk userData.
+    fungsi untuk mengisi QComboBox
+    :parameter
+        cbo_widget      : nama combobox
+        data            : list atau dict yang akan ditampilkan di combobox
+        text_data       : text yang akan ditampilkan di combobox
+        user_data       : data yang akan ada jika teks combobox dipilih
     """
     cbo_widget.clear()  # Bersihkan isi combobox sebelum menambahkan data baru
     if not data:  # Jika data kosong, langsung keluar

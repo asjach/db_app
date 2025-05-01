@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1117</width>
-    <height>1424</height>
+    <height>438</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -1329,7 +1329,16 @@
     <property name="title">
      <string>Dokumen</string>
     </property>
+    <widget class="QMenu" name="menuMode">
+     <property name="title">
+      <string>Mode</string>
+     </property>
+     <addaction name="actionTambah_Dokumen"/>
+     <addaction name="actionHapus_Dokumen"/>
+     <addaction name="actionEdit_Dokumen"/>
+    </widget>
     <addaction name="actionInput_Dokumen"/>
+    <addaction name="menuMode"/>
    </widget>
    <widget class="QMenu" name="menuView">
     <property name="title">
@@ -1565,6 +1574,21 @@
   <action name="actionRiwayat_Biaya">
    <property name="text">
     <string>Riwayat Biaya</string>
+   </property>
+  </action>
+  <action name="actionTambah_Dokumen">
+   <property name="text">
+    <string>Tambah Dokumen</string>
+   </property>
+  </action>
+  <action name="actionHapus_Dokumen">
+   <property name="text">
+    <string>Hapus Dokumen</string>
+   </property>
+  </action>
+  <action name="actionEdit_Dokumen">
+   <property name="text">
+    <string>Edit Dokumen</string>
    </property>
   </action>
  </widget>

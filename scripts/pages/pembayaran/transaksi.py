@@ -4,7 +4,6 @@ from ui.ui_page_transaksi_pembayaran import Ui_Form
 from utils.fungsi.general_functions import *
 from PySide6.QtCore import QDate, QLocale
 
-
 class PageTransaksi(QWidget, Ui_Form):
     def __init__(self, parent:None):
         super().__init__(parent)

@@ -49,27 +49,6 @@ class PagePeserta(QWidget, Ui_Form):
     def table_selected(self):
         self.selected_data = table_selected(self.tbl_widget, self, self.parent)
 
-    # def update_peserta(self, item: QTableWidgetItem):
-    #     row = item.row()
-    #     key_column_index = findColumnByName(self.tbl_widget, "id")
-    #     if key_column_index == -1:
-    #         print("Kolom ID tidak ditemukan.")
-    #         return
-
-    #     key_item = self.tbl_widget.item(row, key_column_index)
-    #     if key_item is None:
-    #         print(f"Baris {row} tidak punya ID.")
-    #         return
-
-    #     key_value = key_item.text()
-    #     update_from_table_v2(
-    #         tabel_ui=self.tbl_widget,
-    #         tabel_sql='kegiatan_peserta',
-    #         item=item,  # Kirim item yang diubah
-    #         not_updatable_column=['id'],
-    #         key='id',
-    #         key_value=key_value
-    #     )
     def update_peserta(self, item: QTableWidgetItem):
         handle_item_changed_v2(
             tabel_ui=self.tbl_widget,

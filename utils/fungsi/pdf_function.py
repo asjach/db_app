@@ -224,7 +224,7 @@ def save_pdf(parent, pdf_buffer, judul_default: str):
         open_in_explorer(filepath)
 
 
-def print_with_foxit(pdf_file, opsi):
+def print_with_foxit(pdf_file, opsi=True):
     path_to_foxit = r"C:\Program Files (x86)\Foxit Software\Foxit PDF Reader\FoxitPDFReader.exe"
     if opsi:
         if opsi.isChecked():
