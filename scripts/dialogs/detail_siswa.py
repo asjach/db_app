@@ -1,6 +1,5 @@
 from PySide6.QtWidgets import QComboBox, QLineEdit, QDialog, QCompleter
 from ui.ui_dialog_detail_siswa import Ui_Form
-from PySide6.QtPdf import QPdfDocument
 from utils.fungsi.general_functions import *
 from models.siswa.biodata_siswa import BiodataSiswa
 from scripts.widgets.image_viewer import Widget_Image_Viewer
@@ -307,8 +306,6 @@ class DialogDetailSiswa(QDialog, Ui_Form):
     
 
     def eventFilter(self, obj, event):
-        if event.type() == QEvent.Wheel and isinstance(obj, QComboBox):
-            return True
         if event.type() == QEvent.Wheel and isinstance(obj, QComboBox):
             return True
         return super().eventFilter(obj, event)

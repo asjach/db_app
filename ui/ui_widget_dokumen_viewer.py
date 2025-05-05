@@ -45,7 +45,7 @@ class Ui_Dokumen_Viewer(object):
         self.btn_1x.setMinimumSize(QSize(25, 25))
         self.btn_1x.setMaximumSize(QSize(25, 25))
         font = QFont()
-        font.setFamilies([u"OCR-A BT"])
+        font.setFamilies([u"MS Reference Sans Serif"])
         font.setPointSize(10)
         self.btn_1x.setFont(font)
         self.btn_1x.setIconSize(QSize(20, 20))
@@ -69,6 +69,24 @@ class Ui_Dokumen_Viewer(object):
         self.btn_3x.setIconSize(QSize(20, 20))
 
         self.horizontalLayout.addWidget(self.btn_3x)
+
+        self.btn_4x = QPushButton(self.widget)
+        self.btn_4x.setObjectName(u"btn_4x")
+        self.btn_4x.setMinimumSize(QSize(25, 25))
+        self.btn_4x.setMaximumSize(QSize(25, 25))
+        self.btn_4x.setFont(font)
+        self.btn_4x.setIconSize(QSize(20, 20))
+
+        self.horizontalLayout.addWidget(self.btn_4x)
+
+        self.btn_5x = QPushButton(self.widget)
+        self.btn_5x.setObjectName(u"btn_5x")
+        self.btn_5x.setMinimumSize(QSize(25, 25))
+        self.btn_5x.setMaximumSize(QSize(25, 25))
+        self.btn_5x.setFont(font)
+        self.btn_5x.setIconSize(QSize(20, 20))
+
+        self.horizontalLayout.addWidget(self.btn_5x)
 
         self.btn_rotate_left = QPushButton(self.widget)
         self.btn_rotate_left.setObjectName(u"btn_rotate_left")
@@ -96,14 +114,13 @@ class Ui_Dokumen_Viewer(object):
 
         self.horizontalLayout.addItem(self.horizontalSpacer_2)
 
-        self.btn_prev_page = QPushButton(self.widget)
-        self.btn_prev_page.setObjectName(u"btn_prev_page")
-        self.btn_prev_page.setMinimumSize(QSize(0, 25))
-        self.btn_prev_page.setMaximumSize(QSize(50, 16777215))
-
-        self.horizontalLayout.addWidget(self.btn_prev_page)
-
-        self.spin_page = QSpinBox(self.widget)
+        self.page_control = QWidget(self.widget)
+        self.page_control.setObjectName(u"page_control")
+        self.gridLayout_3 = QGridLayout(self.page_control)
+        self.gridLayout_3.setSpacing(0)
+        self.gridLayout_3.setObjectName(u"gridLayout_3")
+        self.gridLayout_3.setContentsMargins(0, 0, 0, 0)
+        self.spin_page = QSpinBox(self.page_control)
         self.spin_page.setObjectName(u"spin_page")
         self.spin_page.setMinimumSize(QSize(80, 25))
         self.spin_page.setAlignment(Qt.AlignCenter)
@@ -112,14 +129,24 @@ class Ui_Dokumen_Viewer(object):
         self.spin_page.setMaximum(99999)
         self.spin_page.setValue(1)
 
-        self.horizontalLayout.addWidget(self.spin_page)
+        self.gridLayout_3.addWidget(self.spin_page, 0, 1, 1, 1)
 
-        self.btn_next_page = QPushButton(self.widget)
+        self.btn_prev_page = QPushButton(self.page_control)
+        self.btn_prev_page.setObjectName(u"btn_prev_page")
+        self.btn_prev_page.setMinimumSize(QSize(0, 25))
+        self.btn_prev_page.setMaximumSize(QSize(50, 16777215))
+
+        self.gridLayout_3.addWidget(self.btn_prev_page, 0, 0, 1, 1)
+
+        self.btn_next_page = QPushButton(self.page_control)
         self.btn_next_page.setObjectName(u"btn_next_page")
         self.btn_next_page.setMinimumSize(QSize(0, 25))
         self.btn_next_page.setMaximumSize(QSize(50, 16777215))
 
-        self.horizontalLayout.addWidget(self.btn_next_page)
+        self.gridLayout_3.addWidget(self.btn_next_page, 0, 2, 1, 1)
+
+
+        self.horizontalLayout.addWidget(self.page_control)
 
         self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
@@ -182,10 +209,12 @@ class Ui_Dokumen_Viewer(object):
         self.btn_1x.setText(QCoreApplication.translate("Dokumen_Viewer", u"1x", None))
         self.btn_2x.setText(QCoreApplication.translate("Dokumen_Viewer", u"2x", None))
         self.btn_3x.setText(QCoreApplication.translate("Dokumen_Viewer", u"3x", None))
+        self.btn_4x.setText(QCoreApplication.translate("Dokumen_Viewer", u"4x", None))
+        self.btn_5x.setText(QCoreApplication.translate("Dokumen_Viewer", u"5x", None))
         self.btn_rotate_left.setText("")
         self.btn_rotate_right.setText("")
-        self.btn_prev_page.setText(QCoreApplication.translate("Dokumen_Viewer", u"<", None))
         self.spin_page.setPrefix("")
+        self.btn_prev_page.setText(QCoreApplication.translate("Dokumen_Viewer", u"<", None))
         self.btn_next_page.setText(QCoreApplication.translate("Dokumen_Viewer", u">", None))
 #if QT_CONFIG(statustip)
         self.btn_open.setStatusTip(QCoreApplication.translate("Dokumen_Viewer", u"Open File", None))

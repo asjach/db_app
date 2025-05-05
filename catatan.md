@@ -29,6 +29,9 @@ pyside6-uic -o ui/ui_page_riwayat_mengajar.py ui/sources/page_riwayat_mengajar.u
 
 ### DOKUMEN
 pyside6-uic -o ui/ui_page_dokumen.py ui/sources/page_dokumen.ui
+pyside6-uic -o ui/ui_page_lihat_dokumen.py ui/sources/page_lihat_dokumen.ui
+pyside6-uic -o ui/ui_page_tambah_dokumen.py ui/sources/page_tambah_dokumen.ui
+pyside6-uic -o ui/ui_page_compare_dokumen.py ui/sources/page_compare_dokumen.ui
 
 ### NILAI
 pyside6-uic -o ui/ui_page_peserta.py ui/sources/page_peserta.ui

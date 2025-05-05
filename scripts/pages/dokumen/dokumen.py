@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import QWidget, QMainWindow
 from ui.ui_page_dokumen import Ui_Form
-from models.dokumen import ModelDokumen
+from models.dokumen.dokumen import ModelDokumen
 # from utils.app_config import *
 from scripts.widgets.dokumen_viewer import DokumenViewer
 from utils.fungsi.general_functions import *

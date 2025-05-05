@@ -1329,16 +1329,13 @@
     <property name="title">
      <string>Dokumen</string>
     </property>
-    <widget class="QMenu" name="menuMode">
-     <property name="title">
-      <string>Mode</string>
-     </property>
-     <addaction name="actionTambah_Dokumen"/>
-     <addaction name="actionHapus_Dokumen"/>
-     <addaction name="actionEdit_Dokumen"/>
-    </widget>
     <addaction name="actionInput_Dokumen"/>
-    <addaction name="menuMode"/>
+    <addaction name="actionLihat_Dokumen"/>
+    <addaction name="actionTambah_Dokumen"/>
+    <addaction name="actionCompare_Dokumen"/>
+    <addaction name="actionRename_Dokumen"/>
+    <addaction name="actionGanti_Dokumen"/>
+    <addaction name="actionHapus_Dokumen"/>
    </widget>
    <widget class="QMenu" name="menuView">
     <property name="title">
@@ -1586,9 +1583,24 @@
     <string>Hapus Dokumen</string>
    </property>
   </action>
-  <action name="actionEdit_Dokumen">
+  <action name="actionLihat_Dokumen">
    <property name="text">
-    <string>Edit Dokumen</string>
+    <string>Lihat Dokumen</string>
+   </property>
+  </action>
+  <action name="actionRename_Dokumen">
+   <property name="text">
+    <string>Rename Dokumen</string>
+   </property>
+  </action>
+  <action name="actionGanti_Dokumen">
+   <property name="text">
+    <string>Ganti Dokumen</string>
+   </property>
+  </action>
+  <action name="actionCompare_Dokumen">
+   <property name="text">
+    <string>Bandingkan Dokumen</string>
    </property>
   </action>
  </widget>

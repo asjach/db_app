@@ -11,8 +11,7 @@ HOBI = ('', 'Lainnya', 'Olahraga', 'Kesenian', 'Membaca', 'Menulis',
         'Jalan-jalan', 'Bernyanyi', 'Menggambar', 'Berenang', 'Koleksi', 'Memasak')
 JARAK = ('', '<5 km', '5-10 km', '11-20 km', '21-30 km', '> 30 km')
 JENIS_BUKU = ('', 'Pelajaran', 'Bacaan Umum', 'Referensi', 'Lain-lain')
-JENIS_DOKUMEN = ('', 
-                 'Formulir', 
+JENIS_DOKUMEN = ('', 'Formulir', 
                  'Formulir Pendaftaran',
                  'Kartu Keluarga', 
                  'Akta', 
@@ -38,6 +37,18 @@ TEMPLATE_KETERANGAN = {
                     "Foto": ('', 'Pas', 'Bersama', 'KEGIATAN'),
                     "Surat": ('', 'SK', 'SKet', 'Instruksi', 'Pemberitahuan', 'Perjanjian')
                     }
+
+
+KETERANGAN = {
+                    "Formulir": ('Pendaftaran',),
+                    "Akta": ('Kelahiran', 'Pendirian', 'Notaris'),
+                    "KTP":('Pribadi', 'Orang Tua', 'Ayah', 'Ibu'),
+                    "Ijazah": ('RA', 'TK', 'SD', 'MI', 'MTs', 'SMP', 'MLN', 'MA', 'SMA', 'D1', 'D2', 'D3', 'D4', 'S1', 'S2', 'S3'),
+                    "Nilai Ijazah": ('JENJANG', 'Rapor'),
+                    "Foto": ('Pas', 'Pas MD', 'Bersama', 'KEGIATAN'),
+                    "Surat": ('SK', 'SKet', 'Instruksi', 'Pemberitahuan', 'Perjanjian')
+                    }
+
 JENIS_KELAMIN = ('', 'Laki-laki', 'Perempuan')
 JENIS_SEKOLAH = ('', 'RA', 'TK', 'PAUD', 'Orangtua', 'MI', 'SD', 'SLB')
 JENIS_SK_GURU = ('', 'SK CPNS', 'SK Kenaikan Pangkat PNS (Reguler)', 'SK Kenaikan Pangkat PNS (Pilihan)', 'SK Non-PNS', 'SK Yayasan', 'SK PPPK', 'SK Pensiun', 'SK PTK')
@@ -84,7 +95,7 @@ LEFT_COLUMN = [
     "kampung", "alamat", "alamat_full", "nama_sekolah_asal", "value", "key", "orangtua",
     "namafile", "jenis_dok", "alamat_sekolah_tujuan", "alamat_sekolah", "nama_dokumen",
     "wali_kelas", "catatan_walas", "pelajaran", "mata_pelajaran", "nama_sekolah", "nilai", "kunci", 
-    "nama_biaya", "deskripsi", "kategori_pembayaran", "sql_insert"
+    "nama_biaya", "deskripsi", "kategori_pembayaran", "sql_insert", "keterangan"
 ]
 DK_ORDER = ('Nama', 'JK', 'Urutan', 'Ayah', 'Ibu', 'Alamat')
 DK_SEARCH = ('nama_lengkap', 'ayah_nama', 'ibu_nama', 'alamat', 'status_awal', 'status_akhir')
@@ -101,4 +112,3 @@ KOLOM_TANGGAL = ('tgl_lahir', 'tgl_daftar', 'tgl_mulai', 'tgl_masuk', 'tgl_ijaza
                  'ayah_tgl_lahir', 'ibu_tgl_lahir', 'wali_tgl_lahir', 
                  'tgl_kk', 'tmt_pegawai', 'tmt_guru', 'tgl_lulus_sertifikasi', 'tgl_keluar', 'tgl_lulus', 'tgl_bayar', 'tgl_selesai', 'tgl_transaksi')
 KOLOM_CURRENCY = ('nominal', 'nominal_tagihan', 'nominal_bayar', 'sudah_bayar')
-

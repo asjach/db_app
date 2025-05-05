@@ -25,6 +25,8 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.hideshow_frame_action = QAction("Show/Hide Left Frame")
         self.detail_siswa_action = QAction("Detail Siswa")
         self.detail_guru_action = QAction("Detail Guru")
+        self.nis_lokal = None
+        self.nis_index = None
         self.initialize_components()
         
     def initialize_components(self):
@@ -94,7 +96,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
             self.cbo_tapel: self.model_main.get_list_tapel,
             self.cbo_tingkat: TINGKAT,
             self.DOKUMEN.cbo_jenis_dokumen:JENIS_DOKUMEN,
-            self.DOKUMEN.cbo_filter_dokumen:JENIS_DOKUMEN
+            self.DOKUMEN.cbo_filter_dokumen:JENIS_DOKUMEN,
         }
         for combo, values in combo_values.items():
             combo.blockSignals(True)

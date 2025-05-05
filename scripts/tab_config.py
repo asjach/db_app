@@ -103,6 +103,26 @@ TAB_CONFIG = {
         "action": "actionInput_Dokumen",
         "page_class": PageDokumen,
     },
+    "Lihat Dokumen": {
+        "order_by": ['Nama', 'JK'],
+        "search_by": ['Nama'],
+        "show_page": "LIHAT_DOKUMEN",
+        "action": "actionLihat_Dokumen",
+        "page_class": PageLihatDokumen,
+    },
+    "Tambah Dokumen": {
+        "order_by": ['Nama', 'JK'],
+        "search_by": ['Nama'],
+        "show_page": "TAMBAH_DOKUMEN",
+        "action": "actionTambah_Dokumen",
+        "page_class": PageTambahDokumen,
+    },
+    "Compare Dokumen": {
+        "order_by": ['Nama', 'JK'],
+        "show_page": "COMPARE_DOKUMEN",
+        "action": "actionCompare_Dokumen",
+        "page_class": PageCompareDokumen,
+    },
     "Riwayat Kegiatan": {
         "hidden_frame": ['jenjang', 'tingkat', 'kelas'],
         "show_page": "RIWAYAT_KEGIATAN",
