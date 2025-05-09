@@ -1329,13 +1329,14 @@
     <property name="title">
      <string>Dokumen</string>
     </property>
-    <addaction name="actionInput_Dokumen"/>
     <addaction name="actionLihat_Dokumen"/>
     <addaction name="actionTambah_Dokumen"/>
+    <addaction name="actionCopy_Dokumen"/>
     <addaction name="actionCompare_Dokumen"/>
     <addaction name="actionRename_Dokumen"/>
     <addaction name="actionGanti_Dokumen"/>
     <addaction name="actionHapus_Dokumen"/>
+    <addaction name="actionInput_Dokumen"/>
    </widget>
    <widget class="QMenu" name="menuView">
     <property name="title">
@@ -1601,6 +1602,11 @@
   <action name="actionCompare_Dokumen">
    <property name="text">
     <string>Bandingkan Dokumen</string>
+   </property>
+  </action>
+  <action name="actionCopy_Dokumen">
+   <property name="text">
+    <string>Copy Dokumen</string>
    </property>
   </action>
  </widget>

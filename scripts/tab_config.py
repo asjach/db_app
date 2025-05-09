@@ -123,6 +123,12 @@ TAB_CONFIG = {
         "action": "actionCompare_Dokumen",
         "page_class": PageCompareDokumen,
     },
+    "Copy Dokumen": {
+        "order_by": ['Nama', 'JK'],
+        "show_page": "COPY_DOKUMEN",
+        "action": "actionCopy_Dokumen",
+        "page_class": PageCopyDokumen,
+    },
     "Riwayat Kegiatan": {
         "hidden_frame": ['jenjang', 'tingkat', 'kelas'],
         "show_page": "RIWAYAT_KEGIATAN",

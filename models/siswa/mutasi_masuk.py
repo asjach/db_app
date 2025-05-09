@@ -7,7 +7,7 @@ class MutasiMasuk(ConnectDB):
 
     def daftar_calon_siswa(
             self, jenjang, tapel, opsi_kolom, search_by, search='', 
-            is_active='', is_accepted='', order_by='Nama'):
+            is_active='', order_by='Nama'):
         
         order_by = opsi_order(order_by)
         search_by = opsi_search(search_by)
@@ -16,11 +16,11 @@ class MutasiMasuk(ConnectDB):
             SELECT      {} 
             FROM        siswa_psb
             WHERE       jenjang LIKE %s AND tapel LIKE %s  AND {} LIKE %s 
-                        AND is_active LIKE %s AND is_accepted LIKE %s
+                        AND is_active LIKE %s 
             ORDER BY    jenjang, tapel, is_active, {}
             """.format(opsi_kolom, search_by, order_by)
 
-        params = (f"%{jenjang}%", f"%{tapel}%", f"%{search}%", f"%{is_active}%", f"%{is_accepted}%")
+        params = (f"%{jenjang}%", f"%{tapel}%", f"%{search}%", f"%{is_active}%")
         return self.get_data(sql, params)
 
     def calon_belum_diterima(self, jenjang, tapel, search_by, order_by='Nama', search=''):
@@ -75,7 +75,7 @@ class MutasiMasuk(ConnectDB):
                         tgl_masuk, kls_masuk, tapel_masuk, no_urut, pilihan_jenjang)
             SELECT      concat(mid(tapel,3,2),".", right(tapel,2), ".", lpad(kls_masuk,2,0), ".", 
                         lpad(cast(no_urut as unsigned),4,'0')) as kandidat_nis, 
-                        nama_lengkap, jk, ayah, ibu, %s, kls_masuk, tapel, no_urut, daftar_ke
+                        nama_lengkap, nama_lengkap, jk, ayah_nama, ibu_nama, %s, kls_masuk, tapel, no_urut, daftar_ke
             FROM        siswa_psb
             WHERE       jenjang = %s AND tapel = %s AND is_active = 'Ya';
             """
@@ -98,6 +98,7 @@ class MutasiMasuk(ConnectDB):
             """
 
         params_insert = (tgl_masuk, jenjang, tapel)
+        
         params_insert_ke_riwayat = (jenjang, tapel, tgl_masuk, jenjang, tapel)
         params_update = (jenjang, tapel)
         try:

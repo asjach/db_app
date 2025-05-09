@@ -115,7 +115,6 @@ class PageMutasiMasuk(Ui_Form, QWidget):
     def tambah_calon_siswa(self):
         sukses = self._tambah_operations()
         if sukses:
-            self.tbl_daftar_calon_siswa._last_data_hash = None
             self._tambah_pendaftar_success_messages()
         
 
@@ -152,7 +151,6 @@ class PageMutasiMasuk(Ui_Form, QWidget):
             tgl_masuk=tgl_masuk
         )
         if sukses:
-            self.tbl_daftar_calon_siswa._last_data_hash = None
             self.show_page()
 
     def delete_pendaftar_operations(self):
@@ -160,14 +158,12 @@ class PageMutasiMasuk(Ui_Form, QWidget):
         if self.id:
             sukses = delete_by_id("siswa_psb", "id", self.id)
             if sukses:
-                self.tbl_daftar_calon_siswa._last_data_hash = None
                 self.show_page()
                 self.tbl_daftar_calon_siswa.verticalScrollBar().setValue(scroll_position)
 
     def _batal_terima_siswa_operations(self):
         sukses = self.SQL.batal_terima_pendaftar(self.id, self.kandidat_nis)
         if sukses:
-            self.tbl_daftar_calon_siswa._last_data_hash = None
             self.show_page()
 
     def _cek_input(self):
