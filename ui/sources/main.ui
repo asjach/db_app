@@ -1301,18 +1301,11 @@
     <addaction name="actionInput_By_Excel"/>
     <addaction name="actionInput_Riwayat"/>
     <addaction name="actionTabelAll"/>
-    <addaction name="actionClear_hashdata"/>
    </widget>
    <widget class="QMenu" name="menuNilai">
     <property name="title">
      <string>Nilai</string>
     </property>
-    <widget class="QMenu" name="menuPengaturan">
-     <property name="title">
-      <string>Pengaturan</string>
-     </property>
-    </widget>
-    <addaction name="menuPengaturan"/>
     <addaction name="actionRiwayatKegiatan"/>
     <addaction name="actionPesertaKegiatan"/>
     <addaction name="actionMapelKegiatan"/>
@@ -1321,7 +1314,6 @@
     <addaction name="actionInput_Nilai"/>
     <addaction name="separator"/>
     <addaction name="actionKartu_Peserta"/>
-    <addaction name="actionLabel_Sampul"/>
     <addaction name="actionRekap"/>
     <addaction name="actionRapor"/>
    </widget>
@@ -1440,17 +1432,17 @@
   </action>
   <action name="actionRekap">
    <property name="text">
-    <string>Rekap</string>
+    <string>Cetak Rekap</string>
    </property>
   </action>
   <action name="actionRapor">
    <property name="text">
-    <string>Rapor</string>
+    <string>Cetak Rapor</string>
    </property>
   </action>
   <action name="actionKartu_Peserta">
    <property name="text">
-    <string>Kartu Peserta</string>
+    <string>Cetak Kartu Peserta</string>
    </property>
   </action>
   <action name="actionLabel_Sampul">
@@ -1497,11 +1489,6 @@
   <action name="actionInput_Riwayat">
    <property name="text">
     <string>Input Riwayat</string>
-   </property>
-  </action>
-  <action name="actionClear_hashdata">
-   <property name="text">
-    <string>Clear hashdata</string>
    </property>
   </action>
   <action name="actionInput_Nilai">

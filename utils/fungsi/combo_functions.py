@@ -2,12 +2,11 @@ from PySide6.QtWidgets import QComboBox, QListWidget
 from PySide6.QtGui import QFontMetrics
 
 
-def fill_combobox(ui_combo:QComboBox, values, *parameter):
-    ui_combo.clear()
-    ui_combo.addItems(values() if callable(values) else values)
-    if parameter:
-        ui_combo.addItems(values(parameter) if callable(values) else values)
-
+# def fill_combobox(ui_combo:QComboBox, values, *parameter):
+#     ui_combo.clear()
+#     ui_combo.addItems(values() if callable(values) else values)
+#     if parameter:
+#         ui_combo.addItems(values(parameter) if callable(values) else values)
 
 def populate_combobox(cbo_widget: QComboBox | QListWidget, data, text_data=None, user_data=None, separator='|', padding_pixels=20):
     """
@@ -20,27 +19,19 @@ def populate_combobox(cbo_widget: QComboBox | QListWidget, data, text_data=None,
         separator       : pemisah untuk teks jika text_data adalah list (hanya string, misalnya '|')
         padding_pixels  : jumlah piksel untuk padding tambahan per kolom (default: 10)
     """
-    cbo_widget.clear()  # Bersihkan isi combobox sebelum menambahkan data baru
-    if not data:  # Jika data kosong, langsung keluar
+    cbo_widget.clear() 
+    if not data: 
         return
     if not isinstance(data, list):
         raise TypeError(f"Expected a list or list of dict, got {type(data).__name__}")
     if not isinstance(separator, str):
         raise TypeError("separator must be a string")
-
-    # Dapatkan QFontMetrics dari font widget untuk menghitung lebar piksel
     font_metrics = QFontMetrics(cbo_widget.font())
-    # Hitung lebar spasi untuk padding
-    space_width = font_metrics.horizontalAdvance(' ')  # Lebar spasi spesifik
-
-    # Cek apakah data adalah list of dict
+    space_width = font_metrics.horizontalAdvance(' ')
     is_list_of_dict = data and all(isinstance(item, dict) for item in data)
-
     if is_list_of_dict:
         if text_data is None:
             raise ValueError("text_data must be provided when data is a list of dict")
-        
-        # Hitung lebar maksimum (dalam piksel) untuk setiap kolom jika text_data adalah list
         max_widths_pixels = None
         if isinstance(text_data, list):
             max_widths_pixels = [0] * len(text_data)
@@ -49,25 +40,17 @@ def populate_combobox(cbo_widget: QComboBox | QListWidget, data, text_data=None,
                 text_values = ['' if value is None else str(value) for value in text_values]
                 for i, value in enumerate(text_values):
                     text_width = font_metrics.horizontalAdvance(value)
-                    # Tambahkan padding_pixels ke lebar maksimum
                     max_widths_pixels[i] = max(max_widths_pixels[i], text_width + padding_pixels)
-
         for item in data:
-            # Tangani text_data sebagai string atau list
             if isinstance(text_data, str):
-                # Jika text_data adalah string, ambil nilai dari kunci tersebut
                 text_value = item.get(text_data, '')
                 text = '' if text_value is None else str(text_value)
             elif isinstance(text_data, list):
-                # Jika text_data adalah list, gabungkan nilai dari kunci-kunci tersebut
                 text_values = [item.get(key, '') for key in text_data]
                 text_values = ['' if value is None else str(value) for value in text_values]
-                
-                # Gunakan lebar maksimum dalam piksel untuk membuat kolom rata
                 formatted_values = []
                 for i, value in enumerate(text_values):
                     text_width = font_metrics.horizontalAdvance(value)
-                    # Hitung padding termasuk padding_pixels tambahan
                     padding_pixels_total = max_widths_pixels[i] - text_width
                     padding_spaces = max(0, padding_pixels_total // space_width)
                     formatted_values.append(value + ' ' * padding_spaces)
@@ -86,7 +69,6 @@ def populate_combobox(cbo_widget: QComboBox | QListWidget, data, text_data=None,
             else:
                 cbo_widget.addItem(text)
     else:
-        # Jika data adalah list biasa (string), gunakan addItems
         cbo_widget.addItems(['' if item is None else str(item) for item in data])
 
 

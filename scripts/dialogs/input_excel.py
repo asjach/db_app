@@ -1,14 +1,14 @@
-from PySide6.QtWidgets import QDialog
+from PySide6.QtWidgets import QDialog, QMessageBox
 from ui.ui_dialog_input_excel import Ui_Form
 from models.input_excel import ModelInputExcel
-from utils.static_values import *
-from openpyxl import load_workbook
+from utils.static_values import LEFT_COLUMN
+from openpyxl import Workbook, load_workbook
 from openpyxl.styles import Alignment, Font, PatternFill
-from openpyxl import Workbook
 from openpyxl.utils import get_column_letter
 from utils.fungsi.general_functions import *
 import os
 import pandas as pd
+from PySide6.QtWidgets import QApplication
 
 class DialogInputExcel(QDialog, Ui_Form):
     def __init__(self, parent=None):
@@ -17,208 +17,202 @@ class DialogInputExcel(QDialog, Ui_Form):
         self.parent = parent
         self.setSizeGripEnabled(True)
         self.SQL = ModelInputExcel()
-        self.init_slot_signals()
+        self._setup_connections()
 
-    def init_slot_signals(self):
-        self.cbo_db.currentIndexChanged.connect(self.cbo_db_selected)
-        self.cbo_table.currentIndexChanged.connect(self.cbo_table_selected)
-        self.btn_no_filter.clicked.connect(self.btn_no_filter_clicked)
-        self.btn_browse.clicked.connect(self.on_btn_browse_clicked)
-        self.cbo_sheet.currentIndexChanged.connect(self.cbo_sheet_selected)
-        self.insert_btn.clicked.connect(self.execute_insert)
-
-    def init_attributes(self):
-        self.nama_db = self.cbo_db.currentText()
-        self.nama_tabel = self.cbo_table.currentText()
+    def _setup_connections(self):
+        connections = [
+            (self.cbo_db.currentIndexChanged, self._on_db_selected),
+            (self.cbo_table.currentIndexChanged, self._update_filename),
+            (self.btn_no_filter.clicked, self._create_template),
+            (self.btn_browse.clicked, self._browse_file),
+            (self.cbo_sheet.currentIndexChanged, self._update_sheet_headers),
+            (self.insert_btn.clicked, self._execute_insert)
+        ]
+        for signal, slot in connections:
+            signal.connect(slot)
 
     def show_dialog(self):
-        screen = QApplication.primaryScreen()
-        screen_geometry = screen.availableGeometry()
-        self.resize(screen_geometry.width()*0.9, screen_geometry.height()*0.9)
-        self.move(
-            (screen_geometry.width()-self.width()) // 2,
-            (screen_geometry.height()-self.height()) // 2,)
-        self.init_attributes()
-        self.fill_cbo_db()
-    
+        # screen = QApplication.primaryScreen().availableGeometry()
+        # self.resize(screen.width() * 0.9, screen.height() * 0.9)
+        # self.move((screen.width() - self.width()) // 2, (screen.height() - self.height()) // 2)
+        self._fill_db_combobox()
 
-### BAGIAN TEMPLATE TANPA FILTER
-    # mengisi cbo db
-    def fill_cbo_db(self):
-        daftar_database = self.SQL.get_databases()
-        daftar_database.insert(0, "")
-        fill_combobox(self.cbo_db, daftar_database)
-        fill_combobox(self.cbo_save_to_db, daftar_database)
+    def _fill_db_combobox(self):
+        databases = self.SQL.get_databases()
+        for cbo in (self.cbo_db, self.cbo_save_to_db):
+            populate_combobox(cbo, databases)
 
-    # ketika combobox db dipilih
-    def cbo_db_selected(self):
+    def _on_db_selected(self):
         self.SQL.set_db(self.cbo_db.currentText())
-        self.fill_cbo_tabel()
-        self.generate_namafile_no_filter()
-    
-    # mengisi cbo tabel
-    def fill_cbo_tabel(self):
-        daftar_tabel = ["All"]
-        daftar_tabel.extend(self.SQL.get_all_tables())
-        fill_combobox(self.cbo_table, daftar_tabel)
+        tables = ["All"] + self.SQL.get_all_tables()
+        populate_combobox(self.cbo_table, tables)
+        self._update_filename()
 
-    def cbo_table_selected(self):
-        self.generate_namafile_no_filter()
+    def _update_filename(self):
+        filename = f"{self.cbo_db.currentText()}_{self.cbo_table.currentText()}.xlsx"
+        self.line_filename_nofilter.setText(filename)
 
-    # membuat nama file untuk excel no filter
-    def generate_namafile_no_filter(self):
-        database = self.cbo_db.currentText()
-        tabel = self.cbo_table.currentText()
-        namafile = f'{database}_{tabel}.xlsx'
-        self.line_filename_nofilter.setText(namafile)
+    def _create_template(self):
+        filename = save_as_path(self, self.line_filename_nofilter.text())
+        if not filename:
+            return
+        try:
+            success = self._generate_excel_template(filename)
+            if success:
+                save_value_to_db("LAST_SELECTED_FOLDER", os.path.dirname(filename))
+                QMessageBox.information(self.parent, "Sukses", "Template berhasil dibuat")
+                open_with_default_app(filename)
+        except Exception as e:
+            print(f"Error creating template: {str(e)}")
 
-    # ketika tombol template no filter ditekan
-    def btn_no_filter_clicked(self):
-        sukses = False
-        nama_file = self.line_filename_nofilter.text()
-        namafile = save_as_path(self, nama_file)
-        if namafile:
-            try:
-                sukses = self.create_not_filtered_template(namafile)
-                folder_terakhir = os.path.dirname(namafile)
-                save_value_to_db("LAST_SELECTED_FOLDER", folder_terakhir)
-            except Exception as e:
-                print(f"Error creating template: {str(e)}")
-                return
-        if sukses:
-            QMessageBox.information(self.parent, "Sukses", "Template berhasil dibuat", QMessageBox.Ok)
-            # open_in_explorer(namafile)
-            open_with_default_app(namafile)
-
-    # fungsi membuat file excel berdasarkan pilihan db dan tabel 
-    def create_not_filtered_template(self, namafile=None):
-        align_center = Alignment(horizontal='center', vertical='center')
-        align_left = Alignment(horizontal='left', vertical='center', indent=1)
-        font = Font(name='Aptos', size=10)
-        bold_font = Font(name='Aptos', size=10, bold=True)
-        left_column_set = set(LEFT_COLUMN)
-        database_name = self.cbo_db.currentText()
-        current_table = self.cbo_table.currentText()
-        if current_table == 'All':
-            list_nama_tabel = self.SQL.get_all_tables()
-        else:
-            list_nama_tabel = [current_table]
+    def _generate_excel_template(self, filename):
         wb = Workbook()
         ws_nav = wb.active
         ws_nav.title = "navigasi"
         ws_nav["A1"] = "MENUJU SHEET"
         ws_nav["A1"].font = Font(bold=True, size=12)
 
-        for index, nama_tabel in enumerate(list_nama_tabel, start=2):
-            cell = ws_nav.cell(row=index, column=1, value=nama_tabel)
-            cell.hyperlink = f"#'{nama_tabel}'!A1"
-            cell.font = Font(color="0000FF", underline="single")
-            cell.alignment = align_left
+        tables = self.SQL.get_all_tables() if self.cbo_table.currentText() == "All" else [self.cbo_table.currentText()]
+        styles = {
+            'center': Alignment(horizontal='center', vertical='center'),
+            'left': Alignment(horizontal='left', vertical='center', indent=1),
+            'font': Font(name='Aptos', size=10),
+            'bold': Font(name='Aptos', size=10, bold=True)
+        }
 
-        for nama_tabel in list_nama_tabel:
-            columns = self.SQL.get_column_names(nama_tabel)
-            data = self.SQL.get_table_data(nama_tabel)
+        for idx, table in enumerate(tables, 2):
+            ws_nav.cell(row=idx, column=1, value=table).hyperlink = f"#'{table}'!A1"
+            ws_nav.cell(row=idx, column=1).font = Font(color="0000FF", underline="single")
+            ws_nav.cell(row=idx, column=1).alignment = styles['left']
 
-            ws = wb.create_sheet(title=nama_tabel)
-            for col_num, key in enumerate(columns, 1):
-                header_cell = ws.cell(row=1, column=col_num, value=key)
-                header_cell.font = bold_font
-                header_cell.fill = PatternFill(start_color="FFFFCC", fill_type="solid")
-                header_cell.alignment = align_center
+            ws = wb.create_sheet(title=table)
+            columns = self.SQL.get_column_names(table)
+            data = self.SQL.get_table_data(table) if self.radio_filled.isChecked() else []
+
+            for col, key in enumerate(columns, 1):
+                cell = ws.cell(row=1, column=col, value=key)
+                cell.font = styles['bold']
+                cell.fill = PatternFill(start_color="FFFFCC", fill_type="solid")
+                cell.alignment = styles['center']
 
             ws["A1"].hyperlink = "#'navigasi'!A1"
             ws["A1"].font = Font(underline="single")
             ws["A1"].fill = PatternFill(start_color="4215FF", fill_type="solid")
             ws.freeze_panes = "A2"
 
-            if self.radio_filled.isChecked():
-                if data:
-                    for row_num, row_data in enumerate(data, 2):
-                        for col_num, key in enumerate(columns, 1):
-                            cell = ws.cell(row=row_num, column=col_num, value=row_data.get(key, ""))
-                            cell.alignment = align_left if key in left_column_set else align_center
-                            cell.font = font
+            for row, row_data in enumerate(data, 2):
+                for col, key in enumerate(columns, 1):
+                    cell = ws.cell(row=row, column=col, value=row_data.get(key, ""))
+                    cell.alignment = styles['left'] if key in LEFT_COLUMN else styles['center']
+                    cell.font = styles['font']
 
-            for col_num, column_name in enumerate(columns, 1):
-                column_letter = get_column_letter(col_num)
-                max_length = len(column_name)
-                if data:
-                    for row in range(2, len(data) + 2):
-                        cell_value = ws.cell(row=row, column=col_num).value
-                        if cell_value:
-                            max_length = max(max_length, len(str(cell_value)))
-                ws.column_dimensions[column_letter].width = max_length + 2
-        wb.save(namafile)
+            for col, col_name in enumerate(columns, 1):
+                col_letter = get_column_letter(col)
+                max_length = max(len(str(col_name)), max((len(str(row_data.get(col_name, ""))) for row_data in data), default=0))
+                ws.column_dimensions[col_letter].width = max_length + 2
+
+        wb.save(filename)
         return True
 
-
-### BAGIAN UPDATE INSERT DARI EXCEL
-    def on_btn_browse_clicked(self):
-        # self.cbo_sheet.clear()
-        # self.line_namafile.clear()
-        # self.cbo_key.clear()
-        file_dipilih = open_dialog(parent=self.parent, text_widget=self.line_source)        
-        if file_dipilih:
-            path= self.line_source.text()
-            namafile = os.path.basename(path)
-            self.line_namafile.setText(namafile)
-            sheet_names = pd.ExcelFile(path).sheet_names
-            fill_combobox(self.cbo_sheet, sheet_names[1:])
+    def _browse_file(self):
+        file = open_dialog(parent=self.parent, text_widget=self.line_source)
+        if file:
+            self.line_namafile.setText(os.path.basename(file))
+            sheets = pd.ExcelFile(file).sheet_names[1:]
+            populate_combobox(self.cbo_sheet, sheets)
         else:
             self.cbo_sheet.clear()
             self.line_namafile.clear()
             self.cbo_key.clear()
 
-    def cbo_sheet_selected(self):
-        filepath = self.line_source.text()
-        sheet_name = self.cbo_sheet.currentText()
-        if filepath != '':
-            df = pd.read_excel(filepath, sheet_name, nrows=0)
-            headers = df.columns.tolist()
-            fill_combobox(self.cbo_key, headers)
-        
-    def create_insert_query(self):
-        tabel_db = self.cbo_sheet.currentText()
-        query = generate_insert_queries(
-            tabel_db=tabel_db,
-            excel_file_path=self.line_source.text()
-        )
-        return query
-    
-    def execute_insert(self):
-        """Eksekusi query dengan progress bar dan tampilkan pesan setelah selesai"""
+    def _update_sheet_headers(self):
+        if self.line_source.text():
+            df = pd.read_excel(self.line_source.text(), sheet_name=self.cbo_sheet.currentText(), nrows=0)
+            populate_combobox(self.cbo_key, df.columns.tolist())
+
+    def _execute_insert(self):
         db_name = self.cbo_save_to_db.currentText()
         con = ConnectDB(db_name)
-        con.connect()  # Memastikan koneksi ke database aktif
+        con.connect()
         cursor = con.my_cursor
-
-        queries = self.create_insert_query()
-        total_queries = len(queries)
-        if total_queries == 0:
+        queries = generate_insert_queries(self.cbo_sheet.currentText(), self.line_source.text())
+        if not queries:
             QMessageBox.information(self, "Informasi", "Tidak ada data yang perlu disimpan.")
             return
-        self.progress_save.setMinimum(0)
-        self.progress_save.setMaximum(total_queries)
+        self.progress_save.setMaximum(len(queries))
         self.progress_save.setValue(0)
+
         try:
-            insert_queries = [q for q in queries if q[0].startswith("INSERT")]
+            insert_queries = [(q, p) for q, p in queries if q.startswith("INSERT")]
             if len(insert_queries) > 1000:
-                sql_statement = insert_queries[0][0]  # Query dasar INSERT
-                values_list = [q[1] for q in insert_queries]  # List parameter
-                cursor.executemany(sql_statement, values_list)
-                self.progress_save.setValue(len(insert_queries))  # Langsung penuh
+                cursor.executemany(insert_queries[0][0], [p for _, p in insert_queries])
+                self.progress_save.setValue(len(insert_queries))
             else:
                 for i, (query, params) in enumerate(insert_queries, 1):
                     cursor.execute(query, params)
                     self.progress_save.setValue(i)
-            con.my_connector.commit()  # Commit setelah semua eksekusi berhasil
+            con.my_connector.commit()
             QMessageBox.information(self, "Sukses", "Data berhasil disimpan ke database.")
         except Exception as e:
-            con.my_connector.rollback()  # Rollback jika ada error
+            con.my_connector.rollback()
             QMessageBox.critical(self, "Error", f"Terjadi kesalahan: {str(e)}")
         finally:
             cursor.close()
             con.close_connection()
 
+    def _execute_update(self):
+        db_name = self.cbo_save_to_db.currentText()
+        table_name = self.cbo_sheet.currentText()
+        key_column = self.cbo_key.currentText()
+        source_file = self.line_source.text()
 
+        if not all([db_name, table_name, key_column, source_file]):
+            QMessageBox.warning(self, "Peringatan", "Semua field harus diisi.")
+            return
 
+        try:
+            # Load data from Excel
+            df = pd.read_excel(source_file, sheet_name=table_name)
+            if key_column not in df.columns:
+                QMessageBox.critical(self, "Error", f"Kolom '{key_column}' tidak ditemukan di sheet.")
+                return
+
+            # Connect to database
+            con = ConnectDB(db_name)
+            con.connect()
+            cursor = con.my_cursor
+
+            # Get column names from database table
+            columns = self.SQL.get_column_names(table_name)
+            valid_columns = [col for col in df.columns if col in columns and col != key_column]
+
+            if not valid_columns:
+                QMessageBox.warning(self, "Peringatan", "Tidak ada kolom yang valid untuk diupdate.")
+                return
+
+            # Generate update queries
+            queries = []
+            for _, row in df.iterrows():
+                set_clause = ", ".join([f"{col} = %s" for col in valid_columns])
+                query = f"UPDATE {table_name} SET {set_clause} WHERE {key_column} = %s"
+                params = [row[col] for col in valid_columns] + [row[key_column]]
+                queries.append((query, params))
+
+            # Execute updates
+            self.progress_save.setMaximum(len(queries))
+            self.progress_save.setValue(0)
+
+            for i, (query, params) in enumerate(queries, 1):
+                cursor.execute(query, params)
+                self.progress_save.setValue(i)
+
+            con.my_connector.commit()
+            QMessageBox.information(self, "Sukses", "Data berhasil diupdate di database.")
+
+        except Exception as e:
+            con.my_connector.rollback()
+            QMessageBox.critical(self, "Error", f"Terjadi kesalahan: {str(e)}")
+
+        finally:
+            cursor.close()
+            con.close_connection()
