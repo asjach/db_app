@@ -415,7 +415,7 @@ def handle_item_changed_v2(
     is_last_row = row == tabel_ui.rowCount() - 1
 
     # Dapatkan data baris
-    row_data = get_row_data(tabel_ui, numeric_fields=None, date_fields=None, row=row)
+    row_data = get_row_data(tabel_ui, row=row)
     if not row_data:
         return False
     primary_key_value = row_data.get(primary_key)
@@ -464,7 +464,7 @@ def handle_item_changed_v2(
     return sukses
 
 
-def get_row_data(tabel_ui: QTableWidget, numeric_fields, date_fields, row):
+def get_row_data(tabel_ui: QTableWidget, numeric_fields=None, date_fields=None, row=None):
     if tabel_ui is None: 
         return {}
     if numeric_fields is None:

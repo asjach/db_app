@@ -38,15 +38,47 @@ class PageKartuPeserta(QWidget, Ui_Form):
         self.all_controls = (
             [self.cbo_jenis, self.cbo_kertas, self.cbo_orientasi, self.cbo_fonts] +
             [
-                self.spin_margin_left, self.spin_margin_top, self.spin_horizontal, self.spin_vertikal,
-                self.spin_lebar, self.spin_tinggi, self.x_nama, self.y_nama, self.size_nama,
-                self.x_ttl, self.y_ttl, self.size_ttl, self.x_nopes, self.y_nopes, self.size_nopes,
-                self.x_kelas, self.y_kelas, self.size_kelas, self.x_no_induk, self.y_no_induk, self.size_no_induk,
-                self.x_nisn, self.y_nisn, self.size_nisn, self.x_foto, self.y_foto, self.w_foto, self.h_foto
+                self.spin_margin_left, 
+                self.spin_margin_top, 
+                self.spin_horizontal, 
+                self.spin_vertikal,
+
+                self.spin_lebar, 
+                self.spin_tinggi, 
+                self.x_nama, 
+                self.y_nama, 
+                self.size_nama,
+
+                self.x_ttl, 
+                self.y_ttl, 
+                self.size_ttl, 
+                self.x_nopes, 
+                self.y_nopes, 
+                self.size_nopes,
+
+                self.x_kelas, 
+                self.y_kelas, 
+                self.size_kelas, 
+                self.x_no_induk, 
+                self.y_no_induk, 
+                self.size_no_induk,
+
+                self.x_nisn, 
+                self.y_nisn, 
+                self.size_nisn, 
+                self.x_foto, 
+                self.y_foto, 
+                self.w_foto, 
+                self.h_foto
             ] +
             [
-                self.radio_nama, self.radio_ttl, self.radio_nopes, self.radio_no_induk,
-                self.radio_kelas, self.radio_nisn, self.radio_foto
+                self.radio_nama, 
+                self.radio_ttl, 
+                self.radio_nopes, 
+                self.radio_no_induk,
+                self.radio_kelas, 
+                self.radio_nisn, 
+                self.radio_foto
             ] +
             [self.plain_background]
         )
@@ -66,6 +98,7 @@ class PageKartuPeserta(QWidget, Ui_Form):
         self.btn_reset.clicked.connect(self.reset_setting)
         self.btn_clear.clicked.connect(self.clear_setting)
         self.spin_presisi.valueChanged.connect(self.presisi_changed)
+        
         
 
         # Listener perubahan kontrol untuk refresh preview
@@ -190,13 +223,41 @@ class PageKartuPeserta(QWidget, Ui_Form):
             'background': self.plain_background.toPlainText(),
             'font': self.cbo_fonts.currentText(),
 
-            'nama': self.radio_nama.isChecked(), 'x_nama': self.x_nama.value(), 'y_nama': self.y_nama.value(), 'size_nama': self.size_nama.value(),
-            'ttl': self.radio_ttl.isChecked(), 'x_ttl': self.x_ttl.value(), 'y_ttl': self.y_ttl.value(), 'size_ttl': self.size_ttl.value(),
-            'nopes': self.radio_nopes.isChecked(), 'x_nopes': self.x_nopes.value(), 'y_nopes': self.y_nopes.value(), 'size_nopes': self.size_nopes.value(),
-            'kelas': self.radio_kelas.isChecked(), 'x_kelas': self.x_kelas.value(), 'y_kelas': self.y_kelas.value(), 'size_kelas': self.size_kelas.value(),
-            'no_induk': self.radio_no_induk.isChecked(), 'x_no_induk': self.x_no_induk.value(), 'y_no_induk': self.y_no_induk.value(), 'size_no_induk': self.size_no_induk.value(),
-            'nisn': self.radio_nisn.isChecked(), 'x_nisn': self.x_nisn.value(), 'y_nisn': self.y_nisn.value(), 'size_nisn': self.size_nisn.value(),
-            'foto': self.radio_foto.isChecked(), 'x_foto': self.x_foto.value(), 'y_foto': self.y_foto.value(), 'w_foto': self.w_foto.value(), 'h_foto': self.h_foto.value(),
+            'nama': self.radio_nama.isChecked(), 
+            'x_nama': self.x_nama.value(), 
+            'y_nama': self.y_nama.value(), 
+            'size_nama': self.size_nama.value(),
+
+            'ttl': self.radio_ttl.isChecked(), 
+            'x_ttl': self.x_ttl.value(), 
+            'y_ttl': self.y_ttl.value(), 
+            'size_ttl': self.size_ttl.value(),
+
+            'nopes': self.radio_nopes.isChecked(), 
+            'x_nopes': self.x_nopes.value(), 
+            'y_nopes': self.y_nopes.value(), 
+            'size_nopes': self.size_nopes.value(),
+
+            'kelas': self.radio_kelas.isChecked(), 
+            'x_kelas': self.x_kelas.value(), 
+            'y_kelas': self.y_kelas.value(), 
+            'size_kelas': self.size_kelas.value(),
+
+            'no_induk': self.radio_no_induk.isChecked(), 
+            'x_no_induk': self.x_no_induk.value(), 
+            'y_no_induk': self.y_no_induk.value(), 
+            'size_no_induk': self.size_no_induk.value(),
+
+            'nisn': self.radio_nisn.isChecked(), 
+            'x_nisn': self.x_nisn.value(), 
+            'y_nisn': self.y_nisn.value(), 
+            'size_nisn': self.size_nisn.value(),
+
+            'foto': self.radio_foto.isChecked(), 
+            'x_foto': self.x_foto.value(), 
+            'y_foto': self.y_foto.value(), 
+            'w_foto': self.w_foto.value(), 
+            'h_foto': self.h_foto.value(),
         }
     
     def set_setting_kartu(self):
@@ -278,11 +339,28 @@ class PageKartuPeserta(QWidget, Ui_Form):
 
     def presisi_changed(self):
         for control in [
-                self.spin_margin_left, self.spin_margin_top, self.spin_horizontal, self.spin_vertikal,
-                self.spin_lebar, self.spin_tinggi, self.x_nama, self.y_nama,
-                self.x_ttl, self.y_ttl, self.x_nopes, self.y_nopes, 
-                self.x_kelas, self.y_kelas, self.x_no_induk, self.y_no_induk, 
-                self.x_nisn, self.y_nisn, self.x_foto, self.y_foto, self.w_foto, self.h_foto
+                self.spin_margin_left, 
+                self.spin_margin_top, 
+                self.spin_horizontal, 
+                self.spin_vertikal,
+                self.spin_lebar, 
+                self.spin_tinggi, 
+                self.x_nama, 
+                self.y_nama,
+                self.x_ttl, 
+                self.y_ttl, 
+                self.x_nopes, 
+                self.y_nopes, 
+                self.x_kelas, 
+                self.y_kelas, 
+                self.x_no_induk, 
+                self.y_no_induk, 
+                self.x_nisn, 
+                self.y_nisn, 
+                self.x_foto, 
+                self.y_foto, 
+                self.w_foto, 
+                self.h_foto
             ]:
             control.setSingleStep(self.spin_presisi.value())
 

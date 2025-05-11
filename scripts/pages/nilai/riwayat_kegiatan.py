@@ -41,9 +41,9 @@ class PageRiwayatKegiatan(QWidget, Ui_Form):
         if sukses:self.fill_table()
 
     def delete_riwayat_kegiatan(self):
-        sukses = delete_by_id(
-            table_sql='kegiatan_riwayat',
-            id_name='id',
-            id_value=self.id
-        )
-        if sukses:self.fill_table()
+        try:
+            delete_by_id('kegiatan_riwayat', 'id', self.id)
+        except Exception as e:
+            print(e)
+        finally:
+            self.fill_table()

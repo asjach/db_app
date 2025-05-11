@@ -52,25 +52,18 @@ def date_to_text(tanggal, format=None):
 def text_to_date(tanggal):
     if not tanggal or tanggal.strip() == "":
         return None
-
-    # Jika input sudah berupa datetime, langsung konversi ke date
     if isinstance(tanggal, datetime):
         return tanggal.date()
-
-    # Pisahkan bagian tanggal dan waktu jika ada
     bagian_waktu = None
     if " " in tanggal:
-        parts = tanggal.split(" ", 1)  # Split hanya pada spasi pertama
+        parts = tanggal.split(" ", 1)
         tanggal_part = parts[0]
-        if len(parts) > 1 and ":" in parts[1]:  # Jika ada waktu (mengandung ":")
+        if len(parts) > 1 and ":" in parts[1]:
             bagian_waktu = parts[1]
         else:
-            tanggal_part = tanggal  # Jika tidak ada format waktu, gunakan seluruh string
-
+            tanggal_part = tanggal
     else:
         tanggal_part = tanggal
-
-    # Dictionary untuk mapping nama bulan ke angka
     nama_bulan = {
         nama: i + 1
         for i, group in enumerate([
@@ -89,8 +82,6 @@ def text_to_date(tanggal):
         ])
         for nama in group
     }
-
-    # Daftar pola tanggal yang akan dicoba untuk parsing
     patterns = [
         "%Y-%m-%d", "%Y/%m/%d", "%Y %m %d",
         "%d-%m-%Y", "%d/%m/%Y", "%d %m %Y",
@@ -98,20 +89,13 @@ def text_to_date(tanggal):
         "%d-%B-%y", "%d/%B/%y", "%d %B %y",
         "%d-%B-%Y", "%d/%B/%Y", "%d %B %Y"
     ]
-
-    # Tambahan pola dengan waktu jika ada bagian_waktu
     if bagian_waktu:
         time_patterns = [f"{p} %H:%M:%S" for p in patterns]
         patterns.extend(time_patterns)
-
-    # Mencoba parsing dengan berbagai format
     for pattern in patterns:
         try:
             date_obj = datetime.strptime(tanggal if not bagian_waktu else f"{tanggal_part} {bagian_waktu}", pattern)
-            # Jika hanya ingin tanggal, gunakan .date()
             date_obj = date_obj.date()
-
-            # Jika tahun dalam format dua digit, ubah ke format empat digit
             if date_obj.year < 100:
                 current_year = datetime.now().year
                 current_century = current_year // 100 * 100
@@ -122,19 +106,14 @@ def text_to_date(tanggal):
 
             return date_obj
         except ValueError:
-            pass  # Jika parsing gagal, coba format lain
-
-    # Jika format pola gagal, coba parsing manual
+            pass 
     parts = tanggal_part.split()
     if len(parts) < 3:
         raise ValueError(f"Format tanggal tidak valid: {tanggal}")
-
     try:
         hari = int(parts[0])
         bulan_text = parts[1].lower()
         tahun = int(parts[2])
-
-        # Konversi tahun dua digit ke empat digit
         if tahun < 100:
             current_year = datetime.now().year
             current_century = current_year // 100 * 100
@@ -142,24 +121,12 @@ def text_to_date(tanggal):
                 tahun = current_century - 100 + tahun
             else:
                 tahun = current_century + tahun
-
-        # Konversi nama bulan menjadi angka
         if bulan_text not in nama_bulan:
             raise ValueError(f"Nama bulan tidak valid: {bulan_text}")
         bulan = nama_bulan[bulan_text]
-
-        # Membentuk objek tanggal
         return datetime(tahun, bulan, hari).date()
-
     except ValueError:
         raise ValueError(f"Format tanggal tidak valid: {tanggal}")
-
-
-# def show_frame(frame):
-#     if frame.isVisible():
-#         frame.setVisible(False)
-#     else:
-#         frame.setVisible(True)
 
 
 def tapel_berikutnya(tapel):

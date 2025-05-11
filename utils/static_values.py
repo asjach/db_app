@@ -94,9 +94,10 @@ LEFT_COLUMN = [
     "ibu_nama", "nama_ibu", "ibu", "alamat_sekolah_asal", "kepala_keluarga", "jalan",
     "kampung", "alamat", "alamat_full", "nama_sekolah_asal", "value", "key", "orangtua",
     "namafile", "jenis_dok", "alamat_sekolah_tujuan", "alamat_sekolah", "nama_dokumen",
-    "wali_kelas", "catatan_walas", "pelajaran", "mata_pelajaran", "nama_sekolah", "nilai", "kunci", 
+    "wali_kelas", "catatan_walas", "pelajaran", "mata_pelajaran", "nama_sekolah", "kunci", 
     "nama_biaya", "deskripsi", "kategori_pembayaran", "sql_insert", "keterangan"
 ]
+RIGHT_COLUMN = []
 DK_ORDER = ('Nama', 'JK', 'Urutan', 'Ayah', 'Ibu', 'Alamat')
 DK_SEARCH = ('nama_lengkap', 'ayah_nama', 'ibu_nama', 'alamat', 'status_awal', 'status_akhir')
 DK_KOLOM = ('Default', 'Nama', 'Lengkap', 'Ringkasan', 'Biodata', 'Orangtua', 'Detail Ayah', 
@@ -110,5 +111,9 @@ KOLOM_ANGKA = ("id", "pai", "qds", "aq", "fkh", "ski", "pkn", "bina", "bar", "mt
 KOLOM_FLOAT = ('kehadiran', 'harian', 'uts', 'tulis', 'praktek', 'nilai_akhir')
 KOLOM_TANGGAL = ('tgl_lahir', 'tgl_daftar', 'tgl_mulai', 'tgl_masuk', 'tgl_ijazah', 
                  'ayah_tgl_lahir', 'ibu_tgl_lahir', 'wali_tgl_lahir', 
-                 'tgl_kk', 'tmt_pegawai', 'tmt_guru', 'tgl_lulus_sertifikasi', 'tgl_keluar', 'tgl_lulus', 'tgl_bayar', 'tgl_selesai', 'tgl_transaksi')
+                 'tgl_kk', 'tmt_pegawai', 'tmt_guru', 'tgl_lulus_sertifikasi', 'tgl_keluar', 
+                 'tgl_lulus', 'tgl_bayar', 'tgl_selesai', 'tgl_transaksi',
+                 'tgl_titimangsa', 'tgl_pembagian')
 KOLOM_CURRENCY = ('nominal', 'nominal_tagihan', 'nominal_bayar', 'sudah_bayar')
+ULANGAN = ['PAS', 'AS Ganjil',  'PAT', 'AS Genap', 'UKK', 'UAS', 'ASS', 'ASAS', 'ASAT']
+UJIAN = ['UAP', 'RTR', 'NA', 'US', 'AM', 'UM', 'UN']

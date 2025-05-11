@@ -16,7 +16,7 @@ class InputNilai(ConnectDB):
         params = (jenjang, tapel)
         return self.get_data(sql, params)
 
-    def data_siswa(self, jenjang, tapel, tingkat, kelas, kegiatan):
+    def data_siswa(self, jenjang, tapel, kegiatan):
         sql = """
             SELECT      id_kelas, id_kegiatan, p.no_urut, p.id as id_peserta, p.nis_lokal, nama_lengkap, kelas
             FROM        kegiatan_peserta p
@@ -25,12 +25,10 @@ class InputNilai(ConnectDB):
             JOIN        kelas_riwayat k ON k.id = p.id_kelas
             WHERE       r.jenjang = %s
                 AND		r.tapel = %s
-                AND     k.tingkat LIKE %s
-                AND		k.kelas LIKE %s
                 AND     r.kegiatan = %s
             ORDER BY    k.kelas, cast(p.no_urut as unsigned), nama_lengkap
             """
-        params = (jenjang, tapel, f'%{tingkat}%', f'%{kelas}%', kegiatan)
+        params = (jenjang, tapel, kegiatan)
         return self.get_data(sql, params)
     
     def get_path(self, jenjang, tapel, kegiatan, kolom):
@@ -86,7 +84,6 @@ class InputNilai(ConnectDB):
             INSERT INTO nilai_angka (id_peserta, mapel, nilai)
             VALUES (%s, %s, %s)
         """
-        print("Insert data:", data)
         row_count = self.update_data(sql, data)
         return row_count
 
@@ -99,7 +96,6 @@ class InputNilai(ConnectDB):
             SET nilai = %s
             WHERE id = %s
         """
-        print("Update data:", data)
         row_count = self.update_data(sql, data)
         return row_count
     
@@ -130,7 +126,6 @@ class InputNilai(ConnectDB):
             INSERT INTO kegiatan_peserta (id, id_kelas, id_kegiatan, no_urut, sakit, ijin, alpa, catatan_walas, status_naik)
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
         """
-        print("Insert data for kegiatan_peserta:", data)
         row_count = self.update_data(sql, data)
         return row_count
 
@@ -143,7 +138,6 @@ class InputNilai(ConnectDB):
             SET no_urut = %s, sakit = %s, ijin = %s, alpa = %s, catatan_walas = %s, status_naik = %s
             WHERE id = %s
         """
-        print("Update data for kegiatan_peserta:", data)
         row_count = self.update_data(sql, data)
         return row_count
     
@@ -246,4 +240,14 @@ class InputNilai(ConnectDB):
             ORDER BY    kelas, s.nama_lengkap
             """.format(kolom_mapel, kenaikan, kenaikan)
         params = (jenjang, tapel, f'%{tingkat}%', f'%{kelas}%', kegiatan)
+        return self.get_data(sql, params)
+    
+    def get_kelas(self, jenjang, tapel):
+        sql = """
+        SELECT      id, kelas 
+        FROM        kelas_riwayat
+        WHERE       jenjang = %s AND tapel = %s 
+        ORDER BY    kelas;
+        """
+        params = (jenjang, tapel,)
         return self.get_data(sql, params)

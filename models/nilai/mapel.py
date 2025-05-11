@@ -38,7 +38,7 @@ class Mapel(ConnectDB):
         params = (jenjang, tapel, kelas)
         return self.get_data(sql, params)
     
-    def get_mapel(self, jenjang, tapel, tingkat, kelas, kegiatan):
+    def get_mapel(self, jenjang, tapel, kegiatan, tingkat='', kelas='', ):
         sql = """
             SELECT      mr.id, mr.id_kelas, mr.id_kegiatan, kr.jenjang, kr.tapel, kr.tingkat, kr.kelas, mapel, no, mr.id_guru, nama_lengkap 
             FROM        mapel_riwayat mr

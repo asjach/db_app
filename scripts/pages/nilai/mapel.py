@@ -2,6 +2,7 @@ from PySide6.QtWidgets import QWidget, QMainWindow
 from utils.fungsi.general_functions import *
 from ui.ui_page_mapel_kegiatan import Ui_Form
 from models.nilai.mapel import Mapel
+from utils.static_values import ULANGAN, UJIAN
 
 class PageMapel(QWidget, Ui_Form):
     def __init__(self, parent:QMainWindow):
@@ -23,6 +24,7 @@ class PageMapel(QWidget, Ui_Form):
         self.btn_hapus.clicked.connect(self.delete_mapel)
         self.btn_salin.clicked.connect(self.salin_dari_pas)
         self.btn_clear_mapel.clicked.connect(self.clear_mapel_by_kegiatan)
+        self.cbo_guru.setCurrentIndex(-1)
 
     def show_page(self):
         self.txt_jenjang = self.parent.cbo_jenjang.currentText()
@@ -79,13 +81,22 @@ class PageMapel(QWidget, Ui_Form):
 
     # TABEL MAPEL
     def fill_tbl_mapel(self):
-        data, fields = self.SQL.get_mapel(
-            self.txt_jenjang, 
-            self.txt_tapel, 
-            self.txt_tingkat, 
-            self.txt_kelas,
-            self.cbo_kegiatan.currentText()
-            )
+        kegiatan = self.cbo_kegiatan.currentText()
+        if kegiatan in ULANGAN:
+            data, fields = self.SQL.get_mapel(
+                jenjang = self.txt_jenjang, 
+                tapel = self.txt_tapel, 
+                tingkat = self.txt_tingkat, 
+                kelas = self.txt_kelas,
+                kegiatan = self.cbo_kegiatan.currentText()
+                )
+        elif kegiatan in UJIAN:
+            data, fields = self.SQL.get_mapel(
+                jenjang = self.txt_jenjang, 
+                tapel = self.txt_tapel, 
+                kelas = self.txt_kelas,
+                kegiatan = self.cbo_kegiatan.currentText()
+                )
         generate_table(
             data=data, 
             table=self.tbl_mapel, 

@@ -2,6 +2,7 @@ from PySide6.QtWidgets import QWidget, QMainWindow
 from utils.fungsi.general_functions import *
 from ui.ui_page_peserta import Ui_Form
 from models.nilai.peserta import Peserta
+from utils.static_values import ULANGAN, UJIAN
 
 class PagePeserta(QWidget, Ui_Form):
     def __init__(self, parent:QMainWindow):
@@ -41,8 +42,8 @@ class PagePeserta(QWidget, Ui_Form):
             data=data,
             column_names=fields, 
             table=self.tbl_widget,
-            icon_akhir=":/icon/resources/icon/multiply.svg",
-            fungsi_akhir=self.delete_peserta,
+            # icon_akhir=":/icon/resources/icon/multiply.svg",
+            # fungsi_akhir=self.delete_peserta,
             mode_input=True
         )
     
@@ -55,7 +56,7 @@ class PagePeserta(QWidget, Ui_Form):
             tabel_sql='kegiatan_peserta',
             item=item,
             primary_key='id',
-            must_insert=['nama', 'tanggal'],  # Kolom wajib untuk insert
+            must_insert=['id', 'id_kelas', 'id_kegiatan', 'nis_lokal'],
             not_updatable_column=['id']
         )
 
@@ -77,10 +78,10 @@ class PagePeserta(QWidget, Ui_Form):
             kls = kelas['kelas']
             id_kegiatan = self.cbo_kegiatan.currentData()
             kegiatan = self.cbo_kegiatan.currentText()
-            if kegiatan in ['PAS', 'AS Ganjil',  'PAT', 'AS Genap']:
+            if kegiatan in ULANGAN:
                 sukses = self.SQL.generate_peserta(jenjang, tapel, id_kelas, kls, id_kegiatan)
                 self.SQL.generate_no_peserta(tapel, kegiatan)
-            elif kegiatan in ['UAP', 'RTR', 'NA', 'US', 'AM']:
+            elif kegiatan in UJIAN:
                 if tingkat in ['6', '9', '12']:
                     sukses = self.SQL.generate_peserta(jenjang, tapel, id_kelas, kls, id_kegiatan)
             else: return
