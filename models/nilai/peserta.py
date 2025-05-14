@@ -95,3 +95,38 @@ class Peserta(ConnectDB):
         """
         params = (tapel, kegiatan)
         return self.update_data(sql, params)
+    
+    def peserta_belum_masuk(self, jenjang, tapel, id_kegiatan):
+        sql = """
+            SELECT r.nis_lokal, nama_lengkap, r.kelas
+            FROM    siswa_riwayat r
+            JOIN    siswa s ON s.nis_lokal = r.nis_lokal
+            WHERE   r.jenjang = %s
+                AND r.tapel = %s
+                AND r.is_active = 'Ya'
+                AND r.nis_lokal NOT IN (
+                    SELECT kp.nis_lokal
+                    FROM kegiatan_peserta kp
+                    WHERE   kp.id_kegiatan = %s
+                )
+        """
+        params = (jenjang, tapel, id_kegiatan)
+        return self.get_data(sql, params)
+
+    def peserta_tidak_aktif(self, jenjang, tapel, id_kegiatan):
+        sql = """
+            SELECT kp.nis_lokal, nama_lengkap, kr.kelas
+            FROM        kegiatan_peserta kp
+            JOIN        siswa s ON s.nis_lokal = kp.nis_lokal
+            JOIN        kelas_riwayat kr ON kr.id = kp.id_kelas
+            WHERE       kp.id_kegiatan = %s 
+                AND     kp.nis_lokal NOT IN (
+                    SELECT  r.nis_lokal
+                    FROM    siswa_riwayat r
+                    WHERE   r.jenjang = %s
+                        AND r.tapel = %s
+                        AND r.is_active = 'Ya'
+                )
+        """
+        params = (id_kegiatan, jenjang, tapel)
+        return self.get_data(sql, params)

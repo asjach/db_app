@@ -33,22 +33,27 @@ class PageCompareDokumen(QWidget, Ui_Form):
         self.fill_cbo_target()
         self.fill_cbo_jenis_dokumen()
         self.cbo_target.currentIndexChanged.connect(self.cbo_target_selected)
+        self.radio_is_active.toggled.connect(self.fill_daftar_nama)
+        self.line_search.textEdited.connect(self.on_search_text_edited)
         self.cbo_daftar_nama.currentIndexChanged.connect(self.cbo_daftar_nama_selected)
-        self.cbo_daftar_dokumen.currentIndexChanged.connect(self.cbo_daftar_dokumen_selected)
         self.btn_prev_nama.clicked.connect(lambda: prev_item(self.cbo_daftar_nama))
         self.btn_next_nama.clicked.connect(lambda: next_item(self.cbo_daftar_nama))
+        self.cbo_daftar_dokumen.currentIndexChanged.connect(self.cbo_daftar_dokumen_selected)
         self.btn_prev_dok.clicked.connect(self.btn_prev_dok_clicked)
         self.btn_next_dok.clicked.connect(self.btn_next_dok_clicked)
-        self.btn_prev_file.clicked.connect(self.btn_prev_file_clicked)
-        self.btn_next_file.clicked.connect(self.btn_next_file_clicked)
+
         self.btn_browse.clicked.connect(self.btn_browse_clicked)
         self.cbo_list_files.currentIndexChanged.connect(self.cbo_list_files_selected)
-        self.line_search.textEdited.connect(self.on_search_text_edited)
+        self.btn_prev_file.clicked.connect(self.btn_prev_file_clicked)
+        self.btn_next_file.clicked.connect(self.btn_next_file_clicked)
         self.btn_hapus.clicked.connect(self.btn_hapus_clicked)
+
         self.cbo_jenis_dokumen.currentIndexChanged.connect(self.cbo_jenis_dokumen_selected)
+        self.btn_tambah.clicked.connect(self.btn_tambah_clicked)
+
         for combo in self.combo_boxes:
             combo.installEventFilter(self)
-        self.radio_is_active.toggled.connect(self.fill_daftar_nama)
+        
 
     def show_page(self): 
         self.fill_daftar_nama()
@@ -84,8 +89,9 @@ class PageCompareDokumen(QWidget, Ui_Form):
         if data:
             populate_combobox(
                 self.cbo_daftar_nama, data, 
-                text_data=['nama_lengkap', 'ayah_nama', 'ibu_nama', 'jml_dok'], 
-                user_data='nomor_induk',
+                text_data=['nama_lengkap', 'jml_dok'], 
+                # user_data='nomor_induk',
+                user_data=['nomor_induk', 'nama_lengkap'],
                 separator=''
             )
         else:
@@ -104,13 +110,16 @@ class PageCompareDokumen(QWidget, Ui_Form):
             self.search_timer.start(300)
 
     def fill_cbo_daftar_dokumen(self):
-        data = self.MODEL.get_daftar_dokumen(self.cbo_daftar_nama.currentData())
-        populate_combobox(
-            cbo_widget=self.cbo_daftar_dokumen,
-            data=data,
-            text_data=['jenis_dokumen', 'keterangan'],
-            user_data=['id', 'sub_folder', 'namafile']
-        )
+        data_nama = self.cbo_daftar_nama.currentData()
+        if data_nama:
+            nomor_induk = data_nama['nomor_induk']
+            data = self.MODEL.get_daftar_dokumen(nomor_induk)
+            populate_combobox(
+                cbo_widget=self.cbo_daftar_dokumen,
+                data=data,
+                text_data=['jenis_dokumen', 'keterangan'],
+                user_data=['id', 'sub_folder', 'namafile']
+            )
 
     def cbo_daftar_dokumen_selected(self): 
         self.show_dokumen()
@@ -202,8 +211,43 @@ class PageCompareDokumen(QWidget, Ui_Form):
             return True
         return super().eventFilter(obj, event)
     
-
+    def btn_tambah_clicked(self):
         
+        data = self.cbo_daftar_nama.currentData()
+        source_path = os.path.normpath(self.cbo_list_files.currentText())
+        nama_lengkap = data.get('nama_lengkap', '')
+        nomor_induk = data.get('nomor_induk', '')
+        jenis_dokumen = self.cbo_jenis_dokumen.currentText()
+        keterangan = self.cbo_opsi_keterangan.currentText()
+        namafile = create_namafile2(nama_lengkap, nomor_induk, jenis_dokumen, keterangan, source_path)
+        dest_folder = f"{value_from_db('DOKUMEN_PATH')}/{self.cbo_target.currentText().lower()}"
+        dest_path = os.path.normpath(os.path.join(dest_folder, namafile))
+        
+        sukses = False
+        if jenis_dokumen not in ['', None]:
+            sukses = self.MODEL.tambah_dokumen(
+                no_induk=nomor_induk,
+                jenis_dokumen=jenis_dokumen,
+                keterangan=keterangan,
+                sub_folder=self.cbo_target.currentText(),
+                namafile=namafile
+            )
+        if not sukses:
+            QMessageBox.warning(self, "Error", "Gagal menambahkan file ke database.")
+            return
+        try:
+            dest_dir = os.path.dirname(dest_path) or "."
+            os.makedirs(dest_dir, exist_ok=True)
+            shutil.move(source_path, dest_path)
+            QMessageBox.information(self, "Berhasil", "Berhasil menambahkan dokumen ke Database.")
+        except (OSError, shutil.Error) as e:
+            QMessageBox.critical(self, "Error", f"File operation failed: {str(e)}")
+            return
+        finally:
+            self.fill_cbo_list_files()
+            self.fill_daftar_nama()
+            self.fill_cbo_daftar_dokumen()
+
 
 
 

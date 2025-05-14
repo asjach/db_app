@@ -29,10 +29,16 @@ class PagePeserta(QWidget, Ui_Form):
             self.cbo_kegiatan.addItem(kegiatan['kegiatan'], userData=kegiatan['id'])
         self.cbo_kegiatan.setCurrentIndex(index)
 
+    def refresh(self):
+        self.fill_table()
+        self.fill_tbl_peserta_belum_masuk()
+        self.fill_tbl_peserta_tidak_aktif()
+
     def cbo_kegiatan_selected(self):
         self.current_index = self.cbo_kegiatan.currentIndex()
-        self.fill_table()
+        self.refresh()
         
+
     def fill_table(self):
         data, fields = self.SQL.get_peserta_kegiatan(
             id_kegiatan=self.cbo_kegiatan.currentData(),
@@ -42,13 +48,14 @@ class PagePeserta(QWidget, Ui_Form):
             data=data,
             column_names=fields, 
             table=self.tbl_widget,
-            # icon_akhir=":/icon/resources/icon/multiply.svg",
-            # fungsi_akhir=self.delete_peserta,
+            icon_akhir=":/icon/resources/icon/multiply.svg",
+            fungsi_akhir=self.delete_peserta,
             mode_input=True
         )
     
     def table_selected(self):
         self.selected_data = table_selected(self.tbl_widget, self, self.parent)
+
 
     def update_peserta(self, item: QTableWidgetItem):
         handle_item_changed_v2(
@@ -62,7 +69,29 @@ class PagePeserta(QWidget, Ui_Form):
 
     def delete_peserta(self):
         sukses = delete_by_id('kegiatan_peserta','id', self.id)
-        if sukses: self.fill_table()
+        if sukses: self.refresh()
+
+    def fill_tbl_peserta_belum_masuk(self):
+        data = self.SQL.peserta_belum_masuk(
+            jenjang=self.parent.cbo_jenjang.currentText(),
+            tapel=self.parent.cbo_tapel.currentText(),
+            id_kegiatan=self.cbo_kegiatan.currentData()
+        )
+        generate_table(
+            data=data,
+            table=self.tbl_siswa_aktif_belum_masuk
+        )
+
+    def fill_tbl_peserta_tidak_aktif(self):
+        data = self.SQL.peserta_tidak_aktif(
+            jenjang=self.parent.cbo_jenjang.currentText(),
+            tapel=self.parent.cbo_tapel.currentText(),
+            id_kegiatan=self.cbo_kegiatan.currentData()
+        )
+        generate_table(
+            data=data,
+            table=self.tbl_peserta_tidak_aktif
+        )
 
     def generate_peserta(self):
         sukses = False
@@ -85,10 +114,10 @@ class PagePeserta(QWidget, Ui_Form):
                 if tingkat in ['6', '9', '12']:
                     sukses = self.SQL.generate_peserta(jenjang, tapel, id_kelas, kls, id_kegiatan)
             else: return
-        if sukses: self.fill_table()
+        if sukses: self.refresh()
 
     def clear_peserta(self):
         konfirimasi = pesan_konfirmasi("Hapus Seluruh Peserta", "Anda akan menghapus seluruh Peserta kegiatan")
         if konfirimasi:
             sukses  = self.SQL.clear_peserta(self.cbo_kegiatan.currentData())
-            if sukses: self.fill_table()
+            if sukses: self.refresh()

@@ -46,7 +46,7 @@ def create_filename(nama, jenis_dok, keterangan, source_path, dest_folder):
 
 def create_namafile2(nama_lengkap, nomor_induk, jenis_dokumen, keterangan, source_path):
     if source_path:
-        keterangan = f' {keterangan}' if keterangan !='' else ''
+        keterangan = f' {keterangan}' if keterangan not in ['', None] else ''
         timestamp = datetime.now().strftime("%H%M%S")
         ekstensi = get_extension(source_path)
         return f'{nomor_induk}-{nama_lengkap}_{jenis_dokumen}{keterangan}_{timestamp}.{ekstensi}'

@@ -49,3 +49,11 @@ class ModelCompareDokumen:
         """
         params = (nomor_induk,)
         return self.sql.get_data(sql, params)
+    
+    def tambah_dokumen(self, no_induk, jenis_dokumen, keterangan, sub_folder, namafile):
+        sql = """
+            INSERT INTO dokumen (nomor_induk, jenis_dokumen, keterangan, sub_folder, namafile)
+            VALUES          (%s, %s, %s, %s, %s)
+        """
+        params = (no_induk, jenis_dokumen, keterangan, sub_folder, namafile)
+        return self.sql.update_data(sql, params)

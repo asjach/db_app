@@ -63,11 +63,50 @@ class Ui_Form(object):
 
         self.gridLayout_2.addWidget(self.widget, 0, 0, 1, 1)
 
-        self.tbl_widget = QTableWidget(Form)
+        self.widget_2 = QWidget(Form)
+        self.widget_2.setObjectName(u"widget_2")
+        self.gridLayout_4 = QGridLayout(self.widget_2)
+        self.gridLayout_4.setObjectName(u"gridLayout_4")
+        self.gridLayout_4.setHorizontalSpacing(6)
+        self.gridLayout_4.setContentsMargins(0, 0, 0, 0)
+        self.tbl_widget = QTableWidget(self.widget_2)
         self.tbl_widget.setObjectName(u"tbl_widget")
         self.tbl_widget.setSelectionBehavior(QAbstractItemView.SelectItems)
 
-        self.gridLayout_2.addWidget(self.tbl_widget, 1, 0, 1, 1)
+        self.gridLayout_4.addWidget(self.tbl_widget, 0, 0, 1, 1)
+
+        self.widget_3 = QWidget(self.widget_2)
+        self.widget_3.setObjectName(u"widget_3")
+        self.gridLayout_3 = QGridLayout(self.widget_3)
+        self.gridLayout_3.setObjectName(u"gridLayout_3")
+        self.gridLayout_3.setContentsMargins(0, 0, 0, 0)
+        self.tbl_siswa_aktif_belum_masuk = QTableWidget(self.widget_3)
+        self.tbl_siswa_aktif_belum_masuk.setObjectName(u"tbl_siswa_aktif_belum_masuk")
+        self.tbl_siswa_aktif_belum_masuk.setSelectionBehavior(QAbstractItemView.SelectItems)
+
+        self.gridLayout_3.addWidget(self.tbl_siswa_aktif_belum_masuk, 1, 0, 1, 1)
+
+        self.tbl_peserta_tidak_aktif = QTableWidget(self.widget_3)
+        self.tbl_peserta_tidak_aktif.setObjectName(u"tbl_peserta_tidak_aktif")
+        self.tbl_peserta_tidak_aktif.setSelectionBehavior(QAbstractItemView.SelectItems)
+
+        self.gridLayout_3.addWidget(self.tbl_peserta_tidak_aktif, 3, 0, 1, 1)
+
+        self.label_2 = QLabel(self.widget_3)
+        self.label_2.setObjectName(u"label_2")
+
+        self.gridLayout_3.addWidget(self.label_2, 0, 0, 1, 1)
+
+        self.label_3 = QLabel(self.widget_3)
+        self.label_3.setObjectName(u"label_3")
+
+        self.gridLayout_3.addWidget(self.label_3, 2, 0, 1, 1)
+
+
+        self.gridLayout_4.addWidget(self.widget_3, 0, 1, 1, 1)
+
+
+        self.gridLayout_2.addWidget(self.widget_2, 1, 0, 1, 1)
 
 
         self.retranslateUi(Form)
@@ -80,5 +119,7 @@ class Ui_Form(object):
         self.label.setText(QCoreApplication.translate("Form", u"Kegiatan Evaluatif", None))
         self.btn_generate.setText(QCoreApplication.translate("Form", u"Generate Peserta", None))
         self.btn_clear.setText(QCoreApplication.translate("Form", u"Clear Peserta", None))
+        self.label_2.setText(QCoreApplication.translate("Form", u"Peserta Belum Masuk", None))
+        self.label_3.setText(QCoreApplication.translate("Form", u"Peserta Tidak Aktif", None))
     # retranslateUi
 
