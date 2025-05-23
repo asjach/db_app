@@ -2,8 +2,8 @@ python -m venv venv
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 venv\Scripts\activate.ps1
 
-pip install mysql-connector-python PySide6 openpyxl python-dateutil python-dotenv reportlab pypdf2 pandas PyMuPdf
-
+pip freeze > requirements.txt
+pip install -r requirements.txt
 
 ## convert ui to py
 

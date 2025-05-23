@@ -364,7 +364,7 @@ class PageInputNilai(QWidget, Ui_Form):
                 for col_name in kolom_tambahan:
                     col_idx = all_columns.index(col_name) + 1
                     col_letter = get_column_letter(col_idx)
-                    ws.conditional_formatting.add(f"{col_letter}2:{col_letter}{len(df_kelas) + 1}", red_rule)
+                    # ws.conditional_formatting.add(f"{col_letter}2:{col_letter}{len(df_kelas) + 1}", red_rule)
                 # Atur lebar kolom
                 exclude_column = ['nrh', 'nilai']
                 for col_idx, col_name in enumerate(all_columns, start=1):

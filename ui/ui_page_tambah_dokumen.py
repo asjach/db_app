@@ -25,7 +25,7 @@ class Ui_Form(object):
     def setupUi(self, Form):
         if not Form.objectName():
             Form.setObjectName(u"Form")
-        Form.resize(745, 606)
+        Form.resize(787, 606)
         self.gridLayout_3 = QGridLayout(Form)
         self.gridLayout_3.setObjectName(u"gridLayout_3")
         self.gridLayout_3.setContentsMargins(0, 0, 0, 0)
@@ -71,19 +71,12 @@ class Ui_Form(object):
         self.gridLayout_8 = QGridLayout(self.widget_8)
         self.gridLayout_8.setObjectName(u"gridLayout_8")
         self.gridLayout_8.setContentsMargins(0, 0, 0, 0)
-        self.radio_mode_copy = QRadioButton(self.widget_8)
-        self.radio_mode_copy.setObjectName(u"radio_mode_copy")
-        self.radio_mode_copy.setChecked(True)
-        self.radio_mode_copy.setAutoExclusive(True)
+        self.radio_cycle = QRadioButton(self.widget_8)
+        self.radio_cycle.setObjectName(u"radio_cycle")
+        self.radio_cycle.setChecked(True)
+        self.radio_cycle.setAutoExclusive(False)
 
-        self.gridLayout_8.addWidget(self.radio_mode_copy, 1, 1, 1, 1)
-
-        self.radio_mode_move = QRadioButton(self.widget_8)
-        self.radio_mode_move.setObjectName(u"radio_mode_move")
-        self.radio_mode_move.setChecked(False)
-        self.radio_mode_move.setAutoExclusive(True)
-
-        self.gridLayout_8.addWidget(self.radio_mode_move, 1, 2, 1, 1)
+        self.gridLayout_8.addWidget(self.radio_cycle, 3, 2, 1, 1)
 
         self.label_10 = QLabel(self.widget_8)
         self.label_10.setObjectName(u"label_10")
@@ -93,6 +86,13 @@ class Ui_Form(object):
 
         self.gridLayout_8.addWidget(self.label_10, 1, 0, 1, 1)
 
+        self.radio_move_sudah = QRadioButton(self.widget_8)
+        self.radio_move_sudah.setObjectName(u"radio_move_sudah")
+        self.radio_move_sudah.setChecked(True)
+        self.radio_move_sudah.setAutoExclusive(False)
+
+        self.gridLayout_8.addWidget(self.radio_move_sudah, 3, 1, 1, 1)
+
         self.btn_tambah = QPushButton(self.widget_8)
         self.btn_tambah.setObjectName(u"btn_tambah")
         sizePolicy2 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Preferred)
@@ -101,21 +101,29 @@ class Ui_Form(object):
         sizePolicy2.setHeightForWidth(self.btn_tambah.sizePolicy().hasHeightForWidth())
         self.btn_tambah.setSizePolicy(sizePolicy2)
 
-        self.gridLayout_8.addWidget(self.btn_tambah, 1, 3, 2, 1)
+        self.gridLayout_8.addWidget(self.btn_tambah, 1, 3, 3, 1)
 
-        self.radio_cycle = QRadioButton(self.widget_8)
-        self.radio_cycle.setObjectName(u"radio_cycle")
-        self.radio_cycle.setChecked(True)
-        self.radio_cycle.setAutoExclusive(False)
+        self.widget_9 = QWidget(self.widget_8)
+        self.widget_9.setObjectName(u"widget_9")
+        self.gridLayout_6 = QGridLayout(self.widget_9)
+        self.gridLayout_6.setObjectName(u"gridLayout_6")
+        self.gridLayout_6.setContentsMargins(0, 0, 0, 0)
+        self.radio_mode_copy = QRadioButton(self.widget_9)
+        self.radio_mode_copy.setObjectName(u"radio_mode_copy")
+        self.radio_mode_copy.setChecked(True)
+        self.radio_mode_copy.setAutoExclusive(True)
 
-        self.gridLayout_8.addWidget(self.radio_cycle, 2, 2, 1, 1)
+        self.gridLayout_6.addWidget(self.radio_mode_copy, 0, 0, 1, 1)
 
-        self.radio_move_sudah = QRadioButton(self.widget_8)
-        self.radio_move_sudah.setObjectName(u"radio_move_sudah")
-        self.radio_move_sudah.setChecked(True)
-        self.radio_move_sudah.setAutoExclusive(False)
+        self.radio_mode_move = QRadioButton(self.widget_9)
+        self.radio_mode_move.setObjectName(u"radio_mode_move")
+        self.radio_mode_move.setChecked(False)
+        self.radio_mode_move.setAutoExclusive(True)
 
-        self.gridLayout_8.addWidget(self.radio_move_sudah, 2, 1, 1, 1)
+        self.gridLayout_6.addWidget(self.radio_mode_move, 0, 1, 1, 1)
+
+
+        self.gridLayout_8.addWidget(self.widget_9, 2, 1, 1, 2)
 
 
         self.gridLayout_5.addWidget(self.widget_8, 13, 0, 1, 3)
@@ -166,13 +174,6 @@ class Ui_Form(object):
         self.line_nama.setMinimumSize(QSize(0, 24))
 
         self.gridLayout_5.addWidget(self.line_nama, 4, 0, 1, 1)
-
-        self.plain_source = QPlainTextEdit(self.widget_4)
-        self.plain_source.setObjectName(u"plain_source")
-        self.plain_source.setEnabled(False)
-        self.plain_source.setMaximumSize(QSize(16777215, 40))
-
-        self.gridLayout_5.addWidget(self.plain_source, 1, 0, 1, 3)
 
         self.line_keterangan = QLineEdit(self.widget_4)
         self.line_keterangan.setObjectName(u"line_keterangan")
@@ -225,6 +226,7 @@ class Ui_Form(object):
         self.list_jenis_dokumen.setMaximumSize(QSize(150, 300))
         self.list_jenis_dokumen.setAutoScroll(True)
         self.list_jenis_dokumen.setAutoScrollMargin(16)
+        self.list_jenis_dokumen.setBatchSize(100)
 
         self.gridLayout_5.addWidget(self.list_jenis_dokumen, 5, 1, 5, 1)
 
@@ -251,6 +253,13 @@ class Ui_Form(object):
         self.widget_5.setMinimumSize(QSize(0, 24))
 
         self.gridLayout_5.addWidget(self.widget_5, 8, 0, 1, 1)
+
+        self.plain_source = QPlainTextEdit(self.widget_4)
+        self.plain_source.setObjectName(u"plain_source")
+        self.plain_source.setEnabled(False)
+        self.plain_source.setMaximumSize(QSize(16777215, 40))
+
+        self.gridLayout_5.addWidget(self.plain_source, 1, 0, 1, 3)
 
         self.gridLayout_5.setColumnStretch(0, 1)
 
@@ -317,12 +326,12 @@ class Ui_Form(object):
 
     def retranslateUi(self, Form):
         Form.setWindowTitle(QCoreApplication.translate("Form", u"Form", None))
+        self.radio_cycle.setText(QCoreApplication.translate("Form", u"Input berulang", None))
+        self.label_10.setText(QCoreApplication.translate("Form", u"MODE:", None))
+        self.radio_move_sudah.setText(QCoreApplication.translate("Form", u"Pindahkan ke folder 'sudah'", None))
+        self.btn_tambah.setText(QCoreApplication.translate("Form", u"Tambah", None))
         self.radio_mode_copy.setText(QCoreApplication.translate("Form", u"Copy", None))
         self.radio_mode_move.setText(QCoreApplication.translate("Form", u"Move", None))
-        self.label_10.setText(QCoreApplication.translate("Form", u"MODE:", None))
-        self.btn_tambah.setText(QCoreApplication.translate("Form", u"Tambah", None))
-        self.radio_cycle.setText(QCoreApplication.translate("Form", u"Input berulang", None))
-        self.radio_move_sudah.setText(QCoreApplication.translate("Form", u"Pindahkan ke folder 'sudah'", None))
         self.btn_clear_source.setText(QCoreApplication.translate("Form", u"X", None))
         self.btn_browse.setText(QCoreApplication.translate("Form", u"Pilih File", None))
         self.label_9.setText(QCoreApplication.translate("Form", u"Pilih File", None))

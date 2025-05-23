@@ -5,8 +5,8 @@ from models.nilai.rekap_nilai import RekapNilai
 from PySide6.QtCore import QBuffer, QIODevice, QByteArray
 from reportlab.lib.pagesizes import A4, GOV_LEGAL
 from template.rekap_nilai import TemplateRekapNilai
-from PySide6.QtPdf import QPdfDocument
 from PySide6.QtPdfWidgets import QPdfView
+from scripts.widgets.dokumen_viewer import DokumenViewer
 
 class PageRekapNilai(Ui_Form, QWidget):
     def __init__(self, parent: QMainWindow = None) -> None:
@@ -17,9 +17,9 @@ class PageRekapNilai(Ui_Form, QWidget):
         self.cbo_tapel = self.parent.cbo_tapel
         self.cbo_tingkat = self.parent.cbo_tingkat
         self.cbo_kelas = self.parent.cbo_kelas 
-
         self.SQL = RekapNilai()
-        self.doc = QPdfDocument()
+        self.viewer = DokumenViewer()
+        self.viewer_layout.addWidget(self.viewer)
         self.signal_slot()
 
     def signal_slot(self):
@@ -43,7 +43,7 @@ class PageRekapNilai(Ui_Form, QWidget):
         generate_table(
             data= data,
             table=self.kegiatan_tbl,
-            hidden_column=[0, 5, 6, 7, 8, 9]
+            hidden_column=[0, 1, ]
         )
         
 
@@ -57,7 +57,8 @@ class PageRekapNilai(Ui_Form, QWidget):
         generate_table(
             data=data,
             table=self.kelas_tbl,
-            hidden_column=[0, 1, 2, 3, 5]
+            hidden_column=[0, 1, 2, 3, 5],
+            stretch_column= 6
         )
 
     def kelas_tbl_selected(self):
@@ -81,26 +82,28 @@ class PageRekapNilai(Ui_Form, QWidget):
         data.append(baris_rata_rata_pelajaran)
         if self.perkelas_radio.isChecked():
             if not self.id_kegiatan: return
-            rekap_nilai = TemplateRekapNilai(self)
-            self.pdf_buffer = rekap_nilai.build_pdf(
-                top = self.margin_top_spin.value(),
-                left = self.margin_left_spin.value(),
-                bottom = self.margin_bottom_spin.value(),
-                right=self.margin_right_spin.value(),
-                orientasi=orientasi,
-                kertas = kertas,
-                data_detail=data
+            if data:
+                template = TemplateRekapNilai(self)
+                self.pdf_data = template.build_pdf(
+                    top = self.margin_top_spin.value(),
+                    left = self.margin_left_spin.value(),
+                    bottom = self.margin_bottom_spin.value(),
+                    right=self.margin_right_spin.value(),
+                    orientasi=orientasi,
+                    kertas = kertas,
+                    data_detail = data
                 )
+                self.viewer.loadPDF(self.pdf_data)
+            else:
+                self.pdf_data = None
+                self.viewer.close_file()
         if self.tiga_besar_radio.isChecked():
             if not self.id_kegiatan: return
+            template = TemplateRekapNilai(self)
+            self.pdf_data = template.build_pdf_peringkat(
+            )
+            self.viewer.loadPDF(self.pdf_data)
 
-        buffer.setData(QByteArray(self.pdf_buffer))
-        buffer.open(QIODevice.ReadOnly)
-        self.pdf_viewer.setDocument(self.doc)
-        self.pdf_viewer.setPageMode(QPdfView.PageMode.MultiPage)
-        self.pdf_viewer.setZoomMode(QPdfView.ZoomMode.FitInView)
-        self.doc.load(buffer)
-    
     def get_rekap_nilai(self):
         jenjang = self.jenjang
         tapel = self.tapel

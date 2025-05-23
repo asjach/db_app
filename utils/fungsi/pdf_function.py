@@ -22,7 +22,7 @@ from PySide6.QtCore import QByteArray
 
 
 def register_all_windows_fonts():
-    font_dir = "C:/APP/DB App/resources/font"
+    font_dir = "F:/APP/DB App/resources/font"
     for file in os.listdir(font_dir):
         if file.lower().endswith('.ttf'):
             font_path = os.path.join(font_dir, file)

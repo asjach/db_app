@@ -7,7 +7,8 @@ class RekapNilai(ConnectDB):
 
     def get_kegiatan_riwayat(self, tapel):
         sql = """
-            SELECT * FROM kegiatan_riwayat
+            SELECT      id, jenjang, tapel, semester, kegiatan, tgl_titimangsa
+            FROM kegiatan_riwayat
             WHERE       tapel = %s
             ORDER BY    jenjang DESC, tapel, semester
         """

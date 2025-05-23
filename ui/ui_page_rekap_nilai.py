@@ -15,7 +15,6 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtPdfWidgets import QPdfView
 from PySide6.QtWidgets import (QAbstractItemView, QApplication, QDoubleSpinBox, QGridLayout,
     QHeaderView, QLabel, QPushButton, QRadioButton,
     QSizePolicy, QSpacerItem, QSpinBox, QTableWidget,
@@ -31,8 +30,25 @@ class Ui_Form(object):
         self.gridLayout.setHorizontalSpacing(5)
         self.gridLayout.setVerticalSpacing(0)
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
+        self.widget_15 = QWidget(Form)
+        self.widget_15.setObjectName(u"widget_15")
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.widget_15.sizePolicy().hasHeightForWidth())
+        self.widget_15.setSizePolicy(sizePolicy)
+        self.viewer_layout = QGridLayout(self.widget_15)
+        self.viewer_layout.setObjectName(u"viewer_layout")
+
+        self.gridLayout.addWidget(self.widget_15, 0, 1, 1, 1)
+
         self.widget = QWidget(Form)
         self.widget.setObjectName(u"widget")
+        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Preferred)
+        sizePolicy1.setHorizontalStretch(0)
+        sizePolicy1.setVerticalStretch(0)
+        sizePolicy1.setHeightForWidth(self.widget.sizePolicy().hasHeightForWidth())
+        self.widget.setSizePolicy(sizePolicy1)
         self.gridLayout_13 = QGridLayout(self.widget)
         self.gridLayout_13.setObjectName(u"gridLayout_13")
         self.gridLayout_13.setHorizontalSpacing(0)
@@ -381,14 +397,6 @@ class Ui_Form(object):
 
         self.gridLayout.addWidget(self.widget_2, 0, 2, 1, 1)
 
-        self.pdf_viewer = QPdfView(Form)
-        self.pdf_viewer.setObjectName(u"pdf_viewer")
-
-        self.gridLayout.addWidget(self.pdf_viewer, 0, 1, 1, 1)
-
-        self.gridLayout.setColumnStretch(1, 1)
-        self.gridLayout.setColumnMinimumWidth(0, 400)
-        self.gridLayout.setColumnMinimumWidth(2, 350)
 
         self.retranslateUi(Form)
 

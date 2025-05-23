@@ -239,7 +239,7 @@ class Ui_Form(object):
         self.spin_tinggi_baris.setMinimumSize(QSize(75, 24))
         self.spin_tinggi_baris.setAlignment(Qt.AlignCenter)
         self.spin_tinggi_baris.setAccelerated(True)
-        self.spin_tinggi_baris.setDecimals(1)
+        self.spin_tinggi_baris.setDecimals(2)
         self.spin_tinggi_baris.setMaximum(2.000000000000000)
         self.spin_tinggi_baris.setSingleStep(0.100000000000000)
         self.spin_tinggi_baris.setValue(0.600000000000000)

@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout" columnstretch="0,1,0" columnminimumwidth="400,0,350">
+  <layout class="QGridLayout" name="gridLayout" columnstretch="0,0,0">
    <property name="leftMargin">
     <number>0</number>
    </property>
@@ -32,8 +32,25 @@
    <property name="verticalSpacing">
     <number>0</number>
    </property>
+   <item row="0" column="1">
+    <widget class="QWidget" name="widget_15" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <layout class="QGridLayout" name="viewer_layout"/>
+    </widget>
+   </item>
    <item row="0" column="0">
     <widget class="QWidget" name="widget" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <layout class="QGridLayout" name="gridLayout_13" rowstretch="0,0">
       <property name="leftMargin">
        <number>0</number>
@@ -645,19 +662,8 @@
      </layout>
     </widget>
    </item>
-   <item row="0" column="1">
-    <widget class="QPdfView" name="pdf_viewer" native="true"/>
-   </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>QPdfView</class>
-   <extends>QWidget</extends>
-   <header location="global">qpdfview.h</header>
-   <container>1</container>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>

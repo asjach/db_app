@@ -101,7 +101,7 @@ class TemplateRapor:
     def identitas_siswa(self, data):
         self.kop_madrasah()
         teks = "IDENTITAS PESERTA DIDIK"
-        alamat = Paragraph(f"<para font face='Aptos' size=11 leading=16>{data['alamat_full']}</para>")
+        alamat = Paragraph(f"<para font face='Aptos' size=11 leading=12>{data['alamat_full']}</para>")
         if data['ayah_telp'] == '':
             telp_ayah = ''
         else:
@@ -124,6 +124,7 @@ class TemplateRapor:
             ["Status Dalam Keluarga",       ":",        "Anak Kandung"],
             ["Anak Ke",                     ":",        f"{data['anak_ke']}"],
             ["Alamat Peserta Didik",        ":",        alamat],
+            ["",                            "",                  ],
             ["Nomor Telepon Rumah/HP",      ":",        no_telp_ortu],
             ["Sekolah Asal",                ":",        f"{data['nama_sekolah_asal']}"],
             ["Diterima di sekolah ini",     "",         ""],
@@ -133,6 +134,7 @@ class TemplateRapor:
             ["       a. Ayah",              ":",        f"{data['ayah_nama']}"],
             ["       b. Ibu",               ":",        f"{data['ibu_nama']}"],
             ["Alamat Orang Tua",            ":",        alamat],
+            ["",                            "",                  ],
             ["Pekerjaan Orang Tua",         "",         ""],
             ["       a. Ayah",              ":",        f"{data['ayah_pekerjaan']}"],
             ["       b. Ibu",               ":",        f"{data['ibu_pekerjaan']}"]
@@ -141,7 +143,6 @@ class TemplateRapor:
         data2 = [
             [titimangsa],
             ["Kepala Madrasah"],
-            [""],
             [""],
             [data['mudir']],
         ]
@@ -162,12 +163,11 @@ class TemplateRapor:
                     ("FONTSIZE", (0,0), (-1,-1), 10)])
         
         paragraf(self, teks, x = self.width/2/mm-50, y=60, w= 100, h=8, font='Aptos Bold', size=16)
-        tabel(self, 20, 65 , data1, (50*mm, 5*mm, 115*mm), 8, style1)
+        tabel(self, 20, 65 , data1, (50*mm, 5*mm, 125*mm), self.setting['tinggi_baris']*10, style1)
         self.c.setLineWidth(1)
         self.c.rect(77*mm, 30*mm, 30*mm, 40*mm)
-        tabel(self, 120, 228, data2,[70*mm], self.setting['tinggi_baris']*10, styles=style2)
+        tabel(self, 120, 228, data2,[70*mm], 6, styles=style2)
         gambar_mid(self, self.ttd_mudir, 143 + self.setting['x_mudir']*10, 258 + self.setting['y_mudir']*10, self.setting['size_mudir']*10)
-        
         self.c.showPage()
 
 

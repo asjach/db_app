@@ -197,7 +197,6 @@ class PageCetakRapor(QWidget, Ui_Form):
         try:
             data_setting = self.nilai_setting()
             data_rapor = self.SQL.data_rapor(id_kelas, id_kegiatan, nis_lokal, limit=limit)
-            # print(data_rapor)
             if data_rapor:
                 template = TemplateRapor(parent=self, data={'data_rapor': data_rapor, 'setting': data_setting})
                 self.pdf_data = template.create_rapor()

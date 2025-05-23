@@ -56,8 +56,11 @@ class CetakRapor(ConnectDB):
     
     def data_rapor(self, id_kelas, id_kegiatan, nis_lokal, limit=True):
         sql = """
-            SELECT 		k.id_kelas, k.id_kegiatan, krw.jenjang, krw.tapel, krw.kelas, kr.semester, kr.kegiatan, kr.tgl_titimangsa, 
-                        sum(n.nilai) as jml, round(avg(n.nilai), 2) as rt, k.ranking, k.sakit, k.ijin, k.alpa, 
+            SELECT 		k.id_kelas, k.id_kegiatan, krw.jenjang, krw.tapel, 
+                        krw.kelas, kr.semester, kr.kegiatan, kr.tgl_titimangsa, 
+                        sum(n.nilai) as jml, 
+                        round(avg(n.nilai), 2) as rt, 
+                        k.ranking, k.sakit, k.ijin, k.alpa, 
                         k.catatan_walas, 
                         gw.nama_lengkap as walas, d.namafile as ttd_walas, 
                         gm.nama_lengkap as mudir, dm.namafile as ttd_mudir,
