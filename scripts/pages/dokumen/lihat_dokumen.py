@@ -3,6 +3,7 @@ from ui.ui_page_lihat_dokumen import Ui_Form
 from models.dokumen.lihat_dokumen import ModelLihatDokumen
 from scripts.widgets.dokumen_viewer import DokumenViewer
 from utils.fungsi.general_functions import *
+from utils.app_config import DIREKTORI_DOKUMEN
 
 class PageLihatDokumen(QWidget, Ui_Form):
     def __init__(self, parent: QMainWindow):
@@ -73,7 +74,7 @@ class PageLihatDokumen(QWidget, Ui_Form):
     def tbl_daftar_dokumen_selected(self):
         table_selected(self.tbl_daftar_dokumen, self, self.parent)
         target = self.cbo_target.currentText()
-        path = f"{value_from_db('DOKUMEN_PATH')}/{target}/{self.namafile}"
+        path = os.path.join(DIREKTORI_DOKUMEN, target, self.namafile)
         self.show_dokumen(path)
 
     def show_dokumen(self, path):

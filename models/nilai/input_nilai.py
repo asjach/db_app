@@ -105,7 +105,7 @@ class InputNilai(ConnectDB):
         
         placeholders = ",".join(["(%s)" for _ in keys])
         sql = f"""
-            SELECT id, id_kelas, id_kegiatan, no_urut, sakit, ijin, alpa, catatan_walas, status_naik
+            SELECT id, id_kelas, id_kegiatan, no_urut, sakit, ijin, alpa, catatan_walas, ranking, status_naik
             FROM kegiatan_peserta
             WHERE id IN ({placeholders})
         """
@@ -113,8 +113,13 @@ class InputNilai(ConnectDB):
         results = self.get_data(sql, params)
 
         existing_dict = {r['id']: {
-            'no_urut': r['no_urut'], 'sakit': r['sakit'], 'ijin': r['ijin'],
-            'alpa': r['alpa'], 'catatan_walas': r['catatan_walas'], 'status_naik': r['status_naik']
+            'no_urut': r['no_urut'], 
+            'sakit': r['sakit'], 
+            'ijin': r['ijin'],
+            'alpa': r['alpa'], 
+            'catatan_walas': r['catatan_walas'], 
+            'ranking': r['ranking'], 
+            'status_naik': r['status_naik']
         } for r in results}
         return existing_dict
 
@@ -123,7 +128,7 @@ class InputNilai(ConnectDB):
             return
         
         sql = """
-            INSERT INTO kegiatan_peserta (id, id_kelas, id_kegiatan, no_urut, sakit, ijin, alpa, catatan_walas, status_naik)
+            INSERT INTO kegiatan_peserta (id, id_kelas, id_kegiatan, no_urut, sakit, ijin, alpa, catatan_walas, ranking, status_naik)
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
         """
         row_count = self.update_data(sql, data)
@@ -135,7 +140,7 @@ class InputNilai(ConnectDB):
         
         sql = """
             UPDATE kegiatan_peserta
-            SET no_urut = %s, sakit = %s, ijin = %s, alpa = %s, catatan_walas = %s, status_naik = %s
+            SET no_urut = %s, sakit = %s, ijin = %s, alpa = %s, catatan_walas = %s, ranking = %s, status_naik = %s
             WHERE id = %s
         """
         row_count = self.update_data(sql, data)
@@ -170,7 +175,6 @@ class InputNilai(ConnectDB):
             JOIN        siswa s ON s.nis_lokal = kp.nis_lokal
             JOIN        kegiatan_riwayat kr ON kr.id = kp.id_kegiatan
             JOIN        kelas_riwayat k ON k.id = kp.id_kelas
-            JOIN        guru g ON g.id_guru = k.id_walas
             WHERE       k.jenjang = %s
                 AND     k.tapel = %s
                 AND     k.tingkat LIKE %s
@@ -199,7 +203,6 @@ class InputNilai(ConnectDB):
             JOIN        siswa s ON s.nis_lokal = kp.nis_lokal
             JOIN        kegiatan_riwayat kr ON kr.id = kp.id_kegiatan
             JOIN        kelas_riwayat k ON k.id = kp.id_kelas
-            JOIN        guru g ON g.id_guru = k.id_walas
             WHERE       k.jenjang = %s
                 AND     k.tapel = %s
                 AND     k.tingkat LIKE %s
@@ -208,6 +211,7 @@ class InputNilai(ConnectDB):
             GROUP BY    kelas, kp.no_urut, s.nama_lengkap, kp.ranking, kp.catatan_walas {}
             ORDER BY    kelas, s.nama_lengkap
             """.format(kenaikan, kenaikan)
+        
         params = (jenjang, tapel, f'%{tingkat}%', f'%{kelas}%', kegiatan)
         return self.get_data(sql, params)
 
@@ -230,7 +234,6 @@ class InputNilai(ConnectDB):
             JOIN        siswa s ON s.nis_lokal = kp.nis_lokal
             JOIN        kegiatan_riwayat kr ON kr.id = kp.id_kegiatan
             JOIN        kelas_riwayat k ON k.id = kp.id_kelas
-            JOIN        guru g ON g.id_guru = k.id_walas
             WHERE       k.jenjang = %s
                 AND     k.tapel = %s
                 AND     k.tingkat LIKE %s

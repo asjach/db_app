@@ -5,6 +5,7 @@ from models.siswa.biodata_siswa import BiodataSiswa
 from scripts.widgets.image_viewer import Widget_Image_Viewer
 from PySide6.QtCore import QEvent, Qt
 from utils.static_values import *
+from utils.app_config import DIREKTORI_DOKUMEN
 
 
 class CustomCompleter(QCompleter):
@@ -131,7 +132,7 @@ class DialogDetailSiswa(QDialog, Ui_Form):
         data = self.SQL.get_dokumen_path(nis_lokal)
         if data:
             for item in data:
-                folder = value_from_db("DOKUMEN_PATH")
+                folder = DIREKTORI_DOKUMEN
                 filepath = f"{folder}/siswa/{item['namafile']}"
                 combo.blockSignals(True)
                 combo.addItem(f'{item['jenis_dokumen']}', userData=filepath)

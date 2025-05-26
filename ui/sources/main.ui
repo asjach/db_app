@@ -1301,21 +1301,34 @@
     <addaction name="actionInput_By_Excel"/>
     <addaction name="actionInput_Riwayat"/>
     <addaction name="actionTabelAll"/>
+    <addaction name="actionApp_Setting"/>
    </widget>
    <widget class="QMenu" name="menuNilai">
     <property name="title">
      <string>Nilai</string>
     </property>
-    <addaction name="actionRiwayatKegiatan"/>
-    <addaction name="actionPesertaKegiatan"/>
-    <addaction name="actionMapelKegiatan"/>
-    <addaction name="actionEkskulKegiatan"/>
+    <widget class="QMenu" name="menuPengaturan">
+     <property name="title">
+      <string>Pengaturan</string>
+     </property>
+     <addaction name="actionRiwayatKegiatan"/>
+     <addaction name="actionPesertaKegiatan"/>
+     <addaction name="actionMapelKegiatan"/>
+     <addaction name="actionEkskulKegiatan"/>
+    </widget>
+    <widget class="QMenu" name="menuCetak">
+     <property name="title">
+      <string>Cetak</string>
+     </property>
+     <addaction name="actionKartu_Peserta"/>
+     <addaction name="actionRekap"/>
+     <addaction name="actionRapor"/>
+    </widget>
+    <addaction name="menuPengaturan"/>
     <addaction name="separator"/>
     <addaction name="actionInput_Nilai"/>
     <addaction name="separator"/>
-    <addaction name="actionKartu_Peserta"/>
-    <addaction name="actionRekap"/>
-    <addaction name="actionRapor"/>
+    <addaction name="menuCetak"/>
    </widget>
    <widget class="QMenu" name="menuDokumen">
     <property name="title">
@@ -1443,11 +1456,6 @@
   <action name="actionKartu_Peserta">
    <property name="text">
     <string>Cetak Kartu Peserta</string>
-   </property>
-  </action>
-  <action name="actionLabel_Sampul">
-   <property name="text">
-    <string>Label Sampul</string>
    </property>
   </action>
   <action name="actionRiwayatKeaktifan">
@@ -1594,6 +1602,11 @@
   <action name="actionCopy_Dokumen">
    <property name="text">
     <string>Copy Dokumen</string>
+   </property>
+  </action>
+  <action name="actionApp_Setting">
+   <property name="text">
+    <string>App Setting</string>
    </property>
   </action>
  </widget>

@@ -7,7 +7,6 @@ from openpyxl import load_workbook, Workbook
 from openpyxl.utils import get_column_letter
 from openpyxl.styles import Border, Side, Alignment, PatternFill, Font
 from openpyxl.formatting.rule import CellIsRule
-# from openpyxl.styles.differential import DifferentialStyle
 import pandas as pd
 from collections import defaultdict
 from utils.static_values import LEFT_COLUMN, RIGHT_COLUMN
@@ -75,8 +74,14 @@ class PageInputNilai(QWidget, Ui_Form):
 
 # TEMPLATE NILAI
     def btn_template_nilai_clicked(self):
+        jenjang = self.parent.cbo_jenjang.currentText()
+        data_siswa = self.get_data_siswa()
         if self.pte_default_path.toPlainText() !=  '':
-            self.template_nilai(self.get_data_siswa())
+            if jenjang == 'MI':
+                self.template_nilai_mi(data=data_siswa)
+            elif jenjang == 'MD':
+                self.template_nilai_md(data=data_siswa)
+            
 
 # TEMPLATE WALAS
     def btn_template_walas_clicked(self):
@@ -91,22 +96,22 @@ class PageInputNilai(QWidget, Ui_Form):
 #   BTN RELOAD
     def show_data_nilai_in_table(self):
         path_rekap = self.pte_excel_path.toPlainText()
-        if path_rekap:
-            if self.radio_nilai_db.isChecked():
-                self.get_rekap_nilai()
-            elif self.radio_catatan_db.isChecked():
-                self.get_rekap_catatan()
-            elif self.radio_nilai_catatan_db.isChecked():
-                self.get_rekap_nilai_catatan()
-            else:
+        if self.radio_nilai_db.isChecked():
+            self.get_rekap_nilai()
+        elif self.radio_catatan_db.isChecked():
+            self.get_rekap_catatan()
+        elif self.radio_nilai_catatan_db.isChecked():
+            self.get_rekap_nilai_catatan()
+        else:
+            if path_rekap:
                 if os.path.exists(path_rekap):
                     df = pd.read_excel(path_rekap)
                     generate_table(data=df,table=self.input_tbl)
-        else:
-            self.input_tbl.clear()
-            self.input_tbl.setRowCount(0)
-            self.input_tbl.setColumnCount(0)
-
+                else:
+                    self.input_tbl.clear()
+                    self.input_tbl.setRowCount(0)
+                    self.input_tbl.setColumnCount(0)
+        
     def get_rekap_nilai(self):
         jenjang = self.cbo_jenjang.currentText()
         tapel = self.cbo_tapel.currentText()
@@ -114,8 +119,11 @@ class PageInputNilai(QWidget, Ui_Form):
         kelas = self.cbo_kelas.currentText()
         kegiatan = self.cbo_kegiatan.currentText()
         data_mapel = self.SQL.get_list_mapel(jenjang, tapel, kegiatan, tingkat, kelas, )
-        mapel_list = [mapel['mapel'] for mapel in data_mapel]
-        kolom_mapel = ", ".join([f"MAX(CASE WHEN mapel = '{mapel}' THEN nilai END) AS `{mapel}`" for mapel in mapel_list])
+        if data_mapel:
+            mapel_list = [mapel['mapel'] for mapel in data_mapel]
+            kolom_mapel = ", ".join([f"MAX(CASE WHEN mapel = '{mapel}' THEN nilai END) AS `{mapel}`" for mapel in mapel_list])
+        else:
+            kolom_mapel = ""
         data = self.SQL.get_nilai_by_kegiatan(kolom_mapel, jenjang, tapel, tingkat, kelas, kegiatan)
         generate_table(data=data,table=self.input_tbl)
 
@@ -135,8 +143,11 @@ class PageInputNilai(QWidget, Ui_Form):
         kelas = self.cbo_kelas.currentText()
         kegiatan = self.cbo_kegiatan.currentText()
         data_mapel = self.SQL.get_list_mapel(jenjang, tapel, kegiatan, tingkat, kelas, )
-        mapel_list = [mapel['mapel'] for mapel in data_mapel]
-        kolom_mapel = ", ".join([f"MAX(CASE WHEN mapel = '{mapel}' THEN nilai END) AS `{mapel}`" for mapel in mapel_list])
+        if data_mapel:
+            mapel_list = [mapel['mapel'] for mapel in data_mapel]
+            kolom_mapel = ", ".join([f"MAX(CASE WHEN mapel = '{mapel}' THEN nilai END) AS `{mapel}`" for mapel in mapel_list])
+        else:
+            kolom_mapel = ""
         data = self.SQL.get_nilai_catatan_by_kegiatan(kolom_mapel, jenjang, tapel, tingkat, kelas, kegiatan)
         generate_table(data=data,table=self.input_tbl)
 
@@ -184,20 +195,7 @@ class PageInputNilai(QWidget, Ui_Form):
         kegiatan = self.cbo_kegiatan.currentText()
         jenjang = self.cbo_jenjang.currentText()
         tapel = self.cbo_tapel.currentText()
-        kelas = self.cbo_kelas.currentText()
-        tingkat = self.cbo_tingkat.currentText()
-        if tingkat:
-            if kelas: txt_tingkat = f' Kelas {kelas} '
-            else: txt_tingkat = f' Tingkat {tingkat} '
-        else:
-            if kelas: txt_tingkat = f' Kelas {kelas} '
-            else: txt_tingkat = ''
-
-        filename_nilai = f"Blanko Nilai {kegiatan} {txt_tingkat}{jenjang}.xlsx"
-        filename_walas = f"Blanko Catatan Walas {kegiatan}{txt_tingkat} {jenjang}.xlsx"
         filename_rekap = f"Rekap Nilai {kegiatan} {jenjang} {tapel}.xlsx"
-        self.line_nilai.setText(filename_nilai)
-        self.line_walas.setText(filename_walas)
         self.line_rekap.setText(filename_rekap)
         
     def init_default_folder(self):
@@ -222,186 +220,270 @@ class PageInputNilai(QWidget, Ui_Form):
         else:
             self.pte_excel_path.clear()
 
-    def template_nilai(self, data, jumlah_pel=1):
+    def template_nilai_md(self, data):
+        # Extract form data
         jenjang = self.cbo_jenjang.currentText()
         tapel = self.cbo_tapel.currentText()
         kegiatan = self.cbo_kegiatan.currentText()
 
-        kolom = ["no_urut", "nis_lokal", "nama_lengkap", "kelas"]
+        # Define columns
+        base_columns = ["no_urut", "nis_lokal", "nama_lengkap", "kelas"]
+        additional_columns = [f"nh{i}" for i in range(1, 7)] + ["nrh", "harian", "tulis", "lisan", "nilai"]
+        all_columns = base_columns + additional_columns
+
+        # Create output directory
         folder_output = os.path.join(os.path.normpath(self.pte_default_path.toPlainText()), 'blanko nilai')
         os.makedirs(folder_output, exist_ok=True)
 
-        # Ambil daftar kelas
+        # Get class list
         kelas = self.SQL.get_kelas(jenjang, tapel)
         list_kelas = [item['kelas'] for item in kelas]
 
-        # Definisikan kolom tambahan berdasarkan jenjang
-        if jenjang == "MI":
-            kolom_tambahan = [f"nh{i}" for i in range(1, 9)] + ["nrh", "tulis", "lisan", "nilai"]
-        elif jenjang == "MD":
-            kolom_tambahan = [f"nh{i}" for i in range(1, 7)] + ["nrh", "harian", "tulis", "lisan", "nilai"]
+        # Define styles
+        thin_border = Border(left=Side(style='thin'), right=Side(style='thin'), 
+                            top=Side(style='thin'), bottom=Side(style='thin'))
+        default_font = Font(name='Aptos', size=11)
+        header_font = Font(name='Aptos', size=11, bold=True)
+        yellow_fill = PatternFill(start_color="FFFF00", end_color="FFFF00", fill_type="solid")
+        red_fill = PatternFill(start_color="FF0000", end_color="FF0000", fill_type="solid")
+        red_rule = CellIsRule(operator="greaterThan", formula=["100"], fill=red_fill)
 
-        # Buat DataFrame dasar
+        # Process data
+        df = pd.DataFrame(data, columns=base_columns)
+        for col in additional_columns:
+            df[col] = None
+
+        for kls in list_kelas:
+            df_kelas = df[df['kelas'] == kls].copy()
+            filename = os.path.join(folder_output, f'{kegiatan} {kls} {jenjang}.xlsx')
+            wb = Workbook()
+            ws = wb.active
+
+            # Set headers
+            for col_idx, col_name in enumerate(all_columns, start=1):
+                cell = ws.cell(row=1, column=col_idx)
+                cell.value = col_name
+                cell.border = thin_border
+                cell.fill = yellow_fill
+                cell.alignment = Alignment(horizontal='center', vertical='center')
+                cell.font = header_font
+
+            # Populate data
+            for row_idx, row_data in enumerate(df_kelas.values, start=2):
+                for col_idx, value in enumerate(row_data, start=1):
+                    cell = ws.cell(row=row_idx, column=col_idx)
+                    cell.value = value
+                    cell.border = thin_border
+                    cell.font = default_font
+                    col_name = all_columns[col_idx - 1]
+                    cell.alignment = Alignment(
+                        horizontal='left' if col_name in LEFT_COLUMN else 
+                        'right' if col_name in RIGHT_COLUMN else 'center',
+                        vertical='center'
+                    )
+
+            # Set formulas
+            for row in range(2, len(df_kelas) + 2):
+                cell_nrh = ws[f"K{row}"]
+                cell_nilai = ws[f"O{row}"]
+                cell_nrh.value = f"=AVERAGE(E{row}:J{row})"
+                cell_nilai.value = f"=ROUNDUP(AVERAGE(K{row}:N{row}),0)"
+                cell_nrh.border = thin_border
+                cell_nilai.border = thin_border
+                cell_nrh.font = default_font
+                cell_nilai.font = default_font
+                cell_nrh.alignment = Alignment(
+                    horizontal='left' if 'nrh' in LEFT_COLUMN else 
+                    'right' if 'nrh' in RIGHT_COLUMN else 'center',
+                    vertical='center'
+                )
+                cell_nilai.alignment = Alignment (
+                    horizontal='left' if 'nilai' in LEFT_COLUMN else 
+                    'right' if 'nilai' in RIGHT_COLUMN else 'center',
+                    vertical='center'
+                )
+
+            # Apply conditional formatting
+            for col_name in additional_columns:
+                col_idx = all_columns.index(col_name) + 1
+                col_letter = get_column_letter(col_idx)
+                ws.conditional_formatting.add(f"{col_letter}2:{col_letter}{len(df_kelas) + 1}", red_rule)
+
+            # Adjust column widths
+            for col_idx, col_name in enumerate(all_columns, start=1):
+                if col_name in ['nrh', 'nilai']:
+                    continue
+                max_length = max(
+                    len(str(col_name)),
+                    *(len(str(ws.cell(row=row_idx, column=col_idx).value or '')) 
+                    for row_idx in range(1, len(df_kelas) + 2))
+                )
+                ws.column_dimensions[get_column_letter(col_idx)].width = max_length + 3
+
+            wb.save(filename)
+        
+        open_in_explorer(folder_output)
+
+    def template_nilai_mi(self, data):
+        # Extract form data
+        jenjang = self.cbo_jenjang.currentText()
+        tapel = self.cbo_tapel.currentText()
+        kegiatan = self.cbo_kegiatan.currentText()
+
+        # Define columns
+        base_columns = ["no_urut", "nis_lokal", "nama_lengkap", "kelas"]
+        additional_columns = [f"nh{i}" for i in range(1, 9)] + ["nrh", "tulis", "lisan", "nilai"]
+        all_columns = base_columns + additional_columns
+
+        # Create output directory
+        folder_output = os.path.join(os.path.normpath(self.pte_default_path.toPlainText()), 'blanko nilai')
+        os.makedirs(folder_output, exist_ok=True)
+
+        # Get class list
+        kelas = self.SQL.get_kelas(jenjang, tapel)
+        list_kelas = [item['kelas'] for item in kelas]
+
+        # Define styles
+        thin_border = Border(left=Side(style='thin'), right=Side(style='thin'), 
+                            top=Side(style='thin'), bottom=Side(style='thin'))
+        default_font = Font(name='Aptos', size=11)
+        header_font = Font(name='Aptos', size=11, bold=True)
+        yellow_fill = PatternFill(start_color="FFFF00", end_color="FFFF00", fill_type="solid")
+        red_fill = PatternFill(start_color="FF0000", end_color="FF0000", fill_type="solid")
+        red_rule = CellIsRule(operator="greaterThan", formula=["100"], fill=red_fill)
+
+        # Process data
+        df = pd.DataFrame(data, columns=base_columns)
+        for col in additional_columns:
+            df[col] = None
+
+        for kls in list_kelas:
+            df_kelas = df[df['kelas'] == kls].copy()
+            filename = os.path.join(folder_output, f'{kegiatan} {kls} {jenjang}.xlsx')
+            wb = Workbook()
+            ws = wb.active
+
+            # Set headers
+            for col_idx, col_name in enumerate(all_columns, start=1):
+                cell = ws.cell(row=1, column=col_idx)
+                cell.value = col_name
+                cell.border = thin_border
+                cell.fill = yellow_fill
+                cell.alignment = Alignment(horizontal='center', vertical='center')
+                cell.font = header_font
+
+            # Populate data
+            for row_idx, row_data in enumerate(df_kelas.values, start=2):
+                for col_idx, value in enumerate(row_data, start=1):
+                    cell = ws.cell(row=row_idx, column=col_idx)
+                    cell.value = value
+                    cell.border = thin_border
+                    cell.font = default_font
+                    col_name = all_columns[col_idx - 1]
+                    cell.alignment = Alignment(
+                        horizontal='left' if col_name in LEFT_COLUMN else 
+                        'right' if col_name in RIGHT_COLUMN else 'center',
+                        vertical='center'
+                    )
+
+            # Set formulas
+            for row in range(2, len(df_kelas) + 2):
+                cell_nrh = ws[f"M{row}"]
+                cell_nilai = ws[f"P{row}"]
+                cell_nrh.value = f"=AVERAGE(E{row}:L{row})"
+                cell_nilai.value = f"=ROUNDUP((M{row} * 0.6) + (AVERAGE(N{row}:O{row}) * 0.4),0)"
+                cell_nrh.border = thin_border
+                cell_nilai.border = thin_border
+                cell_nrh.font = default_font
+                cell_nilai.font = header_font
+                cell_nrh.alignment = Alignment(
+                    horizontal='left' if 'nrh' in LEFT_COLUMN else 
+                    'right' if 'nrh' in RIGHT_COLUMN else 'center',
+                    vertical='center'
+                )
+                cell_nilai.alignment = Alignment(
+                    horizontal='left' if 'nilai' in LEFT_COLUMN else 
+                    'right' if 'nilai' in RIGHT_COLUMN else 'center',
+                    vertical='center'
+                )
+
+            # Apply conditional formatting
+            for col_name in additional_columns:
+                col_idx = all_columns.index(col_name) + 1
+                col_letter = get_column_letter(col_idx)
+                ws.conditional_formatting.add(f"{col_letter}2:{col_letter}{len(df_kelas) + 1}", red_rule)
+
+            # Adjust column widths
+            for col_idx, col_name in enumerate(all_columns, start=1):
+                if col_name in ['nrh', 'nilai']:
+                    continue
+                max_length = max(
+                    len(str(col_name)),
+                    *(len(str(ws.cell(row=row_idx, column=col_idx).value or '')) 
+                    for row_idx in range(1, len(df_kelas) + 2))
+                )
+                ws.column_dimensions[get_column_letter(col_idx)].width = max_length + 3
+
+            wb.save(filename)
+        
+        open_in_explorer(folder_output)
+
+    def template_walas(self, data):
+        jenjang = self.cbo_jenjang.currentText()
+        tapel = self.cbo_tapel.currentText()
+        kegiatan = self.cbo_kegiatan.currentText()
+        kegiatan = self.cbo_kegiatan.currentText()
+        folder_output = os.path.join(os.path.normpath(self.pte_default_path.toPlainText()), 'Blanko Walas',)
+        os.makedirs(folder_output, exist_ok=True)
+        kelas = self.SQL.get_kelas(jenjang, tapel)
+        list_kelas = [item['kelas'] for item in kelas]
+        kolom = ["no_urut", "nis_lokal", "nama_lengkap", "kelas"]
+        kolom_tambahan = ['sakit', 'ijin', 'alpa', 'catatan_walas']
+        if kegiatan in ['PAT']:
+                kolom_tambahan = kolom_tambahan + ['status_naik']
         df = pd.DataFrame(data, columns=kolom)
         for col in kolom_tambahan:
             df[col] = None
 
-        # Definisi border
         thin_border = Border(
             left=Side(style='thin'),
             right=Side(style='thin'),
             top=Side(style='thin'),
             bottom=Side(style='thin')
         )
-        # Definisi font
-        default_font = Font(name='Aptos', size=11)  # Font default untuk semua sel
-        header_font = Font(name='Aptos', size=11, bold=True)  # Font untuk header (bold)
-        # Definisi warna fill untuk header (kuning)
+        default_font = Font(name='Aptos', size=11)
+        header_font = Font(name='Aptos', size=11, bold=True)
         yellow_fill = PatternFill(start_color="FFFF00", end_color="FFFF00", fill_type="solid")
-        red_fill = PatternFill(start_color="FF0000", end_color="FF0000", fill_type="solid")
-        # conditional formatting
-        red_rule = CellIsRule(operator="greaterThan", formula=["100"], fill=red_fill)
-        # Definisi kolom dengan alignment khusus
         left_column = LEFT_COLUMN
         right_column = RIGHT_COLUMN 
-        # Buat file Excel untuk setiap kelas
+
         for kls in list_kelas:
-            # Filter data berdasarkan kelas
             df_kelas = df[df['kelas'] == kls].copy()
-            # Nama file
             filename = os.path.join(folder_output, f'{kegiatan} {kls} {jenjang}.xlsx')
-            # Buat workbook baru
             wb = Workbook()
-            # Buat sheet sebanyak jumlah_pel
-            for pel in range(1, jumlah_pel + 1):
-                ws = wb.create_sheet(f'Mapel {pel}') if pel > 1 else wb.active
-                # Tulis header
-                all_columns = kolom + kolom_tambahan
-                for col_idx, col_name in enumerate(all_columns, start=1):
-                    cell = ws.cell(row=1, column=col_idx)
-                    cell.value = col_name
+            df_kelas.to_excel(filename, index=False)
+            wb = load_workbook(filename)
+            ws = wb.active
+            all_columns = kolom + kolom_tambahan
+            for row_idx, row_data in enumerate(df_kelas.values, start=2):
+                for col_idx, value in enumerate(row_data, start=1):
+                    cell = ws.cell(row=row_idx, column=col_idx)
+                    cell.value = value
                     cell.border = thin_border
-                    cell.fill = yellow_fill  # Warna kuning untuk header
-                    cell.alignment = Alignment(horizontal='center', vertical='center')  # Header selalu center
-                    cell.font = header_font
-                # Tulis data
-                for row_idx, row_data in enumerate(df_kelas.values, start=2):
-                    for col_idx, value in enumerate(row_data, start=1):
-                        cell = ws.cell(row=row_idx, column=col_idx)
-                        cell.value = value
-                        cell.border = thin_border
-                        cell.font = default_font
-                        # Atur alignment berdasarkan kolom
-                        col_name = all_columns[col_idx - 1]
-                        if col_name in left_column:
-                            cell.alignment = Alignment(horizontal='left', vertical='center')
-                        elif col_name in right_column:
-                            cell.alignment = Alignment(horizontal='right', vertical='center')
-                        else:
-                            cell.alignment = Alignment(horizontal='center', vertical='center')
-                # Tambahkan border dan alignment pada kolom tambahan yang kosong
-                for row_idx in range(2, len(df_kelas) + 2):
-                    for col_idx, col_name in enumerate(all_columns, start=1):
-                        if col_name in kolom_tambahan:
-                            cell = ws.cell(row=row_idx, column=col_idx)
-                            cell.border = thin_border
-                            cell.font = default_font  
-                            # Atur alignment untuk kolom tambahan
-                            if col_name in left_column:
-                                cell.alignment = Alignment(horizontal='left', vertical='center')
-                            elif col_name in right_column:
-                                cell.alignment = Alignment(horizontal='right', vertical='center')
-                            else:
-                                cell.alignment = Alignment(horizontal='center', vertical='center')
-                # Tambahkan rumus
-                if jenjang == "MI":
-                    for row in range(2, len(df_kelas) + 2):
-                        cell_nrh = ws[f"M{row}"]
-                        cell_nilai = ws[f"P{row}"]
-                        cell_nrh.value = f"=AVERAGE(E{row}:L{row})"  # nrh
-                        cell_nilai.value = f"=ROUNDUP((M{row} * 0.6) + (AVERAGE(N{row}:O{row}) * 0.4),0)"
-                        cell_nrh.border = thin_border
-                        cell_nilai.border = thin_border
-                        cell_nrh.font = default_font 
-                        cell_nilai.font = header_font 
-                        # Atur alignment untuk nrh dan nilai
-                        if 'nrh' in left_column:
-                            cell_nrh.alignment = Alignment(horizontal='left', vertical='center')
-                        elif 'nrh' in right_column:
-                            cell_nrh.alignment = Alignment(horizontal='right', vertical='center')
-                        else:
-                            cell_nrh.alignment = Alignment(horizontal='center', vertical='center')
-                        if 'nilai' in left_column:
-                            cell_nilai.alignment = Alignment(horizontal='left', vertical='center')
-                        elif 'nilai' in right_column:
-                            cell_nilai.alignment = Alignment(horizontal='right', vertical='center')
-                        else:
-                            cell_nilai.alignment = Alignment(horizontal='center', vertical='center')
-                elif jenjang == "MD":
-                    for row in range(2, len(df_kelas) + 2):
-                        cell_nrh = ws[f"K{row}"]
-                        cell_nilai = ws[f"O{row}"]
-                        cell_nrh.value = f"=AVERAGE(E{row}:J{row})"
-                        cell_nilai.value = f"=ROUNDUP(AVERAGE(K{row}:N{row}),0)"
-                        cell_nrh.border = thin_border
-                        cell_nilai.border = thin_border
-                        cell_nrh.font = default_font  # Font Aptos untuk nrh
-                        cell_nilai.font = default_font
-                        # Atur alignment untuk nrh dan nilai
-                        if 'nrh' in left_column:
-                            cell_nrh.alignment = Alignment(horizontal='left', vertical='center')
-                        elif 'nrh' in right_column:
-                            cell_nrh.alignment = Alignment(horizontal='right', vertical='center')
-                        else:
-                            cell_nrh.alignment = Alignment(horizontal='center', vertical='center')
-                        if 'nilai' in left_column:
-                            cell_nilai.alignment = Alignment(horizontal='left', vertical='center')
-                        elif 'nilai' in right_column:
-                            cell_nilai.alignment = Alignment(horizontal='right', vertical='center')
-                        else:
-                            cell_nilai.alignment = Alignment(horizontal='center', vertical='center')
-                # Menambahkan Conditional Formatting
-                for col_name in kolom_tambahan:
-                    col_idx = all_columns.index(col_name) + 1
-                    col_letter = get_column_letter(col_idx)
-                    # ws.conditional_formatting.add(f"{col_letter}2:{col_letter}{len(df_kelas) + 1}", red_rule)
-                # Atur lebar kolom
-                exclude_column = ['nrh', 'nilai']
-                for col_idx, col_name in enumerate(all_columns, start=1):
-                    if col_name in exclude_column:
-                        continue
-                    max_length = max(
-                        len(str(col_name)),
-                        *(len(str(ws.cell(row=row_idx, column=col_idx).value or '')) 
-                        for row_idx in range(1, len(df_kelas) + 2))
-                    )
-                    ws.column_dimensions[get_column_letter(col_idx)].width = max_length + 3
+                    cell.font = default_font
+                    col_name = all_columns[col_idx - 1]
+                    if col_name in left_column:
+                        cell.alignment = Alignment(horizontal='left', vertical='center')
+                    elif col_name in right_column:
+                        cell.alignment = Alignment(horizontal='right', vertical='center')
+                    else:
+                        cell.alignment = Alignment(horizontal='center', vertical='center')
+            for col_idx, col_name in enumerate(all_columns, start=1):
+                max_length = max(
+                    len(str(col_name)),  
+                    *(len(str(ws.cell(row=row_idx, column=col_idx).value)) for row_idx in range(1, len(df) + 2)))
+                ws.column_dimensions[get_column_letter(col_idx)].width = max_length + 2
             wb.save(filename)
-        open_in_explorer(folder_output)
-
-
-    def template_walas(self, data):
-        kegiatan = self.cbo_kegiatan.currentText()
-        namafile = self.line_walas.text()
-        save_path = self.pte_default_path.toPlainText()
-        filename = os.path.join(save_path, namafile)
-        kolom = ["no_urut", "nis_lokal", "nama_lengkap", "kelas"]
-        kolom_tambahan = ['sakit', 'ijin', 'alpa', 'catatan_walas']
-        if kegiatan in ['PAT']:
-            kolom_tambahan = kolom_tambahan + ['status_naik']
-        df = pd.DataFrame(data, columns=kolom)
-        for col in kolom_tambahan:
-            df[col] = ""
-        df.to_excel(filename, index=False)
-        wb = load_workbook(filename)
-        ws = wb.active
-        all_columns = kolom + kolom_tambahan
-        for col_idx, col_name in enumerate(all_columns, start=1):
-            max_length = max(
-                len(str(col_name)),  
-                *(len(str(ws.cell(row=row_idx, column=col_idx).value)) for row_idx in range(1, len(df) + 2)))
-            ws.column_dimensions[get_column_letter(col_idx)].width = max_length + 2
-        wb.save(filename)
         open_in_explorer(filename)
 
     def template_rekap(self, data):
@@ -454,7 +536,7 @@ class PageInputNilai(QWidget, Ui_Form):
 
     def save_operation(self, data):
         MAPEL_NILAI = self.SQL.all_mapel()
-        KEGIATAN_FIELDS = ['no_urut', 'sakit', 'ijin', 'alpa', 'catatan_walas', 'status_naik']
+        KEGIATAN_FIELDS = ['no_urut', 'sakit', 'ijin', 'alpa', 'catatan_walas', 'ranking', 'status_naik']
         nilai_keys = [(row['id_peserta'], mapel) for row in data for mapel in MAPEL_NILAI if mapel in row]
         existing_nilai_dict = self.SQL.cek_nilai_bulk(nilai_keys)
         peserta_keys = [row['id_peserta'] for row in data]
@@ -494,15 +576,25 @@ class PageInputNilai(QWidget, Ui_Form):
                 existing_data = existing_peserta_dict[peserta_key]
                 if any(peserta_data[field] != existing_data[field] for field in KEGIATAN_FIELDS):
                     update_peserta_data.append((
-                        peserta_data['no_urut'], peserta_data['sakit'], peserta_data['ijin'],
-                        peserta_data['alpa'], peserta_data['catatan_walas'], peserta_data['status_naik'],
+                        peserta_data['no_urut'], 
+                        peserta_data['sakit'], 
+                        peserta_data['ijin'],
+                        peserta_data['alpa'], 
+                        peserta_data['catatan_walas'], 
+                        peserta_data['ranking'],
+                        peserta_data['status_naik'],
                         id_peserta
                     ))
             else:
                 insert_peserta_data.append((
                     id_peserta, id_kelas, id_kegiatan,
-                    peserta_data['no_urut'], peserta_data['sakit'], peserta_data['ijin'],
-                    peserta_data['alpa'], peserta_data['catatan_walas']
+                    peserta_data['no_urut'], 
+                    peserta_data['sakit'], 
+                    peserta_data['ijin'],
+                    peserta_data['alpa'], 
+                    peserta_data['catatan_walas'],
+                    peserta_data['ranking'],
+                    peserta_data['status_naik'],
                 ))
         pesan_insert_nilai = ''
         pesan_update_nilai = ''

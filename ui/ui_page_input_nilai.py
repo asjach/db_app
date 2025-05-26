@@ -103,19 +103,129 @@ class Ui_Form(object):
         self.gridLayout_5 = QGridLayout(self.widget_2)
         self.gridLayout_5.setObjectName(u"gridLayout_5")
         self.gridLayout_5.setContentsMargins(0, 0, 0, 0)
-        self.verticalSpacer = QSpacerItem(379, 30, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
+        self.widget_4 = QWidget(self.widget_2)
+        self.widget_4.setObjectName(u"widget_4")
+        self.gridLayout_3 = QGridLayout(self.widget_4)
+        self.gridLayout_3.setObjectName(u"gridLayout_3")
+        self.gridLayout_3.setVerticalSpacing(40)
+        self.gridLayout_3.setContentsMargins(0, 0, 0, 0)
+        self.widget_6 = QWidget(self.widget_4)
+        self.widget_6.setObjectName(u"widget_6")
+        self.gridLayout_7 = QGridLayout(self.widget_6)
+        self.gridLayout_7.setObjectName(u"gridLayout_7")
+        self.gridLayout_7.setContentsMargins(0, 0, 0, 0)
+        self.btn_template_nilai = QPushButton(self.widget_6)
+        self.btn_template_nilai.setObjectName(u"btn_template_nilai")
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.btn_template_nilai.sizePolicy().hasHeightForWidth())
+        self.btn_template_nilai.setSizePolicy(sizePolicy)
+        self.btn_template_nilai.setMinimumSize(QSize(60, 24))
 
-        self.gridLayout_5.addItem(self.verticalSpacer, 2, 0, 1, 1)
+        self.gridLayout_7.addWidget(self.btn_template_nilai, 0, 1, 1, 1)
 
-        self.btn_save = QPushButton(self.widget_2)
-        self.btn_save.setObjectName(u"btn_save")
-        self.btn_save.setMinimumSize(QSize(0, 50))
+        self.label_4 = QLabel(self.widget_6)
+        self.label_4.setObjectName(u"label_4")
+        font = QFont()
+        font.setBold(True)
+        self.label_4.setFont(font)
 
-        self.gridLayout_5.addWidget(self.btn_save, 5, 0, 1, 2)
+        self.gridLayout_7.addWidget(self.label_4, 0, 0, 1, 1)
 
-        self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        self.label_5 = QLabel(self.widget_6)
+        self.label_5.setObjectName(u"label_5")
+        self.label_5.setFont(font)
 
-        self.gridLayout_5.addItem(self.verticalSpacer_2, 4, 0, 1, 2)
+        self.gridLayout_7.addWidget(self.label_5, 1, 0, 1, 1)
+
+        self.btn_template_walas = QPushButton(self.widget_6)
+        self.btn_template_walas.setObjectName(u"btn_template_walas")
+        sizePolicy.setHeightForWidth(self.btn_template_walas.sizePolicy().hasHeightForWidth())
+        self.btn_template_walas.setSizePolicy(sizePolicy)
+        self.btn_template_walas.setMinimumSize(QSize(60, 24))
+
+        self.gridLayout_7.addWidget(self.btn_template_walas, 1, 1, 1, 1)
+
+
+        self.gridLayout_3.addWidget(self.widget_6, 2, 0, 1, 2)
+
+        self.widget_9 = QWidget(self.widget_4)
+        self.widget_9.setObjectName(u"widget_9")
+        self.gridLayout_6 = QGridLayout(self.widget_9)
+        self.gridLayout_6.setObjectName(u"gridLayout_6")
+        self.gridLayout_6.setContentsMargins(0, 0, 0, 0)
+        self.pte_default_path = QPlainTextEdit(self.widget_9)
+        self.pte_default_path.setObjectName(u"pte_default_path")
+        self.pte_default_path.setMaximumSize(QSize(16777215, 60))
+
+        self.gridLayout_6.addWidget(self.pte_default_path, 1, 0, 1, 2)
+
+        self.horizontalSpacer_6 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.gridLayout_6.addItem(self.horizontalSpacer_6, 2, 0, 1, 1)
+
+        self.open_default_folder = QPushButton(self.widget_9)
+        self.open_default_folder.setObjectName(u"open_default_folder")
+        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.Fixed)
+        sizePolicy1.setHorizontalStretch(0)
+        sizePolicy1.setVerticalStretch(0)
+        sizePolicy1.setHeightForWidth(self.open_default_folder.sizePolicy().hasHeightForWidth())
+        self.open_default_folder.setSizePolicy(sizePolicy1)
+        self.open_default_folder.setMinimumSize(QSize(0, 24))
+        self.open_default_folder.setMaximumSize(QSize(30, 16777215))
+        icon = QIcon()
+        icon.addFile(u":/icon/resources/icon/icons8_opened_folder.ico", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        self.open_default_folder.setIcon(icon)
+
+        self.gridLayout_6.addWidget(self.open_default_folder, 0, 1, 1, 1, Qt.AlignRight)
+
+        self.btn_new_default_path = QPushButton(self.widget_9)
+        self.btn_new_default_path.setObjectName(u"btn_new_default_path")
+        self.btn_new_default_path.setMinimumSize(QSize(60, 24))
+
+        self.gridLayout_6.addWidget(self.btn_new_default_path, 2, 1, 1, 1)
+
+        self.label_7 = QLabel(self.widget_9)
+        self.label_7.setObjectName(u"label_7")
+        self.label_7.setFont(font)
+
+        self.gridLayout_6.addWidget(self.label_7, 0, 0, 1, 1)
+
+
+        self.gridLayout_3.addWidget(self.widget_9, 1, 0, 1, 2)
+
+        self.widget_8 = QWidget(self.widget_4)
+        self.widget_8.setObjectName(u"widget_8")
+        self.gridLayout_9 = QGridLayout(self.widget_8)
+        self.gridLayout_9.setObjectName(u"gridLayout_9")
+        self.gridLayout_9.setContentsMargins(0, 0, 0, 0)
+        self.label_6 = QLabel(self.widget_8)
+        self.label_6.setObjectName(u"label_6")
+        self.label_6.setFont(font)
+
+        self.gridLayout_9.addWidget(self.label_6, 0, 0, 1, 2)
+
+        self.btn_template_rekap = QPushButton(self.widget_8)
+        self.btn_template_rekap.setObjectName(u"btn_template_rekap")
+        sizePolicy.setHeightForWidth(self.btn_template_rekap.sizePolicy().hasHeightForWidth())
+        self.btn_template_rekap.setSizePolicy(sizePolicy)
+        self.btn_template_rekap.setMinimumSize(QSize(60, 24))
+
+        self.gridLayout_9.addWidget(self.btn_template_rekap, 1, 1, 1, 1)
+
+        self.line_rekap = QLineEdit(self.widget_8)
+        self.line_rekap.setObjectName(u"line_rekap")
+        self.line_rekap.setMinimumSize(QSize(0, 24))
+
+        self.gridLayout_9.addWidget(self.line_rekap, 1, 0, 1, 1)
+
+
+        self.gridLayout_3.addWidget(self.widget_8, 4, 0, 1, 2)
+
+        self.gridLayout_3.setColumnStretch(0, 1)
+
+        self.gridLayout_5.addWidget(self.widget_4, 0, 0, 2, 2)
 
         self.widget_3 = QWidget(self.widget_2)
         self.widget_3.setObjectName(u"widget_3")
@@ -124,19 +234,17 @@ class Ui_Form(object):
         self.gridLayout_4.setContentsMargins(0, 0, 0, 0)
         self.pte_excel_path = QPlainTextEdit(self.widget_3)
         self.pte_excel_path.setObjectName(u"pte_excel_path")
-        sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.pte_excel_path.sizePolicy().hasHeightForWidth())
-        self.pte_excel_path.setSizePolicy(sizePolicy)
+        sizePolicy2 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
+        sizePolicy2.setHorizontalStretch(0)
+        sizePolicy2.setVerticalStretch(0)
+        sizePolicy2.setHeightForWidth(self.pte_excel_path.sizePolicy().hasHeightForWidth())
+        self.pte_excel_path.setSizePolicy(sizePolicy2)
         self.pte_excel_path.setMaximumSize(QSize(16777215, 60))
 
         self.gridLayout_4.addWidget(self.pte_excel_path, 1, 0, 1, 4)
 
         self.label_3 = QLabel(self.widget_3)
         self.label_3.setObjectName(u"label_3")
-        font = QFont()
-        font.setBold(True)
         self.label_3.setFont(font)
 
         self.gridLayout_4.addWidget(self.label_3, 0, 0, 1, 3)
@@ -163,169 +271,27 @@ class Ui_Form(object):
 
         self.gridLayout_5.addWidget(self.widget_3, 3, 0, 1, 2)
 
-        self.widget_4 = QWidget(self.widget_2)
-        self.widget_4.setObjectName(u"widget_4")
-        self.gridLayout_3 = QGridLayout(self.widget_4)
-        self.gridLayout_3.setObjectName(u"gridLayout_3")
-        self.gridLayout_3.setVerticalSpacing(40)
-        self.gridLayout_3.setContentsMargins(0, 0, 0, 0)
-        self.widget_8 = QWidget(self.widget_4)
-        self.widget_8.setObjectName(u"widget_8")
-        self.gridLayout_9 = QGridLayout(self.widget_8)
-        self.gridLayout_9.setObjectName(u"gridLayout_9")
-        self.gridLayout_9.setContentsMargins(0, 0, 0, 0)
-        self.label_6 = QLabel(self.widget_8)
-        self.label_6.setObjectName(u"label_6")
-        self.label_6.setFont(font)
+        self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
-        self.gridLayout_9.addWidget(self.label_6, 0, 0, 1, 2)
+        self.gridLayout_5.addItem(self.verticalSpacer_2, 4, 0, 1, 2)
 
-        self.btn_template_rekap = QPushButton(self.widget_8)
-        self.btn_template_rekap.setObjectName(u"btn_template_rekap")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Fixed)
-        sizePolicy1.setHorizontalStretch(0)
-        sizePolicy1.setVerticalStretch(0)
-        sizePolicy1.setHeightForWidth(self.btn_template_rekap.sizePolicy().hasHeightForWidth())
-        self.btn_template_rekap.setSizePolicy(sizePolicy1)
-        self.btn_template_rekap.setMinimumSize(QSize(60, 24))
+        self.verticalSpacer = QSpacerItem(379, 30, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
 
-        self.gridLayout_9.addWidget(self.btn_template_rekap, 1, 1, 1, 1)
+        self.gridLayout_5.addItem(self.verticalSpacer, 2, 0, 1, 1)
 
-        self.line_rekap = QLineEdit(self.widget_8)
-        self.line_rekap.setObjectName(u"line_rekap")
-        self.line_rekap.setMinimumSize(QSize(0, 24))
-
-        self.gridLayout_9.addWidget(self.line_rekap, 1, 0, 1, 1)
-
-
-        self.gridLayout_3.addWidget(self.widget_8, 4, 0, 1, 4)
-
-        self.widget_9 = QWidget(self.widget_4)
-        self.widget_9.setObjectName(u"widget_9")
-        self.gridLayout_6 = QGridLayout(self.widget_9)
-        self.gridLayout_6.setObjectName(u"gridLayout_6")
-        self.gridLayout_6.setContentsMargins(0, 0, 0, 0)
-        self.pte_default_path = QPlainTextEdit(self.widget_9)
-        self.pte_default_path.setObjectName(u"pte_default_path")
-        self.pte_default_path.setMaximumSize(QSize(16777215, 60))
-
-        self.gridLayout_6.addWidget(self.pte_default_path, 1, 0, 1, 2)
-
-        self.horizontalSpacer_6 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.gridLayout_6.addItem(self.horizontalSpacer_6, 2, 0, 1, 1)
-
-        self.open_default_folder = QPushButton(self.widget_9)
-        self.open_default_folder.setObjectName(u"open_default_folder")
-        sizePolicy2 = QSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.Fixed)
-        sizePolicy2.setHorizontalStretch(0)
-        sizePolicy2.setVerticalStretch(0)
-        sizePolicy2.setHeightForWidth(self.open_default_folder.sizePolicy().hasHeightForWidth())
-        self.open_default_folder.setSizePolicy(sizePolicy2)
-        self.open_default_folder.setMinimumSize(QSize(0, 24))
-        self.open_default_folder.setMaximumSize(QSize(30, 16777215))
-        icon = QIcon()
-        icon.addFile(u":/icon/resources/icon/icons8_opened_folder.ico", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
-        self.open_default_folder.setIcon(icon)
-
-        self.gridLayout_6.addWidget(self.open_default_folder, 0, 1, 1, 1, Qt.AlignRight)
-
-        self.btn_new_default_path = QPushButton(self.widget_9)
-        self.btn_new_default_path.setObjectName(u"btn_new_default_path")
-        self.btn_new_default_path.setMinimumSize(QSize(60, 24))
-
-        self.gridLayout_6.addWidget(self.btn_new_default_path, 2, 1, 1, 1)
-
-        self.label_7 = QLabel(self.widget_9)
-        self.label_7.setObjectName(u"label_7")
-        self.label_7.setFont(font)
-
-        self.gridLayout_6.addWidget(self.label_7, 0, 0, 1, 1)
-
-
-        self.gridLayout_3.addWidget(self.widget_9, 1, 0, 1, 4)
-
-        self.widget_6 = QWidget(self.widget_4)
-        self.widget_6.setObjectName(u"widget_6")
-        self.gridLayout_7 = QGridLayout(self.widget_6)
-        self.gridLayout_7.setObjectName(u"gridLayout_7")
-        self.gridLayout_7.setContentsMargins(0, 0, 0, 0)
-        self.label_4 = QLabel(self.widget_6)
-        self.label_4.setObjectName(u"label_4")
-        self.label_4.setFont(font)
-
-        self.gridLayout_7.addWidget(self.label_4, 0, 0, 1, 2)
-
-        self.line_nilai = QLineEdit(self.widget_6)
-        self.line_nilai.setObjectName(u"line_nilai")
-        self.line_nilai.setMinimumSize(QSize(0, 24))
-
-        self.gridLayout_7.addWidget(self.line_nilai, 2, 0, 1, 1)
-
-        self.btn_template_nilai = QPushButton(self.widget_6)
-        self.btn_template_nilai.setObjectName(u"btn_template_nilai")
-        sizePolicy1.setHeightForWidth(self.btn_template_nilai.sizePolicy().hasHeightForWidth())
-        self.btn_template_nilai.setSizePolicy(sizePolicy1)
-        self.btn_template_nilai.setMinimumSize(QSize(60, 24))
-
-        self.gridLayout_7.addWidget(self.btn_template_nilai, 2, 1, 1, 1)
-
-        self.widget_5 = QWidget(self.widget_6)
+        self.widget_5 = QWidget(self.widget_2)
         self.widget_5.setObjectName(u"widget_5")
         self.gridLayout_10 = QGridLayout(self.widget_5)
         self.gridLayout_10.setObjectName(u"gridLayout_10")
-        self.radio_nilai_tingkat = QRadioButton(self.widget_5)
-        self.radio_nilai_tingkat.setObjectName(u"radio_nilai_tingkat")
+        self.gridLayout_10.setContentsMargins(0, 0, 0, 0)
+        self.btn_save = QPushButton(self.widget_5)
+        self.btn_save.setObjectName(u"btn_save")
+        self.btn_save.setMinimumSize(QSize(0, 50))
 
-        self.gridLayout_10.addWidget(self.radio_nilai_tingkat, 0, 1, 1, 1)
-
-        self.radio_nilai_kelas = QRadioButton(self.widget_5)
-        self.radio_nilai_kelas.setObjectName(u"radio_nilai_kelas")
-
-        self.gridLayout_10.addWidget(self.radio_nilai_kelas, 0, 0, 1, 1)
-
-        self.radio_nilai_all = QRadioButton(self.widget_5)
-        self.radio_nilai_all.setObjectName(u"radio_nilai_all")
-
-        self.gridLayout_10.addWidget(self.radio_nilai_all, 0, 2, 1, 1)
+        self.gridLayout_10.addWidget(self.btn_save, 0, 0, 1, 1)
 
 
-        self.gridLayout_7.addWidget(self.widget_5, 1, 0, 1, 2)
-
-
-        self.gridLayout_3.addWidget(self.widget_6, 2, 0, 1, 4)
-
-        self.widget_7 = QWidget(self.widget_4)
-        self.widget_7.setObjectName(u"widget_7")
-        self.gridLayout_8 = QGridLayout(self.widget_7)
-        self.gridLayout_8.setObjectName(u"gridLayout_8")
-        self.gridLayout_8.setContentsMargins(0, 0, 0, 0)
-        self.label_5 = QLabel(self.widget_7)
-        self.label_5.setObjectName(u"label_5")
-        self.label_5.setFont(font)
-
-        self.gridLayout_8.addWidget(self.label_5, 0, 0, 1, 2)
-
-        self.line_walas = QLineEdit(self.widget_7)
-        self.line_walas.setObjectName(u"line_walas")
-        self.line_walas.setMinimumSize(QSize(0, 24))
-
-        self.gridLayout_8.addWidget(self.line_walas, 1, 0, 1, 1)
-
-        self.btn_template_walas = QPushButton(self.widget_7)
-        self.btn_template_walas.setObjectName(u"btn_template_walas")
-        sizePolicy1.setHeightForWidth(self.btn_template_walas.sizePolicy().hasHeightForWidth())
-        self.btn_template_walas.setSizePolicy(sizePolicy1)
-        self.btn_template_walas.setMinimumSize(QSize(60, 24))
-
-        self.gridLayout_8.addWidget(self.btn_template_walas, 1, 1, 1, 1)
-
-
-        self.gridLayout_3.addWidget(self.widget_7, 3, 0, 1, 4)
-
-        self.gridLayout_3.setColumnStretch(0, 1)
-
-        self.gridLayout_5.addWidget(self.widget_4, 0, 0, 2, 2)
+        self.gridLayout_5.addWidget(self.widget_5, 5, 0, 1, 2)
 
 
         self.gridLayout.addWidget(self.widget_2, 1, 1, 1, 1)
@@ -343,22 +309,19 @@ class Ui_Form(object):
         self.label.setText(QCoreApplication.translate("Form", u"Kegiatan", None))
         self.radio_nilai_catatan_db.setText(QCoreApplication.translate("Form", u"Rekap Nilai dan Catatan di Database", None))
         self.radio_catatan_db.setText(QCoreApplication.translate("Form", u"Rekap Catatan di Database", None))
-        self.btn_save.setText(QCoreApplication.translate("Form", u"SAVE", None))
+        self.btn_template_nilai.setText(QCoreApplication.translate("Form", u"Create", None))
+        self.label_4.setText(QCoreApplication.translate("Form", u"Template Blanko Nilai", None))
+        self.label_5.setText(QCoreApplication.translate("Form", u"Template Blanko Catatan Wali Kelas", None))
+        self.btn_template_walas.setText(QCoreApplication.translate("Form", u"Create", None))
+        self.open_default_folder.setText("")
+        self.btn_new_default_path.setText(QCoreApplication.translate("Form", u"Browse", None))
+        self.label_7.setText(QCoreApplication.translate("Form", u"Simpan di", None))
+        self.label_6.setText(QCoreApplication.translate("Form", u"Template Blanko Catatan Wali Kelas", None))
+        self.btn_template_rekap.setText(QCoreApplication.translate("Form", u"Create", None))
         self.label_3.setText(QCoreApplication.translate("Form", u"INPUT DARI FILE REKAP NILAI", None))
         self.btn_open_file.setText(QCoreApplication.translate("Form", u"Open File", None))
         self.btn_browse.setText(QCoreApplication.translate("Form", u"Browse", None))
         self.btn_clear.setText(QCoreApplication.translate("Form", u"Clear", None))
-        self.label_6.setText(QCoreApplication.translate("Form", u"Template Blanko Catatan Wali Kelas", None))
-        self.btn_template_rekap.setText(QCoreApplication.translate("Form", u"Create", None))
-        self.open_default_folder.setText("")
-        self.btn_new_default_path.setText(QCoreApplication.translate("Form", u"Browse", None))
-        self.label_7.setText(QCoreApplication.translate("Form", u"Simpan di", None))
-        self.label_4.setText(QCoreApplication.translate("Form", u"Template Blanko Nilai", None))
-        self.btn_template_nilai.setText(QCoreApplication.translate("Form", u"Create", None))
-        self.radio_nilai_tingkat.setText(QCoreApplication.translate("Form", u"Pertingkat", None))
-        self.radio_nilai_kelas.setText(QCoreApplication.translate("Form", u"Perkelas", None))
-        self.radio_nilai_all.setText(QCoreApplication.translate("Form", u"Seluruh Kelas", None))
-        self.label_5.setText(QCoreApplication.translate("Form", u"Template Blanko Catatan Wali Kelas", None))
-        self.btn_template_walas.setText(QCoreApplication.translate("Form", u"Create", None))
+        self.btn_save.setText(QCoreApplication.translate("Form", u"INSERT", None))
     # retranslateUi
 

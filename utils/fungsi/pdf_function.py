@@ -22,7 +22,7 @@ from PySide6.QtCore import QByteArray
 
 
 def register_all_windows_fonts():
-    font_dir = "F:/APP/DB App/resources/font"
+    font_dir = "D:/APP/DB App/resources/font"
     for file in os.listdir(font_dir):
         if file.lower().endswith('.ttf'):
             font_path = os.path.join(font_dir, file)
@@ -47,7 +47,7 @@ def para(teks, font='Aptos', size=12, leading=12, color=colors.black, bg_color=c
         leading = leading,
         textColor = color,
         backColor = bg_color,
-        alignment = alignment
+        alignment = alignment # type: ignore
     )
     paragraf = Paragraph(text = teks, style = style)
     return paragraf

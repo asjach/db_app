@@ -198,7 +198,7 @@
       </property>
       <item row="0" column="0" rowspan="2" colspan="2">
        <widget class="QWidget" name="widget_4" native="true">
-        <layout class="QGridLayout" name="gridLayout_3" columnstretch="1,0,0,0">
+        <layout class="QGridLayout" name="gridLayout_3" columnstretch="1,0">
          <property name="leftMargin">
           <number>0</number>
          </property>
@@ -214,9 +214,9 @@
          <property name="verticalSpacing">
           <number>40</number>
          </property>
-         <item row="4" column="0" colspan="4">
-          <widget class="QWidget" name="widget_8" native="true">
-           <layout class="QGridLayout" name="gridLayout_9">
+         <item row="2" column="0" colspan="2">
+          <widget class="QWidget" name="widget_6" native="true">
+           <layout class="QGridLayout" name="gridLayout_7">
             <property name="leftMargin">
              <number>0</number>
             </property>
@@ -229,21 +229,8 @@
             <property name="bottomMargin">
              <number>0</number>
             </property>
-            <item row="0" column="0" colspan="2">
-             <widget class="QLabel" name="label_6">
-              <property name="font">
-               <font>
-                <weight>75</weight>
-                <bold>true</bold>
-               </font>
-              </property>
-              <property name="text">
-               <string>Template Blanko Catatan Wali Kelas</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="1">
-             <widget class="QPushButton" name="btn_template_rekap">
+            <item row="0" column="1">
+             <widget class="QPushButton" name="btn_template_nilai">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -261,20 +248,55 @@
               </property>
              </widget>
             </item>
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_4">
+              <property name="font">
+               <font>
+                <weight>75</weight>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="text">
+               <string>Template Blanko Nilai</string>
+              </property>
+             </widget>
+            </item>
             <item row="1" column="0">
-             <widget class="QLineEdit" name="line_rekap">
+             <widget class="QLabel" name="label_5">
+              <property name="font">
+               <font>
+                <weight>75</weight>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="text">
+               <string>Template Blanko Catatan Wali Kelas</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QPushButton" name="btn_template_walas">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
               <property name="minimumSize">
                <size>
-                <width>0</width>
+                <width>60</width>
                 <height>24</height>
                </size>
+              </property>
+              <property name="text">
+               <string>Create</string>
               </property>
              </widget>
             </item>
            </layout>
           </widget>
          </item>
-         <item row="1" column="0" colspan="4">
+         <item row="1" column="0" colspan="2">
           <widget class="QWidget" name="widget_9" native="true">
            <layout class="QGridLayout" name="gridLayout_6">
             <property name="leftMargin">
@@ -370,9 +392,9 @@
            </layout>
           </widget>
          </item>
-         <item row="2" column="0" colspan="4">
-          <widget class="QWidget" name="widget_6" native="true">
-           <layout class="QGridLayout" name="gridLayout_7">
+         <item row="4" column="0" colspan="2">
+          <widget class="QWidget" name="widget_8" native="true">
+           <layout class="QGridLayout" name="gridLayout_9">
             <property name="leftMargin">
              <number>0</number>
             </property>
@@ -386,67 +408,7 @@
              <number>0</number>
             </property>
             <item row="0" column="0" colspan="2">
-             <widget class="QLabel" name="label_4">
-              <property name="font">
-               <font>
-                <weight>75</weight>
-                <bold>true</bold>
-               </font>
-              </property>
-              <property name="text">
-               <string>Template Blanko Nilai</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="0">
-             <widget class="QLineEdit" name="line_nilai">
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>24</height>
-               </size>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="1">
-             <widget class="QPushButton" name="btn_template_nilai">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>60</width>
-                <height>24</height>
-               </size>
-              </property>
-              <property name="text">
-               <string>Create</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </item>
-         <item row="3" column="0" colspan="4">
-          <widget class="QWidget" name="widget_7" native="true">
-           <layout class="QGridLayout" name="gridLayout_8">
-            <property name="leftMargin">
-             <number>0</number>
-            </property>
-            <property name="topMargin">
-             <number>0</number>
-            </property>
-            <property name="rightMargin">
-             <number>0</number>
-            </property>
-            <property name="bottomMargin">
-             <number>0</number>
-            </property>
-            <item row="0" column="0" colspan="2">
-             <widget class="QLabel" name="label_5">
+             <widget class="QLabel" name="label_6">
               <property name="font">
                <font>
                 <weight>75</weight>
@@ -458,18 +420,8 @@
               </property>
              </widget>
             </item>
-            <item row="1" column="0">
-             <widget class="QLineEdit" name="line_walas">
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>24</height>
-               </size>
-              </property>
-             </widget>
-            </item>
             <item row="1" column="1">
-             <widget class="QPushButton" name="btn_template_walas">
+             <widget class="QPushButton" name="btn_template_rekap">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -484,6 +436,16 @@
               </property>
               <property name="text">
                <string>Create</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLineEdit" name="line_rekap">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>24</height>
+               </size>
               </property>
              </widget>
             </item>
@@ -639,19 +601,6 @@
            </property>
            <property name="text">
             <string>INSERT</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QPushButton" name="btn_save_2">
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>50</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>UPDATE</string>
            </property>
           </widget>
          </item>

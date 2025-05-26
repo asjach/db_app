@@ -1,4 +1,8 @@
-ROOT_FOLDER = "D:/OneDrive - MI Persis Rahayu/Database/dokumen"
+import os
+
+
+DIREKTORI_ONEDRIVE = "D:/OneDrive - MI Persis Rahayu"
+DIREKTORI_DOKUMEN = os.path.join(DIREKTORI_ONEDRIVE, "Database/dokumen")
 FOLDER_SISWA = "siswa"
 FOLDER_GURU = "guru"
 FOLDER_MADRASAH = "madrasah"

@@ -8,6 +8,7 @@ from reportlab.platypus import (Paragraph,TableStyle)
 from reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_JUSTIFY
 from models.nilai.cetak_rapor import CetakRapor
 import string
+from utils.app_config import DIREKTORI_DOKUMEN
 
 class TemplateRapor:
     def __init__(self, parent=None, papersize=A4, data=None):
@@ -20,9 +21,9 @@ class TemplateRapor:
         self.SQL = CetakRapor()
         self.data_rapor = data['data_rapor']
         self.setting = data['setting']
-        self.ttd_mudir = f'{value_from_db("DOKUMEN_PATH")}/guru/{self.data_rapor[0]['ttd_mudir']}'
+        self.ttd_mudir = f'{DIREKTORI_DOKUMEN}/guru/{self.data_rapor[0]['ttd_mudir']}'
         if self.data_rapor[0]['ttd_walas'] not in ['', None] and self.setting['show_ttd_walas']:
-            self.ttd_walikelas = f'{value_from_db("DOKUMEN_PATH")}/guru/{self.data_rapor[0]["ttd_walas"]}'
+            self.ttd_walikelas = f'{DIREKTORI_DOKUMEN}/guru/{self.data_rapor[0]["ttd_walas"]}'
         else:
             self.ttd_walikelas = 'resources/images/no_ttd.png'
 

@@ -6,6 +6,7 @@ from scripts.widgets.dokumen_viewer import DokumenViewer
 from utils.fungsi.general_functions import *
 from send2trash import send2trash
 from utils.static_values import KETERANGAN, JENIS_DOKUMEN
+from utils.app_config import DIREKTORI_DOKUMEN
 
 class PageCompareDokumen(QWidget, Ui_Form):
     def __init__(self, parent: QMainWindow):
@@ -129,7 +130,7 @@ class PageCompareDokumen(QWidget, Ui_Form):
         data_dokumen = self.cbo_daftar_dokumen.currentData()
         if data_dokumen and isinstance(data_dokumen, dict):
             namafile = data_dokumen.get('namafile', '')
-            dokumen_path = value_from_db('DOKUMEN_PATH')
+            dokumen_path = DIREKTORI_DOKUMEN
             if namafile and dokumen_path:
                 path = f"{dokumen_path}/{target}/{namafile}"
                 self.dokumen_viewer1.loadFile(path)
