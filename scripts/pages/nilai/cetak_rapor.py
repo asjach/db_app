@@ -1,7 +1,7 @@
 from PySide6.QtWidgets import QWidget, QMainWindow, QComboBox, QRadioButton, QDoubleSpinBox
 from PySide6.QtCore import QTimer
 from ui.ui_page_cetak_rapor import Ui_Form
-from models.nilai.cetak_rapor import CetakRapor
+from models.model_nilai import Model_Nilai
 from utils.fungsi.general_functions import *
 from template.rapor_mi import TemplateRapor
 from scripts.widgets.dokumen_viewer import DokumenViewer
@@ -13,7 +13,8 @@ class PageCetakRapor(QWidget, Ui_Form):
         self.setupUi(self)
         self.parent = parent
         self.nis_lokal = None
-        self.SQL = CetakRapor()
+        self.group_bio.setVisible(False)
+        self.SQL = Model_Nilai()
         self.viewer = DokumenViewer()
         self.viewer_layout.addWidget(self.viewer)
         self.pdf_update = QTimer(self)
@@ -31,16 +32,43 @@ class PageCetakRapor(QWidget, Ui_Form):
 
         # List of widgets to connect to opsi_selected
         opsi_opsi = [
-            self.cbo_kertas, self.cbo_orientasi,
-            self.opsi_cover, self.opsi_id_madrasah, self.opsi_id_siswa, self.opsi_petunjuk,
-            self.opsi_nilai, self.opsi_catatan, self.opsi_mutasi,
-            self.spin_left, self.spin_top, self.spin_right, self.spin_bottom,
-            self.radio_walas,
-            self.spin_x_walas, self.spin_y_walas, self.spin_size_walas,
-            self.spin_x_mudir, self.spin_y_mudir, self.spin_size_mudir,
-            self.spin_tinggi_baris, self.spin_ukuran_catatan, self.spin_jarak_catatan,
+            self.cbo_kertas, 
+            self.cbo_orientasi,
+            self.opsi_cover, 
+            self.opsi_id_madrasah, 
+            self.opsi_id_siswa, 
+            self.opsi_petunjuk,
+            self.opsi_nilai, 
+            self.opsi_catatan, 
+            self.opsi_mutasi,
+            self.spin_left, 
+            self.spin_top, 
+            self.spin_right, 
+            self.spin_bottom,
+
+            self.radio_show_mudir,
+            self.radio_show_walas, 
+            self.spin_size_mudir, 
+            self.spin_size_walas,
+
+            self.spin_bio_tinggi, 
+            self.spin_bio_x_mudir, 
+            self.spin_bio_y_mudir, 
+            self.spin_nilai_tinggi,
+            self.spin_nilai_x_mudir, 
+            self.spin_nilai_y_mudir, 
+            self.spin_nilai_x_walas, 
+            self.spin_nilai_y_walas, 
+
+            self.spin_catatan_tinggi,
+            self.spin_catatan_jarak,
+            self.spin_catatan_size,
+            self.spin_catatan_x_mudir, 
+            self.spin_catatan_y_mudir, 
+            self.spin_catatan_x_walas, 
+            self.spin_catatan_y_walas, 
             self.cbo_halaman,
-            self.radio_peringkat_10,
+            self.cbo_peringkat,
         ]
         
         for opsi in opsi_opsi:
@@ -104,7 +132,6 @@ class PageCetakRapor(QWidget, Ui_Form):
                     self.opsi_id_madrasah, self.opsi_id_siswa, 
                     self.opsi_petunjuk, self.opsi_mutasi]:
             opsi.setChecked(False)
-
         halaman = self.cbo_halaman.currentText().lower()
         if halaman == 'nilai':
             self.opsi_nilai.setChecked(True)
@@ -137,18 +164,30 @@ class PageCetakRapor(QWidget, Ui_Form):
             'margin_top': self.spin_top.value(),
             'margin_right': self.spin_right.value(),
             'margin_bottom': self.spin_bottom.value(),
-            'show_ttd_walas': self.radio_walas.isChecked(),
-            'x_walas': self.spin_x_walas.value(),
-            'y_walas': self.spin_y_walas.value(),
-            'size_walas': self.spin_size_walas.value(),
-            'x_mudir': self.spin_x_mudir.value(),
-            'y_mudir': self.spin_y_mudir.value(),
+
+            'show_ttd_mudir': self.radio_show_mudir.isChecked(),
+            'show_ttd_walas': self.radio_show_walas.isChecked(),
             'size_mudir': self.spin_size_mudir.value(),
-            'tinggi_baris': self.spin_tinggi_baris.value(),
-            'jarak_catatan': self.spin_jarak_catatan.value(),
-            'ukuran_catatan': self.spin_ukuran_catatan.value(),
-            'show_ttd_walas': self.radio_walas.isChecked(),
-            '10_besar': self.radio_peringkat_10.isChecked()
+            'size_walas': self.spin_size_walas.value(),
+
+            'bio_tinggi': self.spin_bio_tinggi.value(),
+            'bio_x_mudir': self.spin_bio_x_mudir.value(),
+            'bio_y_mudir': self.spin_bio_y_mudir.value(),
+
+            'show_peringkat': self.cbo_peringkat.currentText(),
+            'nilai_tinggi': self.spin_nilai_tinggi.value(),
+            'nilai_x_mudir': self.spin_nilai_x_mudir.value(),
+            'nilai_y_mudir': self.spin_nilai_y_mudir.value(),
+
+            'nilai_x_walas': self.spin_nilai_x_walas.value(),
+            'nilai_y_walas': self.spin_nilai_y_walas.value(),
+
+            'jarak_catatan': self.spin_catatan_jarak.value(),
+            'ukuran_catatan': self.spin_catatan_size.value(),
+            'catatan_x_mudir': self.spin_catatan_x_mudir.value(),
+            'catatan_y_mudir': self.spin_catatan_y_mudir.value(),
+            'catatan_x_walas': self.spin_catatan_x_walas.value(),
+            'catatan_y_walas': self.spin_catatan_y_walas.value(),
         }
 
     def set_setting(self):
@@ -163,32 +202,37 @@ class PageCetakRapor(QWidget, Ui_Form):
         if setting_db:
             self.cbo_kertas.setCurrentText(setting_db.get('kertas', 'A4'))
             self.cbo_orientasi.setCurrentText(setting_db.get('orientasi', 'Portrait'))
-            self.spin_left.setValue(float(setting_db.get('margin_left', 1.5)))
-            self.spin_top.setValue(float(setting_db.get('margin_top', 1.5)))
-            self.spin_right.setValue(float(setting_db.get('margin_right', 1.5)))
-            self.spin_bottom.setValue(float(setting_db.get('margin_bottom', 1.5)))
-            self.radio_walas.setChecked(bool(setting_db.get('show_ttd_walas', True)))
-            self.spin_x_walas.setValue(float(setting_db.get('x_walas', 0)))
-            self.spin_y_walas.setValue(float(setting_db.get('y_walas', 0)))
-            self.spin_size_walas.setValue(float(setting_db.get('size_walas', 2)))
-            self.spin_x_mudir.setValue(float(setting_db.get('x_mudir', 0)))
-            self.spin_y_mudir.setValue(float(setting_db.get('y_mudir', 0)))
-            self.spin_size_mudir.setValue(float(setting_db.get('size_mudir', 1.4)))
-            self.spin_tinggi_baris.setValue(float(setting_db.get('tinggi_baris', 0.6)))
-            self.spin_jarak_catatan.setValue(float(setting_db.get('jarak_catatan', 15)))
-            self.spin_ukuran_catatan.setValue(setting_db.get('ukuran_catatan', 11))
-            self.radio_walas.setChecked(setting_db.get('show_ttd_walas', True))
-            self.radio_peringkat_10.setChecked(setting_db.get('10_besar', True))
+            self.spin_left.setValue(setting_db.get('margin_left', 1.5))
+            self.spin_top.setValue(setting_db.get('margin_top', 1.5))
+            self.spin_right.setValue(setting_db.get('margin_right', 1.5))
+            self.spin_bottom.setValue(setting_db.get('margin_bottom', 1.5))
+            self.cbo_peringkat.setCurrentText(setting_db.get('show_peringkat', '10 Besar'))
+            # umum/general
+            self.radio_show_mudir.setChecked(setting_db.get('show_ttd_mudir'))
+            self.radio_show_walas.setChecked(setting_db.get('show_ttd_walas'))
+            self.spin_size_mudir.setValue(setting_db.get('size_mudir', 1.4))
+            self.spin_size_walas.setValue(setting_db.get('size_walas', 2))
+            # halaman biodata
+            self.spin_bio_tinggi.setValue(setting_db.get('bio_tinggi'))
+            self.spin_bio_x_mudir.setValue(setting_db.get('bio_x_mudir'))
+            self.spin_bio_y_mudir.setValue(setting_db.get('bio_y_mudir'))
+            # halaman nilai
+            self.spin_nilai_tinggi.setValue(setting_db.get('nilai_tinggi', 0))
+            self.spin_nilai_x_mudir.setValue(setting_db.get('nilai_x_mudir', 0))
+            self.spin_nilai_y_mudir.setValue(setting_db.get('nilai_y_mudir', 0))
+            self.spin_nilai_x_walas.setValue(setting_db.get('nilai_x_walas', 0))
+            self.spin_nilai_y_walas.setValue(setting_db.get('nilai_y_walas', 0))
+            # hamalan catatan
+            self.spin_catatan_jarak.setValue(setting_db.get('jarak_catatan', 0))
+            self.spin_catatan_size.setValue(setting_db.get('ukuran_catatan', 0))
+            self.spin_catatan_x_mudir.setValue(setting_db.get('catatan_x_mudir', 0))
+            self.spin_catatan_y_mudir.setValue(setting_db.get('catatan_y_mudir', 0))
+            self.spin_catatan_x_walas.setValue(setting_db.get('catatan_x_walas', 0))
+            self.spin_catatan_y_walas.setValue(setting_db.get('catatan_y_walas', 0))
 
     def update_setting_rapor(self):
         current_settings = json.dumps(self.nilai_setting())
         self.SQL.update_setting_rapor(self.cbo_kelas.currentData(), current_settings)
-
-    def cek_setting(self):
-        current_settings = self.nilai_setting()
-        db_settings = self.SQL.get_setting_rapor(self.cbo_kelas.currentData())['setting_rapor']
-        db_settings = json.loads(db_settings)
-        return current_settings == db_settings
     
     def show_pdf(self, limit=True):
         id_kelas = self.cbo_kelas.currentData()

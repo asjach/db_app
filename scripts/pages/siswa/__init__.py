@@ -7,6 +7,7 @@ from .kenaikan import PageKenaikan
 from .kelulusan import PageKelulusan
 from .mi_ke_md import PageMI2MD
 from .mutasi_masuk import PageMutasiMasuk
+from .ceklis_emis import PageCeklisEMIS
 
 __all__ = [
     "PageBukuInduk", 
@@ -18,4 +19,5 @@ __all__ = [
     "PageKelulusan",
     "PageMI2MD",
     "PageMutasiMasuk",
+    "PageCeklisEMIS"
 ]

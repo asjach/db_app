@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import QWidget, QMainWindow
 from ui.ui_page_lihat_dokumen import Ui_Form
-from models.dokumen.lihat_dokumen import ModelLihatDokumen
+from models.model_dokumen import Model_Dokumen
 from scripts.widgets.dokumen_viewer import DokumenViewer
 from utils.fungsi.general_functions import *
 from utils.app_config import DIREKTORI_DOKUMEN
@@ -12,7 +12,7 @@ class PageLihatDokumen(QWidget, Ui_Form):
         self.parent = parent
         self.dokumen_viewer = DokumenViewer()
         self.viewer_layout.addWidget(self.dokumen_viewer)
-        self.MODEL = ModelLihatDokumen()
+        self.MODEL = Model_Dokumen()
         self.setup_connections()
 
     def setup_connections(self):
@@ -34,11 +34,11 @@ class PageLihatDokumen(QWidget, Ui_Form):
     def fill_tbl_daftar_nama(self):
         target = self.cbo_target.currentText()
         if target.lower() == 'siswa':
-            data = self.MODEL.get_daftar_siswa(
-                jenjang=self.parent.cbo_jenjang.currentText(),
+            data = self.MODEL.get_daftar_siswa_jml_dok(
+                jenjang=self.parent.str_jenjang,
                 tapel=self.parent.cbo_tapel.currentText(),
-                tingkat=self.parent.cbo_tingkat.currentText(),
-                kelas = self.parent.cbo_kelas.currentText(),
+                tingkat=self.parent.quoted_daftar_tingkat,
+                kelas = self.parent.quoted_daftar_kelas,
                 search_text=self.parent.line_search.text(),
                 order_by=self.parent.cbo_order_by.currentText(),
             )
@@ -49,7 +49,8 @@ class PageLihatDokumen(QWidget, Ui_Form):
             )
         generate_table(
             data=data,
-            table=self.tbl_daftar_nama
+            table=self.tbl_daftar_nama,
+            hidden_column=[0]
         )
 
     def tbl_daftar_nama_selected(self):
@@ -62,12 +63,12 @@ class PageLihatDokumen(QWidget, Ui_Form):
 
     def fill_tbl_daftar_dokumen(self): 
         data = self.MODEL.get_daftar_dokumen(
-            no_induk=self.no_induk
+            nomor_induk=self.nomor_induk
         )
         generate_table(
             data = data, 
             table = self.tbl_daftar_dokumen,
-            hidden_column=[4],
+            hidden_column=[4,5],
             stretch_column=2
         )
 

@@ -1,9 +1,10 @@
 from PySide6.QtWidgets import QWidget, QMainWindow, QMessageBox
 from ui.ui_page_tambah_dokumen import Ui_Form
-from models.dokumen.tambah_dokumen import ModelTambahDokumen
+from models.model_dokumen import Model_Dokumen
 from scripts.widgets.dokumen_viewer import DokumenViewer
 from utils.fungsi.general_functions import *
-from utils.static_values import KETERANGAN, JENIS_DOKUMEN
+# from utils.static_values import KETERANGAN, JENIS_DOKUMEN
+from utils.app_config import DIREKTORI_DOKUMEN
 
 
 
@@ -14,7 +15,7 @@ class PageTambahDokumen(QWidget, Ui_Form):
         self.parent = parent
         self.dokumen_viewer = DokumenViewer()
         self.viewer_layout.addWidget(self.dokumen_viewer)
-        self.MODEL = ModelTambahDokumen()
+        self.MODEL = Model_Dokumen()
         self.btn_tambah.setEnabled(False)
         self.activator = [self.plain_source, self.line_nama, self.line_no_induk, self.line_jenis_dokumen, self.line_keterangan]
         self.fill_list_daftar_dokumen()
@@ -45,10 +46,10 @@ class PageTambahDokumen(QWidget, Ui_Form):
     def fill_tbl_daftar_nama(self):
         if self.cbo_target.currentIndex() == 0:
             data = self.MODEL.get_daftar_siswa(
-                jenjang=self.parent.cbo_jenjang.currentText(),
+                jenjang=self.parent.str_jenjang,
                 tapel=self.parent.cbo_tapel.currentText(),
-                tingkat=self.parent.cbo_tingkat.currentText(),
-                kelas = self.parent.cbo_kelas.currentText(),
+                tingkat=self.parent.quoted_daftar_tingkat,
+                kelas = self.parent.quoted_daftar_kelas,
                 search_text=self.parent.line_search.text(), 
                 order_by=self.parent.cbo_order_by.currentText())
         elif self.cbo_target.currentIndex() == 1:
@@ -63,7 +64,7 @@ class PageTambahDokumen(QWidget, Ui_Form):
     def tbl_daftar_nama_selected(self):
         table_selected(self.tbl_daftar_nama, self, self.parent)
         self.line_nama.setText(self.nama_lengkap)
-        self.line_no_induk.setText(self.no_induk)
+        self.line_no_induk.setText(self.nomor_induk)
 
 
     def btn_clear_clicked(self):
@@ -79,7 +80,7 @@ class PageTambahDokumen(QWidget, Ui_Form):
         open_dialog(self.parent, self.plain_source)
 
     def fill_list_daftar_dokumen(self):
-        data_jenis_dokumen = list(JENIS_DOKUMEN)
+        data_jenis_dokumen = list(static_values['JENIS_DOKUMEN'])
         populate_combobox(self.list_jenis_dokumen, data_jenis_dokumen)
 
     def list_jenis_dokumen_selected(self):
@@ -88,7 +89,7 @@ class PageTambahDokumen(QWidget, Ui_Form):
         self.fill_list_keterangan(self.line_jenis_dokumen.text())
 
     def fill_list_keterangan(self, jenis_dokumen):
-        data_keterangan = list(KETERANGAN.get(jenis_dokumen, ''))
+        data_keterangan = list(static_values['KETERANGAN'].get(jenis_dokumen, ''))
         populate_combobox(self.list_keterangan, data_keterangan)
 
     def list_keterangan_selected(self):
@@ -101,10 +102,10 @@ class PageTambahDokumen(QWidget, Ui_Form):
         nomor_induk = self.line_no_induk.text()
         jenis_dokumen = self.line_jenis_dokumen.text()
         keterangan = self.line_keterangan.text()
-        dest_folder = f"{value_from_db('DOKUMEN_PATH')}/{self.cbo_target.currentText().lower()}"
+        dest_folder = os.path.join(DIREKTORI_DOKUMEN, self.cbo_target.currentText().lower())
         self.namafile = create_namafile2(nama_lengkap, nomor_induk, jenis_dokumen, keterangan, source_path)
         if self.namafile:
-            self.fullpath = os.path.join(dest_folder, self.namafile)
+            self.fullpath = os.path.normpath(os.path.join(dest_folder, self.namafile))
             self.plain_destination.setPlainText(self.fullpath)
         self.activate_btn_tambah()
 
@@ -119,51 +120,111 @@ class PageTambahDokumen(QWidget, Ui_Form):
         else:
             self.btn_tambah.setEnabled(True)
 
+    # def btn_tambah_clicked(self):
+    #     source_path = self.plain_source.toPlainText().strip()
+    #     dest_path = self.plain_destination.toPlainText().strip()
+    #     if not source_path or not dest_path:
+    #         QMessageBox.warning(self, "Error", "Source or destination path cannot be empty.")
+    #         return
+    #     if not os.path.isfile(source_path):
+    #         QMessageBox.warning(self, "Error", "Source file does not exist.")
+    #         return
+    #     source_dir = os.path.dirname(source_path) or "."
+    #     sudah_path = os.path.join(source_dir, "sudah", self.namafile)
+    #     sukses = self.MODEL.tambah_dokumen(
+    #         no_induk=self.line_no_induk.text(),
+    #         jenis_dokumen=self.line_jenis_dokumen.text(),
+    #         keterangan=self.line_keterangan.text(),
+    #         sub_folder=self.cbo_target.currentText(),
+    #         namafile=self.namafile
+    #     )
+    #     if not sukses:
+    #         QMessageBox.warning(self, "Error", "Failed to add document to database.")
+    #         return
+    #     try:
+    #         # MODE: COPY
+    #         if self.radio_mode_copy.isChecked():
+    #             # Buat folder tujuan jika belum ada
+    #             dest_dir = os.path.dirname(dest_path) or "."
+    #             os.makedirs(dest_dir, exist_ok=True)
+    #             shutil.copy(source_path, dest_path)
+    #             if self.radio_move_sudah.isChecked():
+    #                 os.makedirs(os.path.join(source_dir, "sudah"), exist_ok=True)
+    #                 shutil.move(source_path, sudah_path)
+    #             if self.radio_cycle.isChecked():
+    #                 self.btn_browse.click()
+    #                 return
+    #         else:
+    #             dest_dir = os.path.dirname(dest_path) or "."
+    #             os.makedirs(dest_dir, exist_ok=True)
+    #             shutil.move(source_path, dest_path)
+    #             if self.radio_cycle.isChecked():
+    #                 self.btn_browse.click()
+    #                 return
+    #         self.clear_after_tambah()
+    #     except (OSError, shutil.Error) as e:
+    #         QMessageBox.critical(self, "Error", f"File operation failed: {str(e)}")
+    #         return
+
     def btn_tambah_clicked(self):
         source_path = self.plain_source.toPlainText().strip()
         dest_path = self.plain_destination.toPlainText().strip()
+
+        # Input validation
         if not source_path or not dest_path:
             QMessageBox.warning(self, "Error", "Source or destination path cannot be empty.")
             return
         if not os.path.isfile(source_path):
             QMessageBox.warning(self, "Error", "Source file does not exist.")
             return
-        source_dir = os.path.dirname(source_path) or "."
-        sudah_path = os.path.join(source_dir, "sudah", self.namafile)
-        sukses = self.MODEL.tambah_dokumen(
-            no_induk=self.line_no_induk.text(),
-            jenis_dokumen=self.line_jenis_dokumen.text(),
-            keterangan=self.line_keterangan.text(),
-            sub_folder=self.cbo_target.currentText(),
-            namafile=self.namafile
-        )
-        if not sukses:
-            QMessageBox.warning(self, "Error", "Failed to add document to database.")
-            return
+        if os.path.exists(dest_path):
+            reply = QMessageBox.question(self, "Warning", "Destination file already exists. Overwrite?",
+                                        QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+            if reply == QMessageBox.No:
+                return
+
+        # Database operation
         try:
-            # MODE: COPY
+            sukses = self.MODEL.tambah_dokumen(
+                no_induk=self.line_no_induk.text(),
+                jenis_dokumen=self.line_jenis_dokumen.text(),
+                keterangan=self.line_keterangan.text(),
+                sub_folder=self.cbo_target.currentText(),
+                namafile=self.namafile
+            )
+            if not sukses:
+                raise Exception("Failed to add document to database.")
+
+            # File operation
+            dest_dir = os.path.dirname(dest_path) or "."
+            os.makedirs(dest_dir, exist_ok=True)
+
+            # Close PDF in viewer before moving, if it's a PDF
+            if source_path.lower().endswith('.pdf'):
+                self.dokumen_viewer.close_file()
+
             if self.radio_mode_copy.isChecked():
-                # Buat folder tujuan jika belum ada
-                dest_dir = os.path.dirname(dest_path) or "."
-                os.makedirs(dest_dir, exist_ok=True)
                 shutil.copy(source_path, dest_path)
                 if self.radio_move_sudah.isChecked():
+                    source_dir = os.path.dirname(source_path) or "."
+                    sudah_path = os.path.join(source_dir, "sudah", self.namafile)
                     os.makedirs(os.path.join(source_dir, "sudah"), exist_ok=True)
+                    # Close PDF again before moving to "sudah" folder, if it's a PDF
+                    if source_path.lower().endswith('.pdf'):
+                        self.dokumen_viewer.close_file()
                     shutil.move(source_path, sudah_path)
-                if self.radio_cycle.isChecked():
-                    self.btn_browse.click()
-                    return
             else:
-                dest_dir = os.path.dirname(dest_path) or "."
-                os.makedirs(dest_dir, exist_ok=True)
+                # Move mode
                 shutil.move(source_path, dest_path)
-                if self.radio_cycle.isChecked():
-                    self.btn_browse.click()
-                    return
+
             self.clear_after_tambah()
-        except (OSError, shutil.Error) as e:
-            QMessageBox.critical(self, "Error", f"File operation failed: {str(e)}")
-            return
+            if self.radio_cycle.isChecked():
+                self.btn_browse.click()
+
+            # QMessageBox.information(self, "Success", "Document added successfully.")
+        except Exception as e:
+            self.MODEL.rollback()  # Assumes rollback is implemented
+            QMessageBox.critical(self, "Error", f"Operation failed: {str(e)}")
 
     def clear_after_tambah(self):
         self.plain_source.clear()

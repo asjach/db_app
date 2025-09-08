@@ -2,27 +2,25 @@ from PySide6.QtWidgets import QWidget, QMainWindow, QFileDialog
 from utils.fungsi.general_functions import *
 from utils.fungsi.functions import read_excel
 from ui.ui_page_input_nilai import Ui_Form
-from models.nilai.input_nilai import InputNilai
+from models.model_nilai import Model_Nilai
 from openpyxl import load_workbook, Workbook
 from openpyxl.utils import get_column_letter
 from openpyxl.styles import Border, Side, Alignment, PatternFill, Font
+from openpyxl.worksheet.datavalidation import DataValidation
 from openpyxl.formatting.rule import CellIsRule
 import pandas as pd
 from collections import defaultdict
-from utils.static_values import LEFT_COLUMN, RIGHT_COLUMN
+# from utils.static_values import LEFT_COLUMN, RIGHT_COLUMN
 import os
-
 
 class PageInputNilai(QWidget, Ui_Form):
     def __init__(self, parent:QMainWindow):
         super().__init__(parent)
         self.setupUi(self)
         self.parent = parent
-        self.cbo_jenjang = self.parent.cbo_jenjang
+        # self.cbo_jenjang = self.parent.cbo_jenjang
         self.cbo_tapel = self.parent.cbo_tapel
-        self.cbo_tingkat = self.parent.cbo_tingkat
-        self.cbo_kelas = self.parent.cbo_kelas
-        self.SQL = InputNilai()
+        self.SQL = Model_Nilai()
         self.cbo_kegiatan.currentIndexChanged.connect(self.cbo_kegiatan_selected)
         self.btn_new_default_path.clicked.connect(self.browse_save_folder)
         self.open_default_folder.clicked.connect(lambda: open_in_explorer(self.pte_default_path.toPlainText()))
@@ -45,7 +43,7 @@ class PageInputNilai(QWidget, Ui_Form):
 # CBO KEGIATAN
     def fill_kegiatan_cbo(self):
         data = self.SQL.get_id_kegiatan(
-            jenjang=self.cbo_jenjang.currentText(),
+            jenjang=self.parent.str_jenjang,
             tapel=self.cbo_tapel.currentText())
         self.cbo_kegiatan.clear()
         for item in data:
@@ -66,7 +64,7 @@ class PageInputNilai(QWidget, Ui_Form):
         if folder_path:
             self.pte_default_path.setPlainText(folder_path)
             self.SQL.update_path(
-                jenjang=self.cbo_jenjang.currentText(),
+                jenjang=self.parent.str_jenjang,
                 tapel=self.cbo_tapel.currentText(),
                 kegiatan=self.cbo_kegiatan.currentText(),
                 kolom="path_folder_nilai",
@@ -101,7 +99,7 @@ class PageInputNilai(QWidget, Ui_Form):
         elif self.radio_catatan_db.isChecked():
             self.get_rekap_catatan()
         elif self.radio_nilai_catatan_db.isChecked():
-            self.get_rekap_nilai_catatan()
+            self.fill_tabel_rekap_nilai_catatan()
         else:
             if path_rekap:
                 if os.path.exists(path_rekap):
@@ -113,10 +111,12 @@ class PageInputNilai(QWidget, Ui_Form):
                     self.input_tbl.setColumnCount(0)
         
     def get_rekap_nilai(self):
-        jenjang = self.cbo_jenjang.currentText()
+        list_kelas = self.parent.str_list_kelas_txt
+        list_tingkat = self.parent.str_list_tingkat_txt
+        jenjang = self.parent.str_jenjang
         tapel = self.cbo_tapel.currentText()
-        tingkat = self.cbo_tingkat.currentText()
-        kelas = self.cbo_kelas.currentText()
+        tingkat = list_tingkat
+        kelas = list_kelas
         kegiatan = self.cbo_kegiatan.currentText()
         data_mapel = self.SQL.get_list_mapel(jenjang, tapel, kegiatan, tingkat, kelas, )
         if data_mapel:
@@ -128,19 +128,19 @@ class PageInputNilai(QWidget, Ui_Form):
         generate_table(data=data,table=self.input_tbl)
 
     def get_rekap_catatan(self):
-        jenjang = self.cbo_jenjang.currentText()
+        jenjang = self.parent.str_jenjang
         tapel = self.cbo_tapel.currentText()
-        tingkat = self.cbo_tingkat.currentText()
-        kelas = self.cbo_kelas.currentText()
+        tingkat = self.parent.str_list_tingkat_txt
+        kelas = self.parent.str_list_kelas_txt
         kegiatan = self.cbo_kegiatan.currentText()
         data = self.SQL.get_catatan_by_kegiatan(jenjang, tapel, tingkat, kelas, kegiatan)
         generate_table(data=data,table=self.input_tbl)
 
     def get_rekap_nilai_catatan(self):
-        jenjang = self.cbo_jenjang.currentText()
+        jenjang = self.parent.str_jenjang
         tapel = self.cbo_tapel.currentText()
-        tingkat = self.cbo_tingkat.currentText()
-        kelas = self.cbo_kelas.currentText()
+        tingkat = self.parent.str_list_tingkat_txt
+        kelas = self.parent.str_list_kelas_txt
         kegiatan = self.cbo_kegiatan.currentText()
         data_mapel = self.SQL.get_list_mapel(jenjang, tapel, kegiatan, tingkat, kelas, )
         if data_mapel:
@@ -148,7 +148,10 @@ class PageInputNilai(QWidget, Ui_Form):
             kolom_mapel = ", ".join([f"MAX(CASE WHEN mapel = '{mapel}' THEN nilai END) AS `{mapel}`" for mapel in mapel_list])
         else:
             kolom_mapel = ""
-        data = self.SQL.get_nilai_catatan_by_kegiatan(kolom_mapel, jenjang, tapel, tingkat, kelas, kegiatan)
+        return self.SQL.get_nilai_catatan_by_kegiatan(kolom_mapel, jenjang, tapel, tingkat, kelas, kegiatan)
+        
+    def fill_tabel_rekap_nilai_catatan(self):
+        data = self.get_rekap_nilai_catatan()
         generate_table(data=data,table=self.input_tbl)
 
 #   BTN OPEN FILE REKAP           
@@ -164,7 +167,7 @@ class PageInputNilai(QWidget, Ui_Form):
         open_dialog(self, self.pte_excel_path)
         if self.pte_excel_path.toPlainText() !='':
             self.SQL.update_path(
-                jenjang=self.cbo_jenjang.currentText(),
+                jenjang=self.parent.str_jenjang,
                 tapel = self.cbo_tapel.currentText(),
                 kegiatan=self.cbo_kegiatan.currentText(),
                 kolom="path_file_rekap",
@@ -182,7 +185,7 @@ class PageInputNilai(QWidget, Ui_Form):
 #   HELPERS METHOD
     def get_data_siswa(self):
         data_siswa = self.SQL.data_siswa(
-            jenjang=self.cbo_jenjang.currentText(), 
+            jenjang=self.parent.str_jenjang, 
             tapel= self.cbo_tapel.currentText(), 
             kegiatan= self.cbo_kegiatan.currentText()
         )
@@ -193,14 +196,14 @@ class PageInputNilai(QWidget, Ui_Form):
     
     def create_filename(self):
         kegiatan = self.cbo_kegiatan.currentText()
-        jenjang = self.cbo_jenjang.currentText()
+        jenjang = self.parent.str_jenjang
         tapel = self.cbo_tapel.currentText()
         filename_rekap = f"Rekap Nilai {kegiatan} {jenjang} {tapel}.xlsx"
         self.line_rekap.setText(filename_rekap)
         
     def init_default_folder(self):
         default_path = self.SQL.get_path(
-            jenjang=self.cbo_jenjang.currentText(),
+            jenjang=self.parent.str_jenjang,
             tapel = self.cbo_tapel.currentText(),
             kegiatan=self.cbo_kegiatan.currentText(),
             kolom="path_folder_nilai")
@@ -211,7 +214,7 @@ class PageInputNilai(QWidget, Ui_Form):
 
     def init_file_rekap_nilai(self):
         file_rekap_nilai = self.SQL.get_path(
-            jenjang=self.cbo_jenjang.currentText(),
+            jenjang=self.parent.str_jenjang,
             tapel = self.cbo_tapel.currentText(),
             kegiatan=self.cbo_kegiatan.currentText(),
             kolom="path_file_rekap")
@@ -222,13 +225,13 @@ class PageInputNilai(QWidget, Ui_Form):
 
     def template_nilai_md(self, data):
         # Extract form data
-        jenjang = self.cbo_jenjang.currentText()
+        jenjang = self.parent.str_jenjang
         tapel = self.cbo_tapel.currentText()
         kegiatan = self.cbo_kegiatan.currentText()
 
         # Define columns
         base_columns = ["no_urut", "nis_lokal", "nama_lengkap", "kelas"]
-        additional_columns = [f"nh{i}" for i in range(1, 7)] + ["nrh", "harian", "tulis", "lisan", "nilai"]
+        additional_columns = [f"nh{i}" for i in range(1, 7)] + ["nrh", "kehadiran", "tulis", "lisan", "nilai"]
         all_columns = base_columns + additional_columns
 
         # Create output directory
@@ -277,8 +280,8 @@ class PageInputNilai(QWidget, Ui_Form):
                     cell.font = default_font
                     col_name = all_columns[col_idx - 1]
                     cell.alignment = Alignment(
-                        horizontal='left' if col_name in LEFT_COLUMN else 
-                        'right' if col_name in RIGHT_COLUMN else 'center',
+                        horizontal='left' if col_name in static_values['LEFT_COLUMN'] else 
+                        'right' if col_name in static_values['RIGHT_COLUMN'] else 'center',
                         vertical='center'
                     )
 
@@ -293,13 +296,13 @@ class PageInputNilai(QWidget, Ui_Form):
                 cell_nrh.font = default_font
                 cell_nilai.font = default_font
                 cell_nrh.alignment = Alignment(
-                    horizontal='left' if 'nrh' in LEFT_COLUMN else 
-                    'right' if 'nrh' in RIGHT_COLUMN else 'center',
+                    horizontal='left' if 'nrh' in static_values['LEFT_COLUMN'] else 
+                    'right' if 'nrh' in static_values['RIGHT_COLUMN'] else 'center',
                     vertical='center'
                 )
                 cell_nilai.alignment = Alignment (
-                    horizontal='left' if 'nilai' in LEFT_COLUMN else 
-                    'right' if 'nilai' in RIGHT_COLUMN else 'center',
+                    horizontal='left' if 'nilai' in static_values['LEFT_COLUMN'] else 
+                    'right' if 'nilai' in static_values['RIGHT_COLUMN'] else 'center',
                     vertical='center'
                 )
 
@@ -326,7 +329,7 @@ class PageInputNilai(QWidget, Ui_Form):
 
     def template_nilai_mi(self, data):
         # Extract form data
-        jenjang = self.cbo_jenjang.currentText()
+        jenjang = self.parent.str_jenjang
         tapel = self.cbo_tapel.currentText()
         kegiatan = self.cbo_kegiatan.currentText()
 
@@ -381,8 +384,8 @@ class PageInputNilai(QWidget, Ui_Form):
                     cell.font = default_font
                     col_name = all_columns[col_idx - 1]
                     cell.alignment = Alignment(
-                        horizontal='left' if col_name in LEFT_COLUMN else 
-                        'right' if col_name in RIGHT_COLUMN else 'center',
+                        horizontal='left' if col_name in static_values['LEFT_COLUMN'] else 
+                        'right' if col_name in static_values['RIGHT_COLUMN'] else 'center',
                         vertical='center'
                     )
 
@@ -397,13 +400,13 @@ class PageInputNilai(QWidget, Ui_Form):
                 cell_nrh.font = default_font
                 cell_nilai.font = header_font
                 cell_nrh.alignment = Alignment(
-                    horizontal='left' if 'nrh' in LEFT_COLUMN else 
-                    'right' if 'nrh' in RIGHT_COLUMN else 'center',
+                    horizontal='left' if 'nrh' in static_values['LEFT_COLUMN'] else 
+                    'right' if 'nrh' in static_values['RIGHT_COLUMN'] else 'center',
                     vertical='center'
                 )
                 cell_nilai.alignment = Alignment(
-                    horizontal='left' if 'nilai' in LEFT_COLUMN else 
-                    'right' if 'nilai' in RIGHT_COLUMN else 'center',
+                    horizontal='left' if 'nilai' in static_values['LEFT_COLUMN'] else 
+                    'right' if 'nilai' in static_values['RIGHT_COLUMN'] else 'center',
                     vertical='center'
                 )
 
@@ -429,42 +432,54 @@ class PageInputNilai(QWidget, Ui_Form):
         open_in_explorer(folder_output)
 
     def template_walas(self, data):
-        jenjang = self.cbo_jenjang.currentText()
+        # Extract form data
+        jenjang = self.parent.str_jenjang
         tapel = self.cbo_tapel.currentText()
         kegiatan = self.cbo_kegiatan.currentText()
-        kegiatan = self.cbo_kegiatan.currentText()
-        folder_output = os.path.join(os.path.normpath(self.pte_default_path.toPlainText()), 'Blanko Walas',)
+
+        # Define columns
+        base_columns = ["no_urut", "nis_lokal", "nama_lengkap", "kelas"]
+        additional_columns = ['sakit', 'ijin', 'alpa', 'catatan_walas']
+        if kegiatan == 'PAT':
+            additional_columns.append('status_naik')
+        all_columns = base_columns + additional_columns
+
+        # Create output directory
+        folder_output = os.path.join(os.path.normpath(self.pte_default_path.toPlainText()), 'Blanko Walas')
         os.makedirs(folder_output, exist_ok=True)
+
+        # Get class list
         kelas = self.SQL.get_kelas(jenjang, tapel)
         list_kelas = [item['kelas'] for item in kelas]
-        kolom = ["no_urut", "nis_lokal", "nama_lengkap", "kelas"]
-        kolom_tambahan = ['sakit', 'ijin', 'alpa', 'catatan_walas']
-        if kegiatan in ['PAT']:
-                kolom_tambahan = kolom_tambahan + ['status_naik']
-        df = pd.DataFrame(data, columns=kolom)
-        for col in kolom_tambahan:
-            df[col] = None
 
-        thin_border = Border(
-            left=Side(style='thin'),
-            right=Side(style='thin'),
-            top=Side(style='thin'),
-            bottom=Side(style='thin')
-        )
+        # Define styles
+        thin_border = Border(left=Side(style='thin'), right=Side(style='thin'), 
+                            top=Side(style='thin'), bottom=Side(style='thin'))
         default_font = Font(name='Aptos', size=11)
         header_font = Font(name='Aptos', size=11, bold=True)
         yellow_fill = PatternFill(start_color="FFFF00", end_color="FFFF00", fill_type="solid")
-        left_column = LEFT_COLUMN
-        right_column = RIGHT_COLUMN 
+
+        # Process data
+        df = pd.DataFrame(data, columns=base_columns)
+        for col in additional_columns:
+            df[col] = None
 
         for kls in list_kelas:
             df_kelas = df[df['kelas'] == kls].copy()
-            filename = os.path.join(folder_output, f'{kegiatan} {kls} {jenjang}.xlsx')
+            filename = os.path.join(folder_output, f'Catatan_Walas_{kegiatan} {kls} {jenjang}.xlsx')
             wb = Workbook()
-            df_kelas.to_excel(filename, index=False)
-            wb = load_workbook(filename)
             ws = wb.active
-            all_columns = kolom + kolom_tambahan
+
+            # Set headers with yellow fill
+            for col_idx, col_name in enumerate(all_columns, start=1):
+                cell = ws.cell(row=1, column=col_idx)
+                cell.value = col_name
+                cell.border = thin_border
+                cell.fill = yellow_fill
+                cell.alignment = Alignment(horizontal='center', vertical='center')
+                cell.font = header_font
+
+            # Populate data
             for row_idx, row_data in enumerate(df_kelas.values, start=2):
                 for col_idx, value in enumerate(row_data, start=1):
                     cell = ws.cell(row=row_idx, column=col_idx)
@@ -472,25 +487,38 @@ class PageInputNilai(QWidget, Ui_Form):
                     cell.border = thin_border
                     cell.font = default_font
                     col_name = all_columns[col_idx - 1]
-                    if col_name in left_column:
-                        cell.alignment = Alignment(horizontal='left', vertical='center')
-                    elif col_name in right_column:
-                        cell.alignment = Alignment(horizontal='right', vertical='center')
-                    else:
-                        cell.alignment = Alignment(horizontal='center', vertical='center')
+                    cell.alignment = Alignment(
+                        horizontal='left' if col_name in static_values['LEFT_COLUMN'] else 
+                        'right' if col_name in static_values['RIGHT_COLUMN'] else 'center',
+                        vertical='center'
+                    )
+
+            # Add data validation for status_naik if applicable
+            if kegiatan == 'PAT':
+                status_col_idx = all_columns.index('status_naik') + 1
+                status_col_letter = get_column_letter(status_col_idx)
+                dv = DataValidation(type="list", formula1='"Naik,Tidak Naik"', allow_blank=True)
+                dv.add(f"{status_col_letter}2:{status_col_letter}{len(df_kelas) + 1}")
+                ws.add_data_validation(dv)
+
+            # Adjust column widths
             for col_idx, col_name in enumerate(all_columns, start=1):
                 max_length = max(
-                    len(str(col_name)),  
-                    *(len(str(ws.cell(row=row_idx, column=col_idx).value)) for row_idx in range(1, len(df) + 2)))
+                    len(str(col_name)),
+                    *(len(str(ws.cell(row=row_idx, column=col_idx).value or '')) 
+                    for row_idx in range(1, len(df_kelas) + 2))
+                )
                 ws.column_dimensions[get_column_letter(col_idx)].width = max_length + 2
+
             wb.save(filename)
-        open_in_explorer(filename)
+        
+        open_in_explorer(folder_output)
 
     def template_rekap(self, data):
         namafile = self.line_rekap.text()
         save_path = self.pte_default_path.toPlainText()
         filename = os.path.join(save_path, namafile)
-        jenjang = self.cbo_jenjang.currentText()
+        jenjang = self.parent.str_jenjang
         tapel = self.cbo_tapel.currentText()
         kegiatan = self.cbo_kegiatan.currentText()
         kolom = ["id_kelas", "id_kegiatan", "no_urut", "id_peserta", "nis_lokal", "nama_lengkap", "kelas"]

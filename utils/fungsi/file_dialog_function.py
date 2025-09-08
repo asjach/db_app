@@ -2,6 +2,7 @@ import os, shutil, platform, subprocess
 from PySide6.QtWidgets import QFileDialog, QLineEdit, QLabel, QPlainTextEdit
 from utils.fungsi.db_functions import save_value_to_db, value_from_db
 from datetime import datetime
+from typing import List, Union
 
 
 def save_as_file(parent, source, last_folder):
@@ -199,17 +200,17 @@ def get_directory(text_widget: QLineEdit | QPlainTextEdit,
     return None
 
 
-def get_files_in_directory(path_source: str | QLineEdit | QPlainTextEdit, file_types: list = None) -> list:
+def get_files_in_directory(path_source: Union[str, QLineEdit, QPlainTextEdit], file_types: List[str] = None) -> List[str]:
     """
-    Mengambil daftar file dari folder dengan tipe file tertentu.
-    
+    Mengambil daftar nama file dari folder dengan tipe file tertentu (hanya nama file, tanpa path).
+
     :parameter
         path_source : Path folder (string) atau widget teks (QLineEdit/QPlainTextEdit) yang berisi path
         file_types  : Daftar ekstensi file yang diizinkan (misalnya, ['.pdf', '.png', '.jpg']),
                       default: ['.pdf', '.png', '.jpg', '.jpeg', '.gif']
-    
+
     :return
-        list: Daftar nama file (dengan path lengkap) yang sesuai dengan tipe file
+        list: Daftar nama file (hanya nama file, tanpa path folder)
     """
     # Tentukan tipe file default jika tidak diberikan
     if file_types is None:
@@ -219,8 +220,10 @@ def get_files_in_directory(path_source: str | QLineEdit | QPlainTextEdit, file_t
     file_types = [ext.lower() if ext.startswith('.') else f'.{ext.lower()}' for ext in file_types]
     
     # Ambil path dari path_source
-    if isinstance(path_source, (QLineEdit, QPlainTextEdit)):
-        path = path_source.text() if isinstance(path_source, QLineEdit) else path_source.toPlainText()
+    if isinstance(path_source, QLineEdit):
+        path = path_source.text()
+    elif isinstance(path_source, QPlainTextEdit):
+        path = path_source.toPlainText()
     else:
         path = path_source
     
@@ -229,12 +232,14 @@ def get_files_in_directory(path_source: str | QLineEdit | QPlainTextEdit, file_t
         print(f"Path tidak valid atau bukan direktori: {path}")
         return []
     
-    # Ambil daftar file
+    # Ambil daftar nama file saja
     file_list = []
     try:
         for entry in os.scandir(path):
-            if entry.is_file() and os.path.splitext(entry.name)[1].lower() in file_types:
-                file_list.append(entry.path)
+            if entry.is_file():
+                ext = os.path.splitext(entry.name)[1].lower()
+                if ext in file_types:
+                    file_list.append(entry.name)  # Hanya nama file
     except Exception as e:
         print(f"Gagal memindai direktori: {e}")
         return []

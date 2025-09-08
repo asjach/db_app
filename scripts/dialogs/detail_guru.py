@@ -1,7 +1,7 @@
 
 from PySide6.QtCore import Qt, QEvent
 from PySide6.QtWidgets import QDialog, QMessageBox
-from models.guru.detail_guru import DetailGuru
+from models.model_guru import Model_Guru
 from ui.ui_dialog_detail_guru import Ui_Form
 from utils.static_values import *
 from utils.fungsi.general_functions import *
@@ -13,7 +13,7 @@ class DialogDetailGuru(QDialog, Ui_Form):
         self.setupUi(self)
         self.setWindowFlags(Qt.Window | Qt.WindowMinMaxButtonsHint | Qt.WindowCloseButtonHint)
         self.setSizeGripEnabled(True)
-        self.SQL = DetailGuru()
+        self.SQL = Model_Guru()
         self.parent = parent
         self.id_guru = id_guru
         self.id = None

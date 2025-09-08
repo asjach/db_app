@@ -1,8 +1,10 @@
+from pathlib import Path
 from PySide6.QtWidgets import QWidget, QMainWindow
 from ui.ui_page_copy_dokumen import Ui_Form
-from models.dokumen.copy_dokumen import ModelCopyDokumen
+from models.model_dokumen import Model_Dokumen
 from utils.fungsi.general_functions import *
-from utils.static_values import KETERANGAN, JENIS_DOKUMEN
+# from utils.static_values import KETERANGAN, JENIS_DOKUMEN
+from utils.app_config import DIREKTORI_DOKUMEN
 
 
 class PageCopyDokumen(QWidget, Ui_Form):
@@ -10,7 +12,7 @@ class PageCopyDokumen(QWidget, Ui_Form):
         super().__init__(parent)
         self.setupUi(self)
         self.parent = parent
-        self.MODEL = ModelCopyDokumen()
+        self.MODEL = Model_Dokumen()
         self.setup_connections()
 
     def setup_connections(self): 
@@ -26,7 +28,7 @@ class PageCopyDokumen(QWidget, Ui_Form):
         self.fill_tbl_daftar_nama()
 
     def fill_cbo_daftar_dokumen(self):
-        data_jenis_dokumen = list(JENIS_DOKUMEN)
+        data_jenis_dokumen = list(static_values['JENIS_DOKUMEN'])
         populate_combobox(self.cbo_filter_jenis_dokumen, data_jenis_dokumen)
 
     def cbo_jenis_dokumen_selected(self):
@@ -36,7 +38,7 @@ class PageCopyDokumen(QWidget, Ui_Form):
         self.fill_tbl_daftar_nama()
 
     def fill_cbo_keterangan(self, jenis_dokumen):
-        data_keterangan = list(KETERANGAN.get(jenis_dokumen, ''))
+        data_keterangan = list(static_values['KETERANGAN'].get(jenis_dokumen, ''))
         populate_combobox(self.cbo_filter_keterangan, data_keterangan)
 
     def cbo_filter_keterangan_selected(self):
@@ -45,18 +47,18 @@ class PageCopyDokumen(QWidget, Ui_Form):
     def fill_tbl_daftar_nama(self): 
         target = self.cbo_target.currentText().lower()
         if target == 'siswa':
-            data = self.MODEL.get_daftar_siswa(
-                jenjang=self.parent.cbo_jenjang.currentText(),
+            data = self.MODEL.get_daftar_siswa_copy(
+                jenjang=self.parent.str_jenjang,
                 tapel=self.parent.cbo_tapel.currentText(),
-                tingkat=self.parent.cbo_tingkat.currentText(),
-                kelas = self.parent.cbo_kelas.currentText(), 
+                tingkat=self.parent.quoted_daftar_tingkat,
+                kelas = self.parent.quoted_daftar_kelas, 
                 search_text=self.parent.line_search.text(),
                 opsi=self.radio_active_only.isChecked(),
                 jenis_dok=self.line_jenis_dokumen.text(),
                 keterangan=self.line_keterangan.text()
             )
         elif target == 'guru':
-            data = self.MODEL.get_daftar_guru(
+            data = self.MODEL.get_daftar_guru_copy(
                 search_text=self.parent.line_search.text()
             ) 
         generate_table(
@@ -74,7 +76,7 @@ class PageCopyDokumen(QWidget, Ui_Form):
         try:
             # Validasi input
             folder_tujuan = self.line_tujuan.text().strip()
-            folder_asal = os.path.join(value_from_db('DOKUMEN_PATH').strip(), self.cbo_target.currentText().lower())
+            folder_asal = os.path.join(DIREKTORI_DOKUMEN.strip(), self.cbo_target.currentText().lower())
             
             if not folder_tujuan or not folder_asal:
                 raise ValueError("Folder asal atau tujuan tidak boleh kosong")

@@ -1,28 +1,11 @@
 from PySide6.QtWidgets import QComboBox, QLineEdit, QDialog, QCompleter
 from ui.ui_dialog_detail_siswa import Ui_Form
 from utils.fungsi.general_functions import *
-from models.siswa.biodata_siswa import BiodataSiswa
-from scripts.widgets.image_viewer import Widget_Image_Viewer
+from models.model_siswa import Model_Siswa
+from scripts.widgets.dokumen_viewer import DokumenViewer
 from PySide6.QtCore import QEvent, Qt
-from utils.static_values import *
+# from utils.static_values import *
 from utils.app_config import DIREKTORI_DOKUMEN
-
-
-class CustomCompleter(QCompleter):
-    def __init__(self, *args, **kwargs):
-        super(CustomCompleter, self).__init__(*args, **kwargs)
-        self.setCompletionMode(QCompleter.PopupCompletion)
-        self.setFilterMode(Qt.MatchContains)
-
-    def eventFilter(self, source, event):
-        if (event.type() == QEvent.Type.KeyPress and event.key() in [Qt.Key.Key_Return, Qt.Key.Key_Enter, Qt.Key.Key_Tab]):
-            # Jika hanya ada satu item yang cocok, pilih item tersebut
-            if self.completionCount() == 1:
-                self.setCurrentRow(0)
-                self.activated.emit(self.currentCompletion())
-                self.popup().hide()
-                return True
-        return super(CustomCompleter, self).eventFilter(source, event)
 
 
 class DialogDetailSiswa(QDialog, Ui_Form):
@@ -36,9 +19,9 @@ class DialogDetailSiswa(QDialog, Ui_Form):
         self.nis_lokal = nis_lokal
         self.nis_index = nis_index
         
-        self.image_viewer = Widget_Image_Viewer()
+        self.image_viewer = DokumenViewer()
         self.grid_viewer.addWidget(self.image_viewer)
-        self.SQL = BiodataSiswa()
+        self.SQL = Model_Siswa()
         self.fill_combobox()
         self.set_data_cbo_alamat()
         self.set_data_cbo_sekolah()
@@ -73,16 +56,20 @@ class DialogDetailSiswa(QDialog, Ui_Form):
         self.alamat_cbo.activated.connect(self.cbo_alamat_activated)
         self.cbo_daftar_sekolah.activated.connect(self.cbo_daftar_sekolah_activated)
         self.save_btn.clicked.connect(self.btn_save_clicked)
+        self.wali_status_cbo.activated.connect(self.cbo_status_wali_selected)
 
     def show_dialog(self, nis_lokal, tabel=None, nis_index=1):
         self.tabel = tabel
         self.nis_index = nis_index
         self.fill_detail_siswa(nis_lokal)
+        self.fill_tbl_riwayat(nis_lokal)
 
     def fill_detail_siswa(self, nis_lokal):
         self.db_data = self.SQL.get_detail_siswa(nis_lokal)
         data = self.db_data
         if data:
+            if data['nis_kemenag'] in ('', None):
+                self.fill_nis_kemenag()
             self.nis_lokal = data['nis_lokal']
             self.setWindowTitle(data['nama_lengkap'])
             insert_data_to_controls(data, self.controls)
@@ -96,6 +83,10 @@ class DialogDetailSiswa(QDialog, Ui_Form):
             self.set_data_cbo_dokumen(nis_lokal)
             self.create_alamat()
             self.show_dokumen()
+
+    def fill_tbl_riwayat(self, nis_lokal):
+        data = self.SQL.get_riwayat_belajar(nis_lokal)
+        generate_table(data, self.tbl_riwayat)
 
     def save_to_db(self):
         sukses = False
@@ -154,18 +145,19 @@ class DialogDetailSiswa(QDialog, Ui_Form):
             self.cbo_daftar_sekolah.setItemData(self.cbo_daftar_sekolah.count() - 1, item)
         self.cbo_daftar_sekolah.setCurrentIndex(-1)
 
-    # def fill_cbo_jenjang_pilihan(self):
-    #     ...
-
     def show_dokumen(self):
         index = self.cbo_daftar_dokumen.currentIndex()
         self.filepath = self.cbo_daftar_dokumen.itemData(index)
-        self.image_viewer.loadImage(self.filepath)
+        if self.filepath:
+            self.image_viewer.loadFile(self.filepath)
+        else:
+            self.image_viewer.close_file()
         
     def cbo_nama_lengkap_item_selected(self):
         index = self.cbo_nama_lengkap.currentIndex()
         nis_lokal = self.cbo_nama_lengkap.itemData(index)
         self.fill_detail_siswa(nis_lokal)
+        self.fill_tbl_riwayat(nis_lokal)
 
     def btn_prev_table_item_clicked(self):
         self.save_to_db()
@@ -173,6 +165,8 @@ class DialogDetailSiswa(QDialog, Ui_Form):
             prev_table_item(self.tabel)
             nis_lokal = self.tabel.item(self.tabel.currentRow(), self.nis_index).text()
             self.fill_detail_siswa(nis_lokal)
+            self.fill_tbl_riwayat(nis_lokal)
+            # self.fill_nis_kemenag()
 
     def btn_next_table_item_clicked(self):
         self.save_to_db()
@@ -180,10 +174,12 @@ class DialogDetailSiswa(QDialog, Ui_Form):
             next_table_item(self.tabel)
             nis_lokal = self.tabel.item(self.tabel.currentRow(), self.nis_index).text()
             self.fill_detail_siswa(nis_lokal)
+            self.fill_tbl_riwayat(nis_lokal)
+            # self.fill_nis_kemenag()
 
     def connect_btn_to_text_widget(self):
         btn_widget = {
-            self.copy_nama_lengkap:self.nama_lengkap_le,
+            self.btn_nama_lengkap:self.nama_lengkap_le,
             self.copy_nis_lokal:self.nis_lokal_le,
             self.copy_nisn:self.nisn_le,
             self.copy_nik:self.nik_le,
@@ -388,37 +384,42 @@ class DialogDetailSiswa(QDialog, Ui_Form):
             (self.nss_le,"nss_sekolah_asal"),
             (self.plain_alamat_sekolah,"alamat_sekolah_asal"),
             (self.pilihan_jenjang_cbo,"pilihan_jenjang"),
-            (self.pilihan_jenjang_cbo2,"pilihan_jenjang"),
             (self.emis_cbo,"status_emis"),
             (self.vervalpd_cbo,"status_vervalpd"),
         ]
 
     def fill_combobox(self):
         combo_edit_biodata = {
-            self.jk_cbo:JK,
-            self.agama_cbo:AGAMA,
-            self.cita_cita_cbo:CITA_CITA,
-            self.hobi_cbo:HOBI,
-            self.pembiayaan_cbo:BIAYA,
-            self.keb_khusus_cbo:KEB_KHUSUS,
-            self.ayah_status_cbo:STATUS_ORTU,
-            self.ayah_pendidikan_cbo:PENDIDIKAN,
-            self.ayah_pekerjaan_cbo:PEKERJAAN,
-            self.ayah_penghasilan_cbo:PENGHASILAN,
-            self.ibu_status_cbo:STATUS_ORTU,
-            self.ibu_pendidikan_cbo:PENDIDIKAN,
-            self.ibu_pekerjaan_cbo:PEKERJAAN,
-            self.ibu_penghasilan_cbo:PENGHASILAN,
-            self.wali_status_cbo:STATUS_WALI,
-            self.wali_pendidikan_cbo:PENDIDIKAN,
-            self.wali_pekerjaan_cbo:PEKERJAAN,
-            self.transportasi_cbo:TRANSPORTASI,
-            self.jarak_cbo:JARAK,
-            self.waktu_cbo:WAKTU_TEMPUH,
-            self.jenis_sekolah_cbo:JENIS_SEKOLAH,
-            self.pilihan_jenjang_cbo:PILIHAN_JENJANG,
-            self.pilihan_jenjang_cbo2:PILIHAN_JENJANG,
+            self.jk_cbo:static_values['JK'],
+            self.agama_cbo:static_values['AGAMA'],
+            self.cita_cita_cbo:static_values['CITA_CITA'],
+            self.hobi_cbo:static_values['HOBI'],
+            self.pembiayaan_cbo:static_values['BIAYA'],
+            self.keb_khusus_cbo:static_values['KEB_KHUSUS'],
+            self.ayah_status_cbo:static_values['STATUS_ORTU'],
+            self.ayah_pendidikan_cbo:static_values['PENDIDIKAN'],
+            self.ayah_pekerjaan_cbo:static_values['PEKERJAAN'],
+            self.ayah_penghasilan_cbo:static_values['PENGHASILAN'],
+            self.ibu_status_cbo:static_values['STATUS_ORTU'],
+            self.ibu_pendidikan_cbo:static_values['PENDIDIKAN'],
+            self.ibu_pekerjaan_cbo:static_values['PEKERJAAN'],
+            self.ibu_penghasilan_cbo:static_values['PENGHASILAN'],
+            self.wali_status_cbo:static_values['STATUS_WALI'],
+            self.wali_pendidikan_cbo:static_values['PENDIDIKAN'],
+            self.wali_pekerjaan_cbo:static_values['PEKERJAAN'],
+            self.transportasi_cbo:static_values['TRANSPORTASI'],
+            self.jarak_cbo:static_values['JARAK'],
+            self.waktu_cbo:static_values['WAKTU_TEMPUH'],
+            self.jenis_sekolah_cbo:static_values['JENIS_SEKOLAH'],
+            self.pilihan_jenjang_cbo:static_values['PILIHAN_JENJANG'],
         }
         for combo, values in combo_edit_biodata.items():
             combo.clear()
             combo.addItems(values() if callable(values) else values)
+
+    def fill_nis_kemenag(self):
+        nis_lokal = self.nis_lokal_le.text()
+        thn = nis_lokal[0:2]
+        urut = nis_lokal[9:]
+        nis_kemenag = f"111232040082{thn}{urut}"
+        self.nis_kemenag_le.setText(nis_kemenag)

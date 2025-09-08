@@ -1,14 +1,14 @@
 from PySide6.QtWidgets import QWidget, QMainWindow
 from utils.fungsi.general_functions import *
 from ui.ui_page_with_table_widget import Ui_Form
-from models.nilai.riwayat_kegiatan import RiwayatKegiatan
+from models.model_nilai import Model_Nilai
 
 class PageRiwayatKegiatan(QWidget, Ui_Form):
     def __init__(self, parent:QMainWindow):
         super().__init__(parent)
         self.setupUi(self)
         self.parent = parent
-        self.SQL = RiwayatKegiatan()
+        self.SQL = Model_Nilai()
         self.tbl_widget.itemSelectionChanged.connect(self.table_selected)
         self.tbl_widget.itemChanged.connect(self.update_riwayat_kegiatan)
 

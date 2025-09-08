@@ -1,8 +1,9 @@
 # from PySide6.QtWidgets import QWidget, QMainWindow
 from ui.ui_page_mutasi_masuk import Ui_Form
-from models.siswa.mutasi_masuk import MutasiMasuk
+from models.model_siswa import Model_Siswa
 from utils.fungsi.general_functions import *
 from PySide6.QtWidgets import QMainWindow, QWidget
+
 
 class PageMutasiMasuk(Ui_Form, QWidget):
     def __init__(self, parent: QMainWindow = None):
@@ -11,11 +12,14 @@ class PageMutasiMasuk(Ui_Form, QWidget):
         self.cbo_jk.setCurrentIndex(-1)
         self.cbo_kelas.setCurrentIndex(-1)
         self.parent = parent
-        self.SQL = MutasiMasuk()
+        self.SQL = Model_Siswa()
+        self.date_tgl_masuk.setDate(datetime.now())
+        self.btn_tambah.setEnabled(False)
+        self.btn_terima.setEnabled(False)
         self.signals_slots()
-    
+
     def _dynamic_attributs(self):
-        self.txt_jenjang = self.parent.cbo_jenjang.currentText()
+        self.txt_jenjang = self.parent.str_jenjang
         self.txt_tapel = self.parent.cbo_tapel.currentText()
         self.txt_search_by = self.parent.cbo_search_by.currentText()
         self.txt_search = self.parent.line_search.text()
@@ -31,70 +35,73 @@ class PageMutasiMasuk(Ui_Form, QWidget):
         self.btn_tambah.clicked.connect(self.tambah_calon_siswa)
         self.tbl_daftar_calon_siswa.itemChanged.connect(self.update_calon_siswa)
         self.tbl_daftar_calon_siswa.itemSelectionChanged.connect(
-            lambda: table_selected(self.tbl_daftar_calon_siswa, self, self.parent, 
+            lambda: table_selected(self.tbl_daftar_calon_siswa, self, self.parent,
             ['id', 'kandidat_nis', 'nama_lengkap'])
         )
         self.tbl_diterima.itemSelectionChanged.connect(
             lambda: table_selected(self.tbl_diterima, self, self.parent, ['id'])
         )
         self.btn_terima.clicked.connect(self._terima_calon_siswa_operations)
-        self.btn_batal.clicked.connect(self._batal_terima_siswa_operations)
-        self.line_nama_lengkap.textChanged.connect(self._cek_input)
-        self.cbo_jk.currentIndexChanged.connect(self._cek_input)
-        self.cbo_kelas.currentIndexChanged.connect(self._cek_input)
-        
+        self.line_nama_lengkap.textChanged.connect(self.aktivasi_btn_tambah)
+        self.cbo_jk.currentIndexChanged.connect(self.aktivasi_btn_tambah)
+        self.cbo_kelas.currentIndexChanged.connect(self.aktivasi_btn_tambah)
+
 
     def show_page(self):
-        self._cek_input()
         self._dynamic_attributs()
         self.fill_daftar_calon_siswa()
         self.fill_calon_belum()
         self.fill_calon_sudah()
         self._fill_no_urut()
+        self.aktivasi_btn_terima()
+        self.aktivasi_btn_tambah()
+
 
     def fill_daftar_calon_siswa(self):
         opsi_kolom = "*"
-        fill_table(
-            table_name=self.tbl_daftar_calon_siswa,
-            get_function=self.SQL.daftar_calon_siswa,
-            table_params={
-                'icon_akhir':":/icon/resources/icon/multiply.svg",
-                'fungsi_akhir':self.delete_pendaftar_operations
-            },
-            get_params={
-                'jenjang': self.txt_jenjang,
-                'tapel':self.txt_tapel,
-                'opsi_kolom':opsi_kolom,
-                'search_by':self.txt_search_by,
-                'search':self.txt_search,
-                'order_by':self.txt_order,
-            }
+        data = self.SQL.daftar_calon_siswa(
+            jenjang= self.txt_jenjang,
+                tapel=self.txt_tapel,
+                opsi_kolom=opsi_kolom,
+                search_by=self.txt_search_by,
+                search=self.txt_search,
+                order_by=self.txt_order,
+        )
+        generate_table(
+            data=data,
+            table=self.tbl_daftar_calon_siswa,
+            icon_akhir= ":/icon/resources/icon/multiply.svg",
+            fungsi_akhir= self.delete_pendaftar_operations
         )
 
     def fill_calon_belum(self):
-        fill_table(
-            table_name=self.tbl_calon_belum,
-            get_function=self.SQL.calon_belum_diterima,
-            get_params={
-                'jenjang': self.txt_jenjang,
-                'tapel':self.txt_tapel,
-                'search_by':self.txt_search_by,
-                'search':self.txt_search,
-                'order_by':self.txt_order
-            },
+        data = self.SQL.calon_belum_diterima(
+            jenjang= self.txt_jenjang,
+                tapel=self.txt_tapel,
+                search_by=self.txt_search_by,
+                search=self.txt_search,
+                order_by=self.txt_order
+        )
+        generate_table(
+            data=data,
+            table=self.tbl_diterima,
         )
 
     def fill_calon_sudah(self):
-        fill_table(
-            table_name=self.tbl_diterima,
-            get_function=self.SQL.calon_diterima,
-            get_params={
-                'jenjang': self.txt_jenjang,
-                'tapel':self.txt_tapel,
-                'search_by':self.txt_search_by,
-                'search':self.txt_search,
-                'order_by':self.txt_order
-            }
+        data = self.SQL.calon_diterima(
+            jenjang= self.txt_jenjang,
+            tapel=self.txt_tapel,
+            search_by=self.txt_search_by,
+            search=self.txt_search,
+            order_by=self.txt_order
+        )
+        generate_table(
+            data=data,
+            table=self.tbl_diterima,
+            fungsi_akhir=self._batal_terima_siswa_operations,
+            icon_akhir=":/icon/resources/icon/multiply.svg",
+            hidden_column=[1,3],
+            stretch_column=2
         )
 
     def update_calon_siswa(self):
@@ -116,7 +123,8 @@ class PageMutasiMasuk(Ui_Form, QWidget):
         sukses = self._tambah_operations()
         if sukses:
             self._tambah_pendaftar_success_messages()
-        
+
+
 
     def _tambah_operations(self):
         parameter = {
@@ -144,7 +152,7 @@ class PageMutasiMasuk(Ui_Form, QWidget):
         )
 
     def _terima_calon_siswa_operations(self):
-        tgl_masuk = text_to_date(self.line_tgl_masuk.text())
+        tgl_masuk = self.date_tgl_masuk.date().toString('yyyy-MM-dd')
         sukses = self.SQL.terima_pendaftar(
             jenjang= self.txt_jenjang,
             tapel=self.txt_tapel,
@@ -166,12 +174,19 @@ class PageMutasiMasuk(Ui_Form, QWidget):
         if sukses:
             self.show_page()
 
-    def _cek_input(self):
-        if self.line_nama_lengkap.text() == ''\
-            or self.cbo_jk.currentText() == ''\
-            or self.cbo_kelas.currentText() =='':
-            self.btn_tambah.setVisible(False)
-        else: self.btn_tambah.setVisible(True)
+    def aktivasi_btn_tambah(self):
+        """Aktifkan tombol Tambah jika semua input wajib terisi"""
+        nama_ok = self.line_nama_lengkap.text().strip() != ''
+        jk_ok = self.cbo_jk.currentText().strip() != ''
+        kelas_ok = self.cbo_kelas.currentText().strip() != ''
+        self.btn_tambah.setEnabled(nama_ok and jk_ok and kelas_ok)
+
+
+    def aktivasi_btn_terima(self):
+        """Aktifkan tombol Terima jika ada baris di tabel calon_belum"""
+        ada_data = self.tbl_calon_belum.rowCount() > 0
+        self.btn_terima.setEnabled(ada_data)
+
 
     def _fill_no_urut(self):
         if self.tbl_daftar_calon_siswa.rowCount() > 0:
@@ -190,9 +205,8 @@ class PageMutasiMasuk(Ui_Form, QWidget):
                 text_value = item.text().strip()
                 if text_value.isdigit():
                     value = int(text_value)
-                else: 
+                else:
                     value = 0
                 if value > max_value:
                     max_value = value
         return max_value
-

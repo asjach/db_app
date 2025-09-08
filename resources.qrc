@@ -1,15 +1,22 @@
 <RCC>
   <qresource prefix="icon">
-    <file>resources/icon/less_than_hover.svg</file>
-    <file>resources/icon/more_than_hover.svg</file>
-    <file>resources/icon/multiply_hover.svg</file>
+    <file>resources/icon/copy.svg</file>
+    <file>resources/icon/add.svg</file>
+    <file>resources/icon/trash_can.svg</file>
+    <file>resources/icon/rotate_left.svg</file>
+    <file>resources/icon/rotate_right.svg</file>
+    <file>resources/icon/opened_folder.svg</file>
+    <file>resources/icon/image.svg</file>
     <file>resources/icon/less_than.svg</file>
-    <file>resources/icon/app_icon.ico</file>
-    <file>resources/icon/icons8_file_explorer.ico</file>
-    <file>resources/icon/icons8_opened_folder.ico</file>
-    <file>resources/icon/icons8_rotate_left.ico</file>
-    <file>resources/icon/icons8_rotate_right.ico</file>
+    <file>resources/icon/less_than_hover.svg</file>
     <file>resources/icon/more_than.svg</file>
+    <file>resources/icon/more_than_hover.svg</file>
     <file>resources/icon/multiply.svg</file>
+    <file>resources/icon/multiply_hover.svg</file>
+  </qresource>
+  <qresource prefix="dark">
+    <file>resources/icon/dark/multiply_grey.svg</file>
+    <file>resources/icon/dark/multiply_red.svg</file>
+    <file>resources/icon/dark/multiply_white.svg</file>
   </qresource>
 </RCC>

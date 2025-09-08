@@ -1,16 +1,16 @@
 from PySide6.QtWidgets import QWidget, QMainWindow
 from utils.fungsi.general_functions import *
 from ui.ui_page_peserta import Ui_Form
-from models.nilai.peserta import Peserta
-from utils.static_values import ULANGAN, UJIAN
+from models.model_nilai import Model_Nilai
+# from utils.static_values import ULANGAN, UJIAN
 
-class PagePeserta(QWidget, Ui_Form):
+class Page_Peserta(QWidget, Ui_Form):
     def __init__(self, parent:QMainWindow):
         super().__init__(parent)
         self.setupUi(self)
         self.parent = parent
         self.current_index = 0
-        self.SQL = Peserta()
+        self.SQL = Model_Nilai()
         self.cbo_kegiatan.currentIndexChanged.connect(self.cbo_kegiatan_selected)
         self.tbl_widget.itemSelectionChanged.connect(self.table_selected)
         self.tbl_widget.itemChanged.connect(self.update_peserta)
@@ -107,10 +107,10 @@ class PagePeserta(QWidget, Ui_Form):
             kls = kelas['kelas']
             id_kegiatan = self.cbo_kegiatan.currentData()
             kegiatan = self.cbo_kegiatan.currentText()
-            if kegiatan in ULANGAN:
+            if kegiatan in static_values['ULANGAN']:
                 sukses = self.SQL.generate_peserta(jenjang, tapel, id_kelas, kls, id_kegiatan)
                 self.SQL.generate_no_peserta(tapel, kegiatan)
-            elif kegiatan in UJIAN:
+            elif kegiatan in static_values['UJIAN']:
                 if tingkat in ['6', '9', '12']:
                     sukses = self.SQL.generate_peserta(jenjang, tapel, id_kelas, kls, id_kegiatan)
             else: return

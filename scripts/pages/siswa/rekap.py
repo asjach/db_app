@@ -1,7 +1,7 @@
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QWidget, QTableWidgetItem
 from ui.ui_page_rekap_siswa import Ui_Form
-from models.siswa.rekap_siswa import RekapSiswa
+from models.model_siswa import Model_Siswa
 from utils.fungsi.general_functions import *
 
 
@@ -10,10 +10,10 @@ class PageRekapSiswa(QWidget, Ui_Form):
         super().__init__(parent)
         self.setupUi(self)
         self.parent = parent
-        self.SQL = RekapSiswa()
+        self.SQL = Model_Siswa()
 
     def show_page(self):
-        self.txt_jenjang = self.parent.cbo_jenjang.currentText()
+        self.txt_jenjang = self.parent.str_jenjang
         self.txt_tapel = self.parent.cbo_tapel.currentText()
         self.rekap_pertapel()
         self.fill_rekap_pertingkat()

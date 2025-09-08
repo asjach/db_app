@@ -1,5 +1,5 @@
 from .riwayat_kegiatan import PageRiwayatKegiatan
-from .peserta import PagePeserta
+from .peserta import Page_Peserta
 from .mapel import PageMapel
 from .input_nilai import PageInputNilai
 from .kartu_peserta import PageKartuPeserta
@@ -11,7 +11,7 @@ from .cetak_rapor import PageCetakRapor
 
 __all__ = [
     "PageRiwayatKegiatan",
-    "PagePeserta",
+    "Page_Peserta",
     'PageInputNilai',
     'PageRekapNilai',
     'PageMapel',

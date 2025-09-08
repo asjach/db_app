@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import QWidget, QMainWindow, QMessageBox
 from ui.ui_page_riwayat_mengajar import Ui_Form
-from models.guru.riwayat_mengajar import RiwayatMengajar
+from models.model_guru import Model_Guru
 from utils.fungsi.general_functions import *
 from utils.key_value.kolom_sql import GURU
 
@@ -9,9 +9,9 @@ class PageRiwayatMengajar(QWidget, Ui_Form):
         super().__init__(parent)
         self.setupUi(self)
         self.parent = parent
-        self.cbo_jenjang = self.parent.cbo_jenjang
+        self.cbo_jenjang = self.parent.str_jenjang
         self.cbo_tapel = self.parent.cbo_tapel
-        self.SQL = RiwayatMengajar()
+        self.SQL = Model_Guru()
         self.btn_insert.clicked.connect(self.btn_insert_clicked)
         self.tbl_riwayat_mengajar.itemSelectionChanged.connect(
             lambda: table_selected(self.tbl_riwayat_mengajar, self, self.parent)
@@ -25,7 +25,7 @@ class PageRiwayatMengajar(QWidget, Ui_Form):
 
     def fill_tbl_riwayat(self):
         data = self.SQL.get_riwayat_mengajar(
-            self.cbo_jenjang.currentText(), 
+            self.parent.str_jenjang, 
             self.cbo_tapel.currentText()
         )
         generate_table(
@@ -54,7 +54,7 @@ class PageRiwayatMengajar(QWidget, Ui_Form):
     def fill_cbo_guru(self):
         self.cbo_guru.clear()
         data_guru = self.SQL.get_guru_aktif(
-            jenjang=self.cbo_jenjang.currentText(),
+            jenjang=self.parent.str_jenjang,
             tapel=self.cbo_tapel.currentText()
         )
         if data_guru:
@@ -64,7 +64,7 @@ class PageRiwayatMengajar(QWidget, Ui_Form):
     def fill_cbo_kelas(self):
         self.cbo_kelas.clear()
         data_kelas = self.SQL.get_kelas_aktif(
-            jenjang=self.cbo_jenjang.currentText(),
+            jenjang=self.parent.str_jenjang,
             tapel=self.cbo_tapel.currentText()
         )
         if data_kelas:

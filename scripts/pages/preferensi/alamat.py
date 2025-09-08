@@ -1,14 +1,14 @@
 from PySide6.QtWidgets import QWidget, QMainWindow
 from utils.fungsi.general_functions import *
 from ui.ui_page_with_table_widget import Ui_Form
-from models.preferensi.alamat import Alamat
+from models.model_preferensi import Model_Preferensi
 
 class PageAlamat(QWidget, Ui_Form):
     def __init__(self, parent:QMainWindow):
         super().__init__(parent)
         self.setupUi(self)
         self.parent = parent
-        self.SQL = Alamat()
+        self.SQL = Model_Preferensi()
         self.tbl_widget.itemSelectionChanged.connect(self.tbl_alamat_selected)
         self.tbl_widget.itemChanged.connect(self.update_alamat)
         

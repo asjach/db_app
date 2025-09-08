@@ -8,16 +8,10 @@ from utils.fungsi.table_functions import *
 from utils.fungsi.file_dialog_function import *
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfbase import pdfmetrics
-from pathlib import Path
-from PySide6.QtPdf import QPdfDocument
 import sys, os
 from reportlab.lib.utils import ImageReader
 from PySide6.QtWidgets import QFileDialog
 from PySide6.QtCore import QByteArray
-
-# pdfmetrics.registerFont(TTFont("TNR", "times.ttf"))
-# pdfmetrics.registerFont(TTFont("TNRB", "timesbd.ttf"))
-# pdfmetrics.registerFont(TTFont("TNRI", "timesi.ttf"))
 
 
 
@@ -153,15 +147,31 @@ def tabel_style_nogrid():
     )
     return style
 
-def paragraf(obj, text, x=0, y=0, w=100, h=5, font= 'Times New Roman',size=11, alignment=1, leading=0, showBoundary= 0):
+
+def paragraf(obj, text="TEXT KOSONG", x=0, y=0, w=100, h=5, font= 'Times New Roman',size=11, alignment=1, leading=0, showBoundary= 0):
     """
     Digunakan dalam canvas, sehingga posisi paragraf bisa diatur di mana saja 
     
     """
-    style = ParagraphStyle(name='Normal', fontName=font, fontSize=size, leading=leading, alignment=alignment)
+    style = ParagraphStyle(
+        name='Normal', 
+        fontName=font, 
+        fontSize=size, 
+        leading=leading, 
+        alignment=alignment
+    )
+
     paragraph = Paragraph(text, style)
-    frame = Frame(x*mm, obj.height - y*mm, w*mm, h*mm, showBoundary=showBoundary, topPadding=0, bottomPadding=0)
+    frame = Frame(
+        x*mm, 
+        obj.height - y*mm, 
+        w*mm, 
+        h*mm, 
+        showBoundary=showBoundary, 
+        topPadding=0, bottomPadding=0
+    )
     frame.addFromList([paragraph], obj.c)
+
 
 def gambar(obj, path, x=0, y=0, h=20):
     if hasattr(sys, '_MEIPASS'):
@@ -195,9 +205,61 @@ def gambar_mid(obj, path, x=0, y=0, h=20):
     gambar = obj.c.drawImage(path, x-w/2, y, w, h, mask='auto')
     return gambar
 
-def tabel(obj, x, y, data, col_width = None, row_height=None, styles=None):
-    row_height = row_height*mm if  row_height is not None else None
-    table = Table(data, colWidths=col_width, rowHeights=row_height)
+def tabel(obj, x, y, data, col_width=None, row_height=None, styles=None):
+    """
+    Create and draw a table on a ReportLab canvas.
+
+    Args:
+        obj: Object containing the canvas (obj.c) and dimensions (obj.width, obj.height).
+        x: X-coordinate for table placement (in mm).
+        y: Y-coordinate for table placement (in mm, from top).
+        data: 2D list or tuple containing table data.
+        col_width: List of column widths (in points) or None for auto-width.
+        row_height: Single value (in mm) for uniform row height, list of two values 
+                   ([header_height, row_height] in mm) for header and other rows, or None.
+        styles: TableStyle object or None to use default styling.
+
+    Returns:
+        float: Height of the table in points.
+
+    Raises:
+        ValueError: If data is invalid or row_height list does not contain exactly 2 values.
+    """
+    # Validate data
+    # if not data or not isinstance(data, (list, tuple)) or not all(isinstance(row, (list, tuple)) for row in data):
+    #     raise ValueError("Data must be a non-empty 2D list or tuple")
+    # if not all(len(row) == len(data[0]) for row in data):
+    #     raise ValueError("All rows in data must have the same number of columns")
+
+    num_rows = len(data)
+    num_cols = len(data[0]) if data else 0
+
+    # Handle row_height
+    if row_height is not None:
+        if isinstance(row_height, (list, tuple, set)):
+            if len(row_height) != 2:
+                raise ValueError("row_height list must contain exactly 2 values: [header_height, row_height]")
+            if num_rows < 1:
+                raise ValueError("Data must have at least one row for header")
+            if not all(isinstance(h, (int, float)) for h in row_height):
+                raise ValueError("row_height values must be numbers")
+            # Assign first value to header, second to all other rows
+            row_heights = [row_height[0] * mm] + [row_height[1] * mm] * (num_rows - 1)
+        else:
+            if row_height is not None and not isinstance(row_height, (int, float)):
+                raise ValueError("row_height must be a number or None")
+            # Single value or None applied to all rows
+            row_heights = [row_height * mm if row_height is not None else None] * num_rows
+    else:
+        row_heights=None
+
+    # Create table
+    try:
+        table = Table(data, colWidths=col_width, rowHeights=row_heights)
+    except Exception as e:
+        raise ValueError(f"Failed to create table: {str(e)}")
+
+    # Apply default styles if none provided
     if styles is None:
         styles = TableStyle([
             ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
@@ -208,55 +270,96 @@ def tabel(obj, x, y, data, col_width = None, row_height=None, styles=None):
             ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
             ('GRID', (0, 0), (-1, -1), 1, colors.black)
         ])
+    elif not isinstance(styles, TableStyle):
+        raise ValueError("styles must be a TableStyle object")
+
     table.setStyle(styles)
+
+    # Calculate table position and draw
     table.wrapOn(obj.c, aW=obj.width, aH=obj.height)
     table_height = table._height
     y_new = obj.height - (y * mm) - table_height
-    table.drawOn(obj.c, x = x*mm, y = y_new)
+    table.drawOn(obj.c, x=x * mm, y=y_new)
+
     return table_height
 
+# def tabel(obj, x, y, data, col_width = None, row_height=None, styles=None):
+#     if isinstance(row_height, (list, tuple, set)):
+#         row_height = row_height
+#     else:
+#         row_height = row_height*mm if  row_height is not None else None
+#     table = Table(data, colWidths=col_width, rowHeights=row_height)
+#     if styles is None:
+#         styles = TableStyle([
+#             ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+#             ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+#             ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+#             ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+#             ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+#             ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+#             ('GRID', (0, 0), (-1, -1), 1, colors.black)
+#         ])
+#     table.setStyle(styles)
+#     table.wrapOn(obj.c, aW=obj.width, aH=obj.height)
+#     table_height = table._height
+#     y_new = obj.height - (y * mm) - table_height
+#     table.drawOn(obj.c, x = x*mm, y = y_new)
+#     return table_height
 
-def save_pdf(parent, pdf_buffer, judul_default: str):
-    filepath, _ = QFileDialog.getSaveFileName(parent, "Save PDF", judul_default, "PDF Files (*.pdf)")
+
+def save_pdf(parent, pdf_buffer, judul_default: str, auto_open=None):
+    folder = f'{os.path.normpath(value_from_db("LAST_SELECTED_FOLDER"))}'
+    dir = os.path.join(folder, judul_default)
+    filepath, _ = QFileDialog.getSaveFileName(
+        parent=parent, 
+        caption="Save PDF", 
+        dir=dir, 
+        filter="PDF Files (*.pdf)"
+        )
+    # print(f'{filepath=}', f'{_=}')
     if filepath:
         with open(filepath, "wb") as file:
             file.write(pdf_buffer)
-        open_in_explorer(filepath)
+        save_value_to_db("LAST_SELECTED_FOLDER", os.path.dirname(filepath))
+        if auto_open:
+            open_in_explorer(filepath)
+        else: return
 
 
 def print_with_foxit(pdf_file, opsi=True):
     path_to_foxit = r"C:\Program Files (x86)\Foxit Software\Foxit PDF Reader\FoxitPDFReader.exe"
     if opsi:
-        if opsi.isChecked():
-            status_dialog = "/p"
-        else:
-            status_dialog = "/pdialog"
-        if isinstance(pdf_file, QByteArray, bytes):
-            with open("temp.pdf", "wb") as f:
-                file = f.write(pdf_file)
-            if file:
-                try:
-                    subprocess.run(
-                        [
-                            path_to_foxit,
-                            f"{status_dialog}",
-                            "temp.pdf",
-                        ],
-                        check=True,
-                    )
-                except subprocess.CalledProcessError as e:
-                    print(f"Error printing {pdf_file}: {e}")
-            tempfile = os.path.abspath("temp.pdf")
-            os.remove(tempfile)
-        elif isinstance(pdf_file, str):
+        status_dialog = "/p"
+    else:
+        status_dialog = "/pdialog"
+    if isinstance(pdf_file, (QByteArray, bytes)):
+        with open("temp.pdf", "wb") as f:
+            file = f.write(pdf_file)
+        if file:
             try:
                 subprocess.run(
                     [
                         path_to_foxit,
                         f"{status_dialog}",
-                        pdf_file,
+                        "temp.pdf",
                     ],
                     check=True,
                 )
             except subprocess.CalledProcessError as e:
                 print(f"Error printing {pdf_file}: {e}")
+        tempfile = os.path.abspath("temp.pdf")
+        os.remove(tempfile)
+    elif isinstance(pdf_file, str):
+        try:
+            subprocess.run(
+                [
+                    path_to_foxit,
+                    f"{status_dialog}",
+                    pdf_file,
+                ],
+                check=True,
+            )
+        except subprocess.CalledProcessError as e:
+            print(f"Error printing {pdf_file}: {e}")
+    else:
+        return

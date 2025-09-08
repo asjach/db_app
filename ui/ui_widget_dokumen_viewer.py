@@ -93,7 +93,7 @@ class Ui_Dokumen_Viewer(object):
         self.btn_rotate_left.setMinimumSize(QSize(25, 25))
         self.btn_rotate_left.setMaximumSize(QSize(25, 25))
         icon = QIcon()
-        icon.addFile(u":/icon/resources/icon/icons8_rotate_left.ico", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon.addFile(u":/icon/resources/icon/rotate_left.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.btn_rotate_left.setIcon(icon)
         self.btn_rotate_left.setIconSize(QSize(16, 16))
 
@@ -104,7 +104,7 @@ class Ui_Dokumen_Viewer(object):
         self.btn_rotate_right.setMinimumSize(QSize(25, 25))
         self.btn_rotate_right.setMaximumSize(QSize(25, 25))
         icon1 = QIcon()
-        icon1.addFile(u":/icon/resources/icon/icons8_rotate_right.ico", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon1.addFile(u":/icon/resources/icon/rotate_right.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.btn_rotate_right.setIcon(icon1)
         self.btn_rotate_right.setIconSize(QSize(16, 16))
 
@@ -156,7 +156,7 @@ class Ui_Dokumen_Viewer(object):
         self.btn_open.setObjectName(u"btn_open")
         self.btn_open.setMinimumSize(QSize(35, 25))
         icon2 = QIcon()
-        icon2.addFile(u":/icon/resources/icon/icons8_opened_folder.ico", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon2.addFile(u":/icon/resources/icon/image.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.btn_open.setIcon(icon2)
         self.btn_open.setIconSize(QSize(18, 18))
 
@@ -166,7 +166,7 @@ class Ui_Dokumen_Viewer(object):
         self.btn_explorer.setObjectName(u"btn_explorer")
         self.btn_explorer.setMinimumSize(QSize(35, 25))
         icon3 = QIcon()
-        icon3.addFile(u":/icon/resources/icon/icons8_file_explorer.ico", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon3.addFile(u":/icon/resources/icon/opened_folder.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.btn_explorer.setIcon(icon3)
         self.btn_explorer.setIconSize(QSize(18, 18))
 

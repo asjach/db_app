@@ -6,8 +6,7 @@ from io import BytesIO
 from utils.fungsi.general_functions import *
 from reportlab.platypus import (Paragraph,TableStyle)
 from reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_JUSTIFY
-from models.nilai.cetak_rapor import CetakRapor
-import string
+from models.model_nilai import Model_Nilai
 from utils.app_config import DIREKTORI_DOKUMEN
 
 class TemplateRapor:
@@ -18,7 +17,7 @@ class TemplateRapor:
         self.w_center = self.width/2
         self.logo_persis = "resources/images/logo mi.jpg"
         self.logo_kemenag = "resources/images/logo kemenag.jpg"
-        self.SQL = CetakRapor()
+        self.SQL = Model_Nilai()
         self.data_rapor = data['data_rapor']
         self.setting = data['setting']
         self.ttd_mudir = f'{DIREKTORI_DOKUMEN}/guru/{self.data_rapor[0]['ttd_mudir']}'
@@ -36,6 +35,7 @@ class TemplateRapor:
             id_kegiatan = cleaned_data['id_kegiatan']
             nis_lokal = cleaned_data['nis_lokal']
             data_nilai = format_cell_data(self.SQL.data_nilai(id_kelas, id_kegiatan, nis_lokal))
+            print(data_nilai)
             if self.parent.opsi_cover.isChecked():
                 self.cover(cleaned_data)
             if self.parent.opsi_id_madrasah.isChecked():
@@ -119,7 +119,7 @@ class TemplateRapor:
             ["Nama Peserta Didik",          ":",        f"{data['nama_lengkap']}"],
             ["NIS",                         ":",        f"{data['nis_lokal']}"],
             ["NISN",                        ":",        f"{data['nisn']}"],
-            ["Tempat Tanggal Lahir",        ":",        f"{data['tmp_lahir']}, {data['tgl_lahir']}"],
+            ["Tempat Tanggal Lahir",        ":",        f"{data['tmp_lahir']}, {date_to_text(data['tgl_lahir'], 'lengkap')}"],
             ["Jenis Kelamin",               ":",        f"{'Laki-laki' if data['jk']=='L' else 'Perempuan'}"],
             ["Agama",                       ":",        f"{data['agama']}"],
             ["Status Dalam Keluarga",       ":",        "Anak Kandung"],
@@ -152,7 +152,6 @@ class TemplateRapor:
                     ("TEXTCOLOR", (0, 0), (-1, 0), colors.black),
                     ("ALIGN", (0, 0), (-1, 1), "LEFT"),
                     ("FONTNAME", (0, 0), (-1, -1), "Aptos"),
-                    
                     ("FONTSIZE", (0, 0), (-1, -1), 10),
                     ("VALIGN", (0, 1), (-1, -1), "TOP"),
                     ])
@@ -164,11 +163,17 @@ class TemplateRapor:
                     ("FONTSIZE", (0,0), (-1,-1), 10)])
         
         paragraf(self, teks, x = self.width/2/mm-50, y=60, w= 100, h=8, font='Aptos Bold', size=16)
-        tabel(self, 20, 65 , data1, (50*mm, 5*mm, 125*mm), self.setting['tinggi_baris']*10, style1)
+        tabel(self, 20, 65 , data1, (50*mm, 5*mm, 125*mm), self.setting['bio_tinggi']*10, style1)
         self.c.setLineWidth(1)
         self.c.rect(77*mm, 30*mm, 30*mm, 40*mm)
-        tabel(self, 120, 228, data2,[70*mm], 6, styles=style2)
-        gambar_mid(self, self.ttd_mudir, 143 + self.setting['x_mudir']*10, 258 + self.setting['y_mudir']*10, self.setting['size_mudir']*10)
+        tabel(self, 120, 228, data2,[70*mm], 10, styles=style2)
+        gambar_mid(
+            self, 
+            self.ttd_mudir, 
+            143 + self.setting['bio_x_mudir']*10, 
+            258 + self.setting['bio_y_mudir']*10, 
+            self.setting['size_mudir']*10
+        )
         self.c.showPage()
 
 
@@ -176,12 +181,9 @@ class TemplateRapor:
     def halaman_nilai(self, data_siswa, data_nilai_db):
         setting = self.setting
         teks = "CAPAIAN HASIL BELAJAR"
-        
         # Tentukan tanda tangan wali kelas
-
-        
         # Tentukan peringkat berdasarkan radio button
-        if self.setting['10_besar']:
+        if self.setting['show_peringkat'] == '10 Besar':
             if data_siswa['ranking'] != '':
                 if int(data_siswa['ranking']) <= 10:
                     ranking = data_siswa['ranking']
@@ -189,21 +191,21 @@ class TemplateRapor:
                     ranking = ""
             else:
                 ranking = ""
+        elif self.setting['show_peringkat'] == 'Tidak Ditampilkan':
+            ranking = ''
         else:
             if data_siswa['ranking'] != "":
                 ranking = data_siswa['ranking']
             else:
                 ranking = ''
-        
         # Bangun data_nilai secara dinamis dari data_nilai_db (list of dicts)
-        data_nilai = [["#", "MATA PELAJARAN", "NILAI\nAKHIR", "TERBILANG"]]  # Header
-        
+        data_nilai = [["NO", "MATA PELAJARAN", "NILAI\nAKHIR", "TERBILANG"]]  # Header
         # Tambahkan baris untuk setiap mata pelajaran
         for i, item in enumerate(data_nilai_db, start=1):
             mata_pelajaran = Paragraph(f"""
                     <para  alignment='LEFT' leading=10>
                     <font name='Aptos' size='11'>{item['mata_pelajaran']}</font><br/>
-                    <font name='Aptos Italic' size='8'>Guru: {string.capwords(item['nama_guru'])}</font>
+                    <font name='Aptos Italic' size='8'>Guru: {item['nama_guru']}</font>
                     </para>
             """)
             # Paragraph(f"<para font size 10>{item['mata_pelajaran']}</para>") if item['mata_pelajaran'] else item['mapel']
@@ -275,13 +277,40 @@ class TemplateRapor:
         self.kop_madrasah()
         self.identitas(data_siswa)
         paragraf(self, teks, x=self.width/2/mm-50, y=83, w=100, h=8, font='Aptos Bold', size=16)
-        tinggi_tabel = tabel(self, 20, 85, data_nilai, [10 * mm, 85 * mm, 15 * mm, 65*mm], 
-                            #  self.setting['tinggi_baris']*10
-                            None
-                             , style1)
-        gambar_mid(self, self.ttd_mudir, 50+setting['x_mudir']*10, tinggi_tabel/mm + 133 + setting['y_mudir']*10, setting['size_mudir']*10)
-        gambar_mid(self, self.ttd_walikelas, 155+setting['x_walas']*10, tinggi_tabel/mm + 133 + setting['y_walas']*10, setting['size_walas']*10)
-        tabel(self, 30, tinggi_tabel/mm+100, data_tabel_ttd, [60 * mm, 37 * mm, 60 * mm], None, style2)
+        tinggi_tabel = tabel(
+            obj = self, 
+            x = 20, 
+            y = 85, 
+            data = data_nilai, 
+            col_width = [10 * mm, 85 * mm, 15 * mm, 65*mm], 
+            row_height = [10, self.setting['nilai_tinggi']*10], 
+            styles = style1
+        )
+        
+        gambar_mid(
+            obj = self, 
+            path = self.ttd_mudir, 
+            x = 50+setting['nilai_x_mudir']*10, 
+            y = tinggi_tabel/mm + 123 + setting['nilai_y_mudir']*10, 
+            h = setting['size_mudir']*10
+        )
+
+        gambar_mid(
+            obj = self, 
+            path = self.ttd_walikelas, 
+            x = 155+setting['nilai_x_walas']*10, 
+            y = tinggi_tabel/mm + 123 + setting['nilai_y_walas']*10, 
+            h = setting['size_walas']*10
+        )
+        tabel(
+            obj = self, 
+            x = 30, 
+            y = tinggi_tabel/mm + 90, 
+            data=data_tabel_ttd, 
+            col_width=[60 * mm, 37 * mm, 60 * mm], 
+            row_height=None, 
+            styles=style2
+        )
         self.c.showPage()
         
     def halaman_catatan(self, data):
@@ -309,13 +338,13 @@ class TemplateRapor:
             ["2", "", "", ""],
         ]
         data_absensi = [
-            ["Sakit", f"   -    Hari" if data["sakit"] == "" else f"   {data['sakit']}   Hari"],
-            ["Izin", f"   -    Hari" if data["ijin"] == "" else f"   {data['ijin']}   Hari"],
-            ["Alpa", f"   -    Hari" if data["alpa"] == "" else f"   {data['alpa']}   Hari"],
+            ["Sakit", f"       Hari" if data["sakit"] == "" else f"   {data['sakit']}   Hari"],
+            ["Izin", f"       Hari" if data["ijin"] == "" else f"   {data['ijin']}   Hari"],
+            ["Alpa", f"       Hari" if data["alpa"] == "" else f"   {data['alpa']}   Hari"],
         ]
-        # data_kenaikan = [
-        #     [f"{data['status_naik']}"],
-        # ]
+        data_kenaikan = [
+            [f"{data['status_naik']}"],
+        ]
         data_tabel_ttd = [
             ["", "", f"Bandung, {date_to_text(data['tgl_titimangsa'], "lengkap")}"],
             ["Orang Tua/Wali", "", "Wali Kelas"],
@@ -379,8 +408,16 @@ class TemplateRapor:
                 ])
         
         if data['semester'] == "Genap":
-            paragraf(teks5, x = 132, y=107, w= 70, h=8, font='Aptos Bold', size=14, alignment=TA_LEFT)
-            tabel(self, 120, 107, "HARD KODE",[75*mm],[19*mm], style_kenaikan)
+            paragraf(self, teks5, x = 132, y=107, w= 70, h=8, font='Aptos Bold', size=14, alignment=TA_LEFT)
+            tabel(
+                obj=self, 
+                x=120, 
+                y=107, 
+                data=data_kenaikan,
+                col_width=[75*mm],
+                row_height=19, 
+                styles=style_kenaikan
+            )
         
         paragraf(self, teks1, x = 20, y=77, w= 100, h=8, font='Aptos Bold', size=14, alignment=TA_LEFT)
         tabel(self, 22, 77, data_ekskul, [10*mm , 80*mm , 20*mm, 63*mm], None, style_ekstra)
@@ -395,14 +432,14 @@ class TemplateRapor:
 
         gambar_mid(
             self, self.ttd_mudir, 
-            90 + setting['x_mudir']*10, 
-            239 + tinggi_catatan/mm + setting['y_mudir']*10, 
+            90 + setting['catatan_x_mudir']*10, 
+            239 + tinggi_catatan/mm + setting['catatan_y_mudir']*10, 
             setting['size_mudir']*10
         )
 
         gambar_mid(self, self.ttd_walikelas, 
-               155+ setting['x_walas']*10, 
-               203 + setting['y_walas']*10 + tinggi_catatan/mm, 
+               155+ setting['catatan_x_walas']*10, 
+               203 + setting['catatan_y_walas']*10 + tinggi_catatan/mm, 
                setting['size_walas']*10
             )
         tabel(self, 22, 

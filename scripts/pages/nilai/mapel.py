@@ -1,20 +1,20 @@
 from PySide6.QtWidgets import QWidget, QMainWindow
 from utils.fungsi.general_functions import *
 from ui.ui_page_mapel_kegiatan import Ui_Form
-from models.nilai.mapel import Mapel
-from utils.static_values import ULANGAN, UJIAN
+from models.model_nilai import Model_Nilai
+# from utils.static_values import ULANGAN, UJIAN
 
 class PageMapel(QWidget, Ui_Form):
     def __init__(self, parent:QMainWindow):
         super().__init__(parent)
         self.setupUi(self)
         self.parent = parent
-        self.id_kelas = None
-        self.kelas = None
+        # self.id_kelas = None
+        # self.kelas = None
         self.data_id_mapel = None
         self.id_kegiatan = None
         self.cur_kegiatan_idx = None
-        self.SQL = Mapel()
+        self.SQL = Model_Nilai()
         self.cbo_kegiatan.currentIndexChanged.connect(self.cbo_kegiatan_selected)
         self.tbl_mapel.itemSelectionChanged.connect(self.tbl_mapel_selected)
         self.tbl_mapel.itemChanged.connect(self.update_mapel)
@@ -29,13 +29,12 @@ class PageMapel(QWidget, Ui_Form):
     def show_page(self):
         self.txt_jenjang = self.parent.cbo_jenjang.currentText()
         self.txt_tapel = self.parent.cbo_tapel.currentText()
-        self.txt_tingkat = self.parent.cbo_tingkat.currentText()
-        self.txt_kelas = self.parent.cbo_kelas.currentText()
+        self.txt_tingkat = self.parent.not_quoted_tingkat
+        self.txt_kelas = self.parent.not_quoted_kelas
         self.fill_cbo_guru()
         self.fill_cbo_kegiatan()
         self.fill_tbl_mapel()
         self.fill_tbl_list_mapel()
-        
         
     # CBO KEGIATAN
     def fill_cbo_kegiatan(self): 
@@ -82,7 +81,7 @@ class PageMapel(QWidget, Ui_Form):
     # TABEL MAPEL
     def fill_tbl_mapel(self):
         kegiatan = self.cbo_kegiatan.currentText()
-        if kegiatan in ULANGAN:
+        if kegiatan in static_values['ULANGAN']:
             data, fields = self.SQL.get_mapel(
                 jenjang = self.txt_jenjang, 
                 tapel = self.txt_tapel, 
@@ -90,7 +89,7 @@ class PageMapel(QWidget, Ui_Form):
                 kelas = self.txt_kelas,
                 kegiatan = self.cbo_kegiatan.currentText()
                 )
-        elif kegiatan in UJIAN:
+        elif kegiatan in static_values['UJIAN']:
             data, fields = self.SQL.get_mapel(
                 jenjang = self.txt_jenjang, 
                 tapel = self.txt_tapel, 
@@ -110,7 +109,7 @@ class PageMapel(QWidget, Ui_Form):
         self.data_id_mapel = table_selected(self.tbl_mapel, self, self.parent)
 
     def tambah_mapel(self):
-        id_kelas = self.parent.cbo_kelas.currentData()
+        id_kelas = self.parent.data_kelas
         id_kegiatan = self.cbo_kegiatan.currentData()
         list_mapel = [input.strip() for input in self.list_input_pelajaran.text().split(",") if input.strip()]
         if not id_kelas or not id_kegiatan or not list_mapel: 

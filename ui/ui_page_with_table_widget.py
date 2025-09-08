@@ -22,14 +22,17 @@ class Ui_Form(object):
     def setupUi(self, Form):
         if not Form.objectName():
             Form.setObjectName(u"Form")
-        Form.resize(992, 699)
+        Form.resize(992, 494)
         self.gridLayout = QGridLayout(Form)
         self.gridLayout.setSpacing(0)
         self.gridLayout.setObjectName(u"gridLayout")
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
         self.tbl_widget = QTableWidget(Form)
         self.tbl_widget.setObjectName(u"tbl_widget")
+        self.tbl_widget.setLineWidth(0)
         self.tbl_widget.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.tbl_widget.setShowGrid(False)
+        self.tbl_widget.setGridStyle(Qt.NoPen)
 
         self.gridLayout.addWidget(self.tbl_widget, 0, 0, 1, 1)
 

@@ -227,7 +227,7 @@
         </property>
         <property name="icon">
          <iconset resource="../../resources.qrc">
-          <normaloff>:/icon/resources/icon/icons8_rotate_left.ico</normaloff>:/icon/resources/icon/icons8_rotate_left.ico</iconset>
+          <normaloff>:/icon/resources/icon/rotate_left.svg</normaloff>:/icon/resources/icon/rotate_left.svg</iconset>
         </property>
         <property name="iconSize">
          <size>
@@ -256,7 +256,7 @@
         </property>
         <property name="icon">
          <iconset resource="../../resources.qrc">
-          <normaloff>:/icon/resources/icon/icons8_rotate_right.ico</normaloff>:/icon/resources/icon/icons8_rotate_right.ico</iconset>
+          <normaloff>:/icon/resources/icon/rotate_right.svg</normaloff>:/icon/resources/icon/rotate_right.svg</iconset>
         </property>
         <property name="iconSize">
          <size>
@@ -398,7 +398,7 @@
         </property>
         <property name="icon">
          <iconset resource="../../resources.qrc">
-          <normaloff>:/icon/resources/icon/icons8_opened_folder.ico</normaloff>:/icon/resources/icon/icons8_opened_folder.ico</iconset>
+          <normaloff>:/icon/resources/icon/image.svg</normaloff>:/icon/resources/icon/image.svg</iconset>
         </property>
         <property name="iconSize">
          <size>
@@ -424,7 +424,7 @@
         </property>
         <property name="icon">
          <iconset resource="../../resources.qrc">
-          <normaloff>:/icon/resources/icon/icons8_file_explorer.ico</normaloff>:/icon/resources/icon/icons8_file_explorer.ico</iconset>
+          <normaloff>:/icon/resources/icon/opened_folder.svg</normaloff>:/icon/resources/icon/opened_folder.svg</iconset>
         </property>
         <property name="iconSize">
          <size>

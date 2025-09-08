@@ -13,20 +13,21 @@ class TemplateRekapNilai:
     
     def build_pdf_peringkat(
             self, top = 1*cm, left=1*cm, bottom = 1*cm, right = 1*cm, 
-            orientasi = 'portait', 
+            orientasi = 'Portrait', 
             kertas=GOV_LEGAL, 
-            data_mi=None, 
-            data_md=None, 
+            data_peringkat=None,
             opsi_peringkat = None,
             ):
-        if orientasi == "landscape":
+        if orientasi == "Landscape":
             pagesize = landscape(kertas)
-        elif orientasi == "portait":
-            pagesize = kertas
-        if self.parent.cbo_kegiatan.currentText() == "PAS":
-            semester = para(f"SEMESTER GANJIL", font='Aptos Bold', size=16)
         else:
-            semester = para(f"SEMESTER GENAP", font='Aptos Bold', size=16)
+            pagesize = kertas
+        jenjang = self.parent.jenjang
+        tapel = self.parent.tapel
+        semester = self.parent.semester
+        JENJANG = 'IBTIDAIYAH' if jenjang == 'MI' else 'DINIYAH ULA'
+        if semester:
+            semester = para(f"SEMESTER {semester.upper()}", font='Aptos Bold', size=16)
         buffer = BytesIO()
         pdf = SimpleDocTemplate(
             buffer,
@@ -36,8 +37,8 @@ class TemplateRekapNilai:
             rightMargin=right * cm,
             bottomMargin=bottom * cm,
         )
-        tapel = para(f"TAHUN PELAJARAN {self.parent.cbo_tapel.currentText()}", font='Aptos Bold', size=16)
-        col_width = [1*cm, 1*cm, 6*cm, 4.2*cm, 4.2*cm, 1*cm, 1.2*cm]
+        tapel = para(f"TAHUN PELAJARAN {tapel}", font='Aptos Bold', size=16)
+        col_width = [1*cm, 1*cm, 6*cm, 4.2*cm, 4.2*cm, 3*cm, 1.2*cm]
         style = TableStyle(
             [   ("ALIGN", (0, 0), (-1, -1), "CENTER"),
                 ("ALIGN", (2, 1), (-1, -1), "LEFT"),
@@ -48,77 +49,52 @@ class TemplateRekapNilai:
                 ("VALIGN", (0, 0), (-1, -1), "MIDDLE")
             ]
         )
-        style_mi = style
-        style_md = style
-        if opsi_peringkat == "1":
+        style = style
+        if opsi_peringkat == 1:
             judul = para("DAFTAR PERINGKAT PERTAMA PERKELAS", font='Aptos Bold', size=16)
-            judul_mi = para("JENJANG IBTIDAIYAH", font='Aptos Bold', size=14)
-            judul_md = para("JENJANG DINIYAH ULA", font='Aptos Bold', size=14)
-            tabel_mi = Table(data_mi, repeatRows=1, hAlign="LEFT", colWidths=col_width, style=style)
-            tabel_md = Table(data_md, repeatRows=1, hAlign="LEFT", colWidths=col_width, style=style)
+            judul_jenjang = para(f"JENJANG {JENJANG}", font='Aptos Bold', size=14)
+            tabel_nilai = Table(data_peringkat, repeatRows=1, hAlign="LEFT", colWidths=col_width, style=style)
             elements = [
                 judul, v_spacer(2),
                 tapel, v_spacer(2), 
                 semester, v_spacer(10), 
-                judul_mi, v_spacer(2),  
-                tabel_mi, v_spacer(10), 
-                judul_md, v_spacer(2), 
-                tabel_md
+                judul_jenjang, v_spacer(2),  
+                tabel_nilai
             ]
             
-        elif opsi_peringkat == '3':
+        elif opsi_peringkat == 3:
             judul = para("DAFTAR PERINGKAT 3 BESAR", font='Aptos Bold', size=16)
-            judul_mi = para("JENJANG IBTIDAIYAH", font='Aptos Bold', size=14)
-            judul_md = para("JENJANG DINIYAH ULA", font='Aptos Bold', size=14)
-            data = data_mi
-            row_height = [1*cm] + [5*mm] * (len(data)-1)
-            tabel_mi = Table(data, repeatRows=1, hAlign="LEFT", colWidths=col_width, rowHeights=row_height)
-            for i in range(1, len(data)):
+            judul_jenjang = para("JENJANG IBTIDAIYAH", font='Aptos Bold', size=14)
+            row_height = [1*cm] + [5*mm] * (len(data_peringkat)-1)
+            tabel_nilai = Table(data_peringkat, repeatRows=1, hAlign="LEFT", colWidths=col_width, rowHeights=row_height)
+            for i in range(1, len(data_peringkat)):
                 if i % 3 == 0:
                     style.add("LINEBELOW", (0, i), (-1, i), 1, colors.black)
                     if not i < 3:
-                        style_mi.add("SPAN", (0, i-2), (0, i))
-            tabel_mi.setStyle(style_mi)
-            
-            # tabel MD
-            data = data_md
-            row_height = [1*cm] + [5*mm] * (len(data)-1)
-            tabel_md = Table(data, repeatRows=1, hAlign="LEFT", colWidths=col_width, rowHeights=row_height)
-            for i in range(1, len(data)):
-                if i % 3 == 0:
-                    style.add("LINEBELOW", (0, i), (-1, i), 1, colors.black)
-                    if not i < 3:
-                        style_md.add("SPAN", (0, i-2), (0, i))
-            tabel_md.setStyle(style_md)
+                        style.add("SPAN", (0, i-2), (0, i))
+            tabel_nilai.setStyle(style)
             elements = [
-                judul, v_spacer(2),
-                tapel, v_spacer(2), 
-                semester, v_spacer(10), 
-                judul_mi, v_spacer(2),  
-                tabel_mi, 
-                PageBreak(),
-                judul, v_spacer(2),
-                tapel, v_spacer(2), 
-                semester, v_spacer(10), 
-                judul_md, v_spacer(2), 
-                tabel_md
+                judul, 
+                v_spacer(2),
+                tapel, 
+                v_spacer(2), 
+                semester, 
+                v_spacer(10), 
+                judul_jenjang, 
+                v_spacer(2),  
+                tabel_nilai
             ]
         pdf.build(elements)
         pdf_value = buffer.getvalue()
         buffer.close()
         return pdf_value
         
-
     def build_pdf(
             self, top=1 * cm, left=1 * cm, bottom=1 * cm, right=1 * cm, 
-            orientasi="portait", kertas=GOV_LEGAL, data_detail = None):
-        if orientasi == "landscape":
-            pagesize = landscape(kertas)
-        elif orientasi == "portait":
-            pagesize = kertas
+            orientasi="Portrait", kertas=GOV_LEGAL, data_detail = None):
+        if orientasi == "Landscape": pagesize = landscape(kertas)
+        else: pagesize = kertas
         buffer = BytesIO()
-        
-        
         pdf = SimpleDocTemplate(
             buffer,
             pagesize=pagesize,
@@ -135,7 +111,6 @@ class TemplateRekapNilai:
             ["Jenjang", ":", jenjang, "", "Kelas", ":", f"{self.parent.kelas}"],
             ["Tapel", ":", tapel, "", "Wali Kelas", ":", f"{self.parent.wali_kelas}"],
             ["Kegiatan Evaluatif", ":", kegiatan, "", "Titimangsa Rapor", ":", f"{self.parent.tgl_titimangsa}"],
-
         ]
         style_header = TableStyle(
             [

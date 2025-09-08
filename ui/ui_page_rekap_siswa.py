@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'page_rekap_siswa.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.8.1
+## Created by: Qt User Interface Compiler version 6.8.2
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -24,7 +24,7 @@ class Ui_Form(object):
             Form.setObjectName(u"Form")
         Form.resize(1256, 700)
         self.gridLayout = QGridLayout(Form)
-        self.gridLayout.setSpacing(0)
+        self.gridLayout.setSpacing(5)
         self.gridLayout.setObjectName(u"gridLayout")
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
         self.frame_2 = QFrame(Form)
@@ -38,6 +38,9 @@ class Ui_Form(object):
         self.frame_2.setFrameShadow(QFrame.Raised)
         self.gridLayout_4 = QGridLayout(self.frame_2)
         self.gridLayout_4.setObjectName(u"gridLayout_4")
+        self.gridLayout_4.setHorizontalSpacing(6)
+        self.gridLayout_4.setVerticalSpacing(0)
+        self.gridLayout_4.setContentsMargins(0, 0, 0, 0)
         self.tbl_rekap_tingkat = QTableWidget(self.frame_2)
         self.tbl_rekap_tingkat.setObjectName(u"tbl_rekap_tingkat")
 
@@ -62,7 +65,9 @@ class Ui_Form(object):
         self.frame_3.setFrameShape(QFrame.StyledPanel)
         self.frame_3.setFrameShadow(QFrame.Raised)
         self.gridLayout_3 = QGridLayout(self.frame_3)
+        self.gridLayout_3.setSpacing(0)
         self.gridLayout_3.setObjectName(u"gridLayout_3")
+        self.gridLayout_3.setContentsMargins(0, 0, 0, 0)
         self.tbl_rekap_umur = QTableWidget(self.frame_3)
         self.tbl_rekap_umur.setObjectName(u"tbl_rekap_umur")
 
@@ -78,7 +83,9 @@ class Ui_Form(object):
         self.frame.setFrameShape(QFrame.StyledPanel)
         self.frame.setFrameShadow(QFrame.Raised)
         self.gridLayout_2 = QGridLayout(self.frame)
+        self.gridLayout_2.setSpacing(0)
         self.gridLayout_2.setObjectName(u"gridLayout_2")
+        self.gridLayout_2.setContentsMargins(0, 0, 0, 0)
         self.tbl_rekap_all = QTableWidget(self.frame)
         self.tbl_rekap_all.setObjectName(u"tbl_rekap_all")
 

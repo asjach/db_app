@@ -1,14 +1,15 @@
 from PySide6.QtWidgets import QDialog, QMessageBox
 from ui.ui_dialog_input_excel import Ui_Form
-from models.input_excel import ModelInputExcel
-from utils.static_values import LEFT_COLUMN
+from models.model_preferensi import Model_Preferensi
+# from utils.static_values import LEFT_COLUMN, KOLOM_ANGKA, KOLOM_CURRENCY, KOLOM_FLOAT, KOLOM_TANGGAL
 from openpyxl import Workbook, load_workbook
 from openpyxl.styles import Alignment, Font, PatternFill
 from openpyxl.utils import get_column_letter
 from utils.fungsi.general_functions import *
 import os
 import pandas as pd
-from PySide6.QtWidgets import QApplication
+import numpy as np
+# from PySide6.QtWidgets import QApplication
 
 class DialogInputExcel(QDialog, Ui_Form):
     def __init__(self, parent=None):
@@ -16,7 +17,7 @@ class DialogInputExcel(QDialog, Ui_Form):
         self.setupUi(self)
         self.parent = parent
         self.setSizeGripEnabled(True)
-        self.SQL = ModelInputExcel()
+        self.SQL = Model_Preferensi()
         self._setup_connections()
 
     def _setup_connections(self):
@@ -26,7 +27,8 @@ class DialogInputExcel(QDialog, Ui_Form):
             (self.btn_no_filter.clicked, self._create_template),
             (self.btn_browse.clicked, self._browse_file),
             (self.cbo_sheet.currentIndexChanged, self._update_sheet_headers),
-            (self.insert_btn.clicked, self._execute_insert)
+            (self.insert_btn.clicked, self._execute_insert),
+            (self.update_btn.clicked, self._execute_update)
         ]
         for signal, slot in connections:
             signal.connect(slot)
@@ -103,7 +105,7 @@ class DialogInputExcel(QDialog, Ui_Form):
             for row, row_data in enumerate(data, 2):
                 for col, key in enumerate(columns, 1):
                     cell = ws.cell(row=row, column=col, value=row_data.get(key, ""))
-                    cell.alignment = styles['left'] if key in LEFT_COLUMN else styles['center']
+                    cell.alignment = styles['left'] if key in static_values['LEFT_COLUMN'] else styles['center']
                     cell.font = styles['font']
 
             for col, col_name in enumerate(columns, 1):
@@ -115,10 +117,10 @@ class DialogInputExcel(QDialog, Ui_Form):
         return True
 
     def _browse_file(self):
-        file = open_dialog(parent=self.parent, text_widget=self.line_source)
+        file = open_dialog(parent=self, text_widget=self.line_source)
         if file:
-            self.line_namafile.setText(os.path.basename(file))
-            sheets = pd.ExcelFile(file).sheet_names[1:]
+            self.line_namafile.setText(os.path.basename(self.line_source.text()))
+            sheets = pd.ExcelFile(self.line_source.text()).sheet_names[1:]
             populate_combobox(self.cbo_sheet, sheets)
         else:
             self.cbo_sheet.clear()
@@ -171,8 +173,25 @@ class DialogInputExcel(QDialog, Ui_Form):
             return
 
         try:
-            # Load data from Excel
-            df = pd.read_excel(source_file, sheet_name=table_name)
+            # Load data from Excel dengan konversi tipe data yang tepat
+            df = pd.read_excel(source_file, sheet_name=table_name, dtype=str)  # Baca semua sebagai string dulu
+            
+            # Konversi ke tipe data yang sesuai
+            for col in df.columns:
+                if col in static_values['KOLOM_ANGKA']:
+                    df[col] = pd.to_numeric(df[col], errors='coerce').astype('Int64')  # Int64 mendukung NaN
+                elif col in static_values['KOLOM_FLOAT']:
+                    df[col] = pd.to_numeric(df[col], errors='coerce')
+                elif col in static_values['KOLOM_TANGGAL']:
+                    df[col] = pd.to_datetime(df[col], errors='coerce').dt.strftime('%Y-%m-%d')
+                elif col in static_values['KOLOM_CURRENCY']:
+                    # Hilangkan karakter non-numeric lalu konversi ke float
+                    df[col] = df[col].astype(str).str.replace(r'[^\d.]', '', regex=True)
+                    df[col] = pd.to_numeric(df[col], errors='coerce')
+            
+            # Convert NaN values to None (akan menjadi NULL di database)
+            df = df.where(pd.notnull(df), None)
+            
             if key_column not in df.columns:
                 QMessageBox.critical(self, "Error", f"Kolom '{key_column}' tidak ditemukan di sheet.")
                 return
@@ -195,7 +214,23 @@ class DialogInputExcel(QDialog, Ui_Form):
             for _, row in df.iterrows():
                 set_clause = ", ".join([f"{col} = %s" for col in valid_columns])
                 query = f"UPDATE {table_name} SET {set_clause} WHERE {key_column} = %s"
-                params = [row[col] for col in valid_columns] + [row[key_column]]
+                
+                # Handle parameter dengan tipe data yang tepat
+                params = []
+                for col in valid_columns:
+                    val = row[col]
+                    if val is None:
+                        params.append(None)
+                    elif col in static_values['KOLOM_TANGGAL'] and isinstance(val, str):
+                        params.append(val)  # Tanggal sudah dalam format string
+                    elif col in static_values['KOLOM_ANGKA'] and isinstance(val, (int, np.integer)):
+                        params.append(int(val))
+                    elif col in (static_values['KOLOM_FLOAT'] + static_values['KOLOM_CURRENCY']) and isinstance(val, (float, np.floating)):
+                        params.append(float(val))
+                    else:
+                        params.append(str(val) if val is not None else None)
+                
+                params.append(row[key_column] if pd.notnull(row[key_column]) else None)
                 queries.append((query, params))
 
             # Execute updates

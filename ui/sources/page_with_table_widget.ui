@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>992</width>
-    <height>699</height>
+    <height>494</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -31,8 +31,14 @@
    </property>
    <item row="0" column="0">
     <widget class="QTableWidget" name="tbl_widget">
+     <property name="lineWidth">
+      <number>0</number>
+     </property>
      <property name="selectionBehavior">
       <enum>QAbstractItemView::SelectRows</enum>
+     </property>
+     <property name="showGrid">
+      <bool>false</bool>
      </property>
     </widget>
    </item>

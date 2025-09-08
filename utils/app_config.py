@@ -1,6 +1,6 @@
 import os
 
-
+BASE_DIR = "D:/APP/DB App"
 DIREKTORI_ONEDRIVE = "D:/OneDrive - MI Persis Rahayu"
 DIREKTORI_DOKUMEN = os.path.join(DIREKTORI_ONEDRIVE, "Database/dokumen")
 FOLDER_SISWA = "siswa"

@@ -1,16 +1,17 @@
 from ui.ui_page_kelulusan import Ui_Form
-from utils.fungsi.functions import *
-from models.siswa.kelulusan import Kelulusan
+from utils.fungsi.general_functions import *
+from models.model_siswa import Model_Siswa
 from PySide6.QtGui import QAction
 from PySide6.QtWidgets import QMainWindow, QWidget
-from utils.fungsi.table_functions import table_selected, fill_table, update_from_table
 
 class PageKelulusan(Ui_Form, QWidget):
     def __init__(self, parent: QMainWindow = None):
         super().__init__(parent)
         self.setupUi(self)
         self.parent = parent
-        self.SQL = Kelulusan()
+        self.SQL = Model_Siswa()
+        self.tbl_siswa_tidak_lulus.setVisible(False)
+        self.date_tgl_lulus.setDate(datetime.now())
         self.tidak_lulus_action = QAction("Tidak Luluskan Siswa Terpilih")
         self.batal_lulus_action = QAction("Batal Lulus Siswa Terpilih")
         self.batal_lulus_all_action = QAction("Batalkan Kelulusan Seluruh Siswa")
@@ -18,21 +19,16 @@ class PageKelulusan(Ui_Form, QWidget):
         self._signals_slots()
         
     def _dynamic_attributs(self):
-        self.txt_jenjang = self.parent.cbo_jenjang.currentText()
+        self.txt_jenjang = self.parent.str_jenjang
         self.txt_tapel = self.parent.cbo_tapel.currentText()
-        self.txt_tingkat = self.parent.cbo_tingkat.currentText()
-        self.txt_kelas = self.parent.cbo_kelas.currentText()
         self.txt_search_by = self.parent.cbo_search_by.currentText()
         self.txt_search = self.parent.line_search.text()
         self.txt_order = self.parent.cbo_order_by.currentText()
         self.next_tapel = tapel_berikutnya(self.txt_tapel)
-        self.next_tingkat = f"{int(self.txt_tingkat)+1}" if self.txt_tingkat else ""
-        self.next_kelas = (
-            f"{int(self.txt_kelas[0])+1}{self.txt_kelas[-1]}" if self.txt_kelas else ""
-        )
 
     def _signals_slots(self):
         self.btn_luluskan.clicked.connect(self.luluskan_siswa)
+        self.btn_show_bottom.clicked.connect(self.show_tbl_tidak_lulus)
         self.tbl_list_siswa.itemSelectionChanged.connect(
             lambda: table_selected(self.tbl_list_siswa,self, self.parent)
         )
@@ -49,34 +45,36 @@ class PageKelulusan(Ui_Form, QWidget):
         self.fill_tbl_list_siswa()
         self.fill_tbl_siswa_lulus()
         self.fill_tbl_siswa_tidak_lulus()
+        self.aktivasi_btn_kelulusan()
+        self.hide_if_no_data()
 
     def fill_tbl_list_siswa(self):
-        params = {
-           'jenjang':self.txt_jenjang,
-            'tapel':self.txt_tapel,
-            'tingkat':"6",
-            'kelas': '',
-            'search_by':self.txt_search_by,
-            'search_text':self.txt_search,
-            'status_akhir':'Aktif',
-            'order_by':self.txt_order, 
-        }
-        params_table = {
-            'stretch_column':2,
-            'hidden_column':[0],
-        }
-        fill_table(self.tbl_list_siswa, self.SQL.list_siswa_aktif, params, params_table)
+        data = self.SQL.list_siswa_aktif(
+            jenjang=self.txt_jenjang,
+            tapel=self.txt_tapel,
+            tingkat='6',
+            search_text=self.txt_search,
+            status_akhir='Aktif',
+            order_by=self.txt_order
+        )
+        generate_table(
+            data=data,
+            table=self.tbl_list_siswa,
+            stretch_column=2,
+            hidden_column=[0]
+        )
 
-    def fill_tbl_siswa_lulus(self):    
-        params = {
-            'jenjang':self.txt_jenjang,
-            'tapel':self.txt_tapel,
-            'search_by': self.txt_search_by,
-            'search_text':self.txt_search,
-            'order_by': self.txt_order
-        } 
-        fill_table(self.tbl_siswa_lulus, self.SQL.siswa_lulus, params)   
-
+    def fill_tbl_siswa_lulus(self):
+        data = self.SQL.siswa_lulus(
+            jenjang=self.txt_jenjang,
+            tapel=self.txt_tapel,
+            search_text=self.txt_search,
+            order_by=self.txt_order
+        )    
+        generate_table(
+            data=data,
+            table=self.tbl_siswa_lulus
+        )
 
     def fill_tbl_siswa_tidak_lulus(self):
         params = {
@@ -107,26 +105,20 @@ class PageKelulusan(Ui_Form, QWidget):
         update_from_table(**params)
 
     def luluskan_siswa(self):
-        tgl_lulus = text_to_date(self.line_tgl_lulus.text())
+        tgl_lulus = self.date_tgl_lulus.date().toString('yyyy-MM-dd')
         self.SQL.luluskan_siswa(
             self.txt_jenjang, 
             self.txt_tapel, 
             tgl_lulus)
-        self.tbl_list_siswa._last_data_hash = None
-        self.tbl_siswa_lulus._last_data_hash = None
-        self.tbl_siswa_tidak_lulus._last_data_hash = None
         self.show_page()
 
     def tidak_luluskan_siswa(self):
-        tgl_tidak_lulus = text_to_date(self.line_tgl_lulus.text())
+        tgl_tidak_lulus = self.date_tgl_lulus.date().toString('yyyy-MM-dd')
         self.SQL.tidak_luluskan_siswa(
             self.txt_tapel,
             tgl_tidak_lulus, 
             self.id
             )
-        self.tbl_list_siswa._last_data_hash = None
-        self.tbl_siswa_lulus._last_data_hash = None
-        self.tbl_siswa_tidak_lulus._last_data_hash = None
         self.show_page()
 
     def batal_lulus(self):
@@ -136,9 +128,6 @@ class PageKelulusan(Ui_Form, QWidget):
             self.nis_lokal,
             self.id
         )
-        self.tbl_list_siswa._last_data_hash = None
-        self.tbl_siswa_lulus._last_data_hash = None
-        self.tbl_siswa_tidak_lulus._last_data_hash = None
         self.show_page()
     
     def batal_lulus_all(self):
@@ -146,9 +135,6 @@ class PageKelulusan(Ui_Form, QWidget):
             self.txt_jenjang, 
             self.txt_tapel
             )
-        self.tbl_list_siswa._last_data_hash = None
-        self.tbl_siswa_lulus._last_data_hash = None
-        self.tbl_siswa_tidak_lulus._last_data_hash = None
         self.show_page()
 
     def batal_tidak_lulus(self):
@@ -158,10 +144,19 @@ class PageKelulusan(Ui_Form, QWidget):
             self.id,
             self.nis_lokal
             )
-        self.tbl_list_siswa._last_data_hash = None
-        self.tbl_siswa_lulus._last_data_hash = None
-        self.tbl_siswa_tidak_lulus._last_data_hash = None
         self.show_page()
+
+    def aktivasi_btn_kelulusan(self):
+        ada_data = self.tbl_list_siswa.rowCount() > 0
+        self.btn_luluskan.setEnabled(ada_data)
+        
+    def show_tbl_tidak_lulus(self):
+        is_hidden = self.tbl_siswa_tidak_lulus.isHidden()
+        self.tbl_siswa_tidak_lulus.setVisible(is_hidden)
+
+    def hide_if_no_data(self):
+        ada_data = self.tbl_list_siswa.rowCount() > 0
+        self.frame_kiri.setVisible(ada_data)
 
     # def eventFilter(self, source, event):
     #     if event.type() == QEvent.ContextMenu:

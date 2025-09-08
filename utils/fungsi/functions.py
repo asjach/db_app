@@ -2,9 +2,10 @@
 from PySide6.QtWidgets import (QLineEdit, QLabel, QPlainTextEdit, QComboBox,  QApplication,QMessageBox,)
 from datetime import datetime
 from decimal import Decimal
-import time, re
+import time, re, json, os
 import pandas as pd
-from utils.static_values import KOLOM_TANGGAL
+from utils.app_config import BASE_DIR
+# from utils.static_values import KOLOM_TANGGAL
 
 
 def measure_time(func):
@@ -289,13 +290,15 @@ def log_message(parent, text: str):
     parent.statusBar.showMessage(text)
 
 def read_excel(path, sheet_name=None):
+    path = os.path.join(BASE_DIR, "utils/static_values.json")
+    data = get_json_data(path)
     try:
         if sheet_name:
             df = pd.read_excel(path, sheet_name=sheet_name, dtype=str, keep_default_na=False)
         else:
             df = pd.read_excel(path, dtype=str, keep_default_na=False)
         for col in df.columns:
-                if any(keyword in col.lower() for keyword in KOLOM_TANGGAL):
+                if any(keyword in col.lower() for keyword in data['KOLOM_TANGGAL']):
                     df[col] = pd.to_datetime(df[col], errors='coerce').dt.strftime('%Y-%m-%d')
         data = df.fillna("").to_dict(orient='records')
         return data
@@ -437,3 +440,8 @@ def terbilang(n):
         hasil += " koma " + angka_desimal.replace(".", " ")
     
     return hasil
+
+def get_json_data(path):
+    with open(path, "r",encoding='utf-8') as f:
+        data = json.load(f)
+    return data

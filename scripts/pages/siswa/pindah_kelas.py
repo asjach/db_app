@@ -1,5 +1,5 @@
 from ui.ui_page_pindah_kelas import Ui_Form
-from models.siswa.pindah_kelas import PindahKelas
+from models.model_siswa import Model_Siswa
 from utils.fungsi.general_functions import *
 from utils.key_value.kolom_sql import PINDAH_KELAS
 from PySide6.QtWidgets import QMainWindow, QWidget
@@ -9,7 +9,7 @@ class PagePindahKelas(Ui_Form, QWidget):
         super().__init__(parent)
         self.setupUi(self)
         self.parent = parent
-        self.SQL = PindahKelas()
+        self.SQL = Model_Siswa()
         self.tbl_a.itemSelectionChanged.connect(
             lambda: table_selected(self.tbl_a, self, self.parent, ['id', 'nis_lokal', 'tingkat']))
         self.tbl_b.itemSelectionChanged.connect(
@@ -47,17 +47,18 @@ class PagePindahKelas(Ui_Form, QWidget):
         self.lbl_c.setText(f"\tL: {jml_l_c}\tP: {jml_p_c}\tJ: {jml_l_c+jml_p_c}")
 
     def fill_tabel(self, table, kelas, fungsi_awal, fungsi_akhir):
+
         fill_table(
             table_name=table,
             get_function=self.SQL.list_siswa_pindah_kelas,
             get_params={
-                'jenjang':self.parent.cbo_jenjang.currentText(),
+                'jenjang':self.parent.str_jenjang,
                 'tapel':self.parent.cbo_tapel.currentText(),
-                'tingkat':f"%{self.parent.cbo_tingkat.currentText()}%",
+                'tingkat':self.parent.quoted_daftar_tingkat,
                 'order_by':self.parent.cbo_order_by.currentText(),
-                'kelas':f"%{self.parent.cbo_tingkat.currentText()}{kelas}%",
+                'kelas':f"{self.parent.not_quoted_daftar_tingkat}{kelas}",
                 'search_by':self.parent.cbo_search_by.currentText(),
-                'search_text':f"%{self.parent.line_search.text()}%",
+                'search_text':f"{self.parent.line_search.text()}",
                 'kolom':self.kolom,
             },
             table_params={

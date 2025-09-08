@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import QWidget, QMainWindow
 from ui.ui_page_with_table_widget import Ui_Form
-from models.guru.buku_induk import BukuInduk
+from models.model_guru import Model_Guru
 from utils.fungsi.general_functions import *
 
 class PageBukuIndukGuru(QWidget, Ui_Form):
@@ -8,7 +8,7 @@ class PageBukuIndukGuru(QWidget, Ui_Form):
         super().__init__(parent)
         self.setupUi(self)
         self.parent = parent
-        self.SQL = BukuInduk()
+        self.SQL = Model_Guru()
         self.tbl_widget.currentItemChanged.connect(self.table_selected)
         self.tbl_widget.itemChanged.connect(self.update_data_guru)
 

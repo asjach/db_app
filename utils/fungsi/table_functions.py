@@ -1,20 +1,16 @@
-import decimal
+import decimal, os
 from datetime import datetime, date
 from utils.database import ConnectDB
-from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QTableWidget, QTableWidgetItem, QHeaderView, QPushButton, QApplication
 from PySide6.QtGui import QFontMetrics, QFont, QIcon
 from utils.fungsi.functions import show_message, date_to_text, text_to_date
-from utils.static_values import KOLOM_ANGKA, KOLOM_TANGGAL, KOLOM_FLOAT, LEFT_COLUMN, KOLOM_CURRENCY
+# from utils.static_values import KOLOM_ANGKA, KOLOM_TANGGAL, KOLOM_FLOAT, LEFT_COLUMN, KOLOM_CURRENCY
 from PySide6.QtCore import Qt
 import pandas as pd
-from utils.app_config import SEPARATOR_DESIMAL, SEPARATOR_RIBUAN
+from utils.app_config import SEPARATOR_DESIMAL, SEPARATOR_RIBUAN, BASE_DIR
+from utils.fungsi.functions import get_json_data
 
-from PySide6.QtWidgets import (
-    QTableWidget, QTableWidgetItem, QHeaderView, QProgressBar
-)
-from PySide6.QtGui import QFont, QFontMetrics
-from PySide6.QtCore import Qt
+static_values = get_json_data(os.path.join(BASE_DIR, "utils/static_values.json"))
 def generate_table(
     data,
     table: QTableWidget,
@@ -44,13 +40,13 @@ def generate_table(
     - Jika mode_input=False dan data kosong, tabel dihapus.
     """
     if left_column is None:
-        left_column = LEFT_COLUMN
+        left_column = static_values['LEFT_COLUMN']
     if separator_desimal is None:
         separator_desimal = SEPARATOR_DESIMAL
     if separator_ribuan is None:
         separator_ribuan = SEPARATOR_RIBUAN
     if kolom_currency is None:
-        kolom_currency = KOLOM_CURRENCY
+        kolom_currency = static_values['KOLOM_CURRENCY']
     if isinstance(data, pd.DataFrame):
         data = data.fillna("")
         data = data.to_dict(orient="records")
@@ -227,14 +223,6 @@ def get_selected_table_data(table: QTableWidget, target_columns=None):
     return result
 
 
-def add_icon_button(table:QTableWidget, row_num, col_num, icon, fungsi):
-    button = QPushButton()
-    button.setFlat(True)
-    button.setIcon(QIcon(icon))
-    button.clicked.connect(fungsi)
-    table.setCellWidget(row_num, col_num, button)
-
-
 def set_attributes_values(objek, tabel, parent=None, *atribut_texts):
     atribut_values = {}
     all_columns = not atribut_texts
@@ -256,6 +244,13 @@ def set_attributes_values(objek, tabel, parent=None, *atribut_texts):
             setattr(parent, "id_guru", atribut_values["id_guru"])
     return atribut_values
 
+def add_icon_button(table:QTableWidget, row_num, col_num, icon, fungsi):
+    button = QPushButton()
+    button.setFlat(True)
+    button.setIcon(QIcon(icon))
+    button.clicked.connect(fungsi)
+    table.setCellWidget(row_num, col_num, button)
+    
 
 def update_column_width(metrics, column_widths, col_num, item_data, max_column_size=None):
     cell_width = metrics.horizontalAdvance(item_data)
@@ -468,9 +463,9 @@ def get_row_data(tabel_ui: QTableWidget, numeric_fields=None, date_fields=None, 
     if tabel_ui is None: 
         return {}
     if numeric_fields is None:
-        numeric_fields = KOLOM_ANGKA
+        numeric_fields = static_values['KOLOM_ANGKA']
     if date_fields is None:
-        date_fields = KOLOM_TANGGAL
+        date_fields = static_values['KOLOM_TANGGAL']
     column_count = tabel_ui.columnCount()
     headers = [header_for_db(tabel_ui.horizontalHeaderItem(col).text()) for col in range(column_count)]
     row_data = {}
@@ -526,12 +521,12 @@ def update_from_table(
     con = ConnectDB()
     if updatable_column:
         if nama_kolom in updatable_column:
-            sql = f"""UPDATE {tabel_sql} SET {nama_kolom} = %s WHERE {key} = %s;"""
+            sql = """UPDATE {} SET {} = %s WHERE {} = %s;""".format(tabel_sql, nama_kolom, key)
             params = (nilai, key_value)
             sukses = con.update_data(sql, params)
     elif not_updatable_column:
         if nama_kolom not in not_updatable_column:
-            sql = f"""UPDATE {tabel_sql} SET {nama_kolom} = %s WHERE {key} = %s;"""
+            sql = """UPDATE {} SET {} = %s WHERE {} = %s;""".format(tabel_sql, nama_kolom, key)
             params = (nilai, key_value)
             sukses = con.update_data(sql, params)
     if sukses: 
@@ -557,30 +552,74 @@ def convert_item_value(value, header_name, separator_ribuan=None, separator_desi
     if value is None or value.strip() == "":
         return "NULL", None  # Kosong → NULL di SQL
     if separator_ribuan is None:
-        separator_ribuan=SEPARATOR_RIBUAN
+        separator_ribuan = SEPARATOR_RIBUAN
     if separator_desimal is None:
         separator_desimal = SEPARATOR_DESIMAL
+    
     cleaned_value = value.strip()
-    if separator_ribuan and separator_ribuan in cleaned_value:
-        cleaned_value = cleaned_value.replace(separator_ribuan, "")
-    if separator_desimal and separator_desimal in cleaned_value:
-        cleaned_value = cleaned_value.replace(separator_desimal, ".")
-    if header_name in KOLOM_ANGKA:
+    
+    # Terapkan pembersihan separator hanya untuk KOLOM_CURRENCY
+    if header_name in static_values['KOLOM_CURRENCY']:
+        if separator_ribuan and separator_ribuan in cleaned_value:
+            cleaned_value = cleaned_value.replace(separator_ribuan, "")
+        if separator_desimal and separator_desimal in cleaned_value:
+            cleaned_value = cleaned_value.replace(separator_desimal, ".")
+    
+    if header_name in static_values['KOLOM_ANGKA']:
         try:
             int_value = int(cleaned_value)
             return str(int_value), int_value
         except ValueError:
             return "NULL", None  # Jika gagal, anggap NULL
-    if header_name in KOLOM_FLOAT:
+    elif header_name in static_values['KOLOM_CURRENCY']:
         try:
             float_value = float(cleaned_value)
             return str(float_value), float_value
         except ValueError:
             return "NULL", None
-    if header_name in KOLOM_TANGGAL:
+    elif header_name in static_values['KOLOM_FLOAT']:
+        try:
+            float_value = float(cleaned_value)
+            return str(float_value), float_value
+        except ValueError:
+            return "NULL", None
+    elif header_name in static_values['KOLOM_TANGGAL']:
         date_value = text_to_date(cleaned_value)  # Konversi ke format tanggal
         return (f"'{date_value}'", date_value) if date_value else ("NULL", None)
-    return f"'{cleaned_value}'", cleaned_value  # Default: String dengan petik satu
+    else:
+        # Default: String dengan petik satu, tanpa pembersihan separator
+        return f"'{cleaned_value}'", cleaned_value
+    
+
+# def convert_item_value(value, header_name, separator_ribuan=None, separator_desimal=None):
+#     """ Konversi nilai dari QTableWidgetItem berdasarkan tipe data """
+#     if value is None or value.strip() == "":
+#         return "NULL", None  # Kosong → NULL di SQL
+#     if separator_ribuan is None:
+#         separator_ribuan=SEPARATOR_RIBUAN
+#     if separator_desimal is None:
+#         separator_desimal = SEPARATOR_DESIMAL
+#     cleaned_value = value.strip()
+#     if separator_ribuan and separator_ribuan in cleaned_value:
+#         cleaned_value = cleaned_value.replace(separator_ribuan, "")
+#     if separator_desimal and separator_desimal in cleaned_value:
+#         cleaned_value = cleaned_value.replace(separator_desimal, ".")
+#     if header_name in KOLOM_ANGKA:
+#         try:
+#             int_value = int(cleaned_value)
+#             return str(int_value), int_value
+#         except ValueError:
+#             return "NULL", None  # Jika gagal, anggap NULL
+#     if header_name in KOLOM_FLOAT:
+#         try:
+#             float_value = float(cleaned_value)
+#             return str(float_value), float_value
+#         except ValueError:
+#             return "NULL", None
+#     if header_name in KOLOM_TANGGAL:
+#         date_value = text_to_date(cleaned_value)  # Konversi ke format tanggal
+#         return (f"'{date_value}'", date_value) if date_value else ("NULL", None)
+#     return f"'{cleaned_value}'", cleaned_value  # Default: String dengan petik satu
 
 
 def cek_eksistensi(conn, tabel_db, kolom_key, key_value):
@@ -705,7 +744,6 @@ def copyCells(tabel):
     
 
 def pasteCells(tabel):
-    
     clipboard = QApplication.clipboard()
     paste_text = clipboard.text()
 
@@ -836,3 +874,37 @@ def prev_table_item(tabel: QTableWidget):
     if prev_row < 0:
         prev_row = tabel.rowCount() - 1
     tabel.selectRow(prev_row)
+
+
+def export_to_excel(table_widget: QTableWidget, file_path: str):
+    """
+    Export data dari QTableWidget ke file Excel
+    
+    Parameters:
+    table_widget (QTableWidget): Tabel widget yang akan diekspor
+    file_path (str): Path untuk menyimpan file Excel
+    """
+    try:
+        # Mendapatkan jumlah baris dan kolom
+        row_count = table_widget.rowCount()
+        col_count = table_widget.columnCount()
+        
+        # Mendapatkan header
+        headers = []
+        for col in range(col_count):
+            header_item = table_widget.horizontalHeaderItem(col)
+            headers.append(header_item.text() if header_item else f"Column {col+1}")
+        
+        # Mengumpulkan data
+        data = []
+        for row in range(row_count):
+            row_data = []
+            for col in range(col_count):
+                item = table_widget.item(row, col)
+                row_data.append(item.text() if item else "")
+            data.append(row_data)
+        df = pd.DataFrame(data, columns=headers)
+        df.to_excel(file_path, index=False)
+        return True, f"Data berhasil diekspor ke {file_path}"
+    except Exception as e:
+        return False, f"Error saat mengekspor: {str(e)}"

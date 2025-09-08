@@ -4,4 +4,5 @@ from utils.fungsi.table_functions import *
 from utils.fungsi.pdf_function import *
 from utils.fungsi.file_dialog_function import *
 from utils.fungsi.functions import  *
+from utils.fungsi.list_functions import *
 

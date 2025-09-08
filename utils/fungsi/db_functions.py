@@ -126,36 +126,38 @@ def extract_data_from_controls(controls):
     return extracted_data
 
 
-def opsi_order(opsi_order):
-    order_mapping = {
-        "Nama": 'nama_lengkap',
-        "Nama Lengkap": 'nama_lengkap',
-        "JK": 'jk, nama_lengkap',
-        "Urutan": 'r.no_urut',
-        "No Urut": 'no_urut',
-        "Ayah": 'ayah_nama',
-        "Ibu": 'ibu_nama',
-        "Alamat": 'kampung, nama_lengkap',
-        "Pilihan Jenjang": 'pilihan_jenjang, nama_lengkap',
-        "Aktif":'is_active, nama_lengkap',
-        "Tingkat":'tingkat, nama_lengkap',
-        "Tanggal Keluar": 'tgl_keluar',
-        "Tanggal Keluar DESC": 'tgl_keluar DESC',
-        }
-    return order_mapping.get(opsi_order, '')
+# def opsi_order(opsi_order):
+#     order_mapping = {
+#         "Nama": 'nama_lengkap',
+#         "Nama Lengkap": 'nama_lengkap',
+#         "JK": 'jk, nama_lengkap',
+#         "Urutan": 'r.no_urut',
+#         "No Urut": 'no_urut',
+#         "Ayah": 'ayah_nama',
+#         "Ibu": 'ibu_nama',
+#         "Alamat": 'kampung, nama_lengkap',
+#         "Pilihan Jenjang": 'pilihan_jenjang, nama_lengkap',
+#         "Aktif":'is_active, nama_lengkap',
+#         "Tingkat":'tingkat, nama_lengkap',
+#         "Tanggal Keluar": 'tgl_keluar',
+#         "Tanggal Keluar DESC": 'tgl_keluar DESC',
+#         }
+#     return order_mapping.get(opsi_order, '')
 
 
-def opsi_search(opsi_search):
-    mapping = {
-        "Nama": "nama_lengkap",
-        "Nama Lengkap": 'nama_lengkap',
-        "Ayah": "ayah_nama",
-        "Ibu": "ibu_nama",
-        "Alamat": "kampung",
-        "NIS": 'nis_lokal',
-        "JK": 'jk',
-        "Status Awal": 'status_awal',
-        "Status Akhir": 'status_akhir',
-        "Keaktifan": 'is_active'
-        }
-    return mapping.get(opsi_search, '')
+# def opsi_search(opsi_search):
+#     mapping = {
+#         "Nama": "nama_lengkap",
+#         "Nama Lengkap": 'nama_lengkap',
+#         "Ayah": "ayah_nama",
+#         "Ibu": "ibu_nama",
+#         "Alamat": "kampung",
+#         "NIS": 'nis_lokal',
+#         "JK": 'jk',
+#         "Status Awal": 'status_awal',
+#         "Status Akhir": 'status_akhir',
+#         "Keaktifan": 'is_active',
+#         "EMIS": 'status_emis',
+#         "VervalPD": 'status_vervalpd'
+#         }
+#     return mapping.get(opsi_search, '')

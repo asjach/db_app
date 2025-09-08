@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1232</width>
-    <height>557</height>
+    <height>878</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,8 +17,29 @@
    <string notr="true"/>
   </property>
   <layout class="QGridLayout" name="gridLayout_4">
+   <property name="leftMargin">
+    <number>5</number>
+   </property>
+   <property name="topMargin">
+    <number>5</number>
+   </property>
+   <property name="rightMargin">
+    <number>5</number>
+   </property>
+   <property name="bottomMargin">
+    <number>5</number>
+   </property>
+   <property name="spacing">
+    <number>5</number>
+   </property>
    <item row="0" column="0">
     <widget class="QSplitter" name="splitter">
+     <property name="font">
+      <font>
+       <family>Aptos Narrow</family>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
@@ -34,6 +55,12 @@
         <width>650</width>
         <height>0</height>
        </size>
+      </property>
+      <property name="font">
+       <font>
+        <family>Aptos Narrow</family>
+        <pointsize>10</pointsize>
+       </font>
       </property>
       <property name="frameShape">
        <enum>QFrame::StyledPanel</enum>
@@ -59,6 +86,12 @@
        </property>
        <item row="0" column="0">
         <widget class="QWidget" name="widget_49" native="true">
+         <property name="font">
+          <font>
+           <family>Aptos Narrow</family>
+           <pointsize>10</pointsize>
+          </font>
+         </property>
          <layout class="QGridLayout" name="gridLayout_45">
           <property name="leftMargin">
            <number>0</number>
@@ -72,17 +105,35 @@
           <property name="bottomMargin">
            <number>2</number>
           </property>
-          <property name="spacing">
+          <property name="horizontalSpacing">
+           <number>0</number>
+          </property>
+          <property name="verticalSpacing">
            <number>2</number>
           </property>
-          <item row="0" column="0">
-           <widget class="QLabel" name="label_145">
-            <property name="text">
-             <string>Search By</string>
+          <item row="1" column="0" colspan="3">
+           <widget class="QComboBox" name="cbo_nama_lengkap">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>24</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>Aptos Narrow</family>
+              <pointsize>10</pointsize>
+             </font>
             </property>
            </widget>
           </item>
-          <item row="0" column="1">
+          <item row="1" column="4">
            <widget class="QComboBox" name="cbo_search_by">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -98,9 +149,15 @@
             </property>
             <property name="maximumSize">
              <size>
-              <width>120</width>
+              <width>105</width>
               <height>16777215</height>
              </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>Aptos Narrow</family>
+              <pointsize>10</pointsize>
+             </font>
             </property>
             <item>
              <property name="text">
@@ -129,137 +186,10 @@
             </item>
            </widget>
           </item>
-          <item row="0" column="8">
-           <widget class="QPushButton" name="btn_sidebar">
-            <property name="minimumSize">
-             <size>
-              <width>30</width>
-              <height>24</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>30</width>
-              <height>25</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>[   ]</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="7">
-           <widget class="QPushButton" name="save_btn">
-            <property name="minimumSize">
-             <size>
-              <width>75</width>
-              <height>24</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>75</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>Save</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="5">
-           <widget class="QPushButton" name="prev_btn">
-            <property name="minimumSize">
-             <size>
-              <width>30</width>
-              <height>24</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>30</width>
-              <height>25</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>&lt;</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="4">
-           <widget class="QPushButton" name="copy_nama_lengkap">
-            <property name="minimumSize">
-             <size>
-              <width>25</width>
-              <height>25</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>25</width>
-              <height>25</height>
-             </size>
-            </property>
-            <property name="styleSheet">
-             <string notr="true"/>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="flat">
-             <bool>false</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="label_131">
-            <property name="text">
-             <string>Nama Lengkap</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="8">
-           <widget class="QPushButton" name="next_btn">
-            <property name="minimumSize">
-             <size>
-              <width>30</width>
-              <height>24</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>30</width>
-              <height>25</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>&gt;</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="3">
+          <item row="1" column="3">
            <widget class="QLineEdit" name="line_search">
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>24</height>
-             </size>
-            </property>
-            <property name="font">
-             <font>
-              <family>Segoe UI</family>
-              <pointsize>10</pointsize>
-              <weight>50</weight>
-              <italic>false</italic>
-              <bold>false</bold>
-             </font>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1" colspan="3">
-           <widget class="QComboBox" name="cbo_nama_lengkap">
             <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+             <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
@@ -269,6 +199,14 @@
               <width>0</width>
               <height>24</height>
              </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>Aptos Narrow</family>
+              <pointsize>10</pointsize>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
             </property>
            </widget>
           </item>
@@ -285,7 +223,7 @@
          </property>
          <property name="font">
           <font>
-           <family>Segoe UI Semibold</family>
+           <family>Aptos Narrow</family>
            <pointsize>10</pointsize>
           </font>
          </property>
@@ -332,6 +270,12 @@
                <height>0</height>
               </size>
              </property>
+             <property name="font">
+              <font>
+               <family>Aptos Narrow</family>
+               <pointsize>10</pointsize>
+              </font>
+             </property>
              <layout class="QGridLayout" name="gridLayout_29">
               <property name="leftMargin">
                <number>2</number>
@@ -350,6 +294,12 @@
               </property>
               <item row="0" column="0" rowspan="3">
                <widget class="QScrollArea" name="scrollArea">
+                <property name="font">
+                 <font>
+                  <family>Aptos Narrow</family>
+                  <pointsize>10</pointsize>
+                 </font>
+                </property>
                 <property name="widgetResizable">
                  <bool>true</bool>
                 </property>
@@ -357,29 +307,38 @@
                  <property name="geometry">
                   <rect>
                    <x>0</x>
-                   <y>-1017</y>
+                   <y>0</y>
                    <width>619</width>
-                   <height>1629</height>
+                   <height>1450</height>
                   </rect>
+                 </property>
+                 <property name="autoFillBackground">
+                  <bool>true</bool>
                  </property>
                  <layout class="QVBoxLayout" name="verticalLayout">
                   <property name="spacing">
-                   <number>20</number>
+                   <number>10</number>
                   </property>
                   <property name="leftMargin">
-                   <number>5</number>
+                   <number>2</number>
                   </property>
                   <property name="topMargin">
-                   <number>5</number>
+                   <number>2</number>
                   </property>
                   <property name="rightMargin">
-                   <number>5</number>
+                   <number>2</number>
                   </property>
                   <property name="bottomMargin">
-                   <number>5</number>
+                   <number>2</number>
                   </property>
                   <item>
                    <widget class="QWidget" name="frame_datadiri" native="true">
+                    <property name="font">
+                     <font>
+                      <family>Aptos Narrow</family>
+                      <pointsize>10</pointsize>
+                     </font>
+                    </property>
                     <layout class="QGridLayout" name="gridLayout_16">
                      <property name="leftMargin">
                       <number>0</number>
@@ -400,10 +359,9 @@
                       <widget class="QLabel" name="label_2">
                        <property name="font">
                         <font>
+                         <family>Aptos Narrow</family>
                          <pointsize>10</pointsize>
-                         <weight>75</weight>
                          <italic>true</italic>
-                         <bold>true</bold>
                         </font>
                        </property>
                        <property name="text">
@@ -413,6 +371,12 @@
                      </item>
                      <item row="1" column="0">
                       <widget class="QWidget" name="frame_biodata" native="true">
+                       <property name="font">
+                        <font>
+                         <family>Aptos Narrow</family>
+                         <pointsize>10</pointsize>
+                        </font>
+                       </property>
                        <layout class="QGridLayout" name="gridLayout_37" columnstretch="1,1">
                         <property name="leftMargin">
                          <number>0</number>
@@ -434,6 +398,12 @@
                         </property>
                         <item row="3" column="0" colspan="2">
                          <widget class="QWidget" name="widget_19" native="true">
+                          <property name="font">
+                           <font>
+                            <family>Aptos Narrow</family>
+                            <pointsize>10</pointsize>
+                           </font>
+                          </property>
                           <layout class="QGridLayout" name="gridLayout_38" columnstretch="1,1">
                            <property name="leftMargin">
                             <number>0</number>
@@ -455,6 +425,12 @@
                            </property>
                            <item row="0" column="0">
                             <widget class="QWidget" name="widget_20" native="true">
+                             <property name="font">
+                              <font>
+                               <family>Aptos Narrow</family>
+                               <pointsize>10</pointsize>
+                              </font>
+                             </property>
                              <layout class="QGridLayout" name="gridLayout_20" columnminimumwidth="80,0,0,0">
                               <property name="leftMargin">
                                <number>0</number>
@@ -468,11 +444,8 @@
                               <property name="bottomMargin">
                                <number>0</number>
                               </property>
-                              <property name="horizontalSpacing">
+                              <property name="spacing">
                                <number>0</number>
-                              </property>
-                              <property name="verticalSpacing">
-                               <number>5</number>
                               </property>
                               <item row="0" column="2">
                                <widget class="QLineEdit" name="nis_lokal_le">
@@ -490,11 +463,10 @@
                                 </property>
                                 <property name="font">
                                  <font>
-                                  <family>Segoe UI</family>
+                                  <family>Aptos Narrow</family>
                                   <pointsize>10</pointsize>
-                                  <weight>50</weight>
-                                  <italic>false</italic>
-                                  <bold>false</bold>
+                                  <weight>75</weight>
+                                  <bold>true</bold>
                                  </font>
                                 </property>
                                 <property name="alignment">
@@ -504,6 +476,13 @@
                               </item>
                               <item row="0" column="0">
                                <widget class="QLabel" name="label_94">
+                                <property name="font">
+                                 <font>
+                                  <family>Aptos Narrow</family>
+                                  <pointsize>10</pointsize>
+                                  <italic>true</italic>
+                                 </font>
+                                </property>
                                 <property name="text">
                                  <string>NIS Lokal</string>
                                 </property>
@@ -511,6 +490,13 @@
                               </item>
                               <item row="1" column="0">
                                <widget class="QLabel" name="label_92">
+                                <property name="font">
+                                 <font>
+                                  <family>Aptos Narrow</family>
+                                  <pointsize>10</pointsize>
+                                  <italic>true</italic>
+                                 </font>
+                                </property>
                                 <property name="text">
                                  <string>NISN</string>
                                 </property>
@@ -532,8 +518,10 @@
                                 </property>
                                 <property name="font">
                                  <font>
-                                  <family>Segoe UI</family>
+                                  <family>Aptos Narrow</family>
                                   <pointsize>10</pointsize>
+                                  <weight>75</weight>
+                                  <bold>true</bold>
                                  </font>
                                 </property>
                                 <property name="alignment">
@@ -561,6 +549,12 @@
                                   <height>25</height>
                                  </size>
                                 </property>
+                                <property name="font">
+                                 <font>
+                                  <family>Aptos Narrow</family>
+                                  <pointsize>10</pointsize>
+                                 </font>
+                                </property>
                                 <property name="text">
                                  <string/>
                                 </property>
@@ -568,6 +562,13 @@
                               </item>
                               <item row="2" column="0">
                                <widget class="QLabel" name="label_93">
+                                <property name="font">
+                                 <font>
+                                  <family>Aptos Narrow</family>
+                                  <pointsize>10</pointsize>
+                                  <italic>true</italic>
+                                 </font>
+                                </property>
                                 <property name="text">
                                  <string>NIK</string>
                                 </property>
@@ -589,11 +590,10 @@
                                 </property>
                                 <property name="font">
                                  <font>
-                                  <family>Segoe UI</family>
+                                  <family>Aptos Narrow</family>
                                   <pointsize>10</pointsize>
-                                  <weight>50</weight>
-                                  <italic>false</italic>
-                                  <bold>false</bold>
+                                  <weight>75</weight>
+                                  <bold>true</bold>
                                  </font>
                                 </property>
                                 <property name="alignment">
@@ -603,6 +603,13 @@
                               </item>
                               <item row="3" column="0">
                                <widget class="QLabel" name="label_98">
+                                <property name="font">
+                                 <font>
+                                  <family>Aptos Narrow</family>
+                                  <pointsize>10</pointsize>
+                                  <italic>true</italic>
+                                 </font>
+                                </property>
                                 <property name="text">
                                  <string>JK</string>
                                 </property>
@@ -621,6 +628,12 @@
                                   <width>20</width>
                                   <height>25</height>
                                  </size>
+                                </property>
+                                <property name="font">
+                                 <font>
+                                  <family>Aptos Narrow</family>
+                                  <pointsize>10</pointsize>
+                                 </font>
                                 </property>
                                 <property name="text">
                                  <string/>
@@ -643,11 +656,10 @@
                                 </property>
                                 <property name="font">
                                  <font>
-                                  <family>Segoe UI</family>
+                                  <family>Aptos Narrow</family>
                                   <pointsize>10</pointsize>
-                                  <weight>50</weight>
-                                  <italic>false</italic>
-                                  <bold>false</bold>
+                                  <weight>75</weight>
+                                  <bold>true</bold>
                                  </font>
                                 </property>
                                 <property name="mouseTracking">
@@ -683,11 +695,10 @@
                                 </property>
                                 <property name="font">
                                  <font>
-                                  <family>Segoe UI</family>
+                                  <family>Aptos Narrow</family>
                                   <pointsize>10</pointsize>
-                                  <weight>50</weight>
-                                  <italic>false</italic>
-                                  <bold>false</bold>
+                                  <weight>75</weight>
+                                  <bold>true</bold>
                                  </font>
                                 </property>
                                 <property name="alignment">
@@ -697,6 +708,13 @@
                               </item>
                               <item row="4" column="0">
                                <widget class="QLabel" name="label_96">
+                                <property name="font">
+                                 <font>
+                                  <family>Aptos Narrow</family>
+                                  <pointsize>10</pointsize>
+                                  <italic>true</italic>
+                                 </font>
+                                </property>
                                 <property name="text">
                                  <string>Tempat Lahir</string>
                                 </property>
@@ -704,6 +722,13 @@
                               </item>
                               <item row="6" column="0">
                                <widget class="QLabel" name="label_97">
+                                <property name="font">
+                                 <font>
+                                  <family>Aptos Narrow</family>
+                                  <pointsize>10</pointsize>
+                                  <italic>true</italic>
+                                 </font>
+                                </property>
                                 <property name="text">
                                  <string>Anak Ke-</string>
                                 </property>
@@ -731,11 +756,10 @@
                                 </property>
                                 <property name="font">
                                  <font>
-                                  <family>Segoe UI</family>
+                                  <family>Aptos Narrow</family>
                                   <pointsize>10</pointsize>
-                                  <weight>50</weight>
-                                  <italic>false</italic>
-                                  <bold>false</bold>
+                                  <weight>75</weight>
+                                  <bold>true</bold>
                                  </font>
                                 </property>
                                 <property name="alignment">
@@ -745,6 +769,13 @@
                               </item>
                               <item row="5" column="0">
                                <widget class="QLabel" name="label_95">
+                                <property name="font">
+                                 <font>
+                                  <family>Aptos Narrow</family>
+                                  <pointsize>10</pointsize>
+                                  <italic>true</italic>
+                                 </font>
+                                </property>
                                 <property name="text">
                                  <string>Tanggal Lahir</string>
                                 </property>
@@ -752,6 +783,13 @@
                               </item>
                               <item row="7" column="0">
                                <widget class="QLabel" name="label_99">
+                                <property name="font">
+                                 <font>
+                                  <family>Aptos Narrow</family>
+                                  <pointsize>10</pointsize>
+                                  <italic>true</italic>
+                                 </font>
+                                </property>
                                 <property name="text">
                                  <string>Saudara</string>
                                 </property>
@@ -773,11 +811,10 @@
                                 </property>
                                 <property name="font">
                                  <font>
-                                  <family>Segoe UI</family>
+                                  <family>Aptos Narrow</family>
                                   <pointsize>10</pointsize>
-                                  <weight>50</weight>
-                                  <italic>false</italic>
-                                  <bold>false</bold>
+                                  <weight>75</weight>
+                                  <bold>true</bold>
                                  </font>
                                 </property>
                                 <property name="alignment">
@@ -801,11 +838,10 @@
                                 </property>
                                 <property name="font">
                                  <font>
-                                  <family>Segoe UI</family>
+                                  <family>Aptos Narrow</family>
                                   <pointsize>10</pointsize>
-                                  <weight>50</weight>
-                                  <italic>false</italic>
-                                  <bold>false</bold>
+                                  <weight>75</weight>
+                                  <bold>true</bold>
                                  </font>
                                 </property>
                                 <property name="alignment">
@@ -827,11 +863,21 @@
                                   <height>25</height>
                                  </size>
                                 </property>
+                                <property name="font">
+                                 <font>
+                                  <family>Aptos Narrow</family>
+                                  <pointsize>10</pointsize>
+                                 </font>
+                                </property>
                                 <property name="text">
                                  <string/>
                                 </property>
+                                <property name="icon">
+                                 <iconset resource="../../resources.qrc">
+                                  <normaloff>:/icon/resources/icon/copy.svg</normaloff>:/icon/resources/icon/copy.svg</iconset>
+                                </property>
                                 <property name="flat">
-                                 <bool>false</bool>
+                                 <bool>true</bool>
                                 </property>
                                </widget>
                               </item>
@@ -849,11 +895,21 @@
                                   <height>25</height>
                                  </size>
                                 </property>
+                                <property name="font">
+                                 <font>
+                                  <family>Aptos Narrow</family>
+                                  <pointsize>10</pointsize>
+                                 </font>
+                                </property>
                                 <property name="text">
                                  <string/>
                                 </property>
+                                <property name="icon">
+                                 <iconset resource="../../resources.qrc">
+                                  <normaloff>:/icon/resources/icon/copy.svg</normaloff>:/icon/resources/icon/copy.svg</iconset>
+                                </property>
                                 <property name="flat">
-                                 <bool>false</bool>
+                                 <bool>true</bool>
                                 </property>
                                </widget>
                               </item>
@@ -871,11 +927,21 @@
                                   <height>25</height>
                                  </size>
                                 </property>
+                                <property name="font">
+                                 <font>
+                                  <family>Aptos Narrow</family>
+                                  <pointsize>10</pointsize>
+                                 </font>
+                                </property>
                                 <property name="text">
                                  <string/>
                                 </property>
+                                <property name="icon">
+                                 <iconset resource="../../resources.qrc">
+                                  <normaloff>:/icon/resources/icon/copy.svg</normaloff>:/icon/resources/icon/copy.svg</iconset>
+                                </property>
                                 <property name="flat">
-                                 <bool>false</bool>
+                                 <bool>true</bool>
                                 </property>
                                </widget>
                               </item>
@@ -893,11 +959,21 @@
                                   <height>25</height>
                                  </size>
                                 </property>
+                                <property name="font">
+                                 <font>
+                                  <family>Aptos Narrow</family>
+                                  <pointsize>10</pointsize>
+                                 </font>
+                                </property>
                                 <property name="text">
                                  <string/>
                                 </property>
+                                <property name="icon">
+                                 <iconset resource="../../resources.qrc">
+                                  <normaloff>:/icon/resources/icon/copy.svg</normaloff>:/icon/resources/icon/copy.svg</iconset>
+                                </property>
                                 <property name="flat">
-                                 <bool>false</bool>
+                                 <bool>true</bool>
                                 </property>
                                </widget>
                               </item>
@@ -915,11 +991,21 @@
                                   <height>25</height>
                                  </size>
                                 </property>
+                                <property name="font">
+                                 <font>
+                                  <family>Aptos Narrow</family>
+                                  <pointsize>10</pointsize>
+                                 </font>
+                                </property>
                                 <property name="text">
                                  <string/>
                                 </property>
+                                <property name="icon">
+                                 <iconset resource="../../resources.qrc">
+                                  <normaloff>:/icon/resources/icon/copy.svg</normaloff>:/icon/resources/icon/copy.svg</iconset>
+                                </property>
                                 <property name="flat">
-                                 <bool>false</bool>
+                                 <bool>true</bool>
                                 </property>
                                </widget>
                               </item>
@@ -937,11 +1023,21 @@
                                   <height>25</height>
                                  </size>
                                 </property>
+                                <property name="font">
+                                 <font>
+                                  <family>Aptos Narrow</family>
+                                  <pointsize>10</pointsize>
+                                 </font>
+                                </property>
                                 <property name="text">
                                  <string/>
                                 </property>
+                                <property name="icon">
+                                 <iconset resource="../../resources.qrc">
+                                  <normaloff>:/icon/resources/icon/copy.svg</normaloff>:/icon/resources/icon/copy.svg</iconset>
+                                </property>
                                 <property name="flat">
-                                 <bool>false</bool>
+                                 <bool>true</bool>
                                 </property>
                                </widget>
                               </item>
@@ -950,6 +1046,12 @@
                            </item>
                            <item row="0" column="1">
                             <widget class="QWidget" name="widget_28" native="true">
+                             <property name="font">
+                              <font>
+                               <family>Aptos Narrow</family>
+                               <pointsize>10</pointsize>
+                              </font>
+                             </property>
                              <layout class="QGridLayout" name="gridLayout_21" columnminimumwidth="80,0,0,0">
                               <property name="leftMargin">
                                <number>0</number>
@@ -963,14 +1065,18 @@
                               <property name="bottomMargin">
                                <number>0</number>
                               </property>
-                              <property name="horizontalSpacing">
+                              <property name="spacing">
                                <number>0</number>
-                              </property>
-                              <property name="verticalSpacing">
-                               <number>5</number>
                               </property>
                               <item row="1" column="0">
                                <widget class="QLabel" name="label_101">
+                                <property name="font">
+                                 <font>
+                                  <family>Aptos Narrow</family>
+                                  <pointsize>10</pointsize>
+                                  <italic>true</italic>
+                                 </font>
+                                </property>
                                 <property name="text">
                                  <string>Cita-Cita</string>
                                 </property>
@@ -978,6 +1084,13 @@
                               </item>
                               <item row="0" column="0">
                                <widget class="QLabel" name="label_100">
+                                <property name="font">
+                                 <font>
+                                  <family>Aptos Narrow</family>
+                                  <pointsize>10</pointsize>
+                                  <italic>true</italic>
+                                 </font>
+                                </property>
                                 <property name="text">
                                  <string>NIS Kemenag</string>
                                 </property>
@@ -999,8 +1112,10 @@
                                 </property>
                                 <property name="font">
                                  <font>
-                                  <family>Segoe UI</family>
+                                  <family>Aptos Narrow</family>
                                   <pointsize>10</pointsize>
+                                  <weight>75</weight>
+                                  <bold>true</bold>
                                  </font>
                                 </property>
                                 <property name="alignment">
@@ -1024,11 +1139,10 @@
                                 </property>
                                 <property name="font">
                                  <font>
-                                  <family>Segoe UI</family>
+                                  <family>Aptos Narrow</family>
                                   <pointsize>10</pointsize>
-                                  <weight>50</weight>
-                                  <italic>false</italic>
-                                  <bold>false</bold>
+                                  <weight>75</weight>
+                                  <bold>true</bold>
                                  </font>
                                 </property>
                                 <property name="mouseTracking">
@@ -1044,6 +1158,13 @@
                               </item>
                               <item row="2" column="0">
                                <widget class="QLabel" name="label_103">
+                                <property name="font">
+                                 <font>
+                                  <family>Aptos Narrow</family>
+                                  <pointsize>10</pointsize>
+                                  <italic>true</italic>
+                                 </font>
+                                </property>
                                 <property name="text">
                                  <string>Hobi</string>
                                 </property>
@@ -1065,11 +1186,10 @@
                                 </property>
                                 <property name="font">
                                  <font>
-                                  <family>Segoe UI</family>
+                                  <family>Aptos Narrow</family>
                                   <pointsize>10</pointsize>
-                                  <weight>50</weight>
-                                  <italic>false</italic>
-                                  <bold>false</bold>
+                                  <weight>75</weight>
+                                  <bold>true</bold>
                                  </font>
                                 </property>
                                 <property name="mouseTracking">
@@ -1085,6 +1205,13 @@
                               </item>
                               <item row="3" column="0">
                                <widget class="QLabel" name="label_104">
+                                <property name="font">
+                                 <font>
+                                  <family>Aptos Narrow</family>
+                                  <pointsize>10</pointsize>
+                                  <italic>true</italic>
+                                 </font>
+                                </property>
                                 <property name="text">
                                  <string>Agama</string>
                                 </property>
@@ -1106,11 +1233,10 @@
                                 </property>
                                 <property name="font">
                                  <font>
-                                  <family>Segoe UI</family>
+                                  <family>Aptos Narrow</family>
                                   <pointsize>10</pointsize>
-                                  <weight>50</weight>
-                                  <italic>false</italic>
-                                  <bold>false</bold>
+                                  <weight>75</weight>
+                                  <bold>true</bold>
                                  </font>
                                 </property>
                                 <property name="mouseTracking">
@@ -1126,6 +1252,13 @@
                               </item>
                               <item row="4" column="0">
                                <widget class="QLabel" name="label_181">
+                                <property name="font">
+                                 <font>
+                                  <family>Aptos Narrow</family>
+                                  <pointsize>10</pointsize>
+                                  <italic>true</italic>
+                                 </font>
+                                </property>
                                 <property name="text">
                                  <string>Keb. Khusus</string>
                                 </property>
@@ -1147,11 +1280,10 @@
                                 </property>
                                 <property name="font">
                                  <font>
-                                  <family>Segoe UI</family>
+                                  <family>Aptos Narrow</family>
                                   <pointsize>10</pointsize>
-                                  <weight>50</weight>
-                                  <italic>false</italic>
-                                  <bold>false</bold>
+                                  <weight>75</weight>
+                                  <bold>true</bold>
                                  </font>
                                 </property>
                                 <property name="mouseTracking">
@@ -1167,6 +1299,13 @@
                               </item>
                               <item row="5" column="0">
                                <widget class="QLabel" name="label_105">
+                                <property name="font">
+                                 <font>
+                                  <family>Aptos Narrow</family>
+                                  <pointsize>10</pointsize>
+                                  <italic>true</italic>
+                                 </font>
+                                </property>
                                 <property name="text">
                                  <string>Pembiayaan</string>
                                 </property>
@@ -1174,6 +1313,13 @@
                               </item>
                               <item row="6" column="0">
                                <widget class="QLabel" name="label_183">
+                                <property name="font">
+                                 <font>
+                                  <family>Aptos Narrow</family>
+                                  <pointsize>10</pointsize>
+                                  <italic>true</italic>
+                                 </font>
+                                </property>
                                 <property name="text">
                                  <string>Nomor KIP</string>
                                 </property>
@@ -1195,11 +1341,10 @@
                                 </property>
                                 <property name="font">
                                  <font>
-                                  <family>Segoe UI</family>
+                                  <family>Aptos Narrow</family>
                                   <pointsize>10</pointsize>
-                                  <weight>50</weight>
-                                  <italic>false</italic>
-                                  <bold>false</bold>
+                                  <weight>75</weight>
+                                  <bold>true</bold>
                                  </font>
                                 </property>
                                 <property name="frame">
@@ -1226,11 +1371,10 @@
                                 </property>
                                 <property name="font">
                                  <font>
-                                  <family>Segoe UI</family>
+                                  <family>Aptos Narrow</family>
                                   <pointsize>10</pointsize>
-                                  <weight>50</weight>
-                                  <italic>false</italic>
-                                  <bold>false</bold>
+                                  <weight>75</weight>
+                                  <bold>true</bold>
                                  </font>
                                 </property>
                                 <property name="mouseTracking">
@@ -1258,6 +1402,12 @@
                                   <height>25</height>
                                  </size>
                                 </property>
+                                <property name="font">
+                                 <font>
+                                  <family>Aptos Narrow</family>
+                                  <pointsize>10</pointsize>
+                                 </font>
+                                </property>
                                </widget>
                               </item>
                               <item row="7" column="1">
@@ -1267,6 +1417,12 @@
                                   <width>20</width>
                                   <height>0</height>
                                  </size>
+                                </property>
+                                <property name="font">
+                                 <font>
+                                  <family>Aptos Narrow</family>
+                                  <pointsize>10</pointsize>
+                                 </font>
                                 </property>
                                </widget>
                               </item>
@@ -1284,11 +1440,21 @@
                                   <height>25</height>
                                  </size>
                                 </property>
+                                <property name="font">
+                                 <font>
+                                  <family>Aptos Narrow</family>
+                                  <pointsize>10</pointsize>
+                                 </font>
+                                </property>
                                 <property name="text">
                                  <string/>
                                 </property>
+                                <property name="icon">
+                                 <iconset resource="../../resources.qrc">
+                                  <normaloff>:/icon/resources/icon/copy.svg</normaloff>:/icon/resources/icon/copy.svg</iconset>
+                                </property>
                                 <property name="flat">
-                                 <bool>false</bool>
+                                 <bool>true</bool>
                                 </property>
                                </widget>
                               </item>
@@ -1305,6 +1471,12 @@
                                   <width>20</width>
                                   <height>25</height>
                                  </size>
+                                </property>
+                                <property name="font">
+                                 <font>
+                                  <family>Aptos Narrow</family>
+                                  <pointsize>10</pointsize>
+                                 </font>
                                 </property>
                                 <property name="styleSheet">
                                  <string notr="true"/>
@@ -1325,6 +1497,13 @@
                         </item>
                         <item row="0" column="0" colspan="2">
                          <widget class="QWidget" name="widget_30" native="true">
+                          <property name="font">
+                           <font>
+                            <family>Aptos Narrow</family>
+                            <pointsize>10</pointsize>
+                            <italic>false</italic>
+                           </font>
+                          </property>
                           <layout class="QGridLayout" name="gridLayout_47" columnminimumwidth="100,0,0">
                            <property name="leftMargin">
                             <number>0</number>
@@ -1338,11 +1517,8 @@
                            <property name="bottomMargin">
                             <number>5</number>
                            </property>
-                           <property name="horizontalSpacing">
+                           <property name="spacing">
                             <number>0</number>
-                           </property>
-                           <property name="verticalSpacing">
-                            <number>5</number>
                            </property>
                            <item row="1" column="0">
                             <widget class="QLabel" name="label_128">
@@ -1351,6 +1527,13 @@
                                <width>85</width>
                                <height>16777215</height>
                               </size>
+                             </property>
+                             <property name="font">
+                              <font>
+                               <family>Aptos Narrow</family>
+                               <pointsize>10</pointsize>
+                               <italic>true</italic>
+                              </font>
                              </property>
                              <property name="text">
                               <string>Nama Singkat</string>
@@ -1367,14 +1550,16 @@
                              </property>
                              <property name="font">
                               <font>
-                               <family>Segoe UI</family>
+                               <family>Aptos Narrow</family>
                                <pointsize>10</pointsize>
-                               <weight>50</weight>
-                               <italic>false</italic>
-                               <bold>false</bold>
+                               <weight>75</weight>
+                               <bold>true</bold>
                               </font>
                              </property>
                              <property name="inputMask">
+                              <string/>
+                             </property>
+                             <property name="text">
                               <string/>
                              </property>
                             </widget>
@@ -1393,24 +1578,35 @@
                                <height>25</height>
                               </size>
                              </property>
+                             <property name="font">
+                              <font>
+                               <family>Aptos Narrow</family>
+                               <pointsize>10</pointsize>
+                              </font>
+                             </property>
                              <property name="styleSheet">
                               <string notr="true"/>
                              </property>
                              <property name="text">
                               <string/>
                              </property>
+                             <property name="icon">
+                              <iconset resource="../../resources.qrc">
+                               <normaloff>:/icon/resources/icon/copy.svg</normaloff>:/icon/resources/icon/copy.svg</iconset>
+                             </property>
                              <property name="flat">
-                              <bool>false</bool>
+                              <bool>true</bool>
                              </property>
                             </widget>
                            </item>
                            <item row="0" column="0">
                             <widget class="QLabel" name="label_129">
-                             <property name="maximumSize">
-                              <size>
-                               <width>85</width>
-                               <height>16777215</height>
-                              </size>
+                             <property name="font">
+                              <font>
+                               <family>Aptos Narrow</family>
+                               <pointsize>10</pointsize>
+                               <italic>true</italic>
+                              </font>
                              </property>
                              <property name="text">
                               <string>Nama Lengkap</string>
@@ -1427,15 +1623,49 @@
                              </property>
                              <property name="font">
                               <font>
-                               <family>Segoe UI</family>
+                               <family>Aptos Narrow</family>
                                <pointsize>10</pointsize>
-                               <weight>50</weight>
-                               <italic>false</italic>
-                               <bold>false</bold>
+                               <weight>75</weight>
+                               <bold>true</bold>
                               </font>
                              </property>
                              <property name="inputMask">
                               <string/>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="0" column="2">
+                            <widget class="QPushButton" name="btn_nama_lengkap">
+                             <property name="minimumSize">
+                              <size>
+                               <width>22</width>
+                               <height>25</height>
+                              </size>
+                             </property>
+                             <property name="maximumSize">
+                              <size>
+                               <width>20</width>
+                               <height>25</height>
+                              </size>
+                             </property>
+                             <property name="font">
+                              <font>
+                               <family>Aptos Narrow</family>
+                               <pointsize>10</pointsize>
+                              </font>
+                             </property>
+                             <property name="styleSheet">
+                              <string notr="true"/>
+                             </property>
+                             <property name="text">
+                              <string/>
+                             </property>
+                             <property name="icon">
+                              <iconset resource="../../resources.qrc">
+                               <normaloff>:/icon/resources/icon/copy.svg</normaloff>:/icon/resources/icon/copy.svg</iconset>
+                             </property>
+                             <property name="flat">
+                              <bool>true</bool>
                              </property>
                             </widget>
                            </item>
@@ -1449,7 +1679,26 @@
                    </widget>
                   </item>
                   <item>
+                   <widget class="Line" name="line">
+                    <property name="font">
+                     <font>
+                      <family>Aptos Narrow</family>
+                      <pointsize>10</pointsize>
+                     </font>
+                    </property>
+                    <property name="orientation">
+                     <enum>Qt::Horizontal</enum>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
                    <widget class="QWidget" name="frame_alamat" native="true">
+                    <property name="font">
+                     <font>
+                      <family>Aptos Narrow</family>
+                      <pointsize>10</pointsize>
+                     </font>
+                    </property>
                     <layout class="QGridLayout" name="gridLayout_22">
                      <property name="leftMargin">
                       <number>0</number>
@@ -1471,6 +1720,12 @@
                      </property>
                      <item row="1" column="0">
                       <widget class="QWidget" name="widget_4" native="true">
+                       <property name="font">
+                        <font>
+                         <family>Aptos Narrow</family>
+                         <pointsize>10</pointsize>
+                        </font>
+                       </property>
                        <layout class="QGridLayout" name="gridLayout_6">
                         <property name="leftMargin">
                          <number>0</number>
@@ -1492,6 +1747,12 @@
                         </property>
                         <item row="1" column="1">
                          <widget class="QWidget" name="widget_16" native="true">
+                          <property name="font">
+                           <font>
+                            <family>Aptos Narrow</family>
+                            <pointsize>10</pointsize>
+                           </font>
+                          </property>
                           <layout class="QGridLayout" name="gridLayout_23" columnstretch="0,0,0">
                            <property name="leftMargin">
                             <number>0</number>
@@ -1533,7 +1794,7 @@
                              </property>
                              <property name="font">
                               <font>
-                               <family>Segoe UI</family>
+                               <family>Aptos Narrow</family>
                                <pointsize>10</pointsize>
                               </font>
                              </property>
@@ -1552,7 +1813,8 @@
                              </property>
                              <property name="font">
                               <font>
-                               <italic>true</italic>
+                               <family>Aptos Narrow</family>
+                               <pointsize>10</pointsize>
                               </font>
                              </property>
                              <property name="text">
@@ -1562,6 +1824,12 @@
                            </item>
                            <item row="1" column="2">
                             <spacer name="horizontalSpacer_2">
+                             <property name="font">
+                              <font>
+                               <family>Aptos Narrow</family>
+                               <pointsize>10</pointsize>
+                              </font>
+                             </property>
                              <property name="orientation">
                               <enum>Qt::Horizontal</enum>
                              </property>
@@ -1578,6 +1846,12 @@
                         </item>
                         <item row="2" column="0" colspan="2">
                          <widget class="QWidget" name="widget_12" native="true">
+                          <property name="font">
+                           <font>
+                            <family>Aptos Narrow</family>
+                            <pointsize>10</pointsize>
+                           </font>
+                          </property>
                           <layout class="QGridLayout" name="gridLayout_17" columnstretch="1,1">
                            <property name="leftMargin">
                             <number>0</number>
@@ -1599,6 +1873,12 @@
                            </property>
                            <item row="0" column="1">
                             <widget class="QWidget" name="widget_13" native="true">
+                             <property name="font">
+                              <font>
+                               <family>Aptos Narrow</family>
+                               <pointsize>10</pointsize>
+                              </font>
+                             </property>
                              <layout class="QGridLayout" name="gridLayout_18" columnminimumwidth="100,0,0">
                               <property name="leftMargin">
                                <number>0</number>
@@ -1612,17 +1892,15 @@
                               <property name="bottomMargin">
                                <number>0</number>
                               </property>
-                              <property name="horizontalSpacing">
+                              <property name="spacing">
                                <number>0</number>
-                              </property>
-                              <property name="verticalSpacing">
-                               <number>5</number>
                               </property>
                               <item row="2" column="0">
                                <widget class="QLabel" name="label_138">
                                 <property name="font">
                                  <font>
-                                  <italic>true</italic>
+                                  <family>Aptos Narrow</family>
+                                  <pointsize>10</pointsize>
                                  </font>
                                 </property>
                                 <property name="text">
@@ -1640,11 +1918,8 @@
                                 </property>
                                 <property name="font">
                                  <font>
-                                  <family>Segoe UI</family>
+                                  <family>Aptos Narrow</family>
                                   <pointsize>10</pointsize>
-                                  <weight>50</weight>
-                                  <italic>false</italic>
-                                  <bold>false</bold>
                                  </font>
                                 </property>
                                 <property name="alignment">
@@ -1656,7 +1931,8 @@
                                <widget class="QLabel" name="label_139">
                                 <property name="font">
                                  <font>
-                                  <italic>true</italic>
+                                  <family>Aptos Narrow</family>
+                                  <pointsize>10</pointsize>
                                  </font>
                                 </property>
                                 <property name="text">
@@ -1668,7 +1944,8 @@
                                <widget class="QLabel" name="label_143">
                                 <property name="font">
                                  <font>
-                                  <italic>true</italic>
+                                  <family>Aptos Narrow</family>
+                                  <pointsize>10</pointsize>
                                  </font>
                                 </property>
                                 <property name="text">
@@ -1680,7 +1957,8 @@
                                <widget class="QLabel" name="label_144">
                                 <property name="font">
                                  <font>
-                                  <italic>true</italic>
+                                  <family>Aptos Narrow</family>
+                                  <pointsize>10</pointsize>
                                  </font>
                                 </property>
                                 <property name="text">
@@ -1698,11 +1976,8 @@
                                 </property>
                                 <property name="font">
                                  <font>
-                                  <family>Segoe UI</family>
+                                  <family>Aptos Narrow</family>
                                   <pointsize>10</pointsize>
-                                  <weight>50</weight>
-                                  <italic>false</italic>
-                                  <bold>false</bold>
                                  </font>
                                 </property>
                                 <property name="alignment">
@@ -1720,11 +1995,8 @@
                                 </property>
                                 <property name="font">
                                  <font>
-                                  <family>Segoe UI</family>
+                                  <family>Aptos Narrow</family>
                                   <pointsize>10</pointsize>
-                                  <weight>50</weight>
-                                  <italic>false</italic>
-                                  <bold>false</bold>
                                  </font>
                                 </property>
                                 <property name="alignment">
@@ -1742,11 +2014,8 @@
                                 </property>
                                 <property name="font">
                                  <font>
-                                  <family>Segoe UI</family>
+                                  <family>Aptos Narrow</family>
                                   <pointsize>10</pointsize>
-                                  <weight>50</weight>
-                                  <italic>false</italic>
-                                  <bold>false</bold>
                                  </font>
                                 </property>
                                 <property name="focusPolicy">
@@ -1767,11 +2036,8 @@
                                 </property>
                                 <property name="font">
                                  <font>
-                                  <family>Segoe UI</family>
+                                  <family>Aptos Narrow</family>
                                   <pointsize>10</pointsize>
-                                  <weight>50</weight>
-                                  <italic>false</italic>
-                                  <bold>false</bold>
                                  </font>
                                 </property>
                                 <property name="focusPolicy">
@@ -1786,7 +2052,8 @@
                                <widget class="QLabel" name="label_185">
                                 <property name="font">
                                  <font>
-                                  <italic>true</italic>
+                                  <family>Aptos Narrow</family>
+                                  <pointsize>10</pointsize>
                                  </font>
                                 </property>
                                 <property name="text">
@@ -1798,7 +2065,8 @@
                                <widget class="QLabel" name="label_142">
                                 <property name="font">
                                  <font>
-                                  <italic>true</italic>
+                                  <family>Aptos Narrow</family>
+                                  <pointsize>10</pointsize>
                                  </font>
                                 </property>
                                 <property name="text">
@@ -1816,11 +2084,8 @@
                                 </property>
                                 <property name="font">
                                  <font>
-                                  <family>Segoe UI</family>
+                                  <family>Aptos Narrow</family>
                                   <pointsize>10</pointsize>
-                                  <weight>50</weight>
-                                  <italic>false</italic>
-                                  <bold>false</bold>
                                  </font>
                                 </property>
                                 <property name="focusPolicy">
@@ -1845,11 +2110,21 @@
                                   <height>25</height>
                                  </size>
                                 </property>
+                                <property name="font">
+                                 <font>
+                                  <family>Aptos Narrow</family>
+                                  <pointsize>10</pointsize>
+                                 </font>
+                                </property>
                                 <property name="text">
                                  <string/>
                                 </property>
+                                <property name="icon">
+                                 <iconset resource="../../resources.qrc">
+                                  <normaloff>:/icon/resources/icon/copy.svg</normaloff>:/icon/resources/icon/copy.svg</iconset>
+                                </property>
                                 <property name="flat">
-                                 <bool>false</bool>
+                                 <bool>true</bool>
                                 </property>
                                </widget>
                               </item>
@@ -1858,6 +2133,12 @@
                            </item>
                            <item row="0" column="0">
                             <widget class="QWidget" name="widget_14" native="true">
+                             <property name="font">
+                              <font>
+                               <family>Aptos Narrow</family>
+                               <pointsize>10</pointsize>
+                              </font>
+                             </property>
                              <layout class="QGridLayout" name="gridLayout_19" columnminimumwidth="100,0,0">
                               <property name="leftMargin">
                                <number>0</number>
@@ -1871,11 +2152,8 @@
                               <property name="bottomMargin">
                                <number>0</number>
                               </property>
-                              <property name="horizontalSpacing">
+                              <property name="spacing">
                                <number>0</number>
-                              </property>
-                              <property name="verticalSpacing">
-                               <number>5</number>
                               </property>
                               <item row="6" column="1">
                                <widget class="QLineEdit" name="kab_kota_le">
@@ -1887,11 +2165,8 @@
                                 </property>
                                 <property name="font">
                                  <font>
-                                  <family>Segoe UI</family>
+                                  <family>Aptos Narrow</family>
                                   <pointsize>10</pointsize>
-                                  <weight>50</weight>
-                                  <italic>false</italic>
-                                  <bold>false</bold>
                                  </font>
                                 </property>
                                 <property name="alignment">
@@ -1903,7 +2178,8 @@
                                <widget class="QLabel" name="label_135">
                                 <property name="font">
                                  <font>
-                                  <italic>true</italic>
+                                  <family>Aptos Narrow</family>
+                                  <pointsize>10</pointsize>
                                  </font>
                                 </property>
                                 <property name="text">
@@ -1915,7 +2191,8 @@
                                <widget class="QLabel" name="label_132">
                                 <property name="font">
                                  <font>
-                                  <italic>true</italic>
+                                  <family>Aptos Narrow</family>
+                                  <pointsize>10</pointsize>
                                  </font>
                                 </property>
                                 <property name="text">
@@ -1927,7 +2204,8 @@
                                <widget class="QLabel" name="label_133">
                                 <property name="font">
                                  <font>
-                                  <italic>true</italic>
+                                  <family>Aptos Narrow</family>
+                                  <pointsize>10</pointsize>
                                  </font>
                                 </property>
                                 <property name="text">
@@ -1939,7 +2217,8 @@
                                <widget class="QLabel" name="label_134">
                                 <property name="font">
                                  <font>
-                                  <italic>true</italic>
+                                  <family>Aptos Narrow</family>
+                                  <pointsize>10</pointsize>
                                  </font>
                                 </property>
                                 <property name="text">
@@ -1957,11 +2236,8 @@
                                 </property>
                                 <property name="font">
                                  <font>
-                                  <family>Segoe UI</family>
+                                  <family>Aptos Narrow</family>
                                   <pointsize>10</pointsize>
-                                  <weight>50</weight>
-                                  <italic>false</italic>
-                                  <bold>false</bold>
                                  </font>
                                 </property>
                                 <property name="alignment">
@@ -1979,11 +2255,8 @@
                                 </property>
                                 <property name="font">
                                  <font>
-                                  <family>Segoe UI</family>
+                                  <family>Aptos Narrow</family>
                                   <pointsize>10</pointsize>
-                                  <weight>50</weight>
-                                  <italic>false</italic>
-                                  <bold>false</bold>
                                  </font>
                                 </property>
                                 <property name="alignment">
@@ -2001,11 +2274,8 @@
                                 </property>
                                 <property name="font">
                                  <font>
-                                  <family>Segoe UI</family>
+                                  <family>Aptos Narrow</family>
                                   <pointsize>10</pointsize>
-                                  <weight>50</weight>
-                                  <italic>false</italic>
-                                  <bold>false</bold>
                                  </font>
                                 </property>
                                 <property name="alignment">
@@ -2017,7 +2287,8 @@
                                <widget class="QLabel" name="label_136">
                                 <property name="font">
                                  <font>
-                                  <italic>true</italic>
+                                  <family>Aptos Narrow</family>
+                                  <pointsize>10</pointsize>
                                  </font>
                                 </property>
                                 <property name="text">
@@ -2035,11 +2306,8 @@
                                 </property>
                                 <property name="font">
                                  <font>
-                                  <family>Segoe UI</family>
+                                  <family>Aptos Narrow</family>
                                   <pointsize>10</pointsize>
-                                  <weight>50</weight>
-                                  <italic>false</italic>
-                                  <bold>false</bold>
                                  </font>
                                 </property>
                                 <property name="alignment">
@@ -2057,11 +2325,8 @@
                                 </property>
                                 <property name="font">
                                  <font>
-                                  <family>Segoe UI</family>
+                                  <family>Aptos Narrow</family>
                                   <pointsize>10</pointsize>
-                                  <weight>50</weight>
-                                  <italic>false</italic>
-                                  <bold>false</bold>
                                  </font>
                                 </property>
                                 <property name="alignment">
@@ -2073,7 +2338,8 @@
                                <widget class="QLabel" name="label_137">
                                 <property name="font">
                                  <font>
-                                  <italic>true</italic>
+                                  <family>Aptos Narrow</family>
+                                  <pointsize>10</pointsize>
                                  </font>
                                 </property>
                                 <property name="text">
@@ -2095,11 +2361,21 @@
                                   <height>25</height>
                                  </size>
                                 </property>
+                                <property name="font">
+                                 <font>
+                                  <family>Aptos Narrow</family>
+                                  <pointsize>10</pointsize>
+                                 </font>
+                                </property>
                                 <property name="text">
                                  <string/>
                                 </property>
+                                <property name="icon">
+                                 <iconset resource="../../resources.qrc">
+                                  <normaloff>:/icon/resources/icon/copy.svg</normaloff>:/icon/resources/icon/copy.svg</iconset>
+                                </property>
                                 <property name="flat">
-                                 <bool>false</bool>
+                                 <bool>true</bool>
                                 </property>
                                </widget>
                               </item>
@@ -2111,6 +2387,12 @@
                         </item>
                         <item row="3" column="0" colspan="2">
                          <widget class="QWidget" name="widget_17" native="true">
+                          <property name="font">
+                           <font>
+                            <family>Aptos Narrow</family>
+                            <pointsize>10</pointsize>
+                           </font>
+                          </property>
                           <layout class="QGridLayout" name="gridLayout_24" columnminimumwidth="100,0,0">
                            <property name="leftMargin">
                             <number>0</number>
@@ -2124,11 +2406,8 @@
                            <property name="bottomMargin">
                             <number>0</number>
                            </property>
-                           <property name="horizontalSpacing">
+                           <property name="spacing">
                             <number>0</number>
-                           </property>
-                           <property name="verticalSpacing">
-                            <number>5</number>
                            </property>
                            <item row="1" column="0" alignment="Qt::AlignTop">
                             <widget class="QLabel" name="label_141">
@@ -2140,6 +2419,8 @@
                              </property>
                              <property name="font">
                               <font>
+                               <family>Aptos Narrow</family>
+                               <pointsize>10</pointsize>
                                <italic>true</italic>
                               </font>
                              </property>
@@ -2158,11 +2439,10 @@
                              </property>
                              <property name="font">
                               <font>
-                               <family>Segoe UI</family>
+                               <family>Aptos Narrow</family>
                                <pointsize>10</pointsize>
-                               <weight>50</weight>
-                               <italic>false</italic>
-                               <bold>false</bold>
+                               <weight>75</weight>
+                               <bold>true</bold>
                               </font>
                              </property>
                              <property name="alignment">
@@ -2177,6 +2457,8 @@
                             <widget class="QLabel" name="label_140">
                              <property name="font">
                               <font>
+                               <family>Aptos Narrow</family>
+                               <pointsize>10</pointsize>
                                <italic>true</italic>
                               </font>
                              </property>
@@ -2207,8 +2489,10 @@
                              </property>
                              <property name="font">
                               <font>
-                               <family>Segoe UI</family>
+                               <family>Aptos Narrow</family>
                                <pointsize>10</pointsize>
+                               <weight>75</weight>
+                               <bold>true</bold>
                               </font>
                              </property>
                              <property name="focusPolicy">
@@ -2236,11 +2520,21 @@
                                <height>25</height>
                               </size>
                              </property>
+                             <property name="font">
+                              <font>
+                               <family>Aptos Narrow</family>
+                               <pointsize>10</pointsize>
+                              </font>
+                             </property>
                              <property name="text">
                               <string/>
                              </property>
+                             <property name="icon">
+                              <iconset resource="../../resources.qrc">
+                               <normaloff>:/icon/resources/icon/copy.svg</normaloff>:/icon/resources/icon/copy.svg</iconset>
+                             </property>
                              <property name="flat">
-                              <bool>false</bool>
+                              <bool>true</bool>
                              </property>
                             </widget>
                            </item>
@@ -2258,11 +2552,21 @@
                                <height>25</height>
                               </size>
                              </property>
+                             <property name="font">
+                              <font>
+                               <family>Aptos Narrow</family>
+                               <pointsize>10</pointsize>
+                              </font>
+                             </property>
                              <property name="text">
                               <string/>
                              </property>
+                             <property name="icon">
+                              <iconset resource="../../resources.qrc">
+                               <normaloff>:/icon/resources/icon/copy.svg</normaloff>:/icon/resources/icon/copy.svg</iconset>
+                             </property>
                              <property name="flat">
-                              <bool>false</bool>
+                              <bool>true</bool>
                              </property>
                             </widget>
                            </item>
@@ -2288,10 +2592,8 @@
                        </property>
                        <property name="font">
                         <font>
+                         <family>Aptos Narrow</family>
                          <pointsize>10</pointsize>
-                         <weight>75</weight>
-                         <italic>true</italic>
-                         <bold>true</bold>
                         </font>
                        </property>
                        <property name="text">
@@ -2303,7 +2605,26 @@
                    </widget>
                   </item>
                   <item>
+                   <widget class="Line" name="line_2">
+                    <property name="font">
+                     <font>
+                      <family>Aptos Narrow</family>
+                      <pointsize>10</pointsize>
+                     </font>
+                    </property>
+                    <property name="orientation">
+                     <enum>Qt::Horizontal</enum>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
                    <widget class="QWidget" name="frame_kk" native="true">
+                    <property name="font">
+                     <font>
+                      <family>Aptos Narrow</family>
+                      <pointsize>10</pointsize>
+                     </font>
+                    </property>
                     <layout class="QGridLayout" name="gridLayout_33">
                      <property name="leftMargin">
                       <number>0</number>
@@ -2322,6 +2643,12 @@
                      </property>
                      <item row="1" column="0">
                       <widget class="QWidget" name="widget_43" native="true">
+                       <property name="font">
+                        <font>
+                         <family>Aptos Narrow</family>
+                         <pointsize>10</pointsize>
+                        </font>
+                       </property>
                        <layout class="QGridLayout" name="gridLayout_9" columnstretch="4,1,1,2,0,0,0">
                         <property name="leftMargin">
                          <number>0</number>
@@ -2355,6 +2682,12 @@
                             <height>16777215</height>
                            </size>
                           </property>
+                          <property name="font">
+                           <font>
+                            <family>Aptos Narrow</family>
+                            <pointsize>10</pointsize>
+                           </font>
+                          </property>
                           <property name="styleSheet">
                            <string notr="true"/>
                           </property>
@@ -2373,11 +2706,10 @@
                           </property>
                           <property name="font">
                            <font>
-                            <family>Segoe UI</family>
+                            <family>Aptos Narrow</family>
                             <pointsize>10</pointsize>
-                            <weight>50</weight>
-                            <italic>false</italic>
-                            <bold>false</bold>
+                            <weight>75</weight>
+                            <bold>true</bold>
                            </font>
                           </property>
                          </widget>
@@ -2386,6 +2718,8 @@
                          <widget class="QLabel" name="label_187">
                           <property name="font">
                            <font>
+                            <family>Aptos Narrow</family>
+                            <pointsize>10</pointsize>
                             <italic>true</italic>
                            </font>
                           </property>
@@ -2404,11 +2738,10 @@
                           </property>
                           <property name="font">
                            <font>
-                            <family>Segoe UI</family>
+                            <family>Aptos Narrow</family>
                             <pointsize>10</pointsize>
-                            <weight>50</weight>
-                            <italic>false</italic>
-                            <bold>false</bold>
+                            <weight>75</weight>
+                            <bold>true</bold>
                            </font>
                           </property>
                          </widget>
@@ -2417,6 +2750,8 @@
                          <widget class="QLabel" name="label_146">
                           <property name="font">
                            <font>
+                            <family>Aptos Narrow</family>
+                            <pointsize>10</pointsize>
                             <italic>true</italic>
                            </font>
                           </property>
@@ -2429,6 +2764,8 @@
                          <widget class="QLabel" name="label_189">
                           <property name="font">
                            <font>
+                            <family>Aptos Narrow</family>
+                            <pointsize>10</pointsize>
                             <italic>true</italic>
                            </font>
                           </property>
@@ -2439,6 +2776,12 @@
                         </item>
                         <item row="0" column="5">
                          <widget class="QLabel" name="label_no_kk">
+                          <property name="font">
+                           <font>
+                            <family>Aptos Narrow</family>
+                            <pointsize>10</pointsize>
+                           </font>
+                          </property>
                           <property name="text">
                            <string/>
                           </property>
@@ -2454,11 +2797,10 @@
                           </property>
                           <property name="font">
                            <font>
-                            <family>Segoe UI</family>
+                            <family>Aptos Narrow</family>
                             <pointsize>10</pointsize>
-                            <weight>50</weight>
-                            <italic>false</italic>
-                            <bold>false</bold>
+                            <weight>75</weight>
+                            <bold>true</bold>
                            </font>
                           </property>
                          </widget>
@@ -2476,6 +2818,12 @@
                             <width>50</width>
                             <height>16777215</height>
                            </size>
+                          </property>
+                          <property name="font">
+                           <font>
+                            <family>Aptos Narrow</family>
+                            <pointsize>10</pointsize>
+                           </font>
                           </property>
                           <property name="styleSheet">
                            <string notr="true">image: none;</string>
@@ -2499,11 +2847,21 @@
                             <height>25</height>
                            </size>
                           </property>
+                          <property name="font">
+                           <font>
+                            <family>Aptos Narrow</family>
+                            <pointsize>10</pointsize>
+                           </font>
+                          </property>
                           <property name="text">
                            <string/>
                           </property>
+                          <property name="icon">
+                           <iconset resource="../../resources.qrc">
+                            <normaloff>:/icon/resources/icon/copy.svg</normaloff>:/icon/resources/icon/copy.svg</iconset>
+                          </property>
                           <property name="flat">
-                           <bool>false</bool>
+                           <bool>true</bool>
                           </property>
                          </widget>
                         </item>
@@ -2515,6 +2873,12 @@
                   </item>
                   <item>
                    <widget class="QWidget" name="frame_ortu" native="true">
+                    <property name="font">
+                     <font>
+                      <family>Aptos Narrow</family>
+                      <pointsize>10</pointsize>
+                     </font>
+                    </property>
                     <layout class="QGridLayout" name="gridLayout_3">
                      <property name="leftMargin">
                       <number>0</number>
@@ -2531,24 +2895,17 @@
                      <property name="spacing">
                       <number>5</number>
                      </property>
-                     <item row="0" column="1">
-                      <widget class="QLabel" name="label_4">
-                       <property name="minimumSize">
-                        <size>
-                         <width>0</width>
-                         <height>25</height>
-                        </size>
-                       </property>
+                     <item row="3" column="0" colspan="2">
+                      <widget class="QLabel" name="label_7">
                        <property name="font">
                         <font>
+                         <family>Aptos Narrow</family>
                          <pointsize>10</pointsize>
-                         <weight>75</weight>
                          <italic>true</italic>
-                         <bold>true</bold>
                         </font>
                        </property>
                        <property name="text">
-                        <string>DATA IBU</string>
+                        <string>DATA KELUARGA</string>
                        </property>
                       </widget>
                      </item>
@@ -2562,10 +2919,9 @@
                        </property>
                        <property name="font">
                         <font>
+                         <family>Aptos Narrow</family>
                          <pointsize>10</pointsize>
-                         <weight>75</weight>
                          <italic>true</italic>
-                         <bold>true</bold>
                         </font>
                        </property>
                        <property name="text">
@@ -2573,23 +2929,34 @@
                        </property>
                       </widget>
                      </item>
-                     <item row="2" column="0" colspan="2">
-                      <widget class="QLabel" name="label_7">
+                     <item row="0" column="1">
+                      <widget class="QLabel" name="label_4">
+                       <property name="minimumSize">
+                        <size>
+                         <width>0</width>
+                         <height>25</height>
+                        </size>
+                       </property>
                        <property name="font">
                         <font>
+                         <family>Aptos Narrow</family>
                          <pointsize>10</pointsize>
-                         <weight>75</weight>
                          <italic>true</italic>
-                         <bold>true</bold>
                         </font>
                        </property>
                        <property name="text">
-                        <string>DATA KELUARGA</string>
+                        <string>DATA IBU</string>
                        </property>
                       </widget>
                      </item>
                      <item row="1" column="0" colspan="2">
                       <widget class="QWidget" name="widget_3" native="true">
+                       <property name="font">
+                        <font>
+                         <family>Aptos Narrow</family>
+                         <pointsize>10</pointsize>
+                        </font>
+                       </property>
                        <layout class="QGridLayout" name="gridLayout_10">
                         <property name="leftMargin">
                          <number>0</number>
@@ -2611,7 +2978,13 @@
                         </property>
                         <item row="0" column="0">
                          <widget class="QWidget" name="widget_32" native="true">
-                          <layout class="QGridLayout" name="gridLayout_7" columnstretch="0,0,0,0">
+                          <property name="font">
+                           <font>
+                            <family>Aptos Narrow</family>
+                            <pointsize>10</pointsize>
+                           </font>
+                          </property>
+                          <layout class="QGridLayout" name="gridLayout_7" columnstretch="0,0,0,0" columnminimumwidth="80,0,0,0">
                            <property name="leftMargin">
                             <number>0</number>
                            </property>
@@ -2624,11 +2997,8 @@
                            <property name="bottomMargin">
                             <number>0</number>
                            </property>
-                           <property name="horizontalSpacing">
+                           <property name="spacing">
                             <number>0</number>
-                           </property>
-                           <property name="verticalSpacing">
-                            <number>5</number>
                            </property>
                            <item row="6" column="0">
                             <widget class="QLabel" name="label_113">
@@ -2640,6 +3010,8 @@
                              </property>
                              <property name="font">
                               <font>
+                               <family>Aptos Narrow</family>
+                               <pointsize>10</pointsize>
                                <italic>true</italic>
                               </font>
                              </property>
@@ -2664,11 +3036,10 @@
                              </property>
                              <property name="font">
                               <font>
-                               <family>Segoe UI</family>
+                               <family>Aptos Narrow</family>
                                <pointsize>10</pointsize>
-                               <weight>50</weight>
-                               <italic>false</italic>
-                               <bold>false</bold>
+                               <weight>75</weight>
+                               <bold>true</bold>
                               </font>
                              </property>
                              <property name="alignment">
@@ -2686,6 +3057,8 @@
                              </property>
                              <property name="font">
                               <font>
+                               <family>Aptos Narrow</family>
+                               <pointsize>10</pointsize>
                                <italic>true</italic>
                               </font>
                              </property>
@@ -2704,6 +3077,8 @@
                              </property>
                              <property name="font">
                               <font>
+                               <family>Aptos Narrow</family>
+                               <pointsize>10</pointsize>
                                <italic>true</italic>
                               </font>
                              </property>
@@ -2722,6 +3097,8 @@
                              </property>
                              <property name="font">
                               <font>
+                               <family>Aptos Narrow</family>
+                               <pointsize>10</pointsize>
                                <italic>true</italic>
                               </font>
                              </property>
@@ -2744,6 +3121,12 @@
                                <height>0</height>
                               </size>
                              </property>
+                             <property name="font">
+                              <font>
+                               <family>Aptos Narrow</family>
+                               <pointsize>10</pointsize>
+                              </font>
+                             </property>
                              <property name="text">
                               <string/>
                              </property>
@@ -2765,11 +3148,10 @@
                              </property>
                              <property name="font">
                               <font>
-                               <family>Segoe UI</family>
+                               <family>Aptos Narrow</family>
                                <pointsize>10</pointsize>
-                               <weight>50</weight>
-                               <italic>false</italic>
-                               <bold>false</bold>
+                               <weight>75</weight>
+                               <bold>true</bold>
                               </font>
                              </property>
                              <property name="focusPolicy">
@@ -2796,11 +3178,10 @@
                              </property>
                              <property name="font">
                               <font>
-                               <family>Segoe UI</family>
+                               <family>Aptos Narrow</family>
                                <pointsize>10</pointsize>
-                               <weight>50</weight>
-                               <italic>false</italic>
-                               <bold>false</bold>
+                               <weight>75</weight>
+                               <bold>true</bold>
                               </font>
                              </property>
                              <property name="alignment">
@@ -2824,11 +3205,10 @@
                              </property>
                              <property name="font">
                               <font>
-                               <family>Segoe UI</family>
+                               <family>Aptos Narrow</family>
                                <pointsize>10</pointsize>
-                               <weight>50</weight>
-                               <italic>false</italic>
-                               <bold>false</bold>
+                               <weight>75</weight>
+                               <bold>true</bold>
                               </font>
                              </property>
                              <property name="alignment">
@@ -2846,6 +3226,8 @@
                              </property>
                              <property name="font">
                               <font>
+                               <family>Aptos Narrow</family>
+                               <pointsize>10</pointsize>
                                <italic>true</italic>
                               </font>
                              </property>
@@ -2870,11 +3252,10 @@
                              </property>
                              <property name="font">
                               <font>
-                               <family>Segoe UI</family>
+                               <family>Aptos Narrow</family>
                                <pointsize>10</pointsize>
-                               <weight>50</weight>
-                               <italic>false</italic>
-                               <bold>false</bold>
+                               <weight>75</weight>
+                               <bold>true</bold>
                               </font>
                              </property>
                              <property name="alignment">
@@ -2892,6 +3273,8 @@
                              </property>
                              <property name="font">
                               <font>
+                               <family>Aptos Narrow</family>
+                               <pointsize>10</pointsize>
                                <italic>true</italic>
                               </font>
                              </property>
@@ -2910,6 +3293,8 @@
                              </property>
                              <property name="font">
                               <font>
+                               <family>Aptos Narrow</family>
+                               <pointsize>10</pointsize>
                                <italic>true</italic>
                               </font>
                              </property>
@@ -2934,11 +3319,10 @@
                              </property>
                              <property name="font">
                               <font>
-                               <family>Segoe UI</family>
+                               <family>Aptos Narrow</family>
                                <pointsize>10</pointsize>
-                               <weight>50</weight>
-                               <italic>false</italic>
-                               <bold>false</bold>
+                               <weight>75</weight>
+                               <bold>true</bold>
                               </font>
                              </property>
                              <property name="focusPolicy">
@@ -2965,11 +3349,10 @@
                              </property>
                              <property name="font">
                               <font>
-                               <family>Segoe UI</family>
+                               <family>Aptos Narrow</family>
                                <pointsize>10</pointsize>
-                               <weight>50</weight>
-                               <italic>false</italic>
-                               <bold>false</bold>
+                               <weight>75</weight>
+                               <bold>true</bold>
                               </font>
                              </property>
                              <property name="focusPolicy">
@@ -2990,6 +3373,8 @@
                              </property>
                              <property name="font">
                               <font>
+                               <family>Aptos Narrow</family>
+                               <pointsize>10</pointsize>
                                <italic>true</italic>
                               </font>
                              </property>
@@ -3014,11 +3399,10 @@
                              </property>
                              <property name="font">
                               <font>
-                               <family>Segoe UI</family>
+                               <family>Aptos Narrow</family>
                                <pointsize>10</pointsize>
-                               <weight>50</weight>
-                               <italic>false</italic>
-                               <bold>false</bold>
+                               <weight>75</weight>
+                               <bold>true</bold>
                               </font>
                              </property>
                              <property name="alignment">
@@ -3042,11 +3426,10 @@
                              </property>
                              <property name="font">
                               <font>
-                               <family>Segoe UI</family>
+                               <family>Aptos Narrow</family>
                                <pointsize>10</pointsize>
-                               <weight>50</weight>
-                               <italic>false</italic>
-                               <bold>false</bold>
+                               <weight>75</weight>
+                               <bold>true</bold>
                               </font>
                              </property>
                              <property name="focusPolicy">
@@ -3067,6 +3450,8 @@
                              </property>
                              <property name="font">
                               <font>
+                               <family>Aptos Narrow</family>
+                               <pointsize>10</pointsize>
                                <italic>true</italic>
                               </font>
                              </property>
@@ -3089,11 +3474,21 @@
                                <height>25</height>
                               </size>
                              </property>
+                             <property name="font">
+                              <font>
+                               <family>Aptos Narrow</family>
+                               <pointsize>10</pointsize>
+                              </font>
+                             </property>
                              <property name="text">
                               <string/>
                              </property>
+                             <property name="icon">
+                              <iconset resource="../../resources.qrc">
+                               <normaloff>:/icon/resources/icon/copy.svg</normaloff>:/icon/resources/icon/copy.svg</iconset>
+                             </property>
                              <property name="flat">
-                              <bool>false</bool>
+                              <bool>true</bool>
                              </property>
                             </widget>
                            </item>
@@ -3111,11 +3506,21 @@
                                <height>25</height>
                               </size>
                              </property>
+                             <property name="font">
+                              <font>
+                               <family>Aptos Narrow</family>
+                               <pointsize>10</pointsize>
+                              </font>
+                             </property>
                              <property name="text">
                               <string/>
                              </property>
+                             <property name="icon">
+                              <iconset resource="../../resources.qrc">
+                               <normaloff>:/icon/resources/icon/copy.svg</normaloff>:/icon/resources/icon/copy.svg</iconset>
+                             </property>
                              <property name="flat">
-                              <bool>false</bool>
+                              <bool>true</bool>
                              </property>
                             </widget>
                            </item>
@@ -3133,11 +3538,21 @@
                                <height>25</height>
                               </size>
                              </property>
+                             <property name="font">
+                              <font>
+                               <family>Aptos Narrow</family>
+                               <pointsize>10</pointsize>
+                              </font>
+                             </property>
                              <property name="text">
                               <string/>
                              </property>
+                             <property name="icon">
+                              <iconset resource="../../resources.qrc">
+                               <normaloff>:/icon/resources/icon/copy.svg</normaloff>:/icon/resources/icon/copy.svg</iconset>
+                             </property>
                              <property name="flat">
-                              <bool>false</bool>
+                              <bool>true</bool>
                              </property>
                             </widget>
                            </item>
@@ -3155,11 +3570,21 @@
                                <height>25</height>
                               </size>
                              </property>
+                             <property name="font">
+                              <font>
+                               <family>Aptos Narrow</family>
+                               <pointsize>10</pointsize>
+                              </font>
+                             </property>
                              <property name="text">
                               <string/>
                              </property>
+                             <property name="icon">
+                              <iconset resource="../../resources.qrc">
+                               <normaloff>:/icon/resources/icon/copy.svg</normaloff>:/icon/resources/icon/copy.svg</iconset>
+                             </property>
                              <property name="flat">
-                              <bool>false</bool>
+                              <bool>true</bool>
                              </property>
                             </widget>
                            </item>
@@ -3177,11 +3602,21 @@
                                <height>25</height>
                               </size>
                              </property>
+                             <property name="font">
+                              <font>
+                               <family>Aptos Narrow</family>
+                               <pointsize>10</pointsize>
+                              </font>
+                             </property>
                              <property name="text">
                               <string/>
                              </property>
+                             <property name="icon">
+                              <iconset resource="../../resources.qrc">
+                               <normaloff>:/icon/resources/icon/copy.svg</normaloff>:/icon/resources/icon/copy.svg</iconset>
+                             </property>
                              <property name="flat">
-                              <bool>false</bool>
+                              <bool>true</bool>
                              </property>
                             </widget>
                            </item>
@@ -3201,6 +3636,8 @@
                              </property>
                              <property name="font">
                               <font>
+                               <family>Aptos Narrow</family>
+                               <pointsize>10</pointsize>
                                <italic>true</italic>
                               </font>
                              </property>
@@ -3219,6 +3656,8 @@
                              </property>
                              <property name="font">
                               <font>
+                               <family>Aptos Narrow</family>
+                               <pointsize>10</pointsize>
                                <italic>true</italic>
                               </font>
                              </property>
@@ -3232,6 +3671,12 @@
                         </item>
                         <item row="0" column="1">
                          <widget class="QWidget" name="widget_40" native="true">
+                          <property name="font">
+                           <font>
+                            <family>Aptos Narrow</family>
+                            <pointsize>10</pointsize>
+                           </font>
+                          </property>
                           <layout class="QGridLayout" name="gridLayout_25" columnminimumwidth="80,0,0,0">
                            <property name="leftMargin">
                             <number>0</number>
@@ -3245,11 +3690,8 @@
                            <property name="bottomMargin">
                             <number>0</number>
                            </property>
-                           <property name="horizontalSpacing">
+                           <property name="spacing">
                             <number>0</number>
-                           </property>
-                           <property name="verticalSpacing">
-                            <number>5</number>
                            </property>
                            <item row="0" column="0">
                             <widget class="QLabel" name="label_174">
@@ -3261,6 +3703,8 @@
                              </property>
                              <property name="font">
                               <font>
+                               <family>Aptos Narrow</family>
+                               <pointsize>10</pointsize>
                                <italic>true</italic>
                               </font>
                              </property>
@@ -3285,11 +3729,10 @@
                              </property>
                              <property name="font">
                               <font>
-                               <family>Segoe UI</family>
+                               <family>Aptos Narrow</family>
                                <pointsize>10</pointsize>
-                               <weight>50</weight>
-                               <italic>false</italic>
-                               <bold>false</bold>
+                               <weight>75</weight>
+                               <bold>true</bold>
                               </font>
                              </property>
                              <property name="alignment">
@@ -3307,6 +3750,8 @@
                              </property>
                              <property name="font">
                               <font>
+                               <family>Aptos Narrow</family>
+                               <pointsize>10</pointsize>
                                <italic>true</italic>
                               </font>
                              </property>
@@ -3325,6 +3770,8 @@
                              </property>
                              <property name="font">
                               <font>
+                               <family>Aptos Narrow</family>
+                               <pointsize>10</pointsize>
                                <italic>true</italic>
                               </font>
                              </property>
@@ -3349,11 +3796,10 @@
                              </property>
                              <property name="font">
                               <font>
-                               <family>Segoe UI</family>
+                               <family>Aptos Narrow</family>
                                <pointsize>10</pointsize>
-                               <weight>50</weight>
-                               <italic>false</italic>
-                               <bold>false</bold>
+                               <weight>75</weight>
+                               <bold>true</bold>
                               </font>
                              </property>
                              <property name="focusPolicy">
@@ -3378,6 +3824,12 @@
                                <height>0</height>
                               </size>
                              </property>
+                             <property name="font">
+                              <font>
+                               <family>Aptos Narrow</family>
+                               <pointsize>10</pointsize>
+                              </font>
+                             </property>
                              <property name="text">
                               <string/>
                              </property>
@@ -3399,11 +3851,10 @@
                              </property>
                              <property name="font">
                               <font>
-                               <family>Segoe UI</family>
+                               <family>Aptos Narrow</family>
                                <pointsize>10</pointsize>
-                               <weight>50</weight>
-                               <italic>false</italic>
-                               <bold>false</bold>
+                               <weight>75</weight>
+                               <bold>true</bold>
                               </font>
                              </property>
                              <property name="alignment">
@@ -3421,6 +3872,8 @@
                              </property>
                              <property name="font">
                               <font>
+                               <family>Aptos Narrow</family>
+                               <pointsize>10</pointsize>
                                <italic>true</italic>
                               </font>
                              </property>
@@ -3445,11 +3898,10 @@
                              </property>
                              <property name="font">
                               <font>
-                               <family>Segoe UI</family>
+                               <family>Aptos Narrow</family>
                                <pointsize>10</pointsize>
-                               <weight>50</weight>
-                               <italic>false</italic>
-                               <bold>false</bold>
+                               <weight>75</weight>
+                               <bold>true</bold>
                               </font>
                              </property>
                              <property name="alignment">
@@ -3467,6 +3919,8 @@
                              </property>
                              <property name="font">
                               <font>
+                               <family>Aptos Narrow</family>
+                               <pointsize>10</pointsize>
                                <italic>true</italic>
                               </font>
                              </property>
@@ -3485,6 +3939,8 @@
                              </property>
                              <property name="font">
                               <font>
+                               <family>Aptos Narrow</family>
+                               <pointsize>10</pointsize>
                                <italic>true</italic>
                               </font>
                              </property>
@@ -3509,11 +3965,10 @@
                              </property>
                              <property name="font">
                               <font>
-                               <family>Segoe UI</family>
+                               <family>Aptos Narrow</family>
                                <pointsize>10</pointsize>
-                               <weight>50</weight>
-                               <italic>false</italic>
-                               <bold>false</bold>
+                               <weight>75</weight>
+                               <bold>true</bold>
                               </font>
                              </property>
                              <property name="alignment">
@@ -3537,11 +3992,10 @@
                              </property>
                              <property name="font">
                               <font>
-                               <family>Segoe UI</family>
+                               <family>Aptos Narrow</family>
                                <pointsize>10</pointsize>
-                               <weight>50</weight>
-                               <italic>false</italic>
-                               <bold>false</bold>
+                               <weight>75</weight>
+                               <bold>true</bold>
                               </font>
                              </property>
                              <property name="focusPolicy">
@@ -3562,6 +4016,8 @@
                              </property>
                              <property name="font">
                               <font>
+                               <family>Aptos Narrow</family>
+                               <pointsize>10</pointsize>
                                <italic>true</italic>
                               </font>
                              </property>
@@ -3586,11 +4042,10 @@
                              </property>
                              <property name="font">
                               <font>
-                               <family>Segoe UI</family>
+                               <family>Aptos Narrow</family>
                                <pointsize>10</pointsize>
-                               <weight>50</weight>
-                               <italic>false</italic>
-                               <bold>false</bold>
+                               <weight>75</weight>
+                               <bold>true</bold>
                               </font>
                              </property>
                              <property name="focusPolicy">
@@ -3611,6 +4066,8 @@
                              </property>
                              <property name="font">
                               <font>
+                               <family>Aptos Narrow</family>
+                               <pointsize>10</pointsize>
                                <italic>true</italic>
                               </font>
                              </property>
@@ -3635,11 +4092,10 @@
                              </property>
                              <property name="font">
                               <font>
-                               <family>Segoe UI</family>
+                               <family>Aptos Narrow</family>
                                <pointsize>10</pointsize>
-                               <weight>50</weight>
-                               <italic>false</italic>
-                               <bold>false</bold>
+                               <weight>75</weight>
+                               <bold>true</bold>
                               </font>
                              </property>
                              <property name="focusPolicy">
@@ -3666,11 +4122,10 @@
                              </property>
                              <property name="font">
                               <font>
-                               <family>Segoe UI</family>
+                               <family>Aptos Narrow</family>
                                <pointsize>10</pointsize>
-                               <weight>50</weight>
-                               <italic>false</italic>
-                               <bold>false</bold>
+                               <weight>75</weight>
+                               <bold>true</bold>
                               </font>
                              </property>
                              <property name="alignment">
@@ -3688,6 +4143,8 @@
                              </property>
                              <property name="font">
                               <font>
+                               <family>Aptos Narrow</family>
+                               <pointsize>10</pointsize>
                                <italic>true</italic>
                               </font>
                              </property>
@@ -3710,11 +4167,21 @@
                                <height>25</height>
                               </size>
                              </property>
+                             <property name="font">
+                              <font>
+                               <family>Aptos Narrow</family>
+                               <pointsize>10</pointsize>
+                              </font>
+                             </property>
                              <property name="text">
                               <string/>
                              </property>
+                             <property name="icon">
+                              <iconset resource="../../resources.qrc">
+                               <normaloff>:/icon/resources/icon/copy.svg</normaloff>:/icon/resources/icon/copy.svg</iconset>
+                             </property>
                              <property name="flat">
-                              <bool>false</bool>
+                              <bool>true</bool>
                              </property>
                             </widget>
                            </item>
@@ -3732,11 +4199,21 @@
                                <height>25</height>
                               </size>
                              </property>
+                             <property name="font">
+                              <font>
+                               <family>Aptos Narrow</family>
+                               <pointsize>10</pointsize>
+                              </font>
+                             </property>
                              <property name="text">
                               <string/>
                              </property>
+                             <property name="icon">
+                              <iconset resource="../../resources.qrc">
+                               <normaloff>:/icon/resources/icon/copy.svg</normaloff>:/icon/resources/icon/copy.svg</iconset>
+                             </property>
                              <property name="flat">
-                              <bool>false</bool>
+                              <bool>true</bool>
                              </property>
                             </widget>
                            </item>
@@ -3754,11 +4231,21 @@
                                <height>25</height>
                               </size>
                              </property>
+                             <property name="font">
+                              <font>
+                               <family>Aptos Narrow</family>
+                               <pointsize>10</pointsize>
+                              </font>
+                             </property>
                              <property name="text">
                               <string/>
                              </property>
+                             <property name="icon">
+                              <iconset resource="../../resources.qrc">
+                               <normaloff>:/icon/resources/icon/copy.svg</normaloff>:/icon/resources/icon/copy.svg</iconset>
+                             </property>
                              <property name="flat">
-                              <bool>false</bool>
+                              <bool>true</bool>
                              </property>
                             </widget>
                            </item>
@@ -3772,6 +4259,8 @@
                              </property>
                              <property name="font">
                               <font>
+                               <family>Aptos Narrow</family>
+                               <pointsize>10</pointsize>
                                <italic>true</italic>
                               </font>
                              </property>
@@ -3794,11 +4283,21 @@
                                <height>25</height>
                               </size>
                              </property>
+                             <property name="font">
+                              <font>
+                               <family>Aptos Narrow</family>
+                               <pointsize>10</pointsize>
+                              </font>
+                             </property>
                              <property name="text">
                               <string/>
                              </property>
+                             <property name="icon">
+                              <iconset resource="../../resources.qrc">
+                               <normaloff>:/icon/resources/icon/copy.svg</normaloff>:/icon/resources/icon/copy.svg</iconset>
+                             </property>
                              <property name="flat">
-                              <bool>false</bool>
+                              <bool>true</bool>
                              </property>
                             </widget>
                            </item>
@@ -3818,6 +4317,8 @@
                              </property>
                              <property name="font">
                               <font>
+                               <family>Aptos Narrow</family>
+                               <pointsize>10</pointsize>
                                <italic>true</italic>
                               </font>
                              </property>
@@ -3840,11 +4341,21 @@
                                <height>25</height>
                               </size>
                              </property>
+                             <property name="font">
+                              <font>
+                               <family>Aptos Narrow</family>
+                               <pointsize>10</pointsize>
+                              </font>
+                             </property>
                              <property name="text">
                               <string/>
                              </property>
+                             <property name="icon">
+                              <iconset resource="../../resources.qrc">
+                               <normaloff>:/icon/resources/icon/copy.svg</normaloff>:/icon/resources/icon/copy.svg</iconset>
+                             </property>
                              <property name="flat">
-                              <bool>false</bool>
+                              <bool>true</bool>
                              </property>
                             </widget>
                            </item>
@@ -3854,11 +4365,30 @@
                        </layout>
                       </widget>
                      </item>
+                     <item row="2" column="0" colspan="2">
+                      <widget class="Line" name="line_4">
+                       <property name="font">
+                        <font>
+                         <family>Aptos Narrow</family>
+                         <pointsize>10</pointsize>
+                        </font>
+                       </property>
+                       <property name="orientation">
+                        <enum>Qt::Horizontal</enum>
+                       </property>
+                      </widget>
+                     </item>
                     </layout>
                    </widget>
                   </item>
                   <item>
                    <widget class="QWidget" name="frame_wali" native="true">
+                    <property name="font">
+                     <font>
+                      <family>Aptos Narrow</family>
+                      <pointsize>10</pointsize>
+                     </font>
+                    </property>
                     <layout class="QGridLayout" name="gridLayout_34" columnstretch="1,1">
                      <property name="leftMargin">
                       <number>0</number>
@@ -3880,7 +4410,13 @@
                      </property>
                      <item row="1" column="0">
                       <widget class="QWidget" name="widget_18" native="true">
-                       <layout class="QGridLayout" name="gridLayout_26">
+                       <property name="font">
+                        <font>
+                         <family>Aptos Narrow</family>
+                         <pointsize>10</pointsize>
+                        </font>
+                       </property>
+                       <layout class="QGridLayout" name="gridLayout_26" columnminimumwidth="100,0">
                         <property name="leftMargin">
                          <number>0</number>
                         </property>
@@ -3893,16 +4429,15 @@
                         <property name="bottomMargin">
                          <number>0</number>
                         </property>
-                        <property name="horizontalSpacing">
+                        <property name="spacing">
                          <number>0</number>
-                        </property>
-                        <property name="verticalSpacing">
-                         <number>5</number>
                         </property>
                         <item row="6" column="0">
                          <widget class="QLabel" name="label_154">
                           <property name="font">
                            <font>
+                            <family>Aptos Narrow</family>
+                            <pointsize>10</pointsize>
                             <italic>true</italic>
                            </font>
                           </property>
@@ -3921,11 +4456,10 @@
                           </property>
                           <property name="font">
                            <font>
-                            <family>Segoe UI</family>
+                            <family>Aptos Narrow</family>
                             <pointsize>10</pointsize>
-                            <weight>50</weight>
-                            <italic>false</italic>
-                            <bold>false</bold>
+                            <weight>75</weight>
+                            <bold>true</bold>
                            </font>
                           </property>
                           <property name="focusPolicy">
@@ -3946,11 +4480,10 @@
                           </property>
                           <property name="font">
                            <font>
-                            <family>Segoe UI</family>
+                            <family>Aptos Narrow</family>
                             <pointsize>10</pointsize>
-                            <weight>50</weight>
-                            <italic>false</italic>
-                            <bold>false</bold>
+                            <weight>75</weight>
+                            <bold>true</bold>
                            </font>
                           </property>
                           <property name="alignment">
@@ -3962,6 +4495,8 @@
                          <widget class="QLabel" name="label_153">
                           <property name="font">
                            <font>
+                            <family>Aptos Narrow</family>
+                            <pointsize>10</pointsize>
                             <italic>true</italic>
                            </font>
                           </property>
@@ -3980,11 +4515,10 @@
                           </property>
                           <property name="font">
                            <font>
-                            <family>Segoe UI</family>
+                            <family>Aptos Narrow</family>
                             <pointsize>10</pointsize>
-                            <weight>50</weight>
-                            <italic>false</italic>
-                            <bold>false</bold>
+                            <weight>75</weight>
+                            <bold>true</bold>
                            </font>
                           </property>
                           <property name="alignment">
@@ -3996,6 +4530,8 @@
                          <widget class="QLabel" name="label_155">
                           <property name="font">
                            <font>
+                            <family>Aptos Narrow</family>
+                            <pointsize>10</pointsize>
                             <italic>true</italic>
                            </font>
                           </property>
@@ -4014,11 +4550,10 @@
                           </property>
                           <property name="font">
                            <font>
-                            <family>Segoe UI</family>
+                            <family>Aptos Narrow</family>
                             <pointsize>10</pointsize>
-                            <weight>50</weight>
-                            <italic>false</italic>
-                            <bold>false</bold>
+                            <weight>75</weight>
+                            <bold>true</bold>
                            </font>
                           </property>
                           <property name="alignment">
@@ -4030,6 +4565,8 @@
                          <widget class="QLabel" name="label_151">
                           <property name="font">
                            <font>
+                            <family>Aptos Narrow</family>
+                            <pointsize>10</pointsize>
                             <italic>true</italic>
                            </font>
                           </property>
@@ -4048,11 +4585,10 @@
                           </property>
                           <property name="font">
                            <font>
-                            <family>Segoe UI</family>
+                            <family>Aptos Narrow</family>
                             <pointsize>10</pointsize>
-                            <weight>50</weight>
-                            <italic>false</italic>
-                            <bold>false</bold>
+                            <weight>75</weight>
+                            <bold>true</bold>
                            </font>
                           </property>
                           <property name="focusPolicy">
@@ -4067,7 +4603,8 @@
                          <widget class="QLabel" name="label_150">
                           <property name="font">
                            <font>
-                            <italic>true</italic>
+                            <family>Aptos Narrow</family>
+                            <pointsize>10</pointsize>
                            </font>
                           </property>
                           <property name="text">
@@ -4085,11 +4622,10 @@
                           </property>
                           <property name="font">
                            <font>
-                            <family>Segoe UI</family>
+                            <family>Aptos Narrow</family>
                             <pointsize>10</pointsize>
-                            <weight>50</weight>
-                            <italic>false</italic>
-                            <bold>false</bold>
+                            <weight>75</weight>
+                            <bold>true</bold>
                            </font>
                           </property>
                           <property name="focusPolicy">
@@ -4104,6 +4640,8 @@
                          <widget class="QLabel" name="label_149">
                           <property name="font">
                            <font>
+                            <family>Aptos Narrow</family>
+                            <pointsize>10</pointsize>
                             <italic>true</italic>
                            </font>
                           </property>
@@ -4116,6 +4654,8 @@
                          <widget class="QLabel" name="label_152">
                           <property name="font">
                            <font>
+                            <family>Aptos Narrow</family>
+                            <pointsize>10</pointsize>
                             <italic>true</italic>
                            </font>
                           </property>
@@ -4128,6 +4668,8 @@
                          <widget class="QLabel" name="label_188">
                           <property name="font">
                            <font>
+                            <family>Aptos Narrow</family>
+                            <pointsize>10</pointsize>
                             <italic>true</italic>
                            </font>
                           </property>
@@ -4152,11 +4694,10 @@
                           </property>
                           <property name="font">
                            <font>
-                            <family>Segoe UI</family>
+                            <family>Aptos Narrow</family>
                             <pointsize>10</pointsize>
-                            <weight>50</weight>
-                            <italic>false</italic>
-                            <bold>false</bold>
+                            <weight>75</weight>
+                            <bold>true</bold>
                            </font>
                           </property>
                           <property name="alignment">
@@ -4174,11 +4715,10 @@
                           </property>
                           <property name="font">
                            <font>
-                            <family>Segoe UI</family>
+                            <family>Aptos Narrow</family>
                             <pointsize>10</pointsize>
-                            <weight>50</weight>
-                            <italic>false</italic>
-                            <bold>false</bold>
+                            <weight>75</weight>
+                            <bold>true</bold>
                            </font>
                           </property>
                           <property name="alignment">
@@ -4191,6 +4731,12 @@
                      </item>
                      <item row="1" column="1">
                       <widget class="QWidget" name="widget_21" native="true">
+                       <property name="font">
+                        <font>
+                         <family>Aptos Narrow</family>
+                         <pointsize>10</pointsize>
+                        </font>
+                       </property>
                        <layout class="QGridLayout" name="gridLayout_27" columnminimumwidth="100,0">
                         <property name="leftMargin">
                          <number>0</number>
@@ -4204,19 +4750,25 @@
                         <property name="bottomMargin">
                          <number>0</number>
                         </property>
-                        <property name="horizontalSpacing">
+                        <property name="spacing">
                          <number>0</number>
                         </property>
-                        <property name="verticalSpacing">
-                         <number>5</number>
-                        </property>
                         <item row="7" column="0">
-                         <widget class="QWidget" name="widget_22" native="true"/>
+                         <widget class="QWidget" name="widget_22" native="true">
+                          <property name="font">
+                           <font>
+                            <family>Aptos Narrow</family>
+                            <pointsize>10</pointsize>
+                           </font>
+                          </property>
+                         </widget>
                         </item>
                         <item row="0" column="0">
                          <widget class="QLabel" name="label_159">
                           <property name="font">
                            <font>
+                            <family>Aptos Narrow</family>
+                            <pointsize>10</pointsize>
                             <italic>true</italic>
                            </font>
                           </property>
@@ -4241,11 +4793,10 @@
                           </property>
                           <property name="font">
                            <font>
-                            <family>Segoe UI</family>
+                            <family>Aptos Narrow</family>
                             <pointsize>10</pointsize>
-                            <weight>50</weight>
-                            <italic>false</italic>
-                            <bold>false</bold>
+                            <weight>75</weight>
+                            <bold>true</bold>
                            </font>
                           </property>
                           <property name="alignment">
@@ -4257,6 +4808,8 @@
                          <widget class="QLabel" name="label_158">
                           <property name="font">
                            <font>
+                            <family>Aptos Narrow</family>
+                            <pointsize>10</pointsize>
                             <italic>true</italic>
                            </font>
                           </property>
@@ -4281,11 +4834,10 @@
                           </property>
                           <property name="font">
                            <font>
-                            <family>Segoe UI</family>
+                            <family>Aptos Narrow</family>
                             <pointsize>10</pointsize>
-                            <weight>50</weight>
-                            <italic>false</italic>
-                            <bold>false</bold>
+                            <weight>75</weight>
+                            <bold>true</bold>
                            </font>
                           </property>
                           <property name="alignment">
@@ -4309,11 +4861,10 @@
                           </property>
                           <property name="font">
                            <font>
-                            <family>Segoe UI</family>
+                            <family>Aptos Narrow</family>
                             <pointsize>10</pointsize>
-                            <weight>50</weight>
-                            <italic>false</italic>
-                            <bold>false</bold>
+                            <weight>75</weight>
+                            <bold>true</bold>
                            </font>
                           </property>
                           <property name="alignment">
@@ -4325,6 +4876,8 @@
                          <widget class="QLabel" name="label_193">
                           <property name="font">
                            <font>
+                            <family>Aptos Narrow</family>
+                            <pointsize>10</pointsize>
                             <italic>true</italic>
                            </font>
                           </property>
@@ -4337,6 +4890,8 @@
                          <widget class="QLabel" name="label_190">
                           <property name="font">
                            <font>
+                            <family>Aptos Narrow</family>
+                            <pointsize>10</pointsize>
                             <italic>true</italic>
                            </font>
                           </property>
@@ -4349,6 +4904,8 @@
                          <widget class="QLabel" name="label_162">
                           <property name="font">
                            <font>
+                            <family>Aptos Narrow</family>
+                            <pointsize>10</pointsize>
                             <italic>true</italic>
                            </font>
                           </property>
@@ -4361,6 +4918,8 @@
                          <widget class="QLabel" name="label_161">
                           <property name="font">
                            <font>
+                            <family>Aptos Narrow</family>
+                            <pointsize>10</pointsize>
                             <italic>true</italic>
                            </font>
                           </property>
@@ -4385,11 +4944,10 @@
                           </property>
                           <property name="font">
                            <font>
-                            <family>Segoe UI</family>
+                            <family>Aptos Narrow</family>
                             <pointsize>10</pointsize>
-                            <weight>50</weight>
-                            <italic>false</italic>
-                            <bold>false</bold>
+                            <weight>75</weight>
+                            <bold>true</bold>
                            </font>
                           </property>
                           <property name="alignment">
@@ -4413,11 +4971,10 @@
                           </property>
                           <property name="font">
                            <font>
-                            <family>Segoe UI</family>
+                            <family>Aptos Narrow</family>
                             <pointsize>10</pointsize>
-                            <weight>50</weight>
-                            <italic>false</italic>
-                            <bold>false</bold>
+                            <weight>75</weight>
+                            <bold>true</bold>
                            </font>
                           </property>
                           <property name="focusPolicy">
@@ -4444,11 +5001,10 @@
                           </property>
                           <property name="font">
                            <font>
-                            <family>Segoe UI</family>
+                            <family>Aptos Narrow</family>
                             <pointsize>10</pointsize>
-                            <weight>50</weight>
-                            <italic>false</italic>
-                            <bold>false</bold>
+                            <weight>75</weight>
+                            <bold>true</bold>
                            </font>
                           </property>
                           <property name="focusPolicy">
@@ -4460,7 +5016,14 @@
                          </widget>
                         </item>
                         <item row="6" column="0">
-                         <widget class="QWidget" name="widget_23" native="true"/>
+                         <widget class="QWidget" name="widget_23" native="true">
+                          <property name="font">
+                           <font>
+                            <family>Aptos Narrow</family>
+                            <pointsize>10</pointsize>
+                           </font>
+                          </property>
+                         </widget>
                         </item>
                         <item row="6" column="1">
                          <widget class="QWidget" name="widget_24" native="true">
@@ -4469,6 +5032,12 @@
                             <width>0</width>
                             <height>25</height>
                            </size>
+                          </property>
+                          <property name="font">
+                           <font>
+                            <family>Aptos Narrow</family>
+                            <pointsize>10</pointsize>
+                           </font>
                           </property>
                          </widget>
                         </item>
@@ -4480,6 +5049,12 @@
                             <height>25</height>
                            </size>
                           </property>
+                          <property name="font">
+                           <font>
+                            <family>Aptos Narrow</family>
+                            <pointsize>10</pointsize>
+                           </font>
+                          </property>
                          </widget>
                         </item>
                        </layout>
@@ -4489,6 +5064,8 @@
                       <widget class="QLabel" name="label_8">
                        <property name="font">
                         <font>
+                         <family>Aptos Narrow</family>
+                         <pointsize>10</pointsize>
                          <italic>true</italic>
                         </font>
                        </property>
@@ -4507,6 +5084,8 @@
                        </property>
                        <property name="font">
                         <font>
+                         <family>Aptos Narrow</family>
+                         <pointsize>10</pointsize>
                          <italic>true</italic>
                         </font>
                        </property>
@@ -4519,7 +5098,26 @@
                    </widget>
                   </item>
                   <item>
+                   <widget class="Line" name="line_3">
+                    <property name="font">
+                     <font>
+                      <family>Aptos Narrow</family>
+                      <pointsize>10</pointsize>
+                     </font>
+                    </property>
+                    <property name="orientation">
+                     <enum>Qt::Horizontal</enum>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
                    <widget class="QWidget" name="frame_psb" native="true">
+                    <property name="font">
+                     <font>
+                      <family>Aptos Narrow</family>
+                      <pointsize>10</pointsize>
+                     </font>
+                    </property>
                     <layout class="QGridLayout" name="gridLayout_8">
                      <property name="leftMargin">
                       <number>0</number>
@@ -4538,6 +5136,12 @@
                      </property>
                      <item row="1" column="1">
                       <widget class="QWidget" name="widget_7" native="true">
+                       <property name="font">
+                        <font>
+                         <family>Aptos Narrow</family>
+                         <pointsize>10</pointsize>
+                        </font>
+                       </property>
                        <layout class="QGridLayout" name="gridLayout_12">
                         <property name="leftMargin">
                          <number>0</number>
@@ -4561,6 +5165,8 @@
                          <widget class="QLabel" name="label_163">
                           <property name="font">
                            <font>
+                            <family>Aptos Narrow</family>
+                            <pointsize>10</pointsize>
                             <italic>true</italic>
                            </font>
                           </property>
@@ -4579,8 +5185,10 @@
                           </property>
                           <property name="font">
                            <font>
-                            <family>Segoe UI</family>
+                            <family>Aptos Narrow</family>
                             <pointsize>10</pointsize>
+                            <weight>75</weight>
+                            <bold>true</bold>
                            </font>
                           </property>
                           <property name="editable">
@@ -4598,11 +5206,10 @@
                           </property>
                           <property name="font">
                            <font>
-                            <family>Segoe UI</family>
+                            <family>Aptos Narrow</family>
                             <pointsize>10</pointsize>
-                            <weight>50</weight>
-                            <italic>false</italic>
-                            <bold>false</bold>
+                            <weight>75</weight>
+                            <bold>true</bold>
                            </font>
                           </property>
                           <property name="alignment">
@@ -4614,6 +5221,8 @@
                          <widget class="QLabel" name="label_164">
                           <property name="font">
                            <font>
+                            <family>Aptos Narrow</family>
+                            <pointsize>10</pointsize>
                             <italic>true</italic>
                            </font>
                           </property>
@@ -4626,6 +5235,8 @@
                          <widget class="QLabel" name="label_167">
                           <property name="font">
                            <font>
+                            <family>Aptos Narrow</family>
+                            <pointsize>10</pointsize>
                             <italic>true</italic>
                            </font>
                           </property>
@@ -4638,6 +5249,8 @@
                          <widget class="QLabel" name="label_165">
                           <property name="font">
                            <font>
+                            <family>Aptos Narrow</family>
+                            <pointsize>10</pointsize>
                             <italic>true</italic>
                            </font>
                           </property>
@@ -4662,11 +5275,10 @@
                           </property>
                           <property name="font">
                            <font>
-                            <family>Segoe UI</family>
+                            <family>Aptos Narrow</family>
                             <pointsize>10</pointsize>
-                            <weight>50</weight>
-                            <italic>false</italic>
-                            <bold>false</bold>
+                            <weight>75</weight>
+                            <bold>true</bold>
                            </font>
                           </property>
                           <property name="alignment">
@@ -4690,11 +5302,10 @@
                           </property>
                           <property name="font">
                            <font>
-                            <family>Segoe UI</family>
+                            <family>Aptos Narrow</family>
                             <pointsize>10</pointsize>
-                            <weight>50</weight>
-                            <italic>false</italic>
-                            <bold>false</bold>
+                            <weight>75</weight>
+                            <bold>true</bold>
                            </font>
                           </property>
                           <property name="alignment">
@@ -4712,6 +5323,8 @@
                           </property>
                           <property name="font">
                            <font>
+                            <family>Aptos Narrow</family>
+                            <pointsize>10</pointsize>
                             <italic>true</italic>
                            </font>
                           </property>
@@ -4734,6 +5347,12 @@
                             <height>50</height>
                            </size>
                           </property>
+                          <property name="font">
+                           <font>
+                            <family>Aptos Narrow</family>
+                            <pointsize>10</pointsize>
+                           </font>
+                          </property>
                           <property name="tabChangesFocus">
                            <bool>true</bool>
                           </property>
@@ -4741,6 +5360,12 @@
                         </item>
                         <item row="1" column="2">
                          <widget class="QWidget" name="widget_6" native="true">
+                          <property name="font">
+                           <font>
+                            <family>Aptos Narrow</family>
+                            <pointsize>10</pointsize>
+                           </font>
+                          </property>
                           <layout class="QGridLayout" name="gridLayout_13">
                            <property name="leftMargin">
                             <number>0</number>
@@ -4771,6 +5396,12 @@
                                <height>25</height>
                               </size>
                              </property>
+                             <property name="font">
+                              <font>
+                               <family>Aptos Narrow</family>
+                               <pointsize>10</pointsize>
+                              </font>
+                             </property>
                              <property name="styleSheet">
                               <string notr="true"/>
                              </property>
@@ -4781,6 +5412,12 @@
                            </item>
                            <item row="0" column="1">
                             <spacer name="horizontalSpacer_5">
+                             <property name="font">
+                              <font>
+                               <family>Aptos Narrow</family>
+                               <pointsize>10</pointsize>
+                              </font>
+                             </property>
                              <property name="orientation">
                               <enum>Qt::Horizontal</enum>
                              </property>
@@ -4803,6 +5440,12 @@
                   </item>
                   <item alignment="Qt::AlignTop">
                    <widget class="QWidget" name="frame_pendataan" native="true">
+                    <property name="font">
+                     <font>
+                      <family>Aptos Narrow</family>
+                      <pointsize>10</pointsize>
+                     </font>
+                    </property>
                     <layout class="QGridLayout" name="gridLayout_28">
                      <property name="leftMargin">
                       <number>0</number>
@@ -4824,6 +5467,12 @@
                      </property>
                      <item row="1" column="0" alignment="Qt::AlignTop">
                       <widget class="QWidget" name="widget_9" native="true">
+                       <property name="font">
+                        <font>
+                         <family>Aptos Narrow</family>
+                         <pointsize>10</pointsize>
+                        </font>
+                       </property>
                        <layout class="QGridLayout" name="gridLayout_30">
                         <property name="leftMargin">
                          <number>0</number>
@@ -4844,6 +5493,8 @@
                          <widget class="QLabel" name="label_156">
                           <property name="font">
                            <font>
+                            <family>Aptos Narrow</family>
+                            <pointsize>10</pointsize>
                             <italic>true</italic>
                            </font>
                           </property>
@@ -4862,11 +5513,10 @@
                           </property>
                           <property name="font">
                            <font>
-                            <family>Segoe UI</family>
+                            <family>Aptos Narrow</family>
                             <pointsize>10</pointsize>
-                            <weight>50</weight>
-                            <italic>false</italic>
-                            <bold>false</bold>
+                            <weight>75</weight>
+                            <bold>true</bold>
                            </font>
                           </property>
                           <property name="focusPolicy">
@@ -4897,6 +5547,12 @@
                      </item>
                      <item row="1" column="1">
                       <widget class="QWidget" name="widget_10" native="true">
+                       <property name="font">
+                        <font>
+                         <family>Aptos Narrow</family>
+                         <pointsize>10</pointsize>
+                        </font>
+                       </property>
                        <layout class="QGridLayout" name="gridLayout_31">
                         <property name="leftMargin">
                          <number>0</number>
@@ -4917,6 +5573,8 @@
                          <widget class="QLabel" name="label_157">
                           <property name="font">
                            <font>
+                            <family>Aptos Narrow</family>
+                            <pointsize>10</pointsize>
                             <italic>true</italic>
                            </font>
                           </property>
@@ -4935,11 +5593,10 @@
                           </property>
                           <property name="font">
                            <font>
-                            <family>Segoe UI</family>
+                            <family>Aptos Narrow</family>
                             <pointsize>10</pointsize>
-                            <weight>50</weight>
-                            <italic>false</italic>
-                            <bold>false</bold>
+                            <weight>75</weight>
+                            <bold>true</bold>
                            </font>
                           </property>
                           <property name="focusPolicy">
@@ -4972,10 +5629,9 @@
                       <widget class="QLabel" name="label_11">
                        <property name="font">
                         <font>
+                         <family>Aptos Narrow</family>
                          <pointsize>10</pointsize>
-                         <weight>75</weight>
                          <italic>true</italic>
-                         <bold>true</bold>
                         </font>
                        </property>
                        <property name="text">
@@ -4988,6 +5644,12 @@
                   </item>
                   <item>
                    <spacer name="verticalSpacer">
+                    <property name="font">
+                     <font>
+                      <family>Aptos Narrow</family>
+                      <pointsize>10</pointsize>
+                     </font>
+                    </property>
                     <property name="orientation">
                      <enum>Qt::Vertical</enum>
                     </property>
@@ -5052,39 +5714,6 @@
               <property name="verticalSpacing">
                <number>0</number>
               </property>
-              <item row="0" column="1">
-               <widget class="QComboBox" name="pilihan_jenjang_cbo2">
-                <property name="minimumSize">
-                 <size>
-                  <width>120</width>
-                  <height>0</height>
-                 </size>
-                </property>
-                <property name="editable">
-                 <bool>true</bool>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="0">
-               <widget class="QLabel" name="label_10">
-                <property name="text">
-                 <string>Pilihan Jenjang</string>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="2">
-               <spacer name="horizontalSpacer_4">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>40</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
              </layout>
             </widget>
            </item>
@@ -5117,6 +5746,7 @@
                <widget class="QLabel" name="label_5">
                 <property name="font">
                  <font>
+                  <family>Aptos Narrow</family>
                   <italic>true</italic>
                  </font>
                 </property>
@@ -5138,6 +5768,7 @@
                <widget class="QLabel" name="label_9">
                 <property name="font">
                  <font>
+                  <family>Aptos Narrow</family>
                   <italic>true</italic>
                  </font>
                 </property>
@@ -5175,6 +5806,12 @@
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
+      <property name="font">
+       <font>
+        <family>Aptos Narrow</family>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
       <layout class="QGridLayout" name="gridLayout_41">
        <property name="leftMargin">
         <number>0</number>
@@ -5193,26 +5830,79 @@
        </property>
        <item row="0" column="0">
         <widget class="QWidget" name="header_frame" native="true">
+         <property name="font">
+          <font>
+           <family>Aptos Narrow</family>
+           <pointsize>10</pointsize>
+          </font>
+         </property>
          <layout class="QGridLayout" name="gridLayout_5" rowstretch="0">
           <property name="leftMargin">
-           <number>5</number>
+           <number>2</number>
           </property>
           <property name="topMargin">
-           <number>5</number>
+           <number>2</number>
           </property>
           <property name="rightMargin">
-           <number>5</number>
+           <number>2</number>
           </property>
           <property name="bottomMargin">
-           <number>5</number>
+           <number>2</number>
           </property>
-          <property name="horizontalSpacing">
-           <number>3</number>
-          </property>
-          <property name="verticalSpacing">
+          <property name="spacing">
            <number>0</number>
           </property>
-          <item row="0" column="3">
+          <item row="0" column="1">
+           <widget class="QPushButton" name="save_btn">
+            <property name="minimumSize">
+             <size>
+              <width>75</width>
+              <height>24</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>75</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>Aptos Narrow</family>
+              <pointsize>10</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>Save</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QPushButton" name="next_btn">
+            <property name="minimumSize">
+             <size>
+              <width>30</width>
+              <height>24</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>30</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>Aptos Narrow</family>
+              <pointsize>10</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="6">
            <widget class="QPushButton" name="btn_next_dok">
             <property name="minimumSize">
              <size>
@@ -5226,31 +5916,18 @@
               <height>25</height>
              </size>
             </property>
+            <property name="font">
+             <font>
+              <family>Aptos Narrow</family>
+              <pointsize>10</pointsize>
+             </font>
+            </property>
             <property name="text">
              <string>&gt;</string>
             </property>
            </widget>
           </item>
           <item row="0" column="4">
-           <widget class="QPushButton" name="copy_filepath">
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>25</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>25</width>
-              <height>25</height>
-             </size>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
            <widget class="QPushButton" name="btn_prev_dok">
             <property name="minimumSize">
              <size>
@@ -5264,29 +5941,25 @@
               <height>25</height>
              </size>
             </property>
+            <property name="font">
+             <font>
+              <family>Aptos Narrow</family>
+              <pointsize>10</pointsize>
+             </font>
+            </property>
             <property name="text">
              <string>&lt;</string>
             </property>
            </widget>
           </item>
-          <item row="0" column="2">
-           <widget class="QComboBox" name="cbo_daftar_dokumen">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>120</width>
-              <height>25</height>
-             </size>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0">
+          <item row="0" column="3">
            <spacer name="horizontalSpacer_6">
+            <property name="font">
+             <font>
+              <family>Aptos Narrow</family>
+              <pointsize>10</pointsize>
+             </font>
+            </property>
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
             </property>
@@ -5298,8 +5971,61 @@
             </property>
            </spacer>
           </item>
+          <item row="0" column="7">
+           <widget class="QPushButton" name="copy_filepath">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>25</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>Aptos Narrow</family>
+              <pointsize>10</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
           <item row="0" column="5">
+           <widget class="QComboBox" name="cbo_daftar_dokumen">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>150</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>Aptos Narrow</family>
+              <pointsize>10</pointsize>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="8">
            <spacer name="horizontalSpacer">
+            <property name="font">
+             <font>
+              <family>Aptos Narrow</family>
+              <pointsize>10</pointsize>
+             </font>
+            </property>
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
             </property>
@@ -5311,7 +6037,7 @@
             </property>
            </spacer>
           </item>
-          <item row="0" column="6">
+          <item row="0" column="9">
            <widget class="QPushButton" name="pushButton">
             <property name="maximumSize">
              <size>
@@ -5319,11 +6045,42 @@
               <height>24</height>
              </size>
             </property>
+            <property name="font">
+             <font>
+              <family>Aptos Narrow</family>
+              <pointsize>10</pointsize>
+             </font>
+            </property>
             <property name="text">
              <string>&gt;</string>
             </property>
             <property name="checkable">
              <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QPushButton" name="prev_btn">
+            <property name="minimumSize">
+             <size>
+              <width>30</width>
+              <height>24</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>30</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>Aptos Narrow</family>
+              <pointsize>10</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>&lt;</string>
             </property>
            </widget>
           </item>
@@ -5337,6 +6094,12 @@
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <family>Aptos Narrow</family>
+           <pointsize>10</pointsize>
+          </font>
          </property>
          <layout class="QGridLayout" name="grid_viewer">
           <property name="leftMargin">

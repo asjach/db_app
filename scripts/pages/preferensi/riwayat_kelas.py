@@ -1,7 +1,7 @@
 from PySide6.QtWidgets import QWidget, QMainWindow, QMessageBox
 from utils.fungsi.general_functions import *
 from ui.ui_page_pref_riwayat_kelas import Ui_Form
-from models.preferensi.riwayat_kelas import RiwayatKelas
+from models.model_preferensi import Model_Preferensi
 
 class PageRiwayatKelas(QWidget, Ui_Form):
     def __init__(self, parent:QMainWindow):
@@ -11,9 +11,9 @@ class PageRiwayatKelas(QWidget, Ui_Form):
         self.jenjang= None
         self.tapel = None
         self.id_kelas = None
-        self.cbo_jenjang = self.parent.cbo_jenjang
+        # self.cbo_jenjang = self.parent.cbo_jenjang
         self.cbo_tapel = self.parent.cbo_tapel
-        self.SQL = RiwayatKelas()
+        self.SQL = Model_Preferensi()
         self.tbl_jenjang.itemSelectionChanged.connect(self.tabel_jenjang_selected)
         self.tbl_jenjang.itemChanged.connect(self.update_jenjang)
         self.tbl_tapel.itemSelectionChanged.connect(self.tabel_tapel_selected)
@@ -24,7 +24,7 @@ class PageRiwayatKelas(QWidget, Ui_Form):
         self.cbo_wali_kelas.currentIndexChanged.connect(self.update_wali_kelas)
 
     def show_page(self):
-        self.jenjang = self.cbo_jenjang.currentText()
+        self.jenjang = self.parent.str_jenjang
         self.tapel = self.cbo_tapel.currentText()
         self.fill_tabel_jenjang()
         self.fill_tabel_tapel()
@@ -139,10 +139,16 @@ class PageRiwayatKelas(QWidget, Ui_Form):
             QMessageBox.warning(self, "Informasi", "Isi list kelas terlebih dahulu")
 
     def fill_cbo_wali_kelas(self):
-        self.cbo_wali_kelas.clear()
         data_guru = self.SQL.daftar_guru(self.jenjang, self.tapel)
-        for guru in data_guru:
-            self.cbo_wali_kelas.addItem(guru['nama_lengkap'], userData=guru['id_guru'])
+        self.cbo_wali_kelas.blockSignals(True)
+        populate_combobox(
+            cbo_widget=self.cbo_wali_kelas,
+            data=data_guru,
+            text_data='nama_lengkap',
+            user_data='id_guru'
+        )
+        self.cbo_wali_kelas.blockSignals(False)
+
         
     def update_wali_kelas(self):
         sukses = False

@@ -1,7 +1,7 @@
 from PySide6.QtWidgets import QWidget, QMainWindow
 from utils.fungsi.general_functions import populate_combobox, generate_table, open_dialog, table_selected, save_pdf, print_with_foxit
 from ui.ui_page_kartu_peserta import Ui_Form
-from models.nilai.kartu_peserta import KartuPeserta
+from models.model_nilai import Model_Nilai
 from template.kartu_peserta import TemplateKartuPeserta
 from scripts.widgets.dokumen_viewer import DokumenViewer
 import json
@@ -12,7 +12,7 @@ class PageKartuPeserta(QWidget, Ui_Form):
         super().__init__(parent)
         self.setupUi(self)
         self.parent = parent
-        self.SQL = KartuPeserta()
+        self.SQL = Model_Nilai()
         self.viewer = DokumenViewer()
         self.viewer_layout.addWidget(self.viewer)
         self.fill_fonts()
@@ -99,8 +99,6 @@ class PageKartuPeserta(QWidget, Ui_Form):
         self.btn_clear.clicked.connect(self.clear_setting)
         self.spin_presisi.valueChanged.connect(self.presisi_changed)
         
-        
-
         # Listener perubahan kontrol untuk refresh preview
         self.blok_sinyal(True)
         for ctl in self.all_controls:
@@ -128,7 +126,7 @@ class PageKartuPeserta(QWidget, Ui_Form):
 
     def fill_cbo_kegiatan(self):
         data = self.SQL.get_kegiatan(
-            jenjang=self.parent.cbo_jenjang.currentText(),
+            jenjang=self.parent.str_jenjang,
             tapel=self.parent.cbo_tapel.currentText()
         )
         populate_combobox(self.cbo_kegiatan, data, 'kegiatan', 'id')

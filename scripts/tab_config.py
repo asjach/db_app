@@ -6,7 +6,7 @@ from scripts import *
 TAB_CONFIG = {
     "Daftar Kelas": {
         "order_by": ('Nama', 'JK', 'Ayah', 'Ibu', 'Urutan', 'Alamat'),
-        "search_by": ('Nama', 'Ayah', 'Ibu', 'Alamat', 'Status Awal', 'Keaktifan'),
+        "search_by": ('Nama', 'Ayah', 'Ibu', 'Alamat', 'Status Awal', 'Keaktifan', 'EMIS', 'VervalPD'),
         "kolom": {key.title(): value for key, value in DAFTAR_KELAS.items()},
         "show_page": "DK",
         "action": "actionDaftar_Kelas",
@@ -54,6 +54,7 @@ TAB_CONFIG = {
         "page_class": PageMI2MD,
     },
     "Kenaikan": {
+        "hidden_frame": ['kelas'],
         "order_by": ['Nama', 'JK'],
         "search_by": ['Nama', 'Ayah', 'Ibu', 'NIS'],
         "kolom": [],
@@ -70,11 +71,29 @@ TAB_CONFIG = {
         "action": "actionKelulusan",
         "page_class": PageKelulusan,
     },
+    "Buku Induk Siswa": {
+        "order_by": ['Nama', 'JK'],
+        "search_by": ['Nama', 'Ayah', 'Ibu', 'NIS'],
+        "kolom": {key.title(): value for key, value in BUKU_INDUK.items()},
+        "hidden_frame": ["jenjang", "tapel", "tingkat", "kelas"],
+        "show_page": "BUKU_INDUK_SISWA",
+        "action": "actionBukuInduk",
+        "page_class": PageBukuInduk,
+    },
+    "Ceklis EMIS": {
+        "order_by": ['Nama', 'JK'],
+        "search_by": ['Nama', 'Ayah', 'Ibu', 'NIS'],
+        # "kolom": {key.title(): value for key, value in BUKU_INDUK.items()},
+        # "hidden_frame": ["jenjang", "tapel", "tingkat", "kelas"],
+        "show_page": "CEKLIS_EMIS",
+        "action": "actionCeklis_EMIS",
+        "page_class": PageCeklisEMIS,
+    },
     "Buku Induk Guru": {
         "order_by": ['Nama', 'JK', 'ID Guru'],
         "search_by": ['Nama'],
         "kolom": [],
-        "hidden_frame": ['jenjang', 'tapel', 'tingkat', 'kelas'],
+        "hidden_frame": ['jenjang', 'tapel'],
         "show_page": "BUKUINDUKGURU",
         "action": "actionBukuIndukGuru",
         "page_class": PageBukuIndukGuru,
@@ -96,13 +115,19 @@ TAB_CONFIG = {
         "action": "actionRiwayat_Mengajar",
         "page_class": PageRiwayatMengajar,
     },
-    "Dokumen": {
-        "order_by": ['Nama', 'JK'],
-        "search_by": ['Nama'],
-        "show_page": "DOKUMEN",
-        "action": "actionInput_Dokumen",
-        "page_class": PageDokumen,
+    "Administrasi Guru": {
+        "hidden_frame": ['tingkat', 'kelas'],
+        "show_page": "ADM_GURU",
+        "action": "actionAdmGuru",
+        "page_class": PageAdmGuru,
     },
+    # "Dokumen": {
+    #     "order_by": ['Nama', 'JK'],
+    #     "search_by": ['Nama'],
+    #     "show_page": "DOKUMEN",
+    #     "action": "actionInput_Dokumen",
+    #     "page_class": PageDokumen,
+    # },
     "Lihat Dokumen": {
         "order_by": ['Nama', 'JK'],
         "search_by": ['Nama'],
@@ -129,6 +154,14 @@ TAB_CONFIG = {
         "action": "actionCopy_Dokumen",
         "page_class": PageCopyDokumen,
     },
+    "Rename Dokumen": {
+        "order_by": ['Nama', 'JK'],
+        "search_by": ['Nama'],
+        "show_page": "RENAME_DOKUMEN",
+        "action": "actionRename_Dokumen",
+        "page_class": PageRenameDokumen,
+    },
+
     "Riwayat Kegiatan": {
         "hidden_frame": ['jenjang', 'tingkat', 'kelas'],
         "show_page": "RIWAYAT_KEGIATAN",
@@ -140,7 +173,7 @@ TAB_CONFIG = {
         "order_by": ['Nama', 'JK'],
         "show_page": "PESERTA",
         "action": "actionPesertaKegiatan",
-        "page_class": PagePeserta,
+        "page_class": Page_Peserta,
     },
     "Mapel": {
         "show_page": "MAPEL",
@@ -158,6 +191,8 @@ TAB_CONFIG = {
         "page_class": PageKartuPeserta,
     },
     "Rekap Nilai": {
+        "order_by": ['Nama', 'JK', 'Peringkat'],
+        "hidden_frame": ['jenjang', 'tingkat', 'kelas'],
         "show_page": "REKAP_NILAI",
         "action": "actionRekap",
         "page_class": PageRekapNilai,
@@ -193,26 +228,5 @@ TAB_CONFIG = {
         "show_page": "KEY_VALUE",
         "action": "actionKey_Value",
         "page_class": PageKeyValue,
-    },
-    "Biaya": {
-        "search_by": ['nama_biaya'],
-        "hidden_frame": ['jenjang', 'tingkat', 'kelas'],
-        "show_page": "KEY_VALUE",
-        "action": "actionBiaya",
-        "page_class": PageBiaya,
-    },
-    "Transaksi Pembayaran": {
-        "search_by": ['Nama Lengkap', 'Ayah', 'Ibu'],
-        "hidden_frame": ['jenjang',],
-        "show_page": "TRANSAKSI",
-        "action": "actionTransaksi_Pembayaran",
-        "page_class": PageTransaksi,
-    },
-    "Riwayat Biaya": {
-        "search_by": [],
-        "hidden_frame": ['jenjang',],
-        "show_page": "RIWAYAT_BIAYA",
-        "action": "actionRiwayat_Biaya",
-        "page_class": PageRiwayatBiaya,
     },
 }

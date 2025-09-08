@@ -1,7 +1,7 @@
 
 from ui.ui_page_mi_ke_md import Ui_Form
 from utils.fungsi.general_functions import *
-from models.siswa.mi2md import MI2MD
+from models.model_siswa import Model_Siswa
 from PySide6.QtWidgets import QMessageBox, QWidget, QMainWindow
 
 class PageMI2MD(Ui_Form, QWidget):
@@ -9,7 +9,7 @@ class PageMI2MD(Ui_Form, QWidget):
         super().__init__(parent)
         self.setupUi(self)
         self.parent = parent
-        self.SQL = MI2MD()
+        self.SQL = Model_Siswa()
 
         self.mi_tbl.itemSelectionChanged.connect(
             lambda:table_selected(self.mi_tbl, self, self.parent, ['id', 'nis_lokal'])
@@ -22,8 +22,8 @@ class PageMI2MD(Ui_Form, QWidget):
 
     def _dynamic_attributs(self):
         self.txt_tapel = self.parent.cbo_tapel.currentText()
-        self.txt_tingkat = self.parent.cbo_tingkat.currentText()
-        self.txt_kelas = self.parent.cbo_kelas.currentText()
+        self.txt_tingkat = self.parent.quoted_daftar_tingkat
+        self.txt_kelas = self.parent.quoted_daftar_kelas
         self.txt_search_by = self.parent.cbo_search_by.currentText()
         self.txt_search = self.parent.line_search.text()
 
@@ -44,6 +44,8 @@ class PageMI2MD(Ui_Form, QWidget):
         table_params = {
             'fungsi_akhir':self.insert_to_md_clicked,
             'icon_akhir':":/icon/resources/icon/more_than.svg",
+            'hidden_column':[0],
+            'stretch_column':2,
         }
         fill_table(self.mi_tbl, self.SQL.get_mi_only, params, table_params)
         
@@ -59,7 +61,7 @@ class PageMI2MD(Ui_Form, QWidget):
         table_params = {
             'icon_akhir':":/icon/resources/icon/multiply.svg",
             'fungsi_akhir':self.batal_insert_clicked,
-            'hidden_column': [5,6,7],
+            'hidden_column': [0],
             'stretch_column': 2
         }
         fill_table(self.md_tbl, self.SQL.list_siswa_aktif,params, table_params)

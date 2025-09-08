@@ -370,13 +370,13 @@ class Ui_Form(object):
 
         self.gridLayout_3.addWidget(self.insert_btn, 0, 0, 1, 1)
 
-        self.insert_btn_2 = QPushButton(self.widget)
-        self.insert_btn_2.setObjectName(u"insert_btn_2")
-        self.insert_btn_2.setMinimumSize(QSize(0, 40))
-        self.insert_btn_2.setFont(font2)
-        self.insert_btn_2.setAutoDefault(False)
+        self.update_btn = QPushButton(self.widget)
+        self.update_btn.setObjectName(u"update_btn")
+        self.update_btn.setMinimumSize(QSize(0, 40))
+        self.update_btn.setFont(font2)
+        self.update_btn.setAutoDefault(False)
 
-        self.gridLayout_3.addWidget(self.insert_btn_2, 0, 1, 1, 1)
+        self.gridLayout_3.addWidget(self.update_btn, 0, 1, 1, 1)
 
         self.progress_save = QProgressBar(self.widget)
         self.progress_save.setObjectName(u"progress_save")
@@ -440,6 +440,6 @@ class Ui_Form(object):
         self.btn_browse.setText(QCoreApplication.translate("Form", u"Browse", None))
         self.label_10.setText(QCoreApplication.translate("Form", u"Nama File", None))
         self.insert_btn.setText(QCoreApplication.translate("Form", u"Insert", None))
-        self.insert_btn_2.setText(QCoreApplication.translate("Form", u"Update", None))
+        self.update_btn.setText(QCoreApplication.translate("Form", u"Update", None))
     # retranslateUi
 
