@@ -35,11 +35,9 @@ class Ui_Form(object):
         self.tab_3 = QWidget()
         self.tab_3.setObjectName(u"tab_3")
         self.gridLayout_6 = QGridLayout(self.tab_3)
+        self.gridLayout_6.setSpacing(5)
         self.gridLayout_6.setObjectName(u"gridLayout_6")
-        self.verticalSpacer = QSpacerItem(20, 386, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
-
-        self.gridLayout_6.addItem(self.verticalSpacer, 5, 1, 1, 1)
-
+        self.gridLayout_6.setContentsMargins(0, 0, 0, 0)
         self.label_3 = QLabel(self.tab_3)
         self.label_3.setObjectName(u"label_3")
 
@@ -52,17 +50,6 @@ class Ui_Form(object):
 
         self.gridLayout_6.addWidget(self.line_no_urut, 0, 1, 1, 2)
 
-        self.btn_tambah = QPushButton(self.tab_3)
-        self.btn_tambah.setObjectName(u"btn_tambah")
-        sizePolicy = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Preferred)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.btn_tambah.sizePolicy().hasHeightForWidth())
-        self.btn_tambah.setSizePolicy(sizePolicy)
-        self.btn_tambah.setMaximumSize(QSize(80, 16777215))
-
-        self.gridLayout_6.addWidget(self.btn_tambah, 6, 2, 1, 1)
-
         self.cbo_jk = QComboBox(self.tab_3)
         self.cbo_jk.addItem("")
         self.cbo_jk.addItem("")
@@ -71,13 +58,6 @@ class Ui_Form(object):
         self.cbo_jk.setMaximumSize(QSize(40, 16777215))
 
         self.gridLayout_6.addWidget(self.cbo_jk, 2, 1, 1, 1)
-
-        self.line_nama_lengkap = QLineEdit(self.tab_3)
-        self.line_nama_lengkap.setObjectName(u"line_nama_lengkap")
-        self.line_nama_lengkap.setMinimumSize(QSize(240, 24))
-        self.line_nama_lengkap.setMaximumSize(QSize(240, 16777215))
-
-        self.gridLayout_6.addWidget(self.line_nama_lengkap, 1, 1, 1, 1)
 
         self.label_4 = QLabel(self.tab_3)
         self.label_4.setObjectName(u"label_4")
@@ -106,6 +86,27 @@ class Ui_Form(object):
         self.label_8.setObjectName(u"label_8")
 
         self.gridLayout_6.addWidget(self.label_8, 3, 0, 1, 1)
+
+        self.btn_tambah = QPushButton(self.tab_3)
+        self.btn_tambah.setObjectName(u"btn_tambah")
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.btn_tambah.sizePolicy().hasHeightForWidth())
+        self.btn_tambah.setSizePolicy(sizePolicy)
+        self.btn_tambah.setMinimumSize(QSize(0, 40))
+
+        self.gridLayout_6.addWidget(self.btn_tambah, 4, 0, 1, 3)
+
+        self.line_nama_lengkap = QLineEdit(self.tab_3)
+        self.line_nama_lengkap.setObjectName(u"line_nama_lengkap")
+        self.line_nama_lengkap.setMinimumSize(QSize(240, 24))
+
+        self.gridLayout_6.addWidget(self.line_nama_lengkap, 1, 1, 1, 2)
+
+        self.verticalSpacer = QSpacerItem(328, 392, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.gridLayout_6.addItem(self.verticalSpacer, 5, 1, 1, 2)
 
         self.tabWidget.addTab(self.tab_3, "")
         self.tab = QWidget()
@@ -187,7 +188,6 @@ class Ui_Form(object):
     def retranslateUi(self, Form):
         Form.setWindowTitle(QCoreApplication.translate("Form", u"Form", None))
         self.label_3.setText(QCoreApplication.translate("Form", u"No Urut", None))
-        self.btn_tambah.setText(QCoreApplication.translate("Form", u"Tambah", None))
         self.cbo_jk.setItemText(0, QCoreApplication.translate("Form", u"L", None))
         self.cbo_jk.setItemText(1, QCoreApplication.translate("Form", u"P", None))
 
@@ -201,6 +201,7 @@ class Ui_Form(object):
         self.cbo_kelas.setItemText(5, QCoreApplication.translate("Form", u"6", None))
 
         self.label_8.setText(QCoreApplication.translate("Form", u"Kelas", None))
+        self.btn_tambah.setText(QCoreApplication.translate("Form", u"Tambah", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_3), QCoreApplication.translate("Form", u"Input Baru", None))
 #if QT_CONFIG(tooltip)
         self.tbl_diterima.setToolTip(QCoreApplication.translate("Form", u"Tekan tombol silang untuk membatalkan", None))

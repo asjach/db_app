@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1061</width>
-    <height>533</height>
+    <height>715</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -94,7 +94,7 @@
            <number>0</number>
           </property>
           <property name="rightMargin">
-           <number>5</number>
+           <number>0</number>
           </property>
           <property name="bottomMargin">
            <number>0</number>
@@ -344,7 +344,7 @@
             <property name="minimumSize">
              <size>
               <width>100</width>
-              <height>25</height>
+              <height>28</height>
              </size>
             </property>
             <property name="font">
@@ -628,7 +628,7 @@
             <property name="minimumSize">
              <size>
               <width>100</width>
-              <height>25</height>
+              <height>28</height>
              </size>
             </property>
             <property name="font">
@@ -636,6 +636,9 @@
               <family>Segoe UI Semibold</family>
               <pointsize>9</pointsize>
              </font>
+            </property>
+            <property name="maxVisibleItems">
+             <number>30</number>
             </property>
            </widget>
           </item>
@@ -684,7 +687,7 @@
             <property name="minimumSize">
              <size>
               <width>120</width>
-              <height>25</height>
+              <height>28</height>
              </size>
             </property>
             <property name="font">
@@ -692,6 +695,9 @@
               <family>Segoe UI Semibold</family>
               <pointsize>9</pointsize>
              </font>
+            </property>
+            <property name="maxVisibleItems">
+             <number>30</number>
             </property>
             <property name="sizeAdjustPolicy">
              <enum>QComboBox::AdjustToContents</enum>
@@ -1029,6 +1035,9 @@
    </property>
   </action>
   <action name="actionGanti_Dokumen">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Ganti Dokumen</string>
    </property>
@@ -1044,6 +1053,9 @@
    </property>
   </action>
   <action name="actionApp_Setting">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>App Setting</string>
    </property>

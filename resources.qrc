@@ -15,6 +15,8 @@
     <file>resources/icon/multiply_hover.svg</file>
   </qresource>
   <qresource prefix="dark">
+    <file>resources/icon/dark/expand_arrow.svg</file>
+    <file>resources/icon/dark/expand_arrow_hover.svg</file>
     <file>resources/icon/dark/multiply_grey.svg</file>
     <file>resources/icon/dark/multiply_red.svg</file>
     <file>resources/icon/dark/multiply_white.svg</file>

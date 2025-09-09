@@ -24,8 +24,9 @@ class Ui_Form(object):
             Form.setObjectName(u"Form")
         Form.resize(1056, 800)
         self.gridLayout = QGridLayout(Form)
-        self.gridLayout.setSpacing(5)
         self.gridLayout.setObjectName(u"gridLayout")
+        self.gridLayout.setHorizontalSpacing(20)
+        self.gridLayout.setVerticalSpacing(5)
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
         self.widget_2 = QWidget(Form)
         self.widget_2.setObjectName(u"widget_2")
@@ -42,6 +43,7 @@ class Ui_Form(object):
 
         self.tbl_b = QTableWidget(self.widget_2)
         self.tbl_b.setObjectName(u"tbl_b")
+        self.tbl_b.verticalHeader().setVisible(False)
 
         self.gridLayout_3.addWidget(self.tbl_b, 1, 0, 1, 1)
 
@@ -63,6 +65,7 @@ class Ui_Form(object):
 
         self.tbl_c = QTableWidget(self.widget_3)
         self.tbl_c.setObjectName(u"tbl_c")
+        self.tbl_c.verticalHeader().setVisible(False)
 
         self.gridLayout_4.addWidget(self.tbl_c, 1, 0, 1, 1)
 
@@ -84,6 +87,7 @@ class Ui_Form(object):
 
         self.tbl_a = QTableWidget(self.widget)
         self.tbl_a.setObjectName(u"tbl_a")
+        self.tbl_a.verticalHeader().setVisible(False)
 
         self.gridLayout_2.addWidget(self.tbl_a, 1, 0, 1, 1)
 

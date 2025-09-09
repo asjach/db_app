@@ -1,8 +1,7 @@
 /* REFERENSI: https://github.com/ColinDuquesnoy/QDarkStyleSheet/blob/master/qdarkstyle/dark/darkstyle.qss */
 
-
-
-#prev_jenjang, #prev_tapel, #prev_tingkat, #prev_kelas, #prev_keaktifan, #prev_order_by, #prev_data, #prev_kolom {
+#prev_order_by, 
+#prev_kolom {
     image: url(:/icon/resources/icon/less_than.svg);
     width: 15px;
     height: 15px;
@@ -10,17 +9,19 @@
     border-radius: 1px;
 }
 
-#prev_jenjang:hover, #prev_tapel:hover, #prev_tingkat:hover, #prev_kelas:hover, #prev_keaktifan:hover, #prev_order_by:hover, #prev_data:hover, #prev_kolom:hover  {
+#prev_order_by:hover, 
+#prev_kolom:hover  {
     image: url(:/icon/resources/icon/less_than_hover.svg);
 	background-color: #1EFFFFFF;
 }
-
-#prev_jenjang:pressed, #prev_tapel:pressed, #prev_tingkat:pressed, #prev_kelas:pressed, #prev_keaktifan:pressed, #prev_order_by:pressed, #prev_data:pressed, #prev_kolom:pressed{
+ 
+#prev_order_by:pressed, 
+#prev_kolom:pressed{
    background-color: #28FFFFFF;
 }
 
-
-#next_jenjang, #next_tapel, #next_tingkat, #next_kelas, #next_keaktifan, #next_order_by, #next_data, #next_kolom {
+#next_order_by, 
+#next_kolom {
    	image: url(:/icon/resources/icon/more_than.svg);
        width: 15px;
        height: 15px;
@@ -28,46 +29,41 @@
        border-radius: 1px;
 }
 
-#next_jenjang:hover, #next_tapel:hover, #next_tingkat:hover, #next_kelas:hover, #next_keaktifan:hover, #next_order_by:hover, #next_data:hover,  #next_kolom:hover {
+#next_order_by:hover, 
+#next_kolom:hover {
     image: url(:/icon/resources/icon/more_than_hover.svg);
 	background-color: #1EFFFFFF;
 }
 
-#next_jenjang:pressed, #next_tapel:pressed, #next_tingkat:pressed, #next_kelas:pressed, #next_keaktifan:pressed, #next_order_by:pressed {
+#next_order_by:pressed {
    background-color: #28FFFFFF;
 }
 
-
-#label_jenjang, #label_tapel, #label_tingkat, #label_kelas
-{
-	border:none;
-	background-color:transparent;
-	margin:0px 5px;
-}
 
 #frame_filter{
     border: none;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-QMainWindow {
     background-color: var(--background_color);
-    
 }
 
-QWidget, QFrame{
-    background-color: var(--background_color);
-    color: rgba(255, 255, 255, 0.75);
-    border: rgba(255, 255, 255, 0.1);
-}
-
-QTabWidget, QMenuBar {
+QMenuBar {
+	background-color: var(--background_color);
 	color:rgba(255, 255, 255, 0.8);
-	background-color: #181818;
+    padding: 4px;
+
 }
+
+
+/* TAB WIDGET */
 QTabWidget::pane {
-		background-color: transparent;
+		background-color: var(--background_color);
+        padding: 0px;
+        border-radius: 0px;
+}
+
+QTabWidget>QWidget{
+    border-top: 1px solid var(--border);
 }
 
 QListWidget::item{
@@ -121,24 +117,54 @@ QTabBar::close-button:hover{
     image:url(:/dark/resources/icon/dark/multiply_red.svg);
 }
 
+
+
+/* COMBO BOX */
 QComboBox{
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    
+    border: 1px solid var(--border);
     selection-background-color: var(--selection_background);
-    padding-left: 4px;
-    padding-right: 4px;
+    padding-left: 5px;
     background-color: var(--background2);
 }
 
 QComboBox:hover{
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    border: 1px solid var(--grey2);
 }
-
+QComboBox:selected{
+    border: 1px solid green;
+}
+/* QComboBox QAbstractItemView{
+    padding-top: 5px;
+    border: 1px solid var(--grey1);
+    padding-left:5px;
+} */
 QComboBox QAbstractItemView::item {
-    color: rgba(255, 255, 255, 0.75);
+    color: var(--putih1);
     selection-background-color: rgba(29, 176, 151, 0.5);
-    min-height: 1.5em;
+    min-height: 1.5em;  
+}
+/* QComboBox QAbstractItemView::item:hover {
+    color: white;
+} */
+
+
+QComboBox::drop-down{
+    border: 0px solid green;
+    width: 20px;
+    margin: 0px 0px;
 }
 
+QComboBox::down-arrow {
+    image:url(:/dark/resources/icon/dark/expand_arrow.svg);
+    height: 14px;
+    width: 14px;
+    margin-right: 5px;
+    padding: 0px;
+}
+QComboBox::down-arrow:hover{
+    image:url(:/dark/resources/icon/dark/expand_arrow_hover.svg);
+}
 
 /* QLINEEDIT */
 QLineEdit{
@@ -161,15 +187,12 @@ QLineEdit:focus{
 
 
 
-
 /* QHeaderView */
 QHeaderView {
   background-color: var(--header);
   min-height: 2em;
   border-radius: 0;
   font-weight: normal;
-  /* border-bottom: 1px solid var(--border);
-  border-top: 1px solid var(--border); */
   font-family: 'Aptos Narrow';
   font-size: 11pt;
   padding: 0px 0px;
@@ -203,7 +226,7 @@ QHeaderView::section:vertical{
 QTableView {
   background-color: var(--background2);
   padding: 0px;
-  gridline-color: transparent;
+  gridline-color: var(--border);
   border-radius: 0px;
 }
 
@@ -256,4 +279,5 @@ QListView::item:selected:!active{
     background-color: var(--selection_background);
     border:none;
 }
+
 

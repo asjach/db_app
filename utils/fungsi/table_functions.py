@@ -4,7 +4,6 @@ from utils.database import ConnectDB
 from PySide6.QtWidgets import QTableWidget, QTableWidgetItem, QHeaderView, QPushButton, QApplication
 from PySide6.QtGui import QFontMetrics, QFont, QIcon
 from utils.fungsi.functions import show_message, date_to_text, text_to_date
-# from utils.static_values import KOLOM_ANGKA, KOLOM_TANGGAL, KOLOM_FLOAT, LEFT_COLUMN, KOLOM_CURRENCY
 from PySide6.QtCore import Qt
 import pandas as pd
 from utils.app_config import SEPARATOR_DESIMAL, SEPARATOR_RIBUAN, BASE_DIR
@@ -160,6 +159,113 @@ def finalize_table(table: QTableWidget):
     table.setUpdatesEnabled(True)
     table.blockSignals(False)
 
+def adjust_column_widths(table, column_widths, headers, metrics, margin):
+    for col_num, column_width in enumerate(column_widths):
+        header_width = metrics.horizontalAdvance(headers[col_num])
+        table.setColumnWidth(col_num, max(column_width, header_width) + margin)
+
+
+def header_for_table(headers):
+    keys = headers
+    new_keys = []
+    for key in keys:
+        if key:
+            new_key = key.replace("_", " ").upper()
+        else:
+            new_key = "x"
+        new_keys.append(new_key)
+    return new_keys
+
+
+def header_for_db(headers):
+    if isinstance(headers, list):
+        keys = headers
+        new_keys = []
+        for key in keys:
+            if key:
+                new_key = key.replace(" ", "_").lower()
+                new_keys.append(new_key)
+            else:
+                new_keys.append("")
+        return new_keys
+    elif isinstance(headers, str):
+        key = headers
+        new_key = ""
+        new_key = key.replace(" ", "_").lower()
+        return new_key
+    return None
+
+
+def add_icon_button(table:QTableWidget, row_num, col_num, icon, fungsi):
+    button = QPushButton()
+    button.setFlat(True)
+    button.setIcon(QIcon(icon))
+    button.clicked.connect(fungsi)
+    table.setCellWidget(row_num, col_num, button)
+    
+
+def update_column_width(metrics, column_widths, col_num, item_data, max_column_size=None):
+    cell_width = metrics.horizontalAdvance(item_data)
+    if max_column_size and cell_width > max_column_size:
+        cell_width = max_column_size
+    if cell_width > column_widths[col_num]:
+        column_widths[col_num] = cell_width
+        
+
+def format_cell_data(item_data, zero=None, separator_ribuan=None, separator_desimal=None):
+    
+    if item_data is None:
+        return ""
+    if isinstance(item_data, (datetime, date)):
+        return date_to_text(item_data, 'YMD')
+    elif isinstance(item_data, int):
+        if item_data == 0:
+            return str(zero) if zero is not None else ""
+        else:
+            if separator_ribuan:
+                return f"{item_data:,}".replace(",", separator_ribuan)
+            return str(item_data)
+    elif isinstance(item_data, (decimal.Decimal, float)):
+        if item_data == 0:
+            return str(zero) if zero is not None else ""
+        if isinstance(item_data, decimal.Decimal) and item_data == item_data.to_integral_value():
+            # Bilangan bulat dari Decimal
+            if separator_ribuan:
+                return f"{int(item_data):,}".replace(",", separator_ribuan)
+            return f"{item_data:.0f}"
+        if isinstance(item_data, float) and item_data.is_integer():
+            # Bilangan bulat dari float
+            if separator_ribuan:
+                return f"{int(item_data):,}".replace(",", separator_ribuan)
+            return f"{item_data:.0f}"
+        else:
+            # Bilangan desimal
+            formatted = f"{item_data:.2f}"
+            if separator_ribuan or separator_desimal:
+                # Pisahkan bagian integer dan desimal
+                integer_part, decimal_part = formatted.split(".")
+                if separator_ribuan:
+                    integer_part = f"{int(integer_part):,}".replace(",", separator_ribuan)
+                if separator_desimal:
+                    return f"{integer_part}{separator_desimal}{decimal_part}"
+                return f"{integer_part}.{decimal_part}"
+            return formatted
+    elif isinstance(item_data, dict):
+        return {key: format_cell_data(value, zero, separator_ribuan, separator_desimal) 
+                for key, value in item_data.items()}
+    elif isinstance(item_data, list):
+        return [format_cell_data(item, zero, separator_ribuan, separator_desimal) 
+                for item in item_data]
+    return str(item_data)
+
+
+def add_empty_row(table, row_index, headers, icon_awal, icon_akhir, fungsi_awal, fungsi_akhir):
+    """Menambahkan baris kosong di indeks tertentu untuk input data baru."""
+    if icon_awal:
+        add_icon_button(table, row_index, 0, icon_awal, fungsi_awal)
+    if icon_akhir:
+        add_icon_button(table, row_index, len(headers) - 1, icon_akhir, fungsi_akhir)
+
 
 def fill_table(table_name, get_function, get_params={}, table_params={}, ):
     if table_name is None:
@@ -243,116 +349,6 @@ def set_attributes_values(objek, tabel, parent=None, *atribut_texts):
         elif "id_guru" in atribut_values:
             setattr(parent, "id_guru", atribut_values["id_guru"])
     return atribut_values
-
-def add_icon_button(table:QTableWidget, row_num, col_num, icon, fungsi):
-    button = QPushButton()
-    button.setFlat(True)
-    button.setIcon(QIcon(icon))
-    button.clicked.connect(fungsi)
-    table.setCellWidget(row_num, col_num, button)
-    
-
-def update_column_width(metrics, column_widths, col_num, item_data, max_column_size=None):
-    cell_width = metrics.horizontalAdvance(item_data)
-    if max_column_size and cell_width > max_column_size:
-        cell_width = max_column_size
-    if cell_width > column_widths[col_num]:
-        column_widths[col_num] = cell_width
-
-
-def adjust_column_widths(table, column_widths, headers, metrics, margin):
-    for col_num, column_width in enumerate(column_widths):
-        header_width = metrics.horizontalAdvance(headers[col_num])
-        table.setColumnWidth(col_num, max(column_width, header_width) + margin)
-
-
-def header_for_table(headers):
-    keys = headers
-    new_keys = []
-    for key in keys:
-        if key:
-            new_key = key.replace("_", " ").upper()
-        else:
-            new_key = "x"
-        new_keys.append(new_key)
-    return new_keys
-
-
-def header_for_db(headers):
-    if isinstance(headers, list):
-        keys = headers
-        new_keys = []
-        for key in keys:
-            if key:
-                new_key = key.replace(" ", "_").lower()
-                new_keys.append(new_key)
-            else:
-                new_keys.append("")
-        return new_keys
-    elif isinstance(headers, str):
-        key = headers
-        new_key = ""
-        new_key = key.replace(" ", "_").lower()
-        return new_key
-    return None
-
-def format_cell_data(item_data, zero=None, separator_ribuan=None, separator_desimal=None):
-    
-    if item_data is None:
-        return ""
-    # if separator_ribuan is None:
-    #     separator_ribuan=SEPARATOR_RIBUAN
-    # if separator_desimal is None:
-    #     separator_desimal=SEPARATOR_DESIMAL
-    if isinstance(item_data, (datetime, date)):
-        return date_to_text(item_data, 'YMD')
-    elif isinstance(item_data, int):
-        if item_data == 0:
-            return str(zero) if zero is not None else ""
-        else:
-            if separator_ribuan:
-                return f"{item_data:,}".replace(",", separator_ribuan)
-            return str(item_data)
-    elif isinstance(item_data, (decimal.Decimal, float)):
-        if item_data == 0:
-            return str(zero) if zero is not None else ""
-        if isinstance(item_data, decimal.Decimal) and item_data == item_data.to_integral_value():
-            # Bilangan bulat dari Decimal
-            if separator_ribuan:
-                return f"{int(item_data):,}".replace(",", separator_ribuan)
-            return f"{item_data:.0f}"
-        if isinstance(item_data, float) and item_data.is_integer():
-            # Bilangan bulat dari float
-            if separator_ribuan:
-                return f"{int(item_data):,}".replace(",", separator_ribuan)
-            return f"{item_data:.0f}"
-        else:
-            # Bilangan desimal
-            formatted = f"{item_data:.2f}"
-            if separator_ribuan or separator_desimal:
-                # Pisahkan bagian integer dan desimal
-                integer_part, decimal_part = formatted.split(".")
-                if separator_ribuan:
-                    integer_part = f"{int(integer_part):,}".replace(",", separator_ribuan)
-                if separator_desimal:
-                    return f"{integer_part}{separator_desimal}{decimal_part}"
-                return f"{integer_part}.{decimal_part}"
-            return formatted
-    elif isinstance(item_data, dict):
-        return {key: format_cell_data(value, zero, separator_ribuan, separator_desimal) 
-                for key, value in item_data.items()}
-    elif isinstance(item_data, list):
-        return [format_cell_data(item, zero, separator_ribuan, separator_desimal) 
-                for item in item_data]
-    return str(item_data)
-
-
-def add_empty_row(table, row_index, headers, icon_awal, icon_akhir, fungsi_awal, fungsi_akhir):
-    """Menambahkan baris kosong di indeks tertentu untuk input data baru."""
-    if icon_awal:
-        add_icon_button(table, row_index, 0, icon_awal, fungsi_awal)
-    if icon_akhir:
-        add_icon_button(table, row_index, len(headers) - 1, icon_akhir, fungsi_akhir)
 
 
 def handle_item_changed(

@@ -93,7 +93,8 @@ class PageAdmGuru(QWidget, Ui_Form):
             self.parent.cbo_tapel.currentText()
         )
         populate_combobox(cbo_widget=self.cbo_guru,data=data_guru)
-    
+        
+    @measure_time
     def generated_pdf(self):
         data_siswa = self.MODEL.get_daftar_nama_siswa(
             jenjang=self.parent.str_jenjang,

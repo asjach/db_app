@@ -1,6 +1,7 @@
 from PySide6.QtWidgets import QComboBox, QListWidget
 from PySide6.QtGui import QFontMetrics
 from PySide6.QtCore import Qt
+from PySide6.QtWidgets import QStyledItemDelegate, QStyleOptionViewItem
 
 
 # def fill_combobox(ui_combo:QComboBox, values, *parameter):
@@ -104,7 +105,7 @@ def fungsi_filter_buttons(combo_box=None, prev_button=None, next_button=None, cl
 
 
 def centerize_combo(combo):
-    from PySide6.QtWidgets import QStyledItemDelegate, QStyleOptionViewItem
+    # from PySide6.QtWidgets import QStyledItemDelegate, QStyleOptionViewItem
     class CenteredDelegate(QStyledItemDelegate):
         def initStyleOption(self, option: QStyleOptionViewItem, index):
             super().initStyleOption(option, index)
@@ -113,4 +114,17 @@ def centerize_combo(combo):
     combo.setItemDelegate(CenteredDelegate(combo))
     combo.setEditable(True)
     combo.lineEdit().setAlignment(Qt.AlignCenter)
+    combo.lineEdit().setReadOnly(True)
+
+def left_combo(combo):
+    # from PySide6.QtWidgets import QStyledItemDelegate, QStyleOptionViewItem
+    class CenteredDelegate(QStyledItemDelegate):
+        def initStyleOption(self, option: QStyleOptionViewItem, index):
+            super().initStyleOption(option, index)
+            option.displayAlignment = Qt.AlignLeft | Qt.AlignVCenter
+            
+
+    combo.setItemDelegate(CenteredDelegate(combo))
+    combo.setEditable(True)
+    combo.lineEdit().setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
     combo.lineEdit().setReadOnly(True)

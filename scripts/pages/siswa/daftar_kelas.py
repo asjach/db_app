@@ -17,6 +17,7 @@ class PageDaftarKelas(QWidget, Ui_Form):
         self.tbl_widget.itemSelectionChanged.connect(self._tbl_selected)
         self.tbl_widget.itemChanged.connect(self._update_table)
     
+    
     def show_page(self):
         self._fill_table_widget()
 

@@ -26,7 +26,10 @@
    <property name="bottomMargin">
     <number>0</number>
    </property>
-   <property name="spacing">
+   <property name="horizontalSpacing">
+    <number>20</number>
+   </property>
+   <property name="verticalSpacing">
     <number>5</number>
    </property>
    <item row="0" column="1">
@@ -64,7 +67,11 @@
        </widget>
       </item>
       <item row="1" column="0">
-       <widget class="QTableWidget" name="tbl_b"/>
+       <widget class="QTableWidget" name="tbl_b">
+        <attribute name="verticalHeaderVisible">
+         <bool>false</bool>
+        </attribute>
+       </widget>
       </item>
      </layout>
     </widget>
@@ -104,7 +111,11 @@
        </widget>
       </item>
       <item row="1" column="0">
-       <widget class="QTableWidget" name="tbl_c"/>
+       <widget class="QTableWidget" name="tbl_c">
+        <attribute name="verticalHeaderVisible">
+         <bool>false</bool>
+        </attribute>
+       </widget>
       </item>
      </layout>
     </widget>
@@ -144,7 +155,11 @@
        </widget>
       </item>
       <item row="1" column="0">
-       <widget class="QTableWidget" name="tbl_a"/>
+       <widget class="QTableWidget" name="tbl_a">
+        <attribute name="verticalHeaderVisible">
+         <bool>false</bool>
+        </attribute>
+       </widget>
       </item>
      </layout>
     </widget>

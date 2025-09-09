@@ -31,8 +31,7 @@ class Ui_Form(object):
         self.tbl_widget.setObjectName(u"tbl_widget")
         self.tbl_widget.setLineWidth(0)
         self.tbl_widget.setSelectionBehavior(QAbstractItemView.SelectRows)
-        self.tbl_widget.setShowGrid(False)
-        self.tbl_widget.setGridStyle(Qt.NoPen)
+        self.tbl_widget.setShowGrid(True)
 
         self.gridLayout.addWidget(self.tbl_widget, 0, 0, 1, 1)
 

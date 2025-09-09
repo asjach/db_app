@@ -1,7 +1,7 @@
 from functools import partial
 from ui.ui_main import Ui_MainWindow
 from PySide6.QtCore import QTimer, QEvent, Qt
-from PySide6.QtWidgets import QMainWindow, QMenu
+from PySide6.QtWidgets import QMainWindow, QMenu, QTabBar
 from PySide6.QtGui import QAction
 from scripts import *
 from models.model_main import Model_Main
@@ -9,6 +9,7 @@ from scripts.tab_config import TAB_CONFIG
 from utils.static_values import *
 from utils.fungsi.general_functions import *
 from resources.color_var import THEMES
+
 
 class MainWindow(Ui_MainWindow, QMainWindow):
     def __init__(self, parent=None):
@@ -18,6 +19,9 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.list_kelas.setItemDelegate(CenteredDelegate())
         self.list_jenjang.setItemDelegate(CenteredDelegate())
         centerize_combo(self.cbo_tapel)
+        left_combo(self.cbo_order_by)
+        left_combo(self.cbo_kolom)
+        left_combo(self.cbo_search_by)
         self.showMaximized()
         # ThemeManager.apply_theme(self, 'dark', './resources/style.qss')
         register_all_windows_fonts()
@@ -35,7 +39,6 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         # Kelas
         self.quoted_daftar_kelas =None  ## list kelas berupa string dengan tanda petik -> "'1', '2', '3'" untuk IN di sql
         self.str_kelas=None
-  
         self.nis_lokal = None
         self.nis_index = None
         self.model_main = Model_Main()
@@ -45,7 +48,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.tidak_naik_action = QAction("Tidak Naik")
 
         self.requery_timer = QTimer(self)
-        self.requery_timer.setInterval(400)
+        self.requery_timer.setInterval(200)
         self.requery_timer.setSingleShot(True)
         self.requery_timer.timeout.connect(self.requery_page)
         self.initialize_components()
@@ -56,7 +59,10 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.connect_signals()
         self.list_jenjang.setCurrentRow(0)
         self.list_tingkat.setCurrentRow(0)
-        self.actionDaftar_Kelas.trigger()
+        config = TAB_CONFIG["Daftar Kelas"]
+        page = getattr(self, config["show_page"])
+        self.add_tab(page, "Daftar Kelas")
+    
     
     def connect_signals(self):
         # INIT CLASSES
@@ -110,9 +116,12 @@ class MainWindow(Ui_MainWindow, QMainWindow):
             page_instance = page_class(self)
         else:
             page_instance = page_class
-        self.main_tab.addTab(page_instance, title)
+        index = self.main_tab.addTab(page_instance, title)
         self.main_tab.setCurrentWidget(page_instance)
+        if title == "daftar_kelas":
+            self.main_tab.tabBar().setTabButton(index, QTabBar.RightSide, None)
 
+    
     def tab_index_changed(self):
         current_index = self.main_tab.currentIndex()
         if current_index == -1:
@@ -149,7 +158,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.cbo_kolom.blockSignals(False)
         self.cbo_order_by.blockSignals(False)
         self.cbo_search_by.blockSignals(False)
-        self.requery_page()
+        self.delayed_requery()
 
     def close_tab(self, index):
         self.main_tab.removeTab(index)
@@ -181,6 +190,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.quoted_tingkat = get_selected_list_widget_item(self.list_tingkat, 'quoted')
         self.not_quoted_tingkat = get_selected_list_widget_item(self.list_tingkat, 'not_quoted')
         self.requery_kelas()
+        
 
     def requery_kelas(self):
         self.list_kelas.clear()

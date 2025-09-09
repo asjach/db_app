@@ -6,14 +6,15 @@ import time, re, json, os
 import pandas as pd
 from utils.app_config import BASE_DIR
 # from utils.static_values import KOLOM_TANGGAL
-
+from functools import wraps
 
 def measure_time(func):
+    @wraps(func)
     def wrapper(*args, **kwargs):
-        start_time = time.perf_counter()
+        start = time.perf_counter()
         result = func(*args, **kwargs)
-        end_time = time.perf_counter()
-        print(f"{func.__name__} dieksekusi dalam {end_time - start_time:.6f} detik")
+        end = time.perf_counter()
+        print(f"{func.__name__} selesai dalam {end - start:.6f} detik")
         return result
     return wrapper
 
