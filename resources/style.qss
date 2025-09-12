@@ -274,7 +274,7 @@ QHeaderView::section::vertical {
 
 QTableView {
   background-color: var(--surface3);
-  padding: 0px;
+  
   gridline-color: var(--surface4);
   border-radius: 0px;
   color:var(--foreground);
@@ -283,6 +283,7 @@ QTableView {
 QTableView::item:selected:active, QTableView::item:selected:!active {
   background-color: var(--accent);
   color: white;
+  
 }
 
 QTableCornerButton::section {
@@ -310,3 +311,11 @@ QRadioButton::indicator:unchecked{
     border: 0px solid var(--grey2);
 }
  */
+
+
+ QToolTip{
+    background-color: var(--primary);
+    padding: 5px;
+    margin:0px;
+    border: none;
+ }

@@ -10,6 +10,7 @@ from utils.app_config import SEPARATOR_DESIMAL, SEPARATOR_RIBUAN, BASE_DIR
 from utils.fungsi.functions import get_json_data
 
 static_values = get_json_data(os.path.join(BASE_DIR, "utils/static_values.json"))
+
 def generate_table(
     data,
     table: QTableWidget,
@@ -17,7 +18,7 @@ def generate_table(
     left_column=None,
     hidden_column=None,
     stretch_column=None,
-    margin=20,
+    margin=24,
     row_height=24,
     max_column_size=1000,
     font_family="Segoe UI",
@@ -154,8 +155,9 @@ def prepare_table(table: QTableWidget, clear=True):
     
 
 def finalize_table(table: QTableWidget, row_height):
-    table.resizeRowsToContents()
-    table.verticalHeader().setMinimumSectionSize(row_height)
+    # table.resizeRowsToContents()
+    # table.verticalHeader().setMinimumSectionSize(row_height)
+    table.verticalHeader().setDefaultSectionSize(row_height)
     table.verticalHeader().setDefaultAlignment(Qt.AlignRight)
     table.setUpdatesEnabled(True)
     table.blockSignals(False)
@@ -905,3 +907,10 @@ def export_to_excel(table_widget: QTableWidget, file_path: str):
         return True, f"Data berhasil diekspor ke {file_path}"
     except Exception as e:
         return False, f"Error saat mengekspor: {str(e)}"
+    
+
+# def update_table_font(table:QTableWidget):
+#     # Perbarui font dan ukuran tabel
+#     table.setFont(QFont(table.font_family, table.base_font_size))
+#     table.resizeRowsToContents()
+#     table.resizeColumnsToContents()

@@ -30,6 +30,8 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.static_values = get_json_data(os.path.join("D:/APP/DB App", "utils", "static_values.json"))
         self.toggle_theme()
         ## VARIABEL INITIALIZATION
+        self.default_font_size = 10   # ukuran awal font tabel
+        self.current_font_size = self.default_font_size
         self.str_jenjang = None
         self._last_search_text = ''
         # Tingkat
@@ -271,8 +273,34 @@ class MainWindow(Ui_MainWindow, QMainWindow):
                 pasteCells(source)
                 print("PASTED")
                 return True
+             # CTRL + Plus / Equal (=)
+            elif (event.key() in (Qt.Key_Plus, Qt.Key_Equal) 
+                  and event.modifiers() == Qt.ControlModifier):
+                self.current_font_size += 1
+                self.set_table_font_size(source, self.current_font_size)
+                return True
+
+            # CTRL + Minus (-)
+            elif event.key() == Qt.Key_Minus and event.modifiers() == Qt.ControlModifier:
+                if self.current_font_size > 6:  # jangan terlalu kecil
+                    self.current_font_size -= 1
+                    self.set_table_font_size(source, self.current_font_size)
+                return True
+
+            # CTRL + 0 (reset)
+            elif event.key() == Qt.Key_0 and event.modifiers() == Qt.ControlModifier:
+                self.current_font_size = self.default_font_size
+                self.set_table_font_size(source, self.current_font_size)
+                return True
         return super().eventFilter(source, event)
     
+    def set_table_font_size(self, source, size):
+        font = source.font()
+        font.setPointSize(size)
+        source.setFont(font)
+        source.resizeRowsToContents()
+        source.resizeColumnsToContents()
+
     def handle_context_menu(self, source):
         self.cmenu.clear()
         if source in self.tabel_siswa:

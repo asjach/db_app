@@ -40,6 +40,12 @@
      <property name="showGrid">
       <bool>true</bool>
      </property>
+     <attribute name="verticalHeaderDefaultSectionSize">
+      <number>24</number>
+     </attribute>
+     <attribute name="verticalHeaderMinimumSectionSize">
+      <number>24</number>
+     </attribute>
     </widget>
    </item>
   </layout>

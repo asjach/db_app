@@ -346,6 +346,9 @@
                 <pointsize>11</pointsize>
                </font>
               </property>
+              <property name="toolTip">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;jarak dari pinggir yang akan dijilid, biasanya lebih lebar dari sisi lain&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
               </property>
@@ -382,6 +385,9 @@
                 <family>Aptos Narrow</family>
                 <pointsize>11</pointsize>
                </font>
+              </property>
+              <property name="toolTip">
+               <string>sisi bagian yang akan digeser</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
@@ -952,6 +958,9 @@
              <pointsize>11</pointsize>
             </font>
            </property>
+           <property name="toolTip">
+            <string>jumlah baris tiap hari</string>
+           </property>
            <item>
             <property name="text">
              <string>2 baris</string>
@@ -1264,6 +1273,9 @@
              <pointsize>11</pointsize>
             </font>
            </property>
+           <property name="toolTip">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;jumlah baris yang ditampilkan, set melebihi jumlah santri jika ingin menambahkan baris kosong&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
            </property>
@@ -1454,6 +1466,9 @@
              <family>Aptos Narrow</family>
              <pointsize>11</pointsize>
             </font>
+           </property>
+           <property name="toolTip">
+            <string>lebar kolom nama pada tabel</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>

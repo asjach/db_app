@@ -32,6 +32,8 @@ class Ui_Form(object):
         self.tbl_widget.setLineWidth(0)
         self.tbl_widget.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.tbl_widget.setShowGrid(True)
+        self.tbl_widget.verticalHeader().setMinimumSectionSize(24)
+        self.tbl_widget.verticalHeader().setDefaultSectionSize(24)
 
         self.gridLayout.addWidget(self.tbl_widget, 0, 0, 1, 1)
 
