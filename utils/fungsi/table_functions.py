@@ -21,7 +21,7 @@ def generate_table(
     row_height=24,
     max_column_size=1000,
     font_family="Segoe UI",
-    font_size=9,
+    font_size=10,
     icon_awal=None,
     icon_akhir=None,
     fungsi_awal=None,
@@ -84,7 +84,7 @@ def generate_table(
             # Mode biasa: hapus tabel sepenuhnya
             table.setRowCount(0)
             table.setColumnCount(0)
-            finalize_table(table)
+            # finalize_table(table)
             return
     else:
         # Logika untuk data tidak kosong (tidak diubah karena tidak relevan dengan bug)
@@ -144,7 +144,7 @@ def generate_table(
                     table.horizontalHeader().setSectionResizeMode(col_index, QHeaderView.Stretch)
         adjust_column_widths(table, column_widths, headers, metrics, margin)
 
-    finalize_table(table)
+    finalize_table(table, row_height)
 
 def prepare_table(table: QTableWidget, clear=True):
     table.blockSignals(True)
@@ -153,9 +153,10 @@ def prepare_table(table: QTableWidget, clear=True):
     table.setUpdatesEnabled(False)
     
 
-def finalize_table(table: QTableWidget):
+def finalize_table(table: QTableWidget, row_height):
     table.resizeRowsToContents()
-    table.verticalHeader().setMinimumSectionSize(24)
+    table.verticalHeader().setMinimumSectionSize(row_height)
+    table.verticalHeader().setDefaultAlignment(Qt.AlignRight)
     table.setUpdatesEnabled(True)
     table.blockSignals(False)
 
@@ -210,7 +211,7 @@ def update_column_width(metrics, column_widths, col_num, item_data, max_column_s
         cell_width = max_column_size
     if cell_width > column_widths[col_num]:
         column_widths[col_num] = cell_width
-        
+
 
 def format_cell_data(item_data, zero=None, separator_ribuan=None, separator_desimal=None):
     

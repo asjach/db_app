@@ -1,6 +1,6 @@
 from utils.database import ConnectDB
 # from utils.fungsi.db_functions import *
-from utils.fungsi.functions import tapel_berikutnya
+from utils.fungsi.functions import tapel_berikutnya, measure_time
 
 class Model_Siswa(ConnectDB):
     def __init__(self, database_name=None):

@@ -14,7 +14,7 @@ def measure_time(func):
         start = time.perf_counter()
         result = func(*args, **kwargs)
         end = time.perf_counter()
-        print(f"{func.__name__} selesai dalam {end - start:.6f} detik")
+        print(f"{func.__name__} selesai dalam {(end - start)*1000:.6f} ms")
         return result
     return wrapper
 

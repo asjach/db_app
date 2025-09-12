@@ -21,7 +21,7 @@ class PageDaftarKelas(QWidget, Ui_Form):
     def show_page(self):
         self._fill_table_widget()
 
-    # @measure_time
+    @measure_time
     def _fill_table_widget(self):
         data = self.SQL.get_daftar_kelas(
             jenjang= self.parent.str_jenjang,

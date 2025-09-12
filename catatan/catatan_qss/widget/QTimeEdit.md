@@ -1,0 +1,4 @@
+QTimeEdit {
+	color: 	
+	background-color:
+}

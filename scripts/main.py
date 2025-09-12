@@ -15,6 +15,8 @@ class MainWindow(Ui_MainWindow, QMainWindow):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setupUi(self)
+        label = QPushButton("?")
+        self.main_tab.setCornerWidget(label, Qt.TopRightCorner)
         self.list_tingkat.setItemDelegate(CenteredDelegate())
         self.list_kelas.setItemDelegate(CenteredDelegate())
         self.list_jenjang.setItemDelegate(CenteredDelegate())
@@ -73,7 +75,6 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.tabel_tabel()
         for tabel in self.findChildren(QTableWidget):
             tabel.installEventFilter(self)
-        # fungsi_filter_buttons(self.cbo_jenjang, self.prev_jenjang, self.next_jenjang,self.label_jenjang)
         fungsi_filter_buttons(self.cbo_tapel)
         fungsi_filter_buttons(self.cbo_order_by)
         fungsi_filter_buttons(self.cbo_kolom)
@@ -106,6 +107,8 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.list_tingkat.itemSelectionChanged.connect(self.list_tingkat_selected)
         self.list_kelas.itemSelectionChanged.connect(self.list_kelas_selected)
         self.actionDark_Mode.toggled.connect(self.toggle_theme)
+        self.btn_refresh.clicked.connect(self.toggle_theme)
+        
 
     def add_tab(self, page_class, title):
         existing_tabs = [self.main_tab.tabText(i) for i in range(self.main_tab.count())]
@@ -201,7 +204,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
             )
         
         populate_list_widget(self.list_kelas, data_kelas, False, False, 'kelas', 'id')
-        self.list_kelas.setFixedWidth(int((len(data_kelas)+1)*25.5))
+        self.list_kelas.setFixedWidth(int((len(data_kelas)+1)*27.5))
         
         self.delayed_requery()
 
