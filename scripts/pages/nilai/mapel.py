@@ -27,10 +27,10 @@ class PageMapel(QWidget, Ui_Form):
         self.cbo_guru.setCurrentIndex(-1)
 
     def show_page(self):
-        self.txt_jenjang = self.parent.cbo_jenjang.currentText()
+        self.txt_jenjang = self.parent.str_jenjang
         self.txt_tapel = self.parent.cbo_tapel.currentText()
         self.txt_tingkat = self.parent.not_quoted_tingkat
-        self.txt_kelas = self.parent.not_quoted_kelas
+        self.txt_kelas = self.parent.str_kelas
         self.fill_cbo_guru()
         self.fill_cbo_kegiatan()
         self.fill_tbl_mapel()

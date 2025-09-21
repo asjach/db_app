@@ -16,19 +16,22 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QComboBox, QDoubleSpinBox, QGridLayout,
-    QLabel, QPushButton, QRadioButton, QSizePolicy,
-    QSpacerItem, QSpinBox, QWidget)
+    QLabel, QLayout, QPushButton, QRadioButton,
+    QSizePolicy, QSpacerItem, QSpinBox, QWidget)
 
 class Ui_Form(object):
     def setupUi(self, Form):
         if not Form.objectName():
             Form.setObjectName(u"Form")
-        Form.resize(898, 757)
+        Form.resize(860, 757)
         self.gridLayout = QGridLayout(Form)
         self.gridLayout.setObjectName(u"gridLayout")
+        self.gridLayout.setHorizontalSpacing(5)
+        self.gridLayout.setVerticalSpacing(0)
+        self.gridLayout.setContentsMargins(0, 0, 0, 0)
         self.widget_2 = QWidget(Form)
         self.widget_2.setObjectName(u"widget_2")
-        sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.widget_2.sizePolicy().hasHeightForWidth())
@@ -37,8 +40,12 @@ class Ui_Form(object):
         font.setFamilies([u"Aptos Narrow"])
         font.setPointSize(11)
         self.widget_2.setFont(font)
+        self.widget_2.setStyleSheet(u"")
         self.viewer_layout = QGridLayout(self.widget_2)
+        self.viewer_layout.setSpacing(0)
         self.viewer_layout.setObjectName(u"viewer_layout")
+        self.viewer_layout.setSizeConstraint(QLayout.SetNoConstraint)
+        self.viewer_layout.setContentsMargins(3, 3, 3, 3)
 
         self.gridLayout.addWidget(self.widget_2, 0, 1, 1, 1)
 
@@ -49,9 +56,9 @@ class Ui_Form(object):
         self.widget_3.setFont(font)
         self.gridLayout_9 = QGridLayout(self.widget_3)
         self.gridLayout_9.setObjectName(u"gridLayout_9")
-        self.gridLayout_9.setHorizontalSpacing(5)
+        self.gridLayout_9.setHorizontalSpacing(10)
         self.gridLayout_9.setVerticalSpacing(20)
-        self.gridLayout_9.setContentsMargins(0, 0, 0, 0)
+        self.gridLayout_9.setContentsMargins(10, 10, 10, 10)
         self.widget_4 = QWidget(self.widget_3)
         self.widget_4.setObjectName(u"widget_4")
         self.widget_4.setFont(font)
@@ -117,7 +124,7 @@ class Ui_Form(object):
         self.gridLayout_10 = QGridLayout(self.widget_11)
         self.gridLayout_10.setSpacing(5)
         self.gridLayout_10.setObjectName(u"gridLayout_10")
-        self.gridLayout_10.setContentsMargins(0, 0, -1, 0)
+        self.gridLayout_10.setContentsMargins(0, 0, 0, 0)
         self.cbo_kertas = QComboBox(self.widget_11)
         self.cbo_kertas.addItem("")
         self.cbo_kertas.addItem("")
@@ -355,7 +362,7 @@ class Ui_Form(object):
         self.gridLayout_4 = QGridLayout(self.widget_5)
         self.gridLayout_4.setSpacing(5)
         self.gridLayout_4.setObjectName(u"gridLayout_4")
-        self.gridLayout_4.setContentsMargins(5, 5, 5, 5)
+        self.gridLayout_4.setContentsMargins(0, 0, 0, 0)
         self.spin_ibu = QSpinBox(self.widget_5)
         self.spin_ibu.setObjectName(u"spin_ibu")
         self.spin_ibu.setMinimumSize(QSize(100, 24))
@@ -370,8 +377,11 @@ class Ui_Form(object):
 
         self.label_2 = QLabel(self.widget_5)
         self.label_2.setObjectName(u"label_2")
-        sizePolicy.setHeightForWidth(self.label_2.sizePolicy().hasHeightForWidth())
-        self.label_2.setSizePolicy(sizePolicy)
+        sizePolicy2 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
+        sizePolicy2.setHorizontalStretch(0)
+        sizePolicy2.setVerticalStretch(0)
+        sizePolicy2.setHeightForWidth(self.label_2.sizePolicy().hasHeightForWidth())
+        self.label_2.setSizePolicy(sizePolicy2)
 
         self.gridLayout_4.addWidget(self.label_2, 2, 0, 1, 1)
 
@@ -495,8 +505,8 @@ class Ui_Form(object):
 
         self.label_5 = QLabel(self.widget_5)
         self.label_5.setObjectName(u"label_5")
-        sizePolicy.setHeightForWidth(self.label_5.sizePolicy().hasHeightForWidth())
-        self.label_5.setSizePolicy(sizePolicy)
+        sizePolicy2.setHeightForWidth(self.label_5.sizePolicy().hasHeightForWidth())
+        self.label_5.setSizePolicy(sizePolicy2)
 
         self.gridLayout_4.addWidget(self.label_5, 2, 4, 1, 1)
 

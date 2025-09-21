@@ -297,6 +297,7 @@ class Ui_Form(object):
         sizePolicy5.setHeightForWidth(self.tbl_daftar_nama.sizePolicy().hasHeightForWidth())
         self.tbl_daftar_nama.setSizePolicy(sizePolicy5)
         self.tbl_daftar_nama.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.tbl_daftar_nama.verticalHeader().setVisible(False)
 
         self.gridLayout_2.addWidget(self.tbl_daftar_nama, 1, 0, 1, 3)
 

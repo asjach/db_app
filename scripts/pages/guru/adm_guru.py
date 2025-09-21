@@ -1,12 +1,10 @@
-from PySide6.QtWidgets import QWidget, QMainWindow, QSpinBox
+from PySide6.QtWidgets import QWidget, QMainWindow, QSizePolicy
 from ui.ui_page_adm_guru import Ui_Form
 from models.model_guru import Model_Guru
 from utils.fungsi.general_functions import *
 from template.adm_guru import TemplateAdmGuru
-# from utils.key_value.kolom_sql import GURU
 from scripts.widgets.dokumen_viewer import DokumenViewer
 from PySide6.QtCore import QTimer
-from functools import partial
 
 TIMER_DELAY = 300
 
@@ -17,7 +15,10 @@ class PageAdmGuru(QWidget, Ui_Form):
         self.parent = parent
         self.MODEL = Model_Guru()
         self.viewer = DokumenViewer()
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        self.viewer_layout
         self.viewer_layout.addWidget(self.viewer)
+        self.widget_2.setSizePolicy(sizePolicy)
         self.spin = [
             self.spin_sisi_jilid,
             self.spin_sisi_lain,

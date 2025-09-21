@@ -15,9 +15,9 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QDateEdit, QFrame, QGridLayout,
-    QHeaderView, QLabel, QSizePolicy, QTableWidget,
-    QTableWidgetItem, QWidget)
+from PySide6.QtWidgets import (QApplication, QDateEdit, QGridLayout, QHeaderView,
+    QLabel, QSizePolicy, QTableWidget, QTableWidgetItem,
+    QWidget)
 import resources_rc
 
 class Ui_Form(object):
@@ -29,27 +29,30 @@ class Ui_Form(object):
         self.gridLayout.setSpacing(5)
         self.gridLayout.setObjectName(u"gridLayout")
         self.gridLayout.setContentsMargins(5, 5, 5, 5)
-        self.frame_kiri = QFrame(Form)
-        self.frame_kiri.setObjectName(u"frame_kiri")
-        self.frame_kiri.setMinimumSize(QSize(500, 0))
-        self.frame_kiri.setMaximumSize(QSize(500, 16777215))
-        self.frame_kiri.setFrameShape(QFrame.StyledPanel)
-        self.frame_kiri.setFrameShadow(QFrame.Raised)
-        self.gridLayout_2 = QGridLayout(self.frame_kiri)
+        self.tbl_siswa_keluar = QTableWidget(Form)
+        self.tbl_siswa_keluar.setObjectName(u"tbl_siswa_keluar")
+
+        self.gridLayout.addWidget(self.tbl_siswa_keluar, 0, 1, 1, 1)
+
+        self.widget_kiri = QWidget(Form)
+        self.widget_kiri.setObjectName(u"widget_kiri")
+        self.widget_kiri.setMinimumSize(QSize(500, 0))
+        self.widget_kiri.setMaximumSize(QSize(500, 16777215))
+        self.gridLayout_2 = QGridLayout(self.widget_kiri)
         self.gridLayout_2.setSpacing(5)
         self.gridLayout_2.setObjectName(u"gridLayout_2")
         self.gridLayout_2.setContentsMargins(0, 0, 0, 0)
-        self.label = QLabel(self.frame_kiri)
+        self.label = QLabel(self.widget_kiri)
         self.label.setObjectName(u"label")
 
         self.gridLayout_2.addWidget(self.label, 0, 0, 1, 1)
 
-        self.tbl_list_siswa = QTableWidget(self.frame_kiri)
+        self.tbl_list_siswa = QTableWidget(self.widget_kiri)
         self.tbl_list_siswa.setObjectName(u"tbl_list_siswa")
 
         self.gridLayout_2.addWidget(self.tbl_list_siswa, 1, 0, 1, 3)
 
-        self.date_tgl_mutasi = QDateEdit(self.frame_kiri)
+        self.date_tgl_mutasi = QDateEdit(self.widget_kiri)
         self.date_tgl_mutasi.setObjectName(u"date_tgl_mutasi")
         self.date_tgl_mutasi.setMinimumSize(QSize(0, 24))
         self.date_tgl_mutasi.setLocale(QLocale(QLocale.Indonesian, QLocale.Indonesia))
@@ -60,12 +63,7 @@ class Ui_Form(object):
         self.gridLayout_2.addWidget(self.date_tgl_mutasi, 0, 2, 1, 1)
 
 
-        self.gridLayout.addWidget(self.frame_kiri, 0, 0, 1, 1)
-
-        self.tbl_siswa_keluar = QTableWidget(Form)
-        self.tbl_siswa_keluar.setObjectName(u"tbl_siswa_keluar")
-
-        self.gridLayout.addWidget(self.tbl_siswa_keluar, 0, 1, 1, 1)
+        self.gridLayout.addWidget(self.widget_kiri, 0, 0, 1, 1)
 
 
         self.retranslateUi(Form)

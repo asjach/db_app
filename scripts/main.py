@@ -1,7 +1,8 @@
 from functools import partial
 from ui.ui_main import Ui_MainWindow
+# from ui.ui_widgets import Ui_Form
 from PySide6.QtCore import QTimer, QEvent, Qt
-from PySide6.QtWidgets import QMainWindow, QMenu, QTabBar
+from PySide6.QtWidgets import QMainWindow, QMenu, QTabBar, QWidget, QMenuBar
 from PySide6.QtGui import QAction
 from scripts import *
 from models.model_main import Model_Main
@@ -11,19 +12,105 @@ from utils.fungsi.general_functions import *
 from resources.color_var import THEMES
 
 
+# class Widgets(QWidget, Ui_Form):
+#     def __init__(self):
+#         super().__init__()
+#         self.setupUi(self)
+
+
 class MainWindow(Ui_MainWindow, QMainWindow):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setupUi(self)
-        label = QPushButton("?")
-        self.main_tab.setCornerWidget(label, Qt.TopRightCorner)
+        self.menu_bar = QMenuBar()
+        self.horizontalLayout_2.addChildWidget(self.menu_bar)
+        self.menu_santri = QMenu("Santri", self)
+        self.menu_santri.addActions([
+            self.actionDaftar_Kelas, 
+            self.actionRekap_Santri,
+            self.menu_santri.addSeparator(),
+            self.actionMutasiMasuk,
+            self.actionMutasiKeluar,
+            self.menu_santri.addSeparator(),
+            self.actionPindah_Kelas,
+            self.actionMI_ke_MD,
+            self.menu_santri.addSeparator(),
+            self.actionKenaikan,
+            self.actionKelulusan,
+            self.menu_santri.addSeparator(),
+            self.actionCari,
+            self.actionCeklis_EMIS,
+        ])
+
+        self.menu_guru = QMenu("Guru", self)
+        self.menu_guru.addActions([
+            self.actionBukuIndukGuru,
+            self.actionRiwayatKeaktifan,
+            self.actionRiwayat_Mengajar,
+            self.actionAdmGuru,
+        ])
+
+        self.menu_nilai = QMenu("Nilai", self)
+        self.menu_nilai.addActions([
+            self.actionRiwayatKegiatan,
+            self.actionPesertaKegiatan,
+            self.actionMapelKegiatan, 
+            self.actionEkskulKegiatan,
+            self.menu_nilai.addSeparator(),
+            self.actionInput_Nilai,
+            self.menu_nilai.addSeparator(),
+            self.actionKartu_Peserta,
+            self.actionRekap,
+            self.actionRapor,
+        ])
+
+        self.menu_dokumen = QMenu("Dokumen", self)
+        self.menu_dokumen.addActions([
+            self.actionLihat_Dokumen,
+            self.actionTambah_Dokumen,
+            self.actionCopy_Dokumen,
+            self.actionCompare_Dokumen,
+            self.actionRename_Dokumen,
+            self.actionGanti_Dokumen,
+            self.actionHapus_Dokumen,
+        ])
+
+        self.menu_setting = QMenu("Setting", self)
+        self.menu_setting.addActions([
+            self.actionInput_By_Excel,
+            self.actionExport_Excel,
+        ])
+
+        self.menu_preferensi = QMenu("Preferensi", self)
+        self.menu_preferensi.addActions([
+            self.actionRiwayatKelas,
+            self.actionAlamat,
+            self.actionSekolah,
+            self.actionKey_Value,
+            self.actionStatic_Values,
+        ])
+
+        self.menu_view = QMenu("View", self)
+        self.menu_view.addActions([
+            self.actionDark_Mode,
+        ])
+        self.menu_bar.addMenu(self.menu_santri)
+        self.menu_bar.addMenu(self.menu_guru)
+        self.menu_bar.addMenu(self.menu_nilai)
+        self.menu_bar.addMenu(self.menu_dokumen)
+        self.menu_bar.addMenu(self.menu_setting)
+        self.menu_bar.addMenu(self.menu_preferensi)
+        self.menu_bar.addMenu(self.menu_view)
+
+
+        # self.main_tab.setCornerWidget(self.frame_search, Qt.TopRightCorner)
         self.list_tingkat.setItemDelegate(CenteredDelegate())
         self.list_kelas.setItemDelegate(CenteredDelegate())
         self.list_jenjang.setItemDelegate(CenteredDelegate())
-        centerize_combo(self.cbo_tapel)
-        left_combo(self.cbo_order_by)
-        left_combo(self.cbo_kolom)
-        left_combo(self.cbo_search_by)
+        right_combo(self.cbo_tapel)
+        right_combo(self.cbo_order_by)
+        right_combo(self.cbo_kolom)
+        right_combo(self.cbo_search_by)
         self.showMaximized()
         # ThemeManager.apply_theme(self, 'dark', './resources/style.qss')
         register_all_windows_fonts()
@@ -42,6 +129,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.not_quoted_tingkat = None  # 1
         # Kelas
         self.quoted_daftar_kelas =None  ## list kelas berupa string dengan tanda petik -> "'1', '2', '3'" untuk IN di sql
+        self.data_kelas=None
         self.str_kelas=None
         self.nis_lokal = None
         self.nis_index = None
@@ -58,7 +146,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.initialize_components()
         
     def initialize_components(self):
-        self.list_kelas.setFixedWidth(0)
+        
         self.add_combo_value()
         self.connect_signals()
         self.list_jenjang.setCurrentRow(0)
@@ -104,7 +192,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.actionStatic_Values.triggered.connect(lambda: Dialog_Static_Values(self).exec())
         self.actionCari.triggered.connect(self.show_detail_siswa)
         # VIEW
-        self.actionShow_Filter.toggled.connect(self.show_hide_filter)
+        # self.actionShow_Filter.toggled.connect(self.show_hide_filter)
         self.list_jenjang.itemSelectionChanged.connect(self.list_jenjang_selected)
         self.list_tingkat.itemSelectionChanged.connect(self.list_tingkat_selected)
         self.list_kelas.itemSelectionChanged.connect(self.list_kelas_selected)
@@ -139,19 +227,19 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.cbo_order_by.clear()
         self.cbo_search_by.clear()
         frames = {
-            "jenjang": self.frame_jenjang,
-            "tapel": self.frame_tapel,
-            "tingkat": self.frame_tingkat,
-            "kelas": self.frame_kelas,
-            "order_by": self.frame_order_by,
+            "jenjang": self.list_jenjang,
+            "tapel": self.cbo_tapel,
+            "tingkat": self.list_tingkat,
+            "kelas": self.list_kelas,
+            "order_by": self.cbo_order_by,
             "search_by": self.frame_search,
-            "kolom": self.frame_kolom,
+            "kolom": self.cbo_kolom,
         }
         default_visible_frames = {"jenjang", "tapel", "tingkat", "kelas"}
         for key, frame in frames.items():
             is_default_visible = key in default_visible_frames
             is_visible = is_default_visible or (config.get(key) and config[key])
-            frame.setVisible(bool(is_visible))
+            frame.setEnabled(bool(is_visible))
             if is_visible and key not in default_visible_frames:
                 combo_box = getattr(self, f"cbo_{key}")
                 combo_box.addItems(config.get(key, []))
@@ -159,7 +247,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         for frame_name in hidden_frames:
             frame = frames.get(frame_name.lower())
             if frame:
-                frame.setVisible(False)
+                frame.setEnabled(False)
         self.cbo_kolom.blockSignals(False)
         self.cbo_order_by.blockSignals(False)
         self.cbo_search_by.blockSignals(False)
@@ -204,10 +292,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
             tapel=self.cbo_tapel.currentText(),
             tingkat=self.quoted_daftar_tingkat
             )
-        
         populate_list_widget(self.list_kelas, data_kelas, False, False, 'kelas', 'id')
-        self.list_kelas.setFixedWidth(int((len(data_kelas)+1)*27.5))
-        
         self.delayed_requery()
 
     def list_kelas_selected(self):
@@ -333,11 +418,11 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         for parent_class in sub_class_nilai:
             self.tabel_nilai.extend(parent_class.findChildren(QTableWidget))
         
-    def show_hide_filter(self):
-        if self.actionShow_Filter.isChecked():
-            self.frame_filter.show()
-        else:
-            self.frame_filter.hide()
+    # def show_hide_filter(self):
+    #     if self.actionShow_Filter.isChecked():
+    #         self.frame_filter.show()
+    #     else:
+    #         self.frame_filter.hide()
 
     def apply_style(self):
         BASE_DIR = os.path.dirname(os.path.abspath(__file__))

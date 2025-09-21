@@ -15,6 +15,15 @@
     <file>resources/icon/multiply_hover.svg</file>
   </qresource>
   <qresource prefix="dark">
+    <file>resources/icon/dark/refresh.svg</file>
+    <file>resources/icon/dark/less_than.svg</file>
+    <file>resources/icon/dark/more_than.svg</file>
+    <file>resources/icon/dark/down.svg</file>
+    <file>resources/icon/dark/down_hover.svg</file>
+    <file>resources/icon/dark/up.svg</file>
+    <file>resources/icon/dark/up_hover.svg</file>
+    <file>resources/icon/dark/checked.svg</file>
+    <file>resources/icon/dark/unchecked.svg</file>
     <file>resources/icon/dark/expand_arrow.svg</file>
     <file>resources/icon/dark/expand_arrow_hover.svg</file>
     <file>resources/icon/dark/multiply_grey.svg</file>

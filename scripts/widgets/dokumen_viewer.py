@@ -17,6 +17,7 @@ class DokumenViewer(Ui_Dokumen_Viewer, QWidget):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+        
         self.pdf_document = None  # Objek PDF
         self.image_labels = []
         self.qimage = QImage()

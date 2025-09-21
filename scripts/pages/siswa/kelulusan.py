@@ -156,7 +156,7 @@ class PageKelulusan(Ui_Form, QWidget):
 
     def hide_if_no_data(self):
         ada_data = self.tbl_list_siswa.rowCount() > 0
-        self.frame_kiri.setVisible(ada_data)
+        self.widget_kiri.setVisible(ada_data)
 
     # def eventFilter(self, source, event):
     #     if event.type() == QEvent.ContextMenu:

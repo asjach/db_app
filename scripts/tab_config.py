@@ -93,7 +93,7 @@ TAB_CONFIG = {
         "order_by": ['Nama', 'JK', 'ID Guru'],
         "search_by": ['Nama'],
         "kolom": [],
-        "hidden_frame": ['jenjang', 'tapel'],
+        "hidden_frame": ['jenjang', 'tapel', 'tingkat', 'kelas'],
         "show_page": "BUKUINDUKGURU",
         "action": "actionBukuIndukGuru",
         "page_class": PageBukuIndukGuru,

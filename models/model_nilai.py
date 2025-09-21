@@ -73,7 +73,6 @@ class Model_Nilai(ConnectDB):
             ORDER BY    no
         """
         params = (jenjang, tapel, f'%{tingkat}%', f'%{kelas}%', kegiatan)
-        print(sql, params)
         return self.get_data(sql, params, True)
 
 
@@ -208,7 +207,9 @@ class Model_Nilai(ConnectDB):
             WHERE   r.jenjang = %s AND r.tapel = %s AND r.is_active = 'Ya'
                 AND r.nis_lokal NOT IN (SELECT kp.nis_lokal
                     FROM kegiatan_peserta kp
-                    WHERE   kp.id_kegiatan = %s)"""
+                    WHERE   kp.id_kegiatan = %s)
+            ORDER BY kelas, nama_lengkap
+        """
         return self.get_data(sql, (jenjang, tapel, id_kegiatan))
 
     def peserta_tidak_aktif(self, jenjang, tapel, id_kegiatan):
@@ -332,7 +333,6 @@ class Model_Nilai(ConnectDB):
             ORDER BY    mr.no
         """
         params = (id_kelas, id_kegiatan, nis_lokal)
-        print(sql, params)
         return self.get_data(sql, params)
     
     def get_setting_rapor(self, id_kelas):
@@ -745,69 +745,3 @@ class Model_Nilai(ConnectDB):
         """.format(jenis_setting)
         params = (value, id_kegiatan)
         return self.update_data(sql, params)
-    
-    
-# ##  PENGATURAN
-#     def get_ekskul(self, id_kelas, id_kegiatan):
-#         sql = """
-#             SELECT      id, ekskul, e.id_pembimbing, nama_lengkap 
-#             FROM        ekskul_riwayat e
-#             LEFT JOIN   guru g ON g.id_guru = e.id_pembimbing
-#             WHERE       id_kelas = %s AND id_kegiatan = %s
-#             """
-#         params = (id_kelas, id_kegiatan)
-#         return self.get_data(sql, params)
-        
-#     def insert_by_list_ekskul(self, id_kelas, id_kegiatan, ekskul):
-#         sql = """
-#             INSERT INTO     ekskul_riwayat
-#                             (id_kelas, id_kegiatan, ekskul)
-#             SELECT          %s, %s, %s
-#             WHERE NOT EXISTS (
-#                 SELECT  1 
-#                 FROM        ekskul_riwayat 
-#                 WHERE       id_kelas = %s 
-#                     AND id_kegiatan = %s 
-#                     AND ekskul = %s
-#             )
-#         """
-#         params = (id_kelas, id_kegiatan, ekskul, id_kelas, id_kegiatan, ekskul)
-#         try:
-#             result = self.update_data(sql, params)
-#             if result is False:
-#                 return False
-#             elif result == 0:
-#                 print(f"Kombinasi {id_kelas}, {id_kegiatan}, {ekskul} sudah ada, dilewati.")
-#                 return "EXISTS"
-#             return True
-#         except Exception as e:
-#             print(f"Error inserting {id_kelas}, {id_kegiatan}, {ekskul}: {e}")
-#             return False
-
-#     def insert_by_kegiatan_ekskul(self, jenjang, tapel, id_kegiatan):
-#         sql = """
-#             INSERT INTO     ekskul_riwayat 
-#                             (id_kelas, id_kegiatan, id_pembimbing, ekskul)
-#             SELECT          e.id_kelas, %s, e.id_pembimbing, e.ekskul
-#             FROM            ekskul_riwayat e
-#             JOIN            kegiatan_riwayat k ON k.id = e.id_kegiatan
-#             LEFT JOIN       ekskul_riwayat e2 ON e2.ekskul = e.ekskul AND e2.id_kegiatan = %s
-#             JOIN            kelas_riwayat kr ON kr.id = e.id_kelas
-#             WHERE k.kegiatan = 'PAS'
-#                 AND k.jenjang = %s
-#                 AND k.tapel = %s
-#                 AND kr.tingkat NOT IN ('6', '9', '12')
-#                 AND e2.ekskul IS NULL
-#         """
-#         params = (id_kegiatan, id_kegiatan, jenjang, tapel)
-#         try:
-#             result = self.update_data(sql, params)
-#             return True if result else False  # Asumsi result adalah jumlah baris atau None
-#         except Exception as e:
-#             print(f"Error inserting data for kegiatan {id_kegiatan}: {e}")
-#             return False
-
-#     def clear_ekskul(self, id_kegiatan):
-#         sql = "DELETE FROM ekskul_riwayat WHERE id_kegiatan = %s"
-#         params = (id_kegiatan,)
-#         return self.update_data(sql, params)

@@ -8,6 +8,7 @@ pip install -r requirements.txt
 ## convert ui to py
 
 pyside6-uic -o ui/ui_main.py ui/sources/main.ui
+pyside6-uic -o ui/ui_widgets.py ui/sources/widgets.ui
 pyside6-uic -o ui/ui_main_2.py ui/sources/main_2.ui
 pyside6-uic -o ui/ui_page_with_table_widget.py ui/sources/page_with_table_widget.ui
 

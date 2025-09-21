@@ -22,7 +22,7 @@ class Page_Peserta(QWidget, Ui_Form):
 
     def fill_cbo_kegiatan(self, index):
         data_kegiatan = self.SQL.get_kegiatan(
-            self.parent.cbo_jenjang.currentText(), 
+            self.parent.str_jenjang, 
             self.parent.cbo_tapel.currentText())
         self.cbo_kegiatan.clear()
         for kegiatan in data_kegiatan:
@@ -40,21 +40,23 @@ class Page_Peserta(QWidget, Ui_Form):
         
 
     def fill_table(self):
-        data, fields = self.SQL.get_peserta_kegiatan(
-            id_kegiatan=self.cbo_kegiatan.currentData(),
-            id_kelas=self.parent.cbo_kelas.currentData()
-        )
-        generate_table(
-            data=data,
-            column_names=fields, 
-            table=self.tbl_widget,
-            icon_akhir=":/icon/resources/icon/multiply.svg",
-            fungsi_akhir=self.delete_peserta,
-            mode_input=True
-        )
-    
+        if self.parent.data_kelas:
+            data, fields = self.SQL.get_peserta_kegiatan(
+                id_kegiatan=self.cbo_kegiatan.currentData(),
+                id_kelas=self.parent.data_kelas
+            )
+            generate_table(
+                data=data,
+                column_names=fields, 
+                table=self.tbl_widget,
+                icon_akhir=":/icon/resources/icon/multiply.svg",
+                fungsi_akhir=self.delete_peserta,
+                mode_input=True
+            )
+        
     def table_selected(self):
         self.selected_data = table_selected(self.tbl_widget, self, self.parent)
+        print(self.selected_data)
 
 
     def update_peserta(self, item: QTableWidgetItem):
@@ -73,7 +75,7 @@ class Page_Peserta(QWidget, Ui_Form):
 
     def fill_tbl_peserta_belum_masuk(self):
         data = self.SQL.peserta_belum_masuk(
-            jenjang=self.parent.cbo_jenjang.currentText(),
+            jenjang=self.parent.str_jenjang,
             tapel=self.parent.cbo_tapel.currentText(),
             id_kegiatan=self.cbo_kegiatan.currentData()
         )
@@ -84,7 +86,7 @@ class Page_Peserta(QWidget, Ui_Form):
 
     def fill_tbl_peserta_tidak_aktif(self):
         data = self.SQL.peserta_tidak_aktif(
-            jenjang=self.parent.cbo_jenjang.currentText(),
+            jenjang=self.parent.str_jenjang,
             tapel=self.parent.cbo_tapel.currentText(),
             id_kegiatan=self.cbo_kegiatan.currentData()
         )
@@ -96,7 +98,7 @@ class Page_Peserta(QWidget, Ui_Form):
     def generate_peserta(self):
         sukses = False
         list_kelas = self.SQL.get_kelas_riwayat(
-            self.parent.cbo_jenjang.currentText(), 
+            self.parent.str_jenjang, 
             self.parent.cbo_tapel.currentText()
         )
         for kelas in list_kelas:

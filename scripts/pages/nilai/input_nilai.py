@@ -111,14 +111,15 @@ class PageInputNilai(QWidget, Ui_Form):
                     self.input_tbl.setColumnCount(0)
         
     def get_rekap_nilai(self):
-        list_kelas = self.parent.str_list_kelas_txt
-        list_tingkat = self.parent.str_list_tingkat_txt
+        list_kelas = self.parent.str_kelas
+        list_tingkat = self.parent.not_quoted_tingkat
         jenjang = self.parent.str_jenjang
         tapel = self.cbo_tapel.currentText()
         tingkat = list_tingkat
         kelas = list_kelas
         kegiatan = self.cbo_kegiatan.currentText()
         data_mapel = self.SQL.get_list_mapel(jenjang, tapel, kegiatan, tingkat, kelas, )
+        print(data_mapel)
         if data_mapel:
             mapel_list = [mapel['mapel'] for mapel in data_mapel]
             kolom_mapel = ", ".join([f"MAX(CASE WHEN mapel = '{mapel}' THEN nilai END) AS `{mapel}`" for mapel in mapel_list])
@@ -130,8 +131,8 @@ class PageInputNilai(QWidget, Ui_Form):
     def get_rekap_catatan(self):
         jenjang = self.parent.str_jenjang
         tapel = self.cbo_tapel.currentText()
-        tingkat = self.parent.str_list_tingkat_txt
-        kelas = self.parent.str_list_kelas_txt
+        tingkat = self.parent.not_quoted_tingkat
+        kelas = self.parent.str_kelas
         kegiatan = self.cbo_kegiatan.currentText()
         data = self.SQL.get_catatan_by_kegiatan(jenjang, tapel, tingkat, kelas, kegiatan)
         generate_table(data=data,table=self.input_tbl)
@@ -139,8 +140,8 @@ class PageInputNilai(QWidget, Ui_Form):
     def get_rekap_nilai_catatan(self):
         jenjang = self.parent.str_jenjang
         tapel = self.cbo_tapel.currentText()
-        tingkat = self.parent.str_list_tingkat_txt
-        kelas = self.parent.str_list_kelas_txt
+        tingkat = self.parent.not_quoted_tingkat
+        kelas = self.parent.str_kelas
         kegiatan = self.cbo_kegiatan.currentText()
         data_mapel = self.SQL.get_list_mapel(jenjang, tapel, kegiatan, tingkat, kelas, )
         if data_mapel:

@@ -122,9 +122,18 @@ def left_combo(combo):
         def initStyleOption(self, option: QStyleOptionViewItem, index):
             super().initStyleOption(option, index)
             option.displayAlignment = Qt.AlignLeft | Qt.AlignVCenter
-            
-
     combo.setItemDelegate(CenteredDelegate(combo))
     combo.setEditable(True)
-    combo.lineEdit().setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+    combo.lineEdit().setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
     combo.lineEdit().setReadOnly(True)
+
+def right_combo(combo):
+    # from PySide6.QtWidgets import QStyledItemDelegate, QStyleOptionViewItem
+    class CenteredDelegate(QStyledItemDelegate):
+        def initStyleOption(self, option: QStyleOptionViewItem, index):
+            super().initStyleOption(option, index)
+            option.displayAlignment = Qt.AlignCenter | Qt.AlignVCenter
+    combo.setItemDelegate(CenteredDelegate(combo))
+    combo.setEditable(True)
+    combo.lineEdit().setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+    combo.lineEdit().setReadOnly(True)    

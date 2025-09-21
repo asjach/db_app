@@ -29,8 +29,11 @@
    <property name="spacing">
     <number>5</number>
    </property>
+   <item row="0" column="1">
+    <widget class="QTableWidget" name="tbl_siswa_keluar"/>
+   </item>
    <item row="0" column="0">
-    <widget class="QFrame" name="frame_kiri">
+    <widget class="QWidget" name="widget_kiri" native="true">
      <property name="minimumSize">
       <size>
        <width>500</width>
@@ -42,12 +45,6 @@
        <width>500</width>
        <height>16777215</height>
       </size>
-     </property>
-     <property name="frameShape">
-      <enum>QFrame::StyledPanel</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Raised</enum>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
       <property name="leftMargin">
@@ -102,9 +99,6 @@
       </item>
      </layout>
     </widget>
-   </item>
-   <item row="0" column="1">
-    <widget class="QTableWidget" name="tbl_siswa_keluar"/>
    </item>
   </layout>
  </widget>

@@ -13,6 +13,7 @@ class Model_Guru(ConnectDB):
             "No Urut": 'no_urut',
             "Alamat": 'kampung, nama_lengkap',
             "Aktif":'is_active, nama_lengkap',
+            "ID Guru": 'id_guru',
             }
         return order_mapping.get(opsi_order, '')
 

@@ -59,7 +59,6 @@ def populate_list_widget(
                         item.setData(Qt.UserRole, user_data)
                 
                 _set_check_state(item, show_check, set_check)
-        
         # Handle simple list
         else:
             if display_key or data_key:
@@ -71,7 +70,6 @@ def populate_list_widget(
         
         list_widget.blockSignals(False)
         return
-
     raise ValueError("Unsupported data type. Expected list, dict, or list of dicts")
 
 

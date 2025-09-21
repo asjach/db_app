@@ -2,27 +2,6 @@
 
 THEMES = {
   "light": {
-    "--background": "#f0f0f0",
-    "--foreground": "#333333",
-    "--primary": "#606060",
-    "--primary-foreground": "#ffffff",
-    "--secondary": "#e0e0e0",
-    "--secondary-foreground": "#333333",
-    "--muted": "#d9d9d9",
-    "--muted-foreground": "#666666",
-    "--accent": "#c0c0c0",
-    "--accent-foreground": "#333333",
-    "--destructive": "#cc3333",
-    "--destructive-foreground": "#ffffff",
-    "--border": "#d0d0d0",
-    "--input": "#e0e0e0",
-    "--sidebar": "#eaeaea",
-    "--sidebar-foreground": "#333333",
-    "--sidebar-primary": "#606060",
-    "--sidebar-primary-foreground": "#ffffff",
-    "--sidebar-accent": "#c0c0c0",
-    "--sidebar-accent-foreground": "#333333",
-    "--sidebar-border": "#d0d0d0"
   },
   "dark": {
     "--background": "#1a1a1a",
@@ -42,9 +21,21 @@ THEMES = {
     "--sidebar": "#1f1f1f",
     "--sidebar-foreground": "#d9d9d9",
     "--surface1":"#161616",
-    "--surface2":"#232323",
-    "--surface3":"#2e2e2e",
-    "--surface4":"#3e3e3e",
-    "--surface5":"#505050",
+    "--surface2":"#1c1c1c",
+    "--surface3":"#232323",
+    "--surface4":"#282828",
+    "--surface5":"#2e2e2e",
+    "--surface6":"#343434",
+    "--surface7":"#3e3e3e",
+    "--surface8":"#505050",
+    "--surface9":"#707070",
+    "--surface10":"#7e7e7e",
+    "--surface11":"#a0a0a0",
+    "--surface11":"#ededed",
+    "--foreground1": "#F5F5F7",
+    "--foreground2": "#E5E5E8",
+    "--foreground3": "#C2C2C6",
+    "--foreground4": "#A0A0A2",
+    "--foreground5": "#7D7D80"
   }
 }
