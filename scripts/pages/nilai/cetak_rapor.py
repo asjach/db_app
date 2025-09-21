@@ -86,7 +86,7 @@ class PageCetakRapor(QWidget, Ui_Form):
         self.fill_tbl_siswa()
         
     def fill_cbo_kelas(self):
-        data = self.SQL.get_kelas(self.parent.cbo_jenjang.currentText(), self.parent.cbo_tapel.currentText())
+        data = self.SQL.get_kelas(self.parent.str_jenjang, self.parent.cbo_tapel.currentText())
         populate_combobox(self.cbo_kelas, data, 'kelas', 'id')
 
     def cbo_kelas_selected(self):
@@ -99,7 +99,7 @@ class PageCetakRapor(QWidget, Ui_Form):
         
     def fill_cbo_kegiatan(self, index=0):
         data = self.SQL.get_kegiatan(
-            self.parent.cbo_jenjang.currentText(), 
+            self.parent.str_jenjang, 
             self.parent.cbo_tapel.currentText()
         )
         populate_combobox(self.cbo_kegiatan, data, 'kegiatan', 'id')
@@ -112,7 +112,7 @@ class PageCetakRapor(QWidget, Ui_Form):
 
     def fill_tbl_siswa(self):
         data = self.SQL.get_siswa_aktif(
-            self.parent.cbo_jenjang.currentText(),
+            self.parent.str_jenjang,
             self.parent.cbo_tapel.currentText(),
             self.cbo_kelas.currentText(),
             self.cbo_kegiatan.currentText()

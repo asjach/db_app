@@ -340,6 +340,9 @@ QPushButton, QWidget>QPushButton{
     color: var(--foreground);
     border: none;
     border: 1px solid var(--surface8); 
+    padding: 0px 5px;
+    min-width: 24px;
+    min-height: 24px;
 }
 QPushButton:hover{
     border:none;
@@ -397,7 +400,6 @@ QTableView {
   color:var(--foreground3);
   selection-background-color: var(--accent);
 }
-
 
 QTableCornerButton::section {
     background-color: var(--primary);
