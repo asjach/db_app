@@ -53,12 +53,12 @@ class PagePindahKelas(Ui_Form, QWidget):
             get_function=self.SQL.list_siswa_pindah_kelas,
             get_params={
                 'jenjang':self.parent.str_jenjang,
-                'tapel':self.parent.cbo_tapel.currentText(),
+                'tapel':self.parent.str_tapel,
                 'tingkat':self.parent.quoted_daftar_tingkat,
-                'order_by':self.parent.cbo_order_by.currentText(),
-                'kelas':f"{self.parent.not_quoted_daftar_tingkat}{kelas}",
-                'search_by':self.parent.cbo_search_by.currentText(),
-                'search_text':f"{self.parent.line_search.text()}",
+                'order_by':self.parent.str_order_by,
+                'kelas':f"{self.parent.str_daftar_tingkat}{kelas}",
+                'search_by':self.parent.str_search_by,
+                'search_text':f"{self.parent.last_search_text}",
                 'kolom':self.kolom,
             },
             table_params={

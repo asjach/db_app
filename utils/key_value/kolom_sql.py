@@ -29,7 +29,8 @@ DAFTAR_KELAS= {
     "alamat": 'r.nis_lokal, nama_lengkap, nisn, nik, nama_lengkap, jalan, kampung, rt, rw, kel_desa, kecamatan, kabkota, provinsi, kodepos, alamat, alamat_full, transportasi, jarak, waktu_tempuh',
     "pendaftaran": 'r.nis_lokal, nama_lengkap, pilihan_jenjang, s.tgl_masuk, tapel_masuk, kls_masuk, s.no_urut',
 
-    "sekolah asal": 'r.nis_lokal, nama_lengkap, nik, nss_sekolah_asal, npsn_sekolah_asal, nama_sekolah_asal, alamat_sekolah_asal, pilihan_jenjang'
+    "sekolah asal": 'r.nis_lokal, nama_lengkap, nik, nss_sekolah_asal, npsn_sekolah_asal, nama_sekolah_asal, alamat_sekolah_asal, pilihan_jenjang',
+    "custom": "*"
     }
 
 PINDAH_KELAS = {

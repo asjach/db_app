@@ -23,7 +23,7 @@ class PageCeklisEMIS(QWidget, Ui_Form):
         self.fill_tbl_ya() 
     
     def fill_tbl_ya_tidak(self):
-        data = self.MODEL.get_siswa_all(self.parent.line_search.text())
+        data = self.MODEL.get_siswa_all(self.parent.last_search_text)
         generate_table(
             data=data,
             table=self.tbl_ya_tidak
@@ -31,8 +31,8 @@ class PageCeklisEMIS(QWidget, Ui_Form):
 
     def fill_tbl_tidak(self):
         data = self.MODEL.get_siswa_tidak(
-            self.parent.not_quoted_tingkat, 
-            self.parent.line_search.text()
+            self.parent.str_tingkat, 
+            self.parent.last_search_text
         )
         generate_table(
             data=data,
@@ -44,8 +44,8 @@ class PageCeklisEMIS(QWidget, Ui_Form):
 
     def fill_tbl_ya(self):
         data = self.MODEL.get_siswa_ya(
-            self.parent.not_quoted_tingkat, 
-            self.parent.line_search.text()
+            self.parent.str_tingkat, 
+            self.parent.last_search_text
         )
         generate_table(
             data=data,

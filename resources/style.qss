@@ -101,7 +101,7 @@ QTabBar::tab:!selected:hover {
 QTabBar::tab:top, QTabBar::tab:bottom{
     min-width: 10ex;
     margin-right: -1px;
-    padding: 3px 10px 3px 10px;
+    padding: 5px 10px 5px 10px;
 }
 
 QTabBar::tab:top:last, QTabBar::tab:bottom:last,
@@ -340,7 +340,7 @@ QPushButton, QWidget>QPushButton{
     color: var(--foreground);
     border: none;
     border: 1px solid var(--surface8); 
-    padding: 0px 5px;
+    padding: 0px 0px;
     min-width: 24px;
     min-height: 24px;
 }

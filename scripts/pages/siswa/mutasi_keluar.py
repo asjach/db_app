@@ -12,16 +12,12 @@ class PageMutasiKeluar(Ui_Form, QWidget):
         self.date_tgl_mutasi.setDate(datetime.now())
         self.signals_slots()
 
-
     def _dynamic_attributs(self):
-        self.txt_jenjang = self.parent.str_jenjang
-        self.txt_tapel = self.parent.cbo_tapel.currentText()
         self.txt_tingkat = self.parent.quoted_daftar_tingkat
         self.txt_kelas = self.parent.quoted_daftar_kelas
-        self.txt_search_by = self.parent.cbo_search_by.currentText()
-        self.txt_search = self.parent.line_search.text()
-        self.txt_order_by = self.parent.cbo_order_by.currentText()
-
+        self.txt_search_by = self.parent.str_search_by
+        self.txt_search = self.parent.last_search_text
+        self.txt_order_by = self.parent.str_order_by
 
     def signals_slots(self):
         self.tbl_list_siswa.itemSelectionChanged.connect(
@@ -37,8 +33,8 @@ class PageMutasiKeluar(Ui_Form, QWidget):
     
     def fill_tabel_daftar_siswa(self):
         data = self.SQL.list_siswa_aktif(
-            jenjang=self.txt_jenjang,
-            tapel=self.txt_tapel,
+            jenjang=self.parent.str_jenjang,
+            tapel=self.parent.str_tapel,
             tingkat=self.txt_tingkat,
             kelas=self.txt_kelas,
             status_akhir='Aktif',
@@ -56,8 +52,8 @@ class PageMutasiKeluar(Ui_Form, QWidget):
 
     def fill_tabel_siswa_keluar(self):
         params = {
-            'jenjang'   :self.txt_jenjang,
-            'tapel'     :self.txt_tapel,
+            'jenjang'   :self.parent.str_jenjang,
+            'tapel'     :self.parent.str_tapel,
             'order_by'  :self.txt_order_by,
             'search_by' :self.txt_search_by,
             'search'    :self.txt_search,
@@ -84,8 +80,8 @@ class PageMutasiKeluar(Ui_Form, QWidget):
 
     def batal_keluar_siswa(self):
         self.SQL.batal_keluar(
-            self.txt_jenjang,
-            self.txt_tapel,
+            self.parent.str_jenjang,
+            self.parent.str_tapel,
             self.nis_lokal,
             self.id,
         )

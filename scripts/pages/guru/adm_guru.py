@@ -79,7 +79,7 @@ class PageAdmGuru(QWidget, Ui_Form):
     def fill_cbo_kelas(self):
         data_kelas = self.MODEL.get_list_kelas(
             jenjang = self.parent.str_jenjang,
-            tapel=self.parent.cbo_tapel.currentText()
+            tapel=self.parent.str_tapel
         )
         populate_combobox(
             cbo_widget=self.cbo_kelas, 
@@ -91,7 +91,7 @@ class PageAdmGuru(QWidget, Ui_Form):
     def fill_cbo_guru(self):
         data_guru = self.MODEL.get_list_guru(
             self.parent.str_jenjang,
-            self.parent.cbo_tapel.currentText()
+            self.parent.str_tapel
         )
         populate_combobox(cbo_widget=self.cbo_guru,data=data_guru)
         
@@ -99,7 +99,7 @@ class PageAdmGuru(QWidget, Ui_Form):
     def generated_pdf(self):
         data_siswa = self.MODEL.get_daftar_nama_siswa(
             jenjang=self.parent.str_jenjang,
-            tapel = self.parent.cbo_tapel.currentText(),
+            tapel = self.parent.str_tapel,
             kelas = self.cbo_kelas.currentText()
         )
         setting = {
@@ -147,7 +147,7 @@ class PageAdmGuru(QWidget, Ui_Form):
         data = {
             'nama_guru': self.cbo_guru.currentText(),
             'jenjang': self.parent.str_jenjang,
-            'tapel': self.parent.cbo_tapel.currentText(),
+            'tapel': self.parent.str_tapel,
             'semester': self.cbo_semester.currentText(),
             'kelas': self.cbo_kelas.currentText(),
             'data_siswa': data_siswa

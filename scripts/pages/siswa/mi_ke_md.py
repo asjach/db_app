@@ -21,11 +21,11 @@ class PageMI2MD(Ui_Form, QWidget):
         self.btn_update_ke_md.clicked.connect(self.sesuaikan_ke_md)
 
     def _dynamic_attributs(self):
-        self.txt_tapel = self.parent.cbo_tapel.currentText()
+        self.txt_tapel = self.parent.str_tapel
         self.txt_tingkat = self.parent.quoted_daftar_tingkat
         self.txt_kelas = self.parent.quoted_daftar_kelas
-        self.txt_search_by = self.parent.cbo_search_by.currentText()
-        self.txt_search = self.parent.line_search.text()
+        self.txt_search_by = self.parent.str_search_by
+        self.txt_search = self.parent.last_search_text
 
     def show_page(self):
         self._dynamic_attributs()

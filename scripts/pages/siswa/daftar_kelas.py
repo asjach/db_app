@@ -1,5 +1,5 @@
 from PySide6.QtWidgets import QWidget, QMainWindow
-from ui.ui_page_with_table_widget import Ui_Form
+from ui.ui_page_daftar_kelas import Ui_Form
 from models.model_siswa import Model_Siswa
 from utils.fungsi.general_functions import *
 from utils.key_value.kolom_sql import *
@@ -11,31 +11,28 @@ class PageDaftarKelas(QWidget, Ui_Form):
         self.parent = parent
         self.nis_lokal = None
         self.SQL = Model_Siswa()
+        self.plain_custom.setPlainText("r.nis_lokal")
         self._signals_slots()
         
     def _signals_slots(self):
         self.tbl_widget.itemSelectionChanged.connect(self._tbl_selected)
         self.tbl_widget.itemChanged.connect(self._update_table)
-    
+        self.btn_preview.clicked.connect(self.show_page)
+
     def show_page(self):
         self._fill_table_widget()
         
-    # @measure_time
     def _fill_table_widget(self):
         data = self.SQL.get_daftar_kelas(
             jenjang= self.parent.str_jenjang,
-            tapel = self.parent.cbo_tapel.currentText(),
+            tapel = self.parent.str_tapel,
             tingkat = self.parent.quoted_daftar_tingkat,
             kelas = self.parent.quoted_daftar_kelas,
-            search_by=self.parent.cbo_search_by.currentText(),
-            search = self.parent.line_search.text(),
-            opsi_kolom=self.opsi_kolom,
-            order_by = self.parent.cbo_order_by.currentText(),
-        )
-        generate_table(
-            data=data,
-            table=self.tbl_widget,
-        )
+            search_by=self.parent.str_search_by,
+            search = self.parent.last_search_text,
+            opsi_kolom=self._opsi_kolom,
+            order_by = self.parent.str_order_by,)
+        generate_table(data, self.tbl_widget)
 
     def _tbl_selected(self):
         table_selected(self.tbl_widget, self, self.parent)
@@ -58,6 +55,10 @@ class PageDaftarKelas(QWidget, Ui_Form):
             self._fill_table_widget()
 
     @property
-    def opsi_kolom(self):
+    def _opsi_kolom(self):
+        self.widget_custom.setVisible(False)
         kolom = DAFTAR_KELAS.get(self.parent.cbo_kolom.currentText().lower(), DAFTAR_KELAS['default'])
+        if self.parent.cbo_kolom.currentText().lower() == 'custom':
+            kolom = self.plain_custom.toPlainText()
+            self.widget_custom.setVisible(True)
         return kolom

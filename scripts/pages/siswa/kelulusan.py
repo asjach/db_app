@@ -19,12 +19,10 @@ class PageKelulusan(Ui_Form, QWidget):
         self._signals_slots()
         
     def _dynamic_attributs(self):
-        self.txt_jenjang = self.parent.str_jenjang
-        self.txt_tapel = self.parent.cbo_tapel.currentText()
-        self.txt_search_by = self.parent.cbo_search_by.currentText()
-        self.txt_search = self.parent.line_search.text()
-        self.txt_order = self.parent.cbo_order_by.currentText()
-        self.next_tapel = tapel_berikutnya(self.txt_tapel)
+        self.txt_search_by = self.parent.str_search_by
+        self.txt_search = self.parent.last_search_text
+        self.txt_order = self.parent.str_order_by
+        self.next_tapel = self.parent.str_next_tapel
 
     def _signals_slots(self):
         self.btn_luluskan.clicked.connect(self.luluskan_siswa)
@@ -50,8 +48,8 @@ class PageKelulusan(Ui_Form, QWidget):
 
     def fill_tbl_list_siswa(self):
         data = self.SQL.list_siswa_aktif(
-            jenjang=self.txt_jenjang,
-            tapel=self.txt_tapel,
+            jenjang=self.parent.str_jenjang,
+            tapel=self.parent.str_tapel,
             tingkat='6',
             search_text=self.txt_search,
             status_akhir='Aktif',
@@ -66,8 +64,8 @@ class PageKelulusan(Ui_Form, QWidget):
 
     def fill_tbl_siswa_lulus(self):
         data = self.SQL.siswa_lulus(
-            jenjang=self.txt_jenjang,
-            tapel=self.txt_tapel,
+            jenjang=self.parent.str_jenjang,
+            tapel=self.parent.str_tapel,
             search_text=self.txt_search,
             order_by=self.txt_order
         )    
@@ -78,7 +76,7 @@ class PageKelulusan(Ui_Form, QWidget):
 
     def fill_tbl_siswa_tidak_lulus(self):
         params = {
-            'jenjang':self.txt_jenjang,
+            'jenjang':self.parent.str_jenjang,
             'tapel':self.next_tapel,
             'tingkat':'6',
             'kelas':'',
@@ -107,15 +105,15 @@ class PageKelulusan(Ui_Form, QWidget):
     def luluskan_siswa(self):
         tgl_lulus = self.date_tgl_lulus.date().toString('yyyy-MM-dd')
         self.SQL.luluskan_siswa(
-            self.txt_jenjang, 
-            self.txt_tapel, 
+            self.parent.str_jenjang, 
+            self.parent.str_tapel, 
             tgl_lulus)
         self.show_page()
 
     def tidak_luluskan_siswa(self):
         tgl_tidak_lulus = self.date_tgl_lulus.date().toString('yyyy-MM-dd')
         self.SQL.tidak_luluskan_siswa(
-            self.txt_tapel,
+            self.parent.str_tapel,
             tgl_tidak_lulus, 
             self.id
             )
@@ -123,8 +121,8 @@ class PageKelulusan(Ui_Form, QWidget):
 
     def batal_lulus(self):
         self.SQL.batal_lulus_siswa(
-            self.txt_jenjang,
-            self.txt_tapel,
+            self.parent.str_jenjang,
+            self.parent.str_tapel,
             self.nis_lokal,
             self.id
         )
@@ -132,15 +130,15 @@ class PageKelulusan(Ui_Form, QWidget):
     
     def batal_lulus_all(self):
         self.SQL.batal_lulus_semua(
-            self.txt_jenjang, 
-            self.txt_tapel
+            self.parent.str_jenjang, 
+            self.parent.str_tapel
             )
         self.show_page()
 
     def batal_tidak_lulus(self):
         self.SQL.batal_tidak_naik_siswa(
-            self.txt_jenjang, 
-            self.txt_tapel,
+            self.parent.str_jenjang, 
+            self.parent.str_tapel,
             self.id,
             self.nis_lokal
             )

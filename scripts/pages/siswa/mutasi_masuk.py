@@ -9,6 +9,14 @@ class PageMutasiMasuk(Ui_Form, QWidget):
     def __init__(self, parent: QMainWindow = None):
         super().__init__(parent)
         self.setupUi(self)
+        self.input_psb = [
+            self.line_no_urut,
+            self.line_nama_lengkap,
+            self.cbo_jk,
+            self.cbo_kelas,
+            self.line_ibu,
+            self.line_ayah
+        ]
         self.cbo_jk.setCurrentIndex(-1)
         self.cbo_kelas.setCurrentIndex(-1)
         self.parent = parent
@@ -17,30 +25,13 @@ class PageMutasiMasuk(Ui_Form, QWidget):
         self.btn_tambah.setEnabled(False)
         self.btn_terima.setEnabled(False)
         self.signals_slots()
-
-    def _dynamic_attributs(self):
-        self.txt_jenjang = self.parent.str_jenjang
-        self.txt_tapel = self.parent.cbo_tapel.currentText()
-        self.txt_search_by = self.parent.cbo_search_by.currentText()
-        self.txt_search = self.parent.line_search.text()
-        self.txt_order = self.parent.cbo_order_by.currentText()
-        self.input_psb = [
-            self.line_no_urut,
-            self.line_nama_lengkap,
-            self.cbo_jk,
-            self.cbo_kelas,
-        ]
+        
 
     def signals_slots(self):
         self.btn_tambah.clicked.connect(self.tambah_calon_siswa)
         self.tbl_daftar_calon_siswa.itemChanged.connect(self.update_calon_siswa)
-        self.tbl_daftar_calon_siswa.itemSelectionChanged.connect(
-            lambda: table_selected(self.tbl_daftar_calon_siswa, self, self.parent,
-            ['id', 'kandidat_nis', 'nama_lengkap'])
-        )
-        self.tbl_diterima.itemSelectionChanged.connect(
-            lambda: table_selected(self.tbl_diterima, self, self.parent, ['id'])
-        )
+        self.tbl_daftar_calon_siswa.itemSelectionChanged.connect(self.tbl_daftar_calon_siswa_selected)
+        self.tbl_diterima.itemSelectionChanged.connect(self.tbl_diterima_selected)
         self.btn_terima.clicked.connect(self._terima_calon_siswa_operations)
         self.line_nama_lengkap.textChanged.connect(self.aktivasi_btn_tambah)
         self.cbo_jk.currentIndexChanged.connect(self.aktivasi_btn_tambah)
@@ -48,7 +39,6 @@ class PageMutasiMasuk(Ui_Form, QWidget):
 
 
     def show_page(self):
-        self._dynamic_attributs()
         self.fill_daftar_calon_siswa()
         self.fill_calon_belum()
         self.fill_calon_sudah()
@@ -60,12 +50,12 @@ class PageMutasiMasuk(Ui_Form, QWidget):
     def fill_daftar_calon_siswa(self):
         opsi_kolom = "*"
         data = self.SQL.daftar_calon_siswa(
-            jenjang= self.txt_jenjang,
-                tapel=self.txt_tapel,
+            jenjang= self.parent.str_jenjang,
+                tapel=self.parent.str_tapel,
                 opsi_kolom=opsi_kolom,
-                search_by=self.txt_search_by,
-                search=self.txt_search,
-                order_by=self.txt_order,
+                search_by=self.parent.str_search_by,
+                search=self.parent.last_search_text,
+                order_by=self.parent.str_order_by,
         )
         generate_table(
             data=data,
@@ -74,26 +64,29 @@ class PageMutasiMasuk(Ui_Form, QWidget):
             fungsi_akhir= self.delete_pendaftar_operations
         )
 
+    def tbl_daftar_calon_siswa_selected(self):
+        table_selected(self.tbl_daftar_calon_siswa, self, self.parent, ['id'])
+
     def fill_calon_belum(self):
         data = self.SQL.calon_belum_diterima(
-            jenjang= self.txt_jenjang,
-                tapel=self.txt_tapel,
-                search_by=self.txt_search_by,
-                search=self.txt_search,
-                order_by=self.txt_order
+            jenjang= self.parent.str_jenjang,
+                tapel=self.parent.str_tapel,
+                search_by=self.parent.str_search_by,
+                search=self.parent.last_search_text,
+                order_by=self.parent.str_order_by
         )
         generate_table(
             data=data,
-            table=self.tbl_diterima,
+            table=self.tbl_calon_belum,
         )
 
     def fill_calon_sudah(self):
         data = self.SQL.calon_diterima(
-            jenjang= self.txt_jenjang,
-            tapel=self.txt_tapel,
-            search_by=self.txt_search_by,
-            search=self.txt_search,
-            order_by=self.txt_order
+            jenjang= self.parent.str_jenjang,
+            tapel=self.parent.str_tapel,
+            search_by=self.parent.str_search_by,
+            search=self.parent.last_search_text,
+            order_by=self.parent.str_order_by
         )
         generate_table(
             data=data,
@@ -103,6 +96,9 @@ class PageMutasiMasuk(Ui_Form, QWidget):
             hidden_column=[1,3],
             stretch_column=2
         )
+    
+    def tbl_diterima_selected(self):
+        table_selected(self.tbl_diterima, self, self, self.parent, ['id'])
 
     def update_calon_siswa(self):
         if self.id:
@@ -124,15 +120,15 @@ class PageMutasiMasuk(Ui_Form, QWidget):
         if sukses:
             self._tambah_pendaftar_success_messages()
 
-
-
     def _tambah_operations(self):
         parameter = {
-            "jenjang":  self.txt_jenjang,
-            "tapel": self.txt_tapel,
+            "jenjang":  self.parent.str_jenjang,
+            "tapel": self.parent.str_tapel,
             "no_urut": self.line_no_urut.text(),
             "nama_lengkap": self.line_nama_lengkap.text().upper(),
             "jk": self.cbo_jk.currentText(),
+            "ayah_nama": self.line_ayah.text(),
+            "ibu_nama": self.line_ibu.text(),
             "kls_masuk": self.cbo_kelas.currentText(),
             "is_accepted": "",
             "is_active": "Ya",
@@ -154,8 +150,8 @@ class PageMutasiMasuk(Ui_Form, QWidget):
     def _terima_calon_siswa_operations(self):
         tgl_masuk = self.date_tgl_masuk.date().toString('yyyy-MM-dd')
         sukses = self.SQL.terima_pendaftar(
-            jenjang= self.txt_jenjang,
-            tapel=self.txt_tapel,
+            jenjang= self.parent.str_jenjang,
+            tapel=self.parent.str_tapel,
             tgl_masuk=tgl_masuk
         )
         if sukses:

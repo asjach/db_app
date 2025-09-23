@@ -2,7 +2,7 @@ from functools import partial
 from ui.ui_main import Ui_MainWindow
 # from ui.ui_widgets import Ui_Form
 from PySide6.QtCore import QTimer, QEvent, Qt
-from PySide6.QtWidgets import QMainWindow, QMenu, QTabBar, QWidget, QMenuBar
+from PySide6.QtWidgets import QMainWindow, QMenu, QTabBar, QWidget, QMenuBar, QTableWidget
 from PySide6.QtGui import QAction
 from scripts import *
 from models.model_main import Model_Main
@@ -12,21 +12,103 @@ from utils.fungsi.general_functions import *
 from resources.color_var import THEMES
 
 
-# class Widgets(QWidget, Ui_Form):
-#     def __init__(self):
-#         super().__init__()
-#         self.setupUi(self)
-
-
 class MainWindow(Ui_MainWindow, QMainWindow):
     def __init__(self, parent=None):
         super().__init__(parent)
+
+        register_all_windows_fonts()
         self.setupUi(self)
+        self.main_tab.setCornerWidget(self.btn_info, Qt.TopRightCorner)
+        self.toggle_theme()
+        self.showMaximized()
+
+        # Initialization
+        self.initialize_menu()
+        self.initialize_variables()
+        self.initialize_class()
+        self.connect_signals()
+        self.initialize_components()
+
+    # ----------------------------------------------------------------------
+    # INITIALIZATION
+    # ----------------------------------------------------------------------
+    def initialize_components(self):
+        # Delegate untuk list widget
+        self.list_tingkat.setItemDelegate(CenteredDelegate())
+        self.list_kelas.setItemDelegate(CenteredDelegate())
+        self.list_jenjang.setItemDelegate(CenteredDelegate())
+
+        # ComboBox alignment
+        for combo in [self.cbo_tapel, self.cbo_order_by, self.cbo_kolom, self.cbo_search_by]:
+            right_combo(combo)
+
+        self.fill_cbo_tapel()
+
+        # Default selection
+        self.list_jenjang.setCurrentRow(0)
+        self.list_tingkat.setCurrentRow(0)
+
+        # Load tab default
+        config = TAB_CONFIG["Daftar Kelas"]
+        page = getattr(self, config["show_page"])
+        self.add_tab(page, "Daftar Kelas")
+
+    def initialize_variables(self):
+        
+        self.static_values = get_json_data(os.path.join("D:/APP/DB App", "utils", "static_values.json"))
+
+        # Timer untuk requery
+        self.requery_timer = QTimer(self)
+        self.requery_timer.setInterval(200)
+        self.requery_timer.setSingleShot(True)
+        self.requery_timer.timeout.connect(self.requery_page)
+
+        # Model & menu
+        self.model_main = Model_Main()
+        self.cmenu = QMenu()
+
+        # Actions
+        self.detail_siswa_action = QAction("Detail Siswa")
+        self.detail_guru_action = QAction("Detail Guru")
+        self.tidak_naik_action = QAction("Tidak Naik")
+
+        # Variabel state
+        self.str_jenjang = None
+        self.str_tapel = None
+        self.default_font_size = 10
+        self.current_font_size = self.default_font_size
+        self._last_search_text = ""
+        self.str_search_by = 'Nama'
+        self.str_order_by = 'Nama'
+
+        # Tingkat
+        self.quoted_daftar_tingkat = None
+        self.str_daftar_tingkat = None
+        self.list_daftar_tingkat = None
+        self.quoted_tingkat = None
+        self.str_tingkat = None
+
+        # Kelas
+        self.quoted_daftar_kelas = None
+        self.data_kelas = None
+        self.str_kelas = None
+        self.nis_lokal = None
+        self.nis_index = None
+
+    def initialize_class(self):
+        for config in TAB_CONFIG.values():
+            attr_name = config["show_page"]
+            page_class = config["page_class"]
+            setattr(self, attr_name, page_class(self))
+
+    def initialize_menu(self):
         self.menu_bar = QMenuBar()
-        self.horizontalLayout_2.addChildWidget(self.menu_bar)
+        
+
+        # --- Santri ---
         self.menu_santri = QMenu("Santri", self)
         self.menu_santri.addActions([
-            self.actionDaftar_Kelas, 
+            self.actionDaftar_Kelas,
             self.actionRekap_Santri,
             self.menu_santri.addSeparator(),
             self.actionMutasiMasuk,
@@ -42,6 +124,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
             self.actionCeklis_EMIS,
         ])
 
+        # --- Guru ---
         self.menu_guru = QMenu("Guru", self)
         self.menu_guru.addActions([
             self.actionBukuIndukGuru,
@@ -50,11 +133,12 @@ class MainWindow(Ui_MainWindow, QMainWindow):
             self.actionAdmGuru,
         ])
 
+        # --- Nilai ---
         self.menu_nilai = QMenu("Nilai", self)
         self.menu_nilai.addActions([
             self.actionRiwayatKegiatan,
             self.actionPesertaKegiatan,
-            self.actionMapelKegiatan, 
+            self.actionMapelKegiatan,
             self.actionEkskulKegiatan,
             self.menu_nilai.addSeparator(),
             self.actionInput_Nilai,
@@ -64,6 +148,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
             self.actionRapor,
         ])
 
+        # --- Dokumen ---
         self.menu_dokumen = QMenu("Dokumen", self)
         self.menu_dokumen.addActions([
             self.actionLihat_Dokumen,
@@ -75,12 +160,14 @@ class MainWindow(Ui_MainWindow, QMainWindow):
             self.actionHapus_Dokumen,
         ])
 
+        # --- Setting ---
         self.menu_setting = QMenu("Setting", self)
         self.menu_setting.addActions([
             self.actionInput_By_Excel,
             self.actionExport_Excel,
         ])
 
+        # --- Preferensi ---
         self.menu_preferensi = QMenu("Preferensi", self)
         self.menu_preferensi.addActions([
             self.actionRiwayatKelas,
@@ -90,10 +177,11 @@ class MainWindow(Ui_MainWindow, QMainWindow):
             self.actionStatic_Values,
         ])
 
+        # --- View ---
         self.menu_view = QMenu("View", self)
-        self.menu_view.addActions([
-            self.actionDark_Mode,
-        ])
+        self.menu_view.addActions([self.actionDark_Mode])
+
+        # Add menus to menubar
         self.menu_bar.addMenu(self.menu_santri)
         self.menu_bar.addMenu(self.menu_guru)
         self.menu_bar.addMenu(self.menu_nilai)
@@ -101,73 +189,23 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.menu_bar.addMenu(self.menu_setting)
         self.menu_bar.addMenu(self.menu_preferensi)
         self.menu_bar.addMenu(self.menu_view)
+        self.horizontalLayout_2.addChildWidget(self.menu_bar)
 
-
-        # self.main_tab.setCornerWidget(self.frame_search, Qt.TopRightCorner)
-        self.list_tingkat.setItemDelegate(CenteredDelegate())
-        self.list_kelas.setItemDelegate(CenteredDelegate())
-        self.list_jenjang.setItemDelegate(CenteredDelegate())
-        right_combo(self.cbo_tapel)
-        right_combo(self.cbo_order_by)
-        right_combo(self.cbo_kolom)
-        right_combo(self.cbo_search_by)
-        self.showMaximized()
-        # ThemeManager.apply_theme(self, 'dark', './resources/style.qss')
-        register_all_windows_fonts()
-        self.static_values = get_json_data(os.path.join("D:/APP/DB App", "utils", "static_values.json"))
-        self.toggle_theme()
-        ## VARIABEL INITIALIZATION
-        self.default_font_size = 10   # ukuran awal font tabel
-        self.current_font_size = self.default_font_size
-        self.str_jenjang = None
-        self._last_search_text = ''
-        # Tingkat
-        self.quoted_daftar_tingkat =None  ## list tingkat berupa string dengan tanda petik -> "'1', '2', '3'" untuk IN di sql
-        self.not_quoted_daftar_tingkat=None ## list tingkat berupa string tanpa tanda petik -> "1, 2, 3" untuk IN di sql
-        self.list_daftar_tingkat = None ## list tingkat -> ['1', '2', '3']
-        self.quoted_tingkat = None # '1'
-        self.not_quoted_tingkat = None  # 1
-        # Kelas
-        self.quoted_daftar_kelas =None  ## list kelas berupa string dengan tanda petik -> "'1', '2', '3'" untuk IN di sql
-        self.data_kelas=None
-        self.str_kelas=None
-        self.nis_lokal = None
-        self.nis_index = None
-        self.model_main = Model_Main()
-        self.cmenu = QMenu()
-        self.detail_siswa_action = QAction("Detail Siswa")
-        self.detail_guru_action = QAction("Detail Guru")
-        self.tidak_naik_action = QAction("Tidak Naik")
-
-        self.requery_timer = QTimer(self)
-        self.requery_timer.setInterval(200)
-        self.requery_timer.setSingleShot(True)
-        self.requery_timer.timeout.connect(self.requery_page)
-        self.initialize_components()
-        
-    def initialize_components(self):
-        
-        self.add_combo_value()
-        self.connect_signals()
-        self.list_jenjang.setCurrentRow(0)
-        self.list_tingkat.setCurrentRow(0)
-        config = TAB_CONFIG["Daftar Kelas"]
-        page = getattr(self, config["show_page"])
-        self.add_tab(page, "Daftar Kelas")
-    
-    
+    # ----------------------------------------------------------------------
+    # SIGNALS
+    # ----------------------------------------------------------------------
     def connect_signals(self):
-        # INIT CLASSES
-        for config in TAB_CONFIG.values():
-            attr_name = config["show_page"]
-            page_class = config["page_class"]
-            setattr(self, attr_name, page_class(self))
         self.tabel_tabel()
+
+        # Event filter untuk semua tabel
         for tabel in self.findChildren(QTableWidget):
             tabel.installEventFilter(self)
-        fungsi_filter_buttons(self.cbo_tapel)
-        fungsi_filter_buttons(self.cbo_order_by)
-        fungsi_filter_buttons(self.cbo_kolom)
+
+        # Filter button
+        for combo in [self.cbo_tapel, self.cbo_order_by, self.cbo_kolom]:
+            fungsi_filter_buttons(combo)
+
+        # ComboBox requery mapping
         combobox_mapping = {
             "delayed_requery": [self.cbo_order_by, self.cbo_kolom],
             "requery_kelas": [self.cbo_tapel]
@@ -176,56 +214,72 @@ class MainWindow(Ui_MainWindow, QMainWindow):
             for combo in combos:
                 combo.currentIndexChanged.connect(getattr(self, signal))
 
+        # Tab actions
         for title, config in TAB_CONFIG.items():
             attr_name = config["show_page"]
             action_name = config["action"]
             page = getattr(self, attr_name)
             action = getattr(self, action_name)
             action.triggered.connect(partial(self.add_tab, page, title))
+
         # Tab and search signals
         self.line_search.textChanged.connect(self.delayed_search)
         self.main_tab.currentChanged.connect(self.tab_index_changed)
         self.main_tab.tabCloseRequested.connect(self.close_tab)
-        # DIALOG
+
+        # Dialog actions
         self.actionInput_By_Excel.triggered.connect(lambda: DialogInputExcel(self).exec())
         self.actionExport_Excel.triggered.connect(lambda: DialogExportExcel(self).exec())
         self.actionStatic_Values.triggered.connect(lambda: Dialog_Static_Values(self).exec())
         self.actionCari.triggered.connect(self.show_detail_siswa)
-        # VIEW
-        # self.actionShow_Filter.toggled.connect(self.show_hide_filter)
+
+        # List selection
         self.list_jenjang.itemSelectionChanged.connect(self.list_jenjang_selected)
+        self.cbo_tapel.currentIndexChanged.connect(self.cbo_tapel_selected)
         self.list_tingkat.itemSelectionChanged.connect(self.list_tingkat_selected)
         self.list_kelas.itemSelectionChanged.connect(self.list_kelas_selected)
+        self.cbo_search_by.currentIndexChanged.connect(self.cbo_search_by_selected)
+        self.cbo_order_by.currentIndexChanged.connect(self.cbo_order_by_selected)
+
+        # Theme toggle
         self.actionDark_Mode.toggled.connect(self.toggle_theme)
         self.btn_refresh.clicked.connect(self.toggle_theme)
-        
 
+    # ----------------------------------------------------------------------
+    # TAB MANAGEMENT
+    # ----------------------------------------------------------------------
     def add_tab(self, page_class, title):
         existing_tabs = [self.main_tab.tabText(i) for i in range(self.main_tab.count())]
         if title in existing_tabs:
             self.main_tab.setCurrentIndex(existing_tabs.index(title))
             return
-        if isinstance(page_class, type):
-            page_instance = page_class(self)
-        else:
-            page_instance = page_class
+
+        page_instance = page_class(self) if isinstance(page_class, type) else page_class
         index = self.main_tab.addTab(page_instance, title)
         self.main_tab.setCurrentWidget(page_instance)
+
         if title == "daftar_kelas":
             self.main_tab.tabBar().setTabButton(index, QTabBar.RightSide, None)
 
-    
+    def close_tab(self, index):
+        self.main_tab.removeTab(index)
+
     def tab_index_changed(self):
         current_index = self.main_tab.currentIndex()
         if current_index == -1:
             return
+
         tab_name = self.main_tab.tabText(current_index)
         config = TAB_CONFIG.get(tab_name, {})
-        self.cbo_kolom.blockSignals(True)
-        self.cbo_order_by.blockSignals(True)
-        self.cbo_kolom.clear()
-        self.cbo_order_by.clear()
-        self.cbo_search_by.clear()
+
+        # if config.get('right_panel') and hasattr(self, config['right_panel']):
+        #     self.main_tab.setCornerWidget()
+
+        # Reset combo box
+        for combo in [self.cbo_kolom, self.cbo_order_by, self.cbo_search_by]:
+            combo.blockSignals(True)
+            combo.clear()
+
         frames = {
             "jenjang": self.list_jenjang,
             "tapel": self.cbo_tapel,
@@ -235,63 +289,69 @@ class MainWindow(Ui_MainWindow, QMainWindow):
             "search_by": self.frame_search,
             "kolom": self.cbo_kolom,
         }
+
         default_visible_frames = {"jenjang", "tapel", "tingkat", "kelas"}
+
+        # Set visibility
         for key, frame in frames.items():
             is_default_visible = key in default_visible_frames
-            is_visible = is_default_visible or (config.get(key) and config[key])
+            is_visible = is_default_visible or config.get(key, False)
             frame.setEnabled(bool(is_visible))
+
             if is_visible and key not in default_visible_frames:
                 combo_box = getattr(self, f"cbo_{key}")
                 combo_box.addItems(config.get(key, []))
-        hidden_frames = config.get("hidden_frame", set())
-        for frame_name in hidden_frames:
+
+        # Hide frames
+        for frame_name in config.get("hidden_frame", set()):
             frame = frames.get(frame_name.lower())
             if frame:
                 frame.setEnabled(False)
-        self.cbo_kolom.blockSignals(False)
-        self.cbo_order_by.blockSignals(False)
-        self.cbo_search_by.blockSignals(False)
+
+        for combo in [self.cbo_kolom, self.cbo_order_by, self.cbo_search_by]:
+            combo.blockSignals(False)
+
         self.delayed_requery()
 
-    def close_tab(self, index):
-        self.main_tab.removeTab(index)
-
+    # ----------------------------------------------------------------------
+    # QUERY & FILTER
+    # ----------------------------------------------------------------------
     def requery_page(self):
         tab_name = self.main_tab.tabText(self.main_tab.currentIndex())
         config = TAB_CONFIG.get(tab_name)
         if config and hasattr(self, config["show_page"]):
             getattr(self, config["show_page"]).show_page()
 
-    def add_combo_value(self):
-        combo_values = {
-            self.cbo_tapel: self.model_main.get_list_tapel,}
-        for combo, values in combo_values.items():
-            combo.blockSignals(True)
-            combo.clear()
-            combo.addItems(values() if callable(values) else values)
-            combo.blockSignals(False)
-        self.requery_kelas()
+    def fill_cbo_tapel(self):
+        list_tapel = self.model_main.get_list_tapel()
+        populate_combobox(self.cbo_tapel, list_tapel)
 
     def list_jenjang_selected(self):
         self.str_jenjang = self.list_jenjang.currentItem().text().strip()
         self.requery_kelas()
 
+    def cbo_tapel_selected(self):
+        self.str_tapel = self.cbo_tapel.currentText()
+        self.str_next_tapel = tapel_berikutnya(self.str_tapel)
+        self.str_prev_tapel = tapel_sebelumnya(self.str_tapel)
+        self.requery_kelas()
+
     def list_tingkat_selected(self):
         self.quoted_daftar_tingkat = get_selected_list_widget_items(self.list_tingkat, 'quoted')
-        self.not_quoted_daftar_tingkat = get_selected_list_widget_items(self.list_tingkat, 'not_quoted')
+        self.str_daftar_tingkat = get_selected_list_widget_items(self.list_tingkat, 'not_quoted')
         self.list_daftar_tingkat = get_selected_list_widget_items(self.list_tingkat)
         self.quoted_tingkat = get_selected_list_widget_item(self.list_tingkat, 'quoted')
-        self.not_quoted_tingkat = get_selected_list_widget_item(self.list_tingkat, 'not_quoted')
+        self.str_tingkat = get_selected_list_widget_item(self.list_tingkat, 'not_quoted')
         self.requery_kelas()
-        
 
+    
     def requery_kelas(self):
         self.list_kelas.clear()
         data_kelas = self.model_main.get_kelas(
             jenjang=self.str_jenjang,
             tapel=self.cbo_tapel.currentText(),
             tingkat=self.quoted_daftar_tingkat
-            )
+        )
         populate_list_widget(self.list_kelas, data_kelas, False, False, 'kelas', 'id')
         self.delayed_requery()
 
@@ -301,6 +361,18 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.data_kelas = get_selected_list_widget_data(self.list_kelas)
         self.delayed_requery()
 
+    def cbo_search_by_selected(self):
+        self.str_search_by = self.cbo_search_by.currentText()
+        self.delayed_requery()
+
+    def cbo_order_by_selected(self):
+        self.str_order_by = self.cbo_order_by.currentText()
+        self.delayed_requery()
+
+
+    # ----------------------------------------------------------------------
+    # DELAYED ACTIONS
+    # ----------------------------------------------------------------------
     def delayed_action(self, interval=200, update_text=None, is_search=False):
         if is_search and update_text != self.last_search_text:
             self.last_search_text = update_text
@@ -325,13 +397,17 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         if value != getattr(self, "_last_search_text", None):
             self._last_search_text = value
 
+    # ----------------------------------------------------------------------
+    # DETAIL DIALOGS
+    # ----------------------------------------------------------------------
     def show_detail_siswa(self, tabel):
         self.EDIT_BIODATA = DialogDetailSiswa(self)
         ThemeManager.apply_theme(self.EDIT_BIODATA, 'dark', './resources/style.qss')
         self.EDIT_BIODATA.show_dialog(
-            tabel= tabel, 
-            nis_lokal=self.nis_lokal, 
-            nis_index=self.nis_index)
+            tabel=tabel,
+            nis_lokal=self.nis_lokal,
+            nis_index=self.nis_index
+        )
         self.EDIT_BIODATA.showMaximized()
 
     def show_detail_guru(self):
@@ -339,6 +415,9 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.DETAIL_GURU.show_dialog(self.id_guru)
         self.DETAIL_GURU.showMaximized()
 
+    # ----------------------------------------------------------------------
+    # EVENT FILTER
+    # ----------------------------------------------------------------------
     def eventFilter(self, source, event):
         if event.type() == QEvent.ContextMenu:
             self.handle_context_menu(source)
@@ -348,61 +427,33 @@ class MainWindow(Ui_MainWindow, QMainWindow):
             elif action == self.detail_guru_action:
                 self.show_detail_guru()
             elif action == self.tidak_naik_action:
-                self.self.NAIK.tidak_naikkan_siswa()
+                self.NAIK.tidak_naikkan_siswa()
+
         if event.type() == QEvent.KeyPress:
             if event.key() == Qt.Key_C and event.modifiers() == Qt.ControlModifier:
                 copyCells(source)
-                print("COPIED")
                 return True
             elif event.key() == Qt.Key_V and event.modifiers() == Qt.ControlModifier:
                 pasteCells(source)
-                print("PASTED")
-                return True
-             # CTRL + Plus / Equal (=)
-            elif (event.key() in (Qt.Key_Plus, Qt.Key_Equal) 
-                  and event.modifiers() == Qt.ControlModifier):
-                self.current_font_size += 1
-                self.set_table_font_size(source, self.current_font_size)
-                return True
-
-            # CTRL + Minus (-)
-            elif event.key() == Qt.Key_Minus and event.modifiers() == Qt.ControlModifier:
-                if self.current_font_size > 6:  # jangan terlalu kecil
-                    self.current_font_size -= 1
-                    self.set_table_font_size(source, self.current_font_size)
-                return True
-
-            # CTRL + 0 (reset)
-            elif event.key() == Qt.Key_0 and event.modifiers() == Qt.ControlModifier:
-                self.current_font_size = self.default_font_size
-                self.set_table_font_size(source, self.current_font_size)
                 return True
         return super().eventFilter(source, event)
-    
-    def set_table_font_size(self, source, size):
-        font = source.font()
-        font.setPointSize(size)
-        source.setFont(font)
-        source.resizeRowsToContents()
-        source.resizeColumnsToContents()
 
     def handle_context_menu(self, source):
         self.cmenu.clear()
         if source in self.tabel_siswa:
-            self.cmenu.addActions([
-                self.detail_siswa_action,
-            ])
-            nama_tabel = source.objectName()
-            if nama_tabel == 'tbl_list_siswa_kenaikan':
-               self.cmenu.addAction(self.tidak_naik_action,) 
+            self.cmenu.addAction(self.detail_siswa_action)
+            if source.objectName() == 'tbl_list_siswa_kenaikan':
+                self.cmenu.addAction(self.tidak_naik_action)
         elif source in self.tabel_guru:
-            self.cmenu.addActions([
-                self.detail_guru_action,
-            ])
-            
+            self.cmenu.addAction(self.detail_guru_action)
+
+    # ----------------------------------------------------------------------
+    # TABLE COLLECTION
+    # ----------------------------------------------------------------------
     def tabel_tabel(self):
         sub_class_siswa = [
-            self.BUKU_INDUK_SISWA, self.CEKLIS_EMIS, self.DK, self.NAIK, self.LULUS, self.MUTASI_KELUAR, self.PINDAH_KELAS, self.MI2MD, self.REKAP_SISWA
+            self.BUKU_INDUK_SISWA, self.CEKLIS_EMIS, self.DK, self.NAIK, self.LULUS,
+            self.MUTASI_KELUAR, self.PINDAH_KELAS, self.MI2MD, self.REKAP_SISWA
         ]
         self.tabel_siswa = []
         for parent_class in sub_class_siswa:
@@ -417,13 +468,10 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.tabel_nilai = []
         for parent_class in sub_class_nilai:
             self.tabel_nilai.extend(parent_class.findChildren(QTableWidget))
-        
-    # def show_hide_filter(self):
-    #     if self.actionShow_Filter.isChecked():
-    #         self.frame_filter.show()
-    #     else:
-    #         self.frame_filter.hide()
 
+    # ----------------------------------------------------------------------
+    # STYLING
+    # ----------------------------------------------------------------------
     def apply_style(self):
         BASE_DIR = os.path.dirname(os.path.abspath(__file__))
         STYLE_PATH = os.path.join(BASE_DIR, '..', 'resources', 'style.qss')
@@ -433,17 +481,16 @@ class MainWindow(Ui_MainWindow, QMainWindow):
 
     def toggle_theme(self):
         ThemeManager.apply_theme(self, 'dark', './resources/style.qss')
-        # if self.actionDark_Mode.isChecked():
-        #     ThemeManager.apply_theme(self, 'dark', './resources/style.qss')
-        # else:
-        #     print('belum dibuat')
 
+
+# ----------------------------------------------------------------------
+# THEME MANAGER
+# ----------------------------------------------------------------------
 class ThemeManager:
     @classmethod
     def load_qss(cls, filename, variables):
         with open(filename, "r") as f:
             qss = f.read()
-        # Ganti var(--xxx) dengan warna dari dict
         for key, value in variables.items():
             qss = qss.replace(f"var({key})", value)
         return qss
@@ -456,7 +503,6 @@ class ThemeManager:
         colors = THEMES[theme_name]
         qss = cls.load_qss(qss_file, colors)
 
-        # Kalau dikasih QApplication → theme global
         if isinstance(app_or_widget, QApplication):
             app_or_widget.setStyleSheet(qss)
         else:

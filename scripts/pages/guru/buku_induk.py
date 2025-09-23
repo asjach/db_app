@@ -8,14 +8,15 @@ class PageBukuIndukGuru(QWidget, Ui_Form):
         super().__init__(parent)
         self.setupUi(self)
         self.parent = parent
+        self.id_guru = None
         self.SQL = Model_Guru()
         self.tbl_widget.currentItemChanged.connect(self.table_selected)
         self.tbl_widget.itemChanged.connect(self.update_data_guru)
 
     def _dynamic_attrtibutes(self):
-        self.txt_order=self.parent.cbo_order_by.currentText()
-        self.txt_search_by= self.parent.cbo_search_by.currentText()
-        self.txt_search = self.parent.line_search.text()
+        self.txt_order=self.parent.str_order_by
+        self.txt_search_by= self.parent.str_search_by
+        self.txt_search = self.parent.last_search_text
 
     def show_page(self):
         self._dynamic_attrtibutes()

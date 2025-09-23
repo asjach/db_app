@@ -28,15 +28,15 @@ class PageKenaikan(Ui_Form, QWidget):
     
     def _dynamic_attributs(self):
         self.txt_jenjang = self.parent.str_jenjang
-        self.txt_tapel = self.parent.cbo_tapel.currentText()
+        self.txt_tapel = self.parent.str_tapel
         self.txt_tingkat = self.parent.quoted_daftar_tingkat
         self.txt_kelas = self.parent.quoted_daftar_kelas
-        self.txt_search_by = self.parent.cbo_search_by.currentText()
-        self.txt_search = self.parent.line_search.text()
-        self.txt_order = self.parent.cbo_order_by.currentText()
+        self.txt_search_by = self.parent.str_search_by
+        self.txt_search = self.parent.last_search_text
+        self.txt_order = self.parent.str_order_by
         self.txt_kolom = self.parent.cbo_kolom.currentText()
-        self.next_tapel = tapel_berikutnya(self.txt_tapel)
-        self.next_tingkat = f"'{int(self.parent.not_quoted_daftar_tingkat)+1}'" if self.txt_tingkat else ""
+        self.next_tapel = self.parent.str_next_tapel
+        self.next_tingkat = f"'{int(self.parent.str_daftar_tingkat)+1}'" if self.txt_tingkat else ""
         self.next_kelas = (
             f"'{int(self.parent.str_kelas[0])+1}{self.parent.str_kelas[-1]}'" if self.parent.str_kelas else ""
         )

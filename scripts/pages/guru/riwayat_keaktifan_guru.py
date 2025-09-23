@@ -22,11 +22,11 @@ class PageKeaktifanGuru(QWidget, Ui_Form):
     def fill_table_guru(self):
         data = self.SQL.get_keaktifan_guru(
             jenjang=self.parent.str_jenjang,
-            tapel = self.parent.cbo_tapel.currentText(),
+            tapel = self.parent.str_tapel,
             kolom = self.kolom(),
-            order_by=self.parent.cbo_order_by.currentText(),
-            search_by=self.parent.cbo_search_by.currentText(),
-            search_text=self.parent.line_search.text()
+            order_by=self.parent.str_order_by,
+            search_by=self.parent.str_search_by,
+            search_text=self.parent.last_search_text
         )
         generate_table(
             data=data,
@@ -93,7 +93,7 @@ class PageKeaktifanGuru(QWidget, Ui_Form):
             self.SQL.aktifkan_guru(
                 id_guru=self.cbo_guru.currentData(),
                 jenjang = self.parent.str_jenjang,
-                tapel=self.parent.cbo_tapel.currentText()
+                tapel=self.parent.str_tapel
             )
             self.show_page()
         except Exception as e:
@@ -103,7 +103,7 @@ class PageKeaktifanGuru(QWidget, Ui_Form):
         try:
             self.SQL.aktivasi_dari_tapel_sebelumnya(
                 jenjang = self.parent.str_jenjang,
-                tapel=self.parent.cbo_tapel.currentText(),
+                tapel=self.parent.str_tapel,
             )
             self.show_page()
         except Exception as e:
