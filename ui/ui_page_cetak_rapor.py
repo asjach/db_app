@@ -32,6 +32,7 @@ class Ui_Form(object):
         self.gridLayout_8.setContentsMargins(5, 5, 5, 5)
         self.widget = QWidget(Form)
         self.widget.setObjectName(u"widget")
+        self.widget.setMinimumSize(QSize(400, 0))
         self.gridLayout_9 = QGridLayout(self.widget)
         self.gridLayout_9.setObjectName(u"gridLayout_9")
         self.gridLayout_9.setContentsMargins(0, 0, 0, 0)
@@ -106,6 +107,12 @@ class Ui_Form(object):
         self.gridLayout_2 = QGridLayout(self.widget_7)
         self.gridLayout_2.setObjectName(u"gridLayout_2")
         self.gridLayout_2.setContentsMargins(0, 0, 0, 0)
+        self.btn_generate_pdf = QPushButton(self.widget_7)
+        self.btn_generate_pdf.setObjectName(u"btn_generate_pdf")
+        self.btn_generate_pdf.setMinimumSize(QSize(0, 30))
+
+        self.gridLayout_2.addWidget(self.btn_generate_pdf, 1, 0, 1, 1)
+
         self.btn_save_pdf = QPushButton(self.widget_7)
         self.btn_save_pdf.setObjectName(u"btn_save_pdf")
         self.btn_save_pdf.setMinimumSize(QSize(0, 30))
@@ -118,11 +125,11 @@ class Ui_Form(object):
 
         self.gridLayout_2.addWidget(self.btn_print, 1, 2, 1, 1)
 
-        self.btn_generate_pdf = QPushButton(self.widget_7)
-        self.btn_generate_pdf.setObjectName(u"btn_generate_pdf")
-        self.btn_generate_pdf.setMinimumSize(QSize(0, 30))
+        self.btn_send_whatsapp = QPushButton(self.widget_7)
+        self.btn_send_whatsapp.setObjectName(u"btn_send_whatsapp")
+        self.btn_send_whatsapp.setMinimumSize(QSize(0, 30))
 
-        self.gridLayout_2.addWidget(self.btn_generate_pdf, 1, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.btn_send_whatsapp, 2, 0, 1, 3)
 
 
         self.gridLayout_7.addWidget(self.widget_7, 3, 0, 1, 1)
@@ -138,7 +145,7 @@ class Ui_Form(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 350, 588))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 350, 552))
         self.gridLayout_12 = QGridLayout(self.scrollAreaWidgetContents)
         self.gridLayout_12.setObjectName(u"gridLayout_12")
         self.gridLayout_12.setHorizontalSpacing(5)
@@ -811,9 +818,10 @@ class Ui_Form(object):
         Form.setWindowTitle(QCoreApplication.translate("Form", u"Form", None))
         self.label_2.setText(QCoreApplication.translate("Form", u"Kelas", None))
         self.label.setText(QCoreApplication.translate("Form", u"Kegiatan", None))
+        self.btn_generate_pdf.setText(QCoreApplication.translate("Form", u"PDF Perkelas", None))
         self.btn_save_pdf.setText(QCoreApplication.translate("Form", u"Save PDF", None))
         self.btn_print.setText(QCoreApplication.translate("Form", u"Print", None))
-        self.btn_generate_pdf.setText(QCoreApplication.translate("Form", u"Generate PDF (Perkelas)", None))
+        self.btn_send_whatsapp.setText(QCoreApplication.translate("Form", u"Kirim ke WA Wali Kelas", None))
         self.groupBox_5.setTitle(QCoreApplication.translate("Form", u"Umum", None))
         self.radio_show_walas.setText(QCoreApplication.translate("Form", u"TTD Wali Kelas", None))
         self.radio_show_mudir.setText(QCoreApplication.translate("Form", u"TTD Mudir", None))

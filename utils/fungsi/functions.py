@@ -19,6 +19,49 @@ def measure_time(func):
     return wrapper
 
 
+def normalize_in_values(values):
+    if values is None or values == "":
+        return []
+    if isinstance(values, str):
+        items = [item.strip().strip("'\"") for item in values.split(",") if item.strip()]
+    elif isinstance(values, (list, tuple)):
+        items = [str(item).strip() for item in values if item is not None and str(item).strip()]
+    else:
+        raise ValueError("IN clause values must be a string, list, or tuple")
+    return items
+
+
+def build_in_clause(values):
+    items = normalize_in_values(values)
+    if not items:
+        return "", []
+    placeholders = ", ".join(["%s"] * len(items))
+    return placeholders, items
+
+
+def validate_sql_identifier(name, allowed=None):
+    if not isinstance(name, str):
+        raise ValueError("SQL identifier must be a string")
+    if allowed is not None and name not in allowed:
+        raise ValueError(f"SQL identifier '{name}' is not allowed")
+    if not re.match(r"^[A-Za-z0-9_]+$", name):
+        raise ValueError(f"Invalid SQL identifier: {name}")
+    return name
+
+
+def validate_sql_order_by(expression):
+    if not isinstance(expression, str):
+        raise ValueError("ORDER BY expression must be a string")
+    expression = expression.strip()
+    if not expression:
+        return expression
+    parts = [part.strip() for part in expression.split(",") if part.strip()]
+    for part in parts:
+        if not re.match(r"^[A-Za-z0-9_ ]+$", part):
+            raise ValueError(f"Invalid ORDER BY expression: {expression}")
+    return ", ".join(parts)
+
+
 # TEXT FUNCTIONS
 def date_to_text(tanggal, format=None):
     if not tanggal:
@@ -291,8 +334,8 @@ def log_message(parent, text: str):
     parent.statusBar.showMessage(text)
 
 def read_excel(path, sheet_name=None):
-    path = os.path.join(BASE_DIR, "utils/static_values.json")
-    data = get_json_data(path)
+    path_kolom = os.path.normpath(os.path.join(BASE_DIR, "utils", "static_values.json"))
+    data = get_json_data(path_kolom)
     try:
         if sheet_name:
             df = pd.read_excel(path, sheet_name=sheet_name, dtype=str, keep_default_na=False)

@@ -1,4 +1,5 @@
 from utils.database import ConnectDB
+from utils.fungsi.functions import build_in_clause, validate_sql_identifier, validate_sql_order_by
 # from utils.fungsi.functions import tapel_sebelumnya
 
 class Model_Preferensi(ConnectDB):
@@ -96,10 +97,10 @@ class Model_Preferensi(ConnectDB):
         return [col["Field"] for col in columns]
     
     def get_kolom_export(self, tabel='siswa'):
-        sql = f"""   SELECT  id, tabel, nama_data, kolom_kolom, filter_tambahan
+        sql = """   SELECT  id, tabel, nama_data, kolom_kolom, filter_tambahan
                     FROM    kolom_export
-                    WHERE   tabel = '{tabel}' """
-        return self.get_data(sql)
+                    WHERE   tabel = %s """
+        return self.get_data(sql, (tabel,))
     
     def save_kolom_export(self, tabel, nama_data, kolom_kolom, filter_tambahan=''):
         sql_cek = """
@@ -123,7 +124,7 @@ class Model_Preferensi(ConnectDB):
         return self.update_data(sql, tuple(params))
     
     def delete_kolom_export(self, id):
-        sql = "DELETE FROM kolom_export WHERE id %s"
+        sql = "DELETE FROM kolom_export WHERE id = %s"
         return self.update_data(sql, (int(id),))
     
     def get_data_siswa(self, kolom, jenjang, tapel, tingkat=None, kelas=None, order=None, status=None, filter_tambahan=None):
@@ -170,8 +171,10 @@ class Model_Preferensi(ConnectDB):
                             SELECT nis_lokal FROM siswa_riwayat
                             WHERE jenjang = 'MI' AND is_active='Ya' AND tapel = '{}')))""".format(tapel, tapel)
         if tingkat:
-            sql += " AND tingkat IN (%s) "
-            params.append(tingkat)
+            placeholders, items = build_in_clause(tingkat)
+            if placeholders:
+                sql += f" AND tingkat IN ({placeholders}) "
+                params.extend(items)
         if kelas:
             sql += " AND kelas = %s "
             params.append(kelas)
@@ -194,8 +197,8 @@ class Model_Preferensi(ConnectDB):
                 order = 'kampung'
             else:
                 order = 'nama_lengkap'
-            sql += " , %s "
-            params.append(order)
+            order = validate_sql_order_by(order)
+            sql += f", {order}"
         params = tuple(params)
         return self.get_data(sql, params)  
 
@@ -228,6 +231,7 @@ class Model_Preferensi(ConnectDB):
                 order = 'kampung'
             else:
                 order = 'nama_lengkap'
+            order = validate_sql_order_by(order)
             sql += " ORDER BY {}".format(order)
         return self.get_data(sql, (tapel,))     
 
@@ -236,8 +240,8 @@ class Model_Preferensi(ConnectDB):
         self.set_database(db_name)
 
     def get_databases(self):
-        databases = self.get_databases()
-        return databases
+        # databases = self.
+        return super().get_databases()
 
     def get_all_tables(self,):
         query = "SHOW TABLES"
@@ -245,15 +249,19 @@ class Model_Preferensi(ConnectDB):
         return [list(table.values())[0] for table in tables]
 
     def get_column_names(self, nama_tabel):
+        nama_tabel = validate_sql_identifier(nama_tabel)
         query = f"SHOW COLUMNS FROM `{nama_tabel}`"
         columns = self.get_data(query)
         return [col["Field"] for col in columns]
 
     def get_table_data(self, nama_tabel):
+        nama_tabel = validate_sql_identifier(nama_tabel)
         query = f"SELECT * FROM `{nama_tabel}`"
         return self.get_data(query)
     
     def data_for_template(self, nama_tabel, join, kolom, kondisi, order_by):
+        nama_tabel = validate_sql_identifier(nama_tabel)
+        order_by = validate_sql_order_by(order_by)
         query = """
         SELECT {} FROM {} {} WHERE {} ORDER BY {}
         """.format(kolom, nama_tabel, join, kondisi, order_by)

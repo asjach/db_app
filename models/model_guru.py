@@ -1,5 +1,5 @@
 from utils.database import ConnectDB
-from utils.fungsi.functions import tapel_sebelumnya
+from utils.fungsi.functions import tapel_sebelumnya, validate_sql_identifier, validate_sql_order_by
 
 class Model_Guru(ConnectDB):
     def __init__(self, database_name=None):
@@ -31,6 +31,7 @@ class Model_Guru(ConnectDB):
     def get_buku_induk_guru(self, order_by='Nama', search_by='Nama', search=''):
         order_by = self.opsi_order(order_by)
         search_by = self.opsi_search(search_by)
+        order_by = validate_sql_order_by(order_by)
         sql = """
             SELECT      * 
             FROM        guru
@@ -42,6 +43,9 @@ class Model_Guru(ConnectDB):
     
 
 ##  RIWAYAT KEAKTIFAN
+    def get_kolom_tabel_guru(self):
+        return self.get_table_columns('guru')
+    
     def get_keaktifan_guru(
             self,
             jenjang = '',
@@ -54,6 +58,7 @@ class Model_Guru(ConnectDB):
 
         order_by = self.opsi_order(order_by)
         search_by = self.opsi_search(search_by)
+        order_by = validate_sql_order_by(order_by)
         
         sql = """
             SELECT      {}
@@ -153,16 +158,18 @@ class Model_Guru(ConnectDB):
         return self.get_one_data(sql, params)
     
     def update_identitas_guru(self, **data):
-        placeholders = ", ".join(["{} = %s".format(column) for column in data.keys()])
-        sql = """
+        columns = [validate_sql_identifier(column) for column in data.keys()]
+        placeholders = ", ".join([f"{column} = %s" for column in columns])
+        sql = f"""
             UPDATE      guru 
-            SET         {} 
+            SET         {placeholders} 
             WHERE       id_guru= %s
-            """.format(placeholders)
+            """
         params = tuple(data.values()) + (data["id_guru"],)
         return self.update_data(sql, params)
     
     def get_daftar_guru(self, search_by=None, search_text=None):
+        search_by = validate_sql_identifier(search_by)
         sql = "SELECT * FROM guru WHERE {} LIKE %s".format(search_by)
         params = (f"%{search_text}%",)
         return self.get_data(sql, params)
@@ -174,17 +181,17 @@ class Model_Guru(ConnectDB):
             WHERE       id_guru = %s
             """
         params = (id_guru,)
-        return self.get_data(sql, params)
+        return self.get_data(sql, params, True)
     
-    def insert_keluarga(self, **data):
-        columns = ", ".join(data.keys())
-        placeholders = ", ".join(["%s"] * len(data))
-        sql = f"""
-        INSERT INTO     guru_keluarga ({columns})
-        VALUES          ({placeholders});
-        """
-        params = tuple(data.values())
-        return self.update_data(sql, params)
+    # def insert_keluarga(self, **data):
+    #     columns = ", ".join(data.keys())
+    #     placeholders = ", ".join(["%s"] * len(data))
+    #     sql = f"""
+    #     INSERT INTO     guru_keluarga ({columns})
+    #     VALUES          ({placeholders});
+    #     """
+    #     params = tuple(data.values())
+    #     return self.update_data(sql, params)
     
     def get_pendidikan_formal(self, id_guru):
         sql = """
@@ -193,17 +200,17 @@ class Model_Guru(ConnectDB):
             WHERE       id_guru = %s
             """
         params = (id_guru,)
-        return self.get_data(sql, params)
+        return self.get_data(sql, params, True)
     
-    def insert_riwayat_pendidikan(self, **data):
-        columns = ", ".join(data.keys())
-        placeholders = ", ".join(["%s"] * len(data))
-        sql = f"""
-        INSERT INTO     guru_pendidikan ({columns})
-        VALUES          ({placeholders});
-        """
-        params = tuple(data.values())
-        return self.update_data(sql, params)
+    # def insert_riwayat_pendidikan(self, **data):
+    #     columns = ", ".join(data.keys())
+    #     placeholders = ", ".join(["%s"] * len(data))
+    #     sql = f"""
+    #     INSERT INTO     guru_pendidikan ({columns})
+    #     VALUES          ({placeholders});
+    #     """
+    #     params = tuple(data.values())
+    #     return self.update_data(sql, params)
     
 
 ##  ADM GURU
@@ -223,7 +230,7 @@ class Model_Guru(ConnectDB):
             FROM guru_keaktifan r
             JOIN guru g ON g.id_guru = r.id_guru
             WHERE jenjang=%s and tapel=%s and r.is_active='Ya' and fungsi_jabatan='Guru'
-            ORDER BY tapel ASC, jenjang DESC, kelas ASC"""
+            ORDER BY tapel ASC, jenjang DESC, kelas ASC, nama_lengkap"""
         params = (jenjang, tapel,)
         return self.get_list_data(sql, params)
     

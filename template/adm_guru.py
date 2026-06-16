@@ -24,6 +24,7 @@ class TemplateAdmGuru:
         self.width = width 
         self.height = height 
         self.logo_persis = "resources/images/logo mi.jpg"
+        self.logo_diniyah = "resources/images/logo_md.png"
         # self.data_siswa = data['data_siswa']
 
     def create_pdf(self):
@@ -82,6 +83,7 @@ class TemplateAdmGuru:
     
     def lembar_cover(self):
         half = self.width/2
+        jenjang = self.data['jenjang']
         teks = [
             "BUKU ADMINISTRASI", 
             "ASATIDZAH", 
@@ -95,7 +97,10 @@ class TemplateAdmGuru:
             ]
         self.paragraf(teks[0], x=half-7.0*cm, y= 4*cm, w=14*cm, h=1.2*cm, size=24)
         self.paragraf(teks[1], x=half-7.0*cm, y= 5.2*cm, w=14*cm, h=1.2*cm, size=24)
-        self.image(path = self.logo_persis, x = half-2.5*cm, y = 13.2*cm, h = 50*mm)
+        if jenjang == 'MI':
+            self.image(path = self.logo_persis, x = half-2.5*cm, y = 13.2*cm, h = 50*mm)
+        else:
+            self.image(path = self.logo_diniyah, x = half-2.5*cm, y = 13.2*cm, h = 50*mm)
         self.paragraf(teks[2], x=half-7.0*cm, y= 17*cm, w=14*cm, h=0.8*cm, size=16)
         self.paragraf(teks[3], x=half-7.0*cm, y= 18*cm, w=14*cm, h=1*cm, size=22)
         self.paragraf(teks[4], x=half-7.0*cm, y= 19.5*cm, w=14*cm, h=0.8*cm, size=16)
@@ -498,7 +503,7 @@ class TemplateAdmGuru:
             ["Tapel/Semester", ":", tapel_semester],
         ]
 
-        data_detail = [["#", "Nama Lengkap", "Tanggal", "Dikembalikan Oleh", "Keterangan"]]
+        data_detail = [["#", "Nama Lengkap", "Tanggal", "Diterima Oleh", "Keterangan"]]
         for row_data in data_siswa:
             new_row = [row_data['no_urut'], row_data['nama_singkat']]
             data_detail.append(new_row)

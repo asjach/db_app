@@ -88,8 +88,8 @@ class Ui_Form(object):
         self.cbo_search_by.setObjectName(u"cbo_search_by")
         sizePolicy1.setHeightForWidth(self.cbo_search_by.sizePolicy().hasHeightForWidth())
         self.cbo_search_by.setSizePolicy(sizePolicy1)
-        self.cbo_search_by.setMinimumSize(QSize(0, 24))
-        self.cbo_search_by.setMaximumSize(QSize(105, 16777215))
+        self.cbo_search_by.setMinimumSize(QSize(110, 24))
+        self.cbo_search_by.setMaximumSize(QSize(110, 16777215))
         self.cbo_search_by.setFont(font)
 
         self.gridLayout_45.addWidget(self.cbo_search_by, 1, 4, 1, 1)
@@ -2311,6 +2311,19 @@ class Ui_Form(object):
         self.gridLayout_11.addWidget(self.pdf_viewer, 0, 0, 1, 1)
 
         self.tabWidget.addTab(self.tab_profil, "")
+        self.tab = QWidget()
+        self.tab.setObjectName(u"tab")
+        self.gridLayout_14 = QGridLayout(self.tab)
+        self.gridLayout_14.setSpacing(1)
+        self.gridLayout_14.setContentsMargins(5, 5, 5, 5)
+        self.gridLayout_14.setObjectName(u"gridLayout_14")
+        self.gridLayout_14.setContentsMargins(1, 1, 1, 1)
+        self.plain_catatan = QPlainTextEdit(self.tab)
+        self.plain_catatan.setObjectName(u"plain_catatan")
+
+        self.gridLayout_14.addWidget(self.plain_catatan, 0, 0, 1, 1)
+
+        self.tabWidget.addTab(self.tab, "")
 
         self.gridLayout_2.addWidget(self.tabWidget, 1, 0, 1, 1)
 
@@ -2339,31 +2352,31 @@ class Ui_Form(object):
         self.save_btn = QPushButton(self.header_frame)
         self.save_btn.setObjectName(u"save_btn")
         self.save_btn.setMinimumSize(QSize(75, 24))
-        self.save_btn.setMaximumSize(QSize(75, 16777215))
+        self.save_btn.setMaximumSize(QSize(75, 24))
         self.save_btn.setFont(font)
 
         self.gridLayout_5.addWidget(self.save_btn, 0, 1, 1, 1)
 
         self.next_btn = QPushButton(self.header_frame)
         self.next_btn.setObjectName(u"next_btn")
-        self.next_btn.setMinimumSize(QSize(30, 24))
-        self.next_btn.setMaximumSize(QSize(30, 25))
+        self.next_btn.setMinimumSize(QSize(24, 24))
+        self.next_btn.setMaximumSize(QSize(24, 24))
         self.next_btn.setFont(font)
 
         self.gridLayout_5.addWidget(self.next_btn, 0, 2, 1, 1)
 
         self.btn_next_dok = QPushButton(self.header_frame)
         self.btn_next_dok.setObjectName(u"btn_next_dok")
-        self.btn_next_dok.setMinimumSize(QSize(0, 25))
-        self.btn_next_dok.setMaximumSize(QSize(25, 25))
+        self.btn_next_dok.setMinimumSize(QSize(24, 24))
+        self.btn_next_dok.setMaximumSize(QSize(24, 24))
         self.btn_next_dok.setFont(font)
 
         self.gridLayout_5.addWidget(self.btn_next_dok, 0, 6, 1, 1)
 
         self.btn_prev_dok = QPushButton(self.header_frame)
         self.btn_prev_dok.setObjectName(u"btn_prev_dok")
-        self.btn_prev_dok.setMinimumSize(QSize(0, 25))
-        self.btn_prev_dok.setMaximumSize(QSize(25, 25))
+        self.btn_prev_dok.setMinimumSize(QSize(24, 24))
+        self.btn_prev_dok.setMaximumSize(QSize(24, 24))
         self.btn_prev_dok.setFont(font)
 
         self.gridLayout_5.addWidget(self.btn_prev_dok, 0, 4, 1, 1)
@@ -2395,7 +2408,8 @@ class Ui_Form(object):
 
         self.pushButton = QPushButton(self.header_frame)
         self.pushButton.setObjectName(u"pushButton")
-        self.pushButton.setMaximumSize(QSize(30, 24))
+        self.pushButton.setMinimumSize(QSize(24, 24))
+        self.pushButton.setMaximumSize(QSize(24, 24))
         self.pushButton.setFont(font)
         self.pushButton.setCheckable(True)
 
@@ -2403,8 +2417,8 @@ class Ui_Form(object):
 
         self.prev_btn = QPushButton(self.header_frame)
         self.prev_btn.setObjectName(u"prev_btn")
-        self.prev_btn.setMinimumSize(QSize(30, 24))
-        self.prev_btn.setMaximumSize(QSize(30, 25))
+        self.prev_btn.setMinimumSize(QSize(24, 24))
+        self.prev_btn.setMaximumSize(QSize(24, 24))
         self.prev_btn.setFont(font)
 
         self.gridLayout_5.addWidget(self.prev_btn, 0, 0, 1, 1)
@@ -2585,6 +2599,7 @@ class Ui_Form(object):
         self.label_9.setText(QCoreApplication.translate("Form", u"Nilai Rapor MD", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_nilai), QCoreApplication.translate("Form", u"Nilai Rapor", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_profil), QCoreApplication.translate("Form", u"Profil (PDF)", None))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QCoreApplication.translate("Form", u"Catatan EMIS atau VervalPD", None))
         self.save_btn.setText(QCoreApplication.translate("Form", u"Save", None))
         self.next_btn.setText(QCoreApplication.translate("Form", u">", None))
         self.btn_next_dok.setText(QCoreApplication.translate("Form", u">", None))

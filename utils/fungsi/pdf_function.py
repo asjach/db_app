@@ -2,6 +2,7 @@ from reportlab.lib.styles import ParagraphStyle
 from reportlab.lib import colors
 from reportlab.lib.units import mm, cm
 from reportlab.platypus import Paragraph, Spacer, Frame, Table, TableStyle
+from reportlab.lib.styles import ParagraphStyle
 from reportlab.platypus.flowables import Flowable
 from utils.fungsi.functions import *
 from utils.fungsi.table_functions import *
@@ -12,11 +13,13 @@ import sys, os
 from reportlab.lib.utils import ImageReader
 from PySide6.QtWidgets import QFileDialog
 from PySide6.QtCore import QByteArray
+from pathlib import Path
 
-
+ROOT_DIR = Path(__file__).resolve().parent.parent.parent
+font_dir = ROOT_DIR / "resources" / "font"
 
 def register_all_windows_fonts():
-    font_dir = "D:/APP/DB App/resources/font"
+    # font_dir = "E:/APP/DB App/resources/font"
     for file in os.listdir(font_dir):
         if file.lower().endswith('.ttf'):
             font_path = os.path.join(font_dir, file)
@@ -327,7 +330,7 @@ def save_pdf(parent, pdf_buffer, judul_default: str, auto_open=None):
 
 
 def print_with_foxit(pdf_file, opsi=True):
-    path_to_foxit = r"C:\Program Files (x86)\Foxit Software\Foxit PDF Reader\FoxitPDFReader.exe"
+    path_to_foxit = r"C:\Program Files\Foxit Software\Foxit PDF Reader\FoxitPDFReader.exe"
     if opsi:
         status_dialog = "/p"
     else:

@@ -18,10 +18,10 @@ class PageCeklisEMIS(QWidget, Ui_Form):
         self.tbl_ya.itemSelectionChanged.connect(lambda: table_selected(self.tbl_ya, self, self.parent))
 
     def show_page(self):
-        self.fill_tbl_ya_tidak() 
+        self.fill_tbl_ya_tidak()
         self.fill_tbl_tidak()
-        self.fill_tbl_ya() 
-    
+        self.fill_tbl_ya()
+
     def fill_tbl_ya_tidak(self):
         data = self.MODEL.get_siswa_all(self.parent.last_search_text)
         generate_table(
@@ -31,20 +31,20 @@ class PageCeklisEMIS(QWidget, Ui_Form):
 
     def fill_tbl_tidak(self):
         data = self.MODEL.get_siswa_tidak(
-            self.parent.str_tingkat, 
+            self.parent.str_tingkat,
             self.parent.last_search_text
         )
         generate_table(
             data=data,
             table=self.tbl_tidak,
-            hidden_column=[0], 
+            hidden_column=[0],
             fungsi_akhir=self.set_ya,
             icon_akhir=":/icon/resources/icon/more_than.svg"
         )
 
     def fill_tbl_ya(self):
         data = self.MODEL.get_siswa_ya(
-            self.parent.str_tingkat, 
+            self.parent.str_tingkat,
             self.parent.last_search_text
         )
         generate_table(

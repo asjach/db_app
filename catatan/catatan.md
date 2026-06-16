@@ -1,6 +1,11 @@
 python -m venv venv
+python -m venv lvenv
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
-venv\Scripts\activate.ps1
+yay
+windows: `venv\Scripts\activate.ps1`
+linux di fish: `source lvenv/bin/activate.fish` atau `. lvenv/bin/activate.fish`
+
+pip install pandas mysql-connector-python PySide6 openpyxl Send2Trash dotenv reportlab PyPDF2 PyMuPDF
 
 pip freeze > requirements.txt
 pip install -r requirements.txt
@@ -20,7 +25,7 @@ pyside6-uic -o ui/ui_page_daftar_kelas.py ui/sources/page_daftar_kelas.ui
 pyside6-uic -o ui/ui_page_rekap_siswa.py ui/sources/page_rekap_siswa.ui
 pyside6-uic -o ui/ui_page_pindah_kelas.py ui/sources/page_pindah_kelas.ui
 pyside6-uic -o ui/ui_page_mutasi_masuk.py ui/sources/page_mutasi_masuk.ui
-pyside6-uic -o ui/ui_page_mutasi_keluar.py ui/sources/page_mutasi_keluar.ui
+pyside6-uic -o ui/ui_page_mutasi_keluar.py ui/sources/page_mutasi_keluar.uij
 pyside6-uic -o ui/ui_page_kenaikan.py ui/sources/page_kenaikan.ui
 pyside6-uic -o ui/ui_page_kelulusan.py ui/sources/page_kelulusan.ui
 pyside6-uic -o ui/ui_page_mi_ke_md.py ui/sources/page_mi_ke_md.ui
@@ -47,6 +52,8 @@ pyside6-uic -o ui/ui_page_input_nilai.py ui/sources/page_input_nilai.ui
 pyside6-uic -o ui/ui_page_kartu_peserta.py ui/sources/page_kartu_peserta.ui
 pyside6-uic -o ui/ui_page_rekap_nilai.py ui/sources/page_rekap_nilai.ui
 pyside6-uic -o ui/ui_page_cetak_rapor.py ui/sources/page_cetak_rapor.ui
+pyside6-uic -o ui/ui_page_ekskul_kegiatan.py ui/sources/page_ekskul_kegiatan.ui
+pyside6-uic -o ui/ui_page_prestasi.py ui/sources/page_prestasi.ui
 
 ### PEMBAYARAN
 pyside6-uic -o ui/ui_page_transaksi_pembayaran.py ui/sources/page_transaksi_pembayaran.ui

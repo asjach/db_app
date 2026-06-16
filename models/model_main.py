@@ -1,4 +1,5 @@
 from utils.database import ConnectDB
+from utils.fungsi.functions import build_in_clause
 
 class Model_Main(ConnectDB):
     def __init__(self, database_name=None):
@@ -19,9 +20,12 @@ class Model_Main(ConnectDB):
         FROM        kelas_riwayat
         WHERE       jenjang = %s 
             AND     tapel = %s """
+        params = [jenjang, tapel]
         if tingkat:
-            sql += f" AND tingkat IN ({tingkat})"
+            placeholders, items = build_in_clause(tingkat)
+            if placeholders:
+                sql += f" AND tingkat IN ({placeholders})"
+                params.extend(items)
         sql += " ORDER BY    kelas;"
-        params = (jenjang, tapel)
-        return self.get_data(sql, params)
+        return self.get_data(sql, tuple(params))
     

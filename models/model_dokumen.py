@@ -1,4 +1,5 @@
 from utils.database import ConnectDB
+from utils.fungsi.functions import build_in_clause, validate_sql_identifier, validate_sql_order_by
 
 class Model_Dokumen(ConnectDB):
     def __init__(self, database_name=None):
@@ -15,9 +16,13 @@ class Model_Dokumen(ConnectDB):
                 """
         params = [jenjang, tapel]
         if tingkat:
-            sql += f" AND tingkat IN ({tingkat})"
+            placeholders, items = build_in_clause(tingkat)
+            if placeholders:
+                sql += f" AND tingkat IN ({placeholders})"
+                params.extend(items)
         if kelas:
-            sql += f" AND kelas = '{kelas}' "
+            sql += " AND kelas = %s "
+            params.append(kelas)
         if search_text:
             sql += " AND nama_lengkap LIKE %s"
             params.append(f"%{search_text}%")
@@ -44,13 +49,13 @@ class Model_Dokumen(ConnectDB):
             if search_text:
                 sql += " WHERE   nama_lengkap LIKE %s "
             sql += " ORDER BY nama_lengkap LIMIT 100"
-            params.append(f"%{search_text}%",)
+            params.append(f"%{search_text}%")
         elif target == 'guru':
             sql = f"SELECT id_guru as no_induk, nama_lengkap FROM guru"
             if search_text:
                 sql += " WHERE   nama_lengkap LIKE %s "
             sql += " ORDER BY nama_lengkap "
-            params.append(f"%{search_text}%",)
+            params.append(f"%{search_text}%")
         if search_text:
             params = tuple(params)
             return self.get_data(sql, params)
@@ -77,7 +82,8 @@ class Model_Dokumen(ConnectDB):
 
     def input_dokumen(self, **data):
         con = ConnectDB()
-        columns = ", ".join(data.keys())
+        columns = [validate_sql_identifier(key) for key in data.keys()]
+        columns = ", ".join(columns)
         placeholders = ", ".join(["%s"] * len(data))
         sql = f"""
             INSERT INTO dokumen ({columns})
@@ -87,19 +93,26 @@ class Model_Dokumen(ConnectDB):
         return con.update_data(sql, params)
     
     def get_daftar_siswa_jml_dok(self, jenjang, tapel, tingkat=None, kelas=None, search_text=None, order_by:str=None, opsi=True):
-        order = 'jk, nama_lengkap' if order_by.lower() == 'jk' else 'nama_lengkap'
+        order = 'jk, nama_lengkap' if order_by and order_by.lower() == 'jk' else 'nama_lengkap'
+        order = validate_sql_order_by(order)
         if opsi:
             sql = f"""
-                SELECT r.nis_lokal as nomor_induk, nama_lengkap, jk, kelas, count(d.id)
+                SELECT r.nis_lokal as nomor_induk, nama_lengkap, jk, kelas, count(d.id) as jml
                 FROM siswa_riwayat r
                 JOIN siswa s ON s.nis_lokal = r.nis_lokal
                 LEFT JOIN dokumen d on d.nomor_induk = s.nis_lokal
                 WHERE   jenjang = %s AND tapel = %s """
             params = [jenjang, tapel]
             if tingkat: 
-                sql += f" AND tingkat IN ({tingkat}) "
+                placeholders, items = build_in_clause(tingkat)
+                if placeholders:
+                    sql += f" AND tingkat IN ({placeholders}) "
+                    params.extend(items)
             if kelas: 
-                sql += f" AND kelas IN ({kelas}) "
+                placeholders, items = build_in_clause(kelas)
+                if placeholders:
+                    sql += f" AND kelas IN ({placeholders}) "
+                    params.extend(items)
             if search_text: 
                 sql += " AND nama_lengkap LIKE %s "
                 params.append(f"%{search_text}%")
@@ -118,7 +131,8 @@ class Model_Dokumen(ConnectDB):
         return self.get_data(sql, tuple(params))    
 
     def get_daftar_siswa(self, jenjang, tapel, tingkat=None, kelas=None, search_text=None, order_by:str=None, opsi=True):
-        order = 'jk, nama_lengkap' if order_by.lower() == 'jk' else 'nama_lengkap'
+        order = 'jk, nama_lengkap' if order_by and order_by.lower() == 'jk' else 'nama_lengkap'
+        order = validate_sql_order_by(order)
         if opsi:
             sql = f"""
                 SELECT r.nis_lokal as nomor_induk, nama_lengkap, jk, kelas
@@ -126,11 +140,17 @@ class Model_Dokumen(ConnectDB):
                 JOIN siswa s ON s.nis_lokal = r.nis_lokal
                 WHERE   jenjang = %s AND tapel = %s """
             params = [jenjang, tapel]
-            if tingkat: 
-                sql += f" AND tingkat IN ({tingkat}) "
-            if kelas: 
-                sql += f" AND kelas IN ({kelas}) "
-            if search_text: 
+            if tingkat:
+                placeholders, items = build_in_clause(tingkat)
+                if placeholders:
+                    sql += f" AND tingkat IN ({placeholders}) "
+                    params.extend(items)
+            if kelas:
+                placeholders, items = build_in_clause(kelas)
+                if placeholders:
+                    sql += f" AND kelas IN ({placeholders}) "
+                    params.extend(items)
+            if search_text:
                 sql += " AND nama_lengkap LIKE %s "
                 params.append(f"%{search_text}%")
             sql += f" ORDER BY tingkat, kelas, {order} "
@@ -145,9 +165,10 @@ class Model_Dokumen(ConnectDB):
         return self.get_data(sql, tuple(params))
     
     def get_daftar_guru(self, search_text, order_by=None):
-        order = 'jk, nama_lengkap' if order_by.lower() == 'jk' else 'nama_lengkap'
+        order = 'jk, nama_lengkap' if order_by and order_by.lower() == 'jk' else 'nama_lengkap'
+        order = validate_sql_order_by(order)
         sql = """
-            SELECT id_guru as nomor_induk, nama_lengkap, COUNT(d.id) as jml_dok
+            SELECT id_guru as nomor_induk, nama_lengkap, COUNT(d.id) as jml
             FROM guru g
             LEFT JOIN dokumen d ON d.nomor_induk = id_guru
             WHERE nama_lengkap LIKE %s
@@ -184,19 +205,33 @@ class Model_Dokumen(ConnectDB):
                     AND     keterangan = %s
                     AND     jenjang = %s
                     AND     tapel = %s """
-            if tingkat: sql += f" AND tingkat IN ({tingkat}) "
-            if kelas: sql += f" AND kelas IN ({kelas}) "
-            if search_text: sql += f" nama_lengkap LIKE %{search_text}% "
+            params = [jenis_dok, keterangan, jenjang, tapel]
+            if tingkat:
+                placeholders, items = build_in_clause(tingkat)
+                if placeholders:
+                    sql += f" AND tingkat IN ({placeholders}) "
+                    params.extend(items)
+            if kelas:
+                placeholders, items = build_in_clause(kelas)
+                if placeholders:
+                    sql += f" AND kelas IN ({placeholders}) "
+                    params.extend(items)
+            if search_text:
+                sql += " AND nama_lengkap LIKE %s "
+                params.append(f"%{search_text}%")
             sql += " ORDER BY nama_lengkap, jk "
-            params = (jenis_dok, keterangan, jenjang, tapel)
+            params = tuple(params)
         else:
             sql = """
                 SELECT nis_lokal as nomor_induk, nisn, nama_lengkap, jenis_dokumen, keterangan, namafile
                 FROM siswa s
                 LEFT JOIN dokumen d ON d.nomor_induk = s.nis_lokal
                 WHERE jenis_dokumen LIKE %s AND keterangan LIKE %s  """    
-            if search_text: sql += f" nama_lengkap LIKE %{search_text}% "  
-            params = (f'%{jenis_dok}%', f'%{keterangan}%')        
+            if search_text:
+                sql += " AND nama_lengkap LIKE %s "  
+                params = (f'%{jenis_dok}%', f'%{keterangan}%', f'%{search_text}%')        
+            else:
+                params = (f'%{jenis_dok}%', f'%{keterangan}%')
             sql += " LIMIT 20 "
         return self.get_data(sql, params)
     
@@ -210,6 +245,6 @@ class Model_Dokumen(ConnectDB):
                 AND     keterangan LIKE %s
             ORDER BY nama_lengkap 
         """
-        params = (f'%{search_text}%',)
+        params = (f'%{search_text}%', '%', '%')
         return self.get_data(sql, params)
 

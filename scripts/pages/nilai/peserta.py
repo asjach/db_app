@@ -43,7 +43,8 @@ class Page_Peserta(QWidget, Ui_Form):
         if self.parent.data_kelas:
             data, fields = self.SQL.get_peserta_kegiatan(
                 id_kegiatan=self.cbo_kegiatan.currentData(),
-                id_kelas=self.parent.data_kelas
+                tingkat=self.parent.quoted_daftar_tingkat,
+                kelas=self.parent.quoted_daftar_kelas,
             )
             generate_table(
                 data=data,
@@ -60,14 +61,15 @@ class Page_Peserta(QWidget, Ui_Form):
 
 
     def update_peserta(self, item: QTableWidgetItem):
-        handle_item_changed_v2(
+        sukses = handle_item_changed_v2(
             tabel_ui=self.tbl_widget,
             tabel_sql='kegiatan_peserta',
             item=item,
             primary_key='id',
-            must_insert=['id', 'id_kelas', 'id_kegiatan', 'nis_lokal'],
+            must_insert=['id_kelas', 'id_kegiatan', 'nis_lokal'],
             not_updatable_column=['id']
         )
+        if sukses:self.refresh()
 
     def delete_peserta(self):
         sukses = delete_by_id('kegiatan_peserta','id', self.id)

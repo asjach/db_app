@@ -2,6 +2,16 @@
 - https://github.com/ColinDuquesnoy/QDarkStyleSheet/blob/master/qdarkstyle/dark/darkstyle.qss 
 - https://doc.qt.io/qt-6/stylesheet-reference.html
 */
+/* SELECTOR KHUSUS */
+#list_nama_kolom{
+    padding: 0px 0px 0px 10px;
+}
+#list_nama_kolom::item{
+    padding: 0px;
+    margin: 0px;
+}
+
+
 /*  
 =========================================
             MENU BAR
@@ -128,15 +138,20 @@ QTabBar::close-button:hover{
 QComboBox{
     margin-right:0px;
     padding: 0px 0px 0px 5px; 
-    border: 1px solid var(--surface8);
-    background-color: var(--surface5);
+    border: 1px solid var(--surface6);
+    background-color: var(--surface4);
     selection-background-color: var(--primary); 
     min-height: 22px;
 }
 
 QComboBox:hover{
-    border: 1px solid var(--surface10);
+    border: 1px solid yellow;
 } 
+
+QComboBox:focus{
+    border: 1px solid yellow;
+} 
+
 QComboBox::item:disabled{
     background-color: var(--muted);
     color: var(--muted-foreground);
@@ -176,7 +191,9 @@ QComboBox QAbstractItemView::item{
 QComboBox QAbstractItemView::item:selected {
     background: var(--primary);
 }
-
+QComboBox::down-arrow:disabled{
+    image: none;
+} 
 /*  
 =========================================
             LIST WIDGET
@@ -198,7 +215,7 @@ QListWidget:disabled{
 QListWidget::item {
     background: var(--surface5);
     color: var(--primary-foreground);
-    padding: 5px 0px;
+    padding: 2px 0px;
     margin: 0px; 
     border-radius: 0px;
 }
@@ -221,18 +238,18 @@ QListWidget::item:disabled{
 =========================================
 */
 QLineEdit, QPlainTextEdit{
-    border: 1px solid var(--surface8);
+    border: 1px solid var(--surface6);
     padding-left: 5px;
     background: var(--surface4);
     /* min-height: 22px; */
 }
 QLineEdit:hover, QPlainTextEdit:hover{
-    border: 1px solid var(--surface10);
+    border: 1px solid yellow;
 }
 QLineEdit:focus, QPlainTextEdit:focus{
     background: var(--surface6);
-    border: 1px solid var(--surface10);
-    color: var(--foreground);
+    border: 1px solid yellow;
+    color: yellow;
 }
 
 /*  
@@ -340,9 +357,6 @@ QPushButton, QWidget>QPushButton{
     color: var(--foreground);
     border: none;
     border: 1px solid var(--surface8); 
-    padding: 0px 0px;
-    min-width: 24px;
-    min-height: 24px;
 }
 QPushButton:hover{
     border:none;

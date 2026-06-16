@@ -46,7 +46,6 @@ class Ui_Form(object):
         self.cbo_opsi_data.addItem("")
         self.cbo_opsi_data.addItem("")
         self.cbo_opsi_data.addItem("")
-        self.cbo_opsi_data.addItem("")
         self.cbo_opsi_data.setObjectName(u"cbo_opsi_data")
         self.cbo_opsi_data.setMinimumSize(QSize(0, 24))
 
@@ -83,12 +82,11 @@ class Ui_Form(object):
         Form.setWindowTitle(QCoreApplication.translate("Form", u"Form", None))
         self.label.setText(QCoreApplication.translate("Form", u"Opsi Data", None))
         self.cbo_opsi_data.setItemText(0, QCoreApplication.translate("Form", u"Seluruh Siswa Aktif", None))
-        self.cbo_opsi_data.setItemText(1, QCoreApplication.translate("Form", u"Siswa MI-MD", None))
-        self.cbo_opsi_data.setItemText(2, QCoreApplication.translate("Form", u"Siswa MI", None))
-        self.cbo_opsi_data.setItemText(3, QCoreApplication.translate("Form", u"Siswa MD", None))
-        self.cbo_opsi_data.setItemText(4, QCoreApplication.translate("Form", u"Siswa MI Saja", None))
-        self.cbo_opsi_data.setItemText(5, QCoreApplication.translate("Form", u"Siswa MD Saja", None))
-        self.cbo_opsi_data.setItemText(6, QCoreApplication.translate("Form", u"Seluruh Siswa", None))
+        self.cbo_opsi_data.setItemText(1, QCoreApplication.translate("Form", u"Siswa MI", None))
+        self.cbo_opsi_data.setItemText(2, QCoreApplication.translate("Form", u"Siswa MD", None))
+        self.cbo_opsi_data.setItemText(3, QCoreApplication.translate("Form", u"Siswa MI Saja", None))
+        self.cbo_opsi_data.setItemText(4, QCoreApplication.translate("Form", u"Siswa MD Saja", None))
+        self.cbo_opsi_data.setItemText(5, QCoreApplication.translate("Form", u"Seluruh Siswa", None))
 
     # retranslateUi
 

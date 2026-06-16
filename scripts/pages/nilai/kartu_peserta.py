@@ -146,7 +146,7 @@ class PageKartuPeserta(QWidget, Ui_Form):
 
     def data_peserta(self, limit=True):
         kegiatan = self.cbo_kegiatan.currentText()
-        is_distinct = kegiatan in {'UAS', 'PAS', 'PAT', 'AS'}
+        is_distinct = kegiatan in {'UAS', 'PAS', 'PAT', 'AS', 'ASAS', 'ASAT', 'PSAS', 'PSAT', "UKK"}
         return self.SQL.get_data_peserta(
             tapel=self.cbo_tapel.currentText(),
             kegiatan=kegiatan,

@@ -102,10 +102,10 @@ class PageTambahDokumen(QWidget, Ui_Form):
         nomor_induk = self.line_no_induk.text()
         jenis_dokumen = self.line_jenis_dokumen.text()
         keterangan = self.line_keterangan.text()
-        dest_folder = os.path.join(DIREKTORI_DOKUMEN, self.cbo_target.currentText().lower())
+        dest_folder = str((DIREKTORI_DOKUMEN / self.cbo_target.currentText().lower()).resolve())
         self.namafile = create_namafile2(nama_lengkap, nomor_induk, jenis_dokumen, keterangan, source_path)
         if self.namafile:
-            self.fullpath = os.path.normpath(os.path.join(dest_folder, self.namafile))
+            self.fullpath = str((DIREKTORI_DOKUMEN / self.cbo_target.currentText().lower() / self.namafile).resolve())
             self.plain_destination.setPlainText(self.fullpath)
         self.activate_btn_tambah()
 
@@ -119,52 +119,6 @@ class PageTambahDokumen(QWidget, Ui_Form):
             self.btn_tambah.setEnabled(False)
         else:
             self.btn_tambah.setEnabled(True)
-
-    # def btn_tambah_clicked(self):
-    #     source_path = self.plain_source.toPlainText().strip()
-    #     dest_path = self.plain_destination.toPlainText().strip()
-    #     if not source_path or not dest_path:
-    #         QMessageBox.warning(self, "Error", "Source or destination path cannot be empty.")
-    #         return
-    #     if not os.path.isfile(source_path):
-    #         QMessageBox.warning(self, "Error", "Source file does not exist.")
-    #         return
-    #     source_dir = os.path.dirname(source_path) or "."
-    #     sudah_path = os.path.join(source_dir, "sudah", self.namafile)
-    #     sukses = self.MODEL.tambah_dokumen(
-    #         no_induk=self.line_no_induk.text(),
-    #         jenis_dokumen=self.line_jenis_dokumen.text(),
-    #         keterangan=self.line_keterangan.text(),
-    #         sub_folder=self.cbo_target.currentText(),
-    #         namafile=self.namafile
-    #     )
-    #     if not sukses:
-    #         QMessageBox.warning(self, "Error", "Failed to add document to database.")
-    #         return
-    #     try:
-    #         # MODE: COPY
-    #         if self.radio_mode_copy.isChecked():
-    #             # Buat folder tujuan jika belum ada
-    #             dest_dir = os.path.dirname(dest_path) or "."
-    #             os.makedirs(dest_dir, exist_ok=True)
-    #             shutil.copy(source_path, dest_path)
-    #             if self.radio_move_sudah.isChecked():
-    #                 os.makedirs(os.path.join(source_dir, "sudah"), exist_ok=True)
-    #                 shutil.move(source_path, sudah_path)
-    #             if self.radio_cycle.isChecked():
-    #                 self.btn_browse.click()
-    #                 return
-    #         else:
-    #             dest_dir = os.path.dirname(dest_path) or "."
-    #             os.makedirs(dest_dir, exist_ok=True)
-    #             shutil.move(source_path, dest_path)
-    #             if self.radio_cycle.isChecked():
-    #                 self.btn_browse.click()
-    #                 return
-    #         self.clear_after_tambah()
-    #     except (OSError, shutil.Error) as e:
-    #         QMessageBox.critical(self, "Error", f"File operation failed: {str(e)}")
-    #         return
 
     def btn_tambah_clicked(self):
         source_path = self.plain_source.toPlainText().strip()
@@ -230,6 +184,7 @@ class PageTambahDokumen(QWidget, Ui_Form):
         self.plain_source.clear()
         self.plain_destination.clear()
         self.dokumen_viewer.close_file()
+        self.fill_tbl_daftar_nama()
 
 
         

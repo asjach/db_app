@@ -76,10 +76,6 @@ class PageMI2MD(Ui_Form, QWidget):
         if tapel == "":
             return
         sukses = self.SQL.update_ke_mi(tapel)
-        self.md_tbl._last_data_hash = None
-        self.mi_tbl._last_data_hash = None
-        self.tbl_beda._last_data_hash = None
-
         if sukses:
             QMessageBox.information(self, "Berhasil", "Rombel siswa telah berhasil disesuaikan ke MI")
             self.fill_tbl_beda()
@@ -90,24 +86,15 @@ class PageMI2MD(Ui_Form, QWidget):
         if tapel == "":
             return
         sukses = self.SQL.update_ke_md(tapel)
-        self.md_tbl._last_data_hash = None
-        self.mi_tbl._last_data_hash = None
-        self.tbl_beda._last_data_hash = None
         if sukses:
             QMessageBox.information(self, "Berhasil", "Rombel siswa telah berhasil disesuaikan ke MD")
             self.fill_tbl_beda()
 
     def insert_to_md_clicked(self):
         self.SQL.insert_to_md(self.id)
-        self.md_tbl._last_data_hash = None
-        self.mi_tbl._last_data_hash = None
-        self.tbl_beda._last_data_hash = None
         self.show_page()
 
     def batal_insert_clicked(self):
         self.SQL.batal_insert_to_md(self.id)
-        self.md_tbl._last_data_hash = None
-        self.mi_tbl._last_data_hash = None
-        self.tbl_beda._last_data_hash = None
         self.show_page()
         

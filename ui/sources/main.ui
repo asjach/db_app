@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1291</width>
+    <width>1318</width>
     <height>651</height>
    </rect>
   </property>
@@ -349,7 +349,7 @@
         <number>0</number>
        </property>
        <property name="topMargin">
-        <number>5</number>
+        <number>0</number>
        </property>
        <property name="rightMargin">
         <number>0</number>
@@ -370,7 +370,7 @@
            <number>0</number>
           </property>
           <property name="topMargin">
-           <number>0</number>
+           <number>1</number>
           </property>
           <property name="rightMargin">
            <number>0</number>
@@ -381,14 +381,14 @@
           <item>
            <widget class="QPushButton" name="btn_refresh">
             <property name="sizePolicy">
-             <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
             <property name="minimumSize">
              <size>
-              <width>16</width>
+              <width>24</width>
               <height>24</height>
              </size>
             </property>
@@ -852,6 +852,16 @@
    </property>
    <property name="text">
     <string>&lt;</string>
+   </property>
+  </action>
+  <action name="actionPrestasi">
+   <property name="text">
+    <string>Input Prestasi</string>
+   </property>
+  </action>
+  <action name="actionInput_Ekstrakurikuler">
+   <property name="text">
+    <string>Input Ekstrakurikuler</string>
    </property>
   </action>
  </widget>

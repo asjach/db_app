@@ -75,7 +75,7 @@ class PageRenameDokumen(QWidget, Ui_Form):
         self.line_jenis_dokumen_old.setText(self.jenis_dokumen)
         self.line_keterangan_old.setText(self.keterangan)
         self.line_namafile_old.setText(self.namafile)
-        path = f"{os.path.normpath(os.path.join(DIREKTORI_DOKUMEN,self.line_namafile_old.text()))}"
+        path = str((DIREKTORI_DOKUMEN / self.line_namafile_old.text()).resolve())
         self.plain_path_old.setPlainText(path)
 
     def fill_cbo_jenis_dokumen(self): 
@@ -97,7 +97,7 @@ class PageRenameDokumen(QWidget, Ui_Form):
             keterangan=self.cbo_keterangan_new.currentText(),
             source_path=self.plain_path_old.toPlainText())
         self.label_namafile_new.setText(namafile)
-        new_path = f"{os.path.normpath(os.path.join(DIREKTORI_DOKUMEN,self.cbo_target.currentText().lower(), self.line_namafile_old.text()))}"
+        new_path = str((DIREKTORI_DOKUMEN / self.cbo_target.currentText().lower() / self.line_namafile_old.text()).resolve())
         self.plain_path_new.setPlainText(new_path)
     
     def fill_cbo_nama_new(self):

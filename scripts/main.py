@@ -4,17 +4,21 @@ from ui.ui_main import Ui_MainWindow
 from PySide6.QtCore import QTimer, QEvent, Qt
 from PySide6.QtWidgets import QMainWindow, QMenu, QTabBar, QWidget, QMenuBar, QTableWidget
 from PySide6.QtGui import QAction
-from scripts import *
 from models.model_main import Model_Main
+from scripts.dialogs.detail_siswa import DialogDetailSiswa
+from scripts.dialogs.detail_guru import DialogDetailGuru
+from scripts.dialogs.input_excel import DialogInputExcel
 from scripts.tab_config import TAB_CONFIG
 from utils.static_values import *
 from utils.fungsi.general_functions import *
 from resources.color_var import THEMES
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 class MainWindow(Ui_MainWindow, QMainWindow):
     def __init__(self, parent=None):
         super().__init__(parent)
+        
 
         register_all_windows_fonts()
         self.setupUi(self)
@@ -54,8 +58,9 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.add_tab(page, "Daftar Kelas")
 
     def initialize_variables(self):
-        
-        self.static_values = get_json_data(os.path.join("D:/APP/DB App", "utils", "static_values.json"))
+        path_json = os.path.join(BASE_DIR, "utils", "static_values.json")
+        self.static_values = get_json_data(path_json)
+        # self.static_values = get_json_data(os.path.join("E:/APP/DB App", "utils", "static_values.json"))
 
         # Timer untuk requery
         self.requery_timer = QTimer(self)
@@ -71,6 +76,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.detail_siswa_action = QAction("Detail Siswa")
         self.detail_guru_action = QAction("Detail Guru")
         self.tidak_naik_action = QAction("Tidak Naik")
+        self.fill_no_urut_siswa_action = QAction("Isi Nomor Absen")
 
         # Variabel state
         self.str_jenjang = None
@@ -122,6 +128,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
             self.menu_santri.addSeparator(),
             self.actionCari,
             self.actionCeklis_EMIS,
+            self.actionBukuInduk,
         ])
 
         # --- Guru ---
@@ -142,6 +149,8 @@ class MainWindow(Ui_MainWindow, QMainWindow):
             self.actionEkskulKegiatan,
             self.menu_nilai.addSeparator(),
             self.actionInput_Nilai,
+            self.actionPrestasi,
+            self.actionInput_Ekstrakurikuler,
             self.menu_nilai.addSeparator(),
             self.actionKartu_Peserta,
             self.actionRekap,
@@ -428,6 +437,8 @@ class MainWindow(Ui_MainWindow, QMainWindow):
                 self.show_detail_guru()
             elif action == self.tidak_naik_action:
                 self.NAIK.tidak_naikkan_siswa()
+            elif action == self.fill_no_urut_siswa_action:
+                self.DK.fill_no_urut()
 
         if event.type() == QEvent.KeyPress:
             if event.key() == Qt.Key_C and event.modifiers() == Qt.ControlModifier:
@@ -444,6 +455,8 @@ class MainWindow(Ui_MainWindow, QMainWindow):
             self.cmenu.addAction(self.detail_siswa_action)
             if source.objectName() == 'tbl_list_siswa_kenaikan':
                 self.cmenu.addAction(self.tidak_naik_action)
+            if source.objectName() == 'tbl_widget':
+                self.cmenu.addAction(self.fill_no_urut_siswa_action)
         elif source in self.tabel_guru:
             self.cmenu.addAction(self.detail_guru_action)
 

@@ -1,6 +1,6 @@
 from utils.static_values import *
 from utils.key_value.kolom_sql import *
-from scripts import *
+from scripts.pages import *
 
 
 TAB_CONFIG = {
@@ -180,6 +180,16 @@ TAB_CONFIG = {
         "action": "actionMapelKegiatan",
         "page_class": PageMapel,
     },
+    "Ekskul": {
+        "show_page": "EKSKUL",
+        "action": "actionEkskulKegiatan",
+        "page_class": PageEkskul,
+    },
+    "Prestasi": {
+        "show_page": "PRESTASI",
+        "action": "actionPrestasi",
+        "page_class": PagePrestasi,
+    },
     "Input Nilai": {
         "show_page": "INPUT_NILAI",
         "action": "actionInput_Nilai",
@@ -191,7 +201,7 @@ TAB_CONFIG = {
         "page_class": PageKartuPeserta,
     },
     "Rekap Nilai": {
-        "order_by": ['Nama', 'JK', 'Peringkat'],
+        "order_by": ['Peringkat', 'Nama', 'JK'],
         "hidden_frame": ['jenjang', 'tingkat', 'kelas'],
         "show_page": "REKAP_NILAI",
         "action": "actionRekap",

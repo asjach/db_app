@@ -11,6 +11,7 @@ class TemplateKartuPeserta:
         self.parent = parent
         self.data = data
         self.height = 0
+        self.width = 0
         self.init_data()
     
     def init_data(self):
@@ -64,8 +65,19 @@ class TemplateKartuPeserta:
 
         # NAMA
         if setting['nama']:
-            c.setFont(font, setting['size_nama'])
-            c.drawString(x + setting['x_nama']*cm, y + self.tinggi_kartu - setting['y_nama']*cm, f"{peserta.get('nama_lengkap', '')}")
+            paragraf(
+                obj=self,
+                text=f"{peserta.get('nama_lengkap', '')}",
+                x=(x + setting['x_nama']*cm)/mm,
+                y=( - y  + self.tinggi_kartu*mm + setting['y_nama']*cm -12*mm)/mm,
+                w=75,
+                h=12,
+                showBoundary=0,
+                font=font,
+                size=setting['size_nama'],
+                leading=12,
+            )
+
         # TTL
         if setting['ttl']:
             c.setFont(font, setting['size_ttl'])
@@ -114,11 +126,13 @@ class TemplateKartuPeserta:
                 page_size = letter
             if self.orientation == 'landscape':
                 page_width, page_height = landscape(page_size)
+                self.width, self.height = landscape(page_size)
             else:
                 page_width, page_height = portrait(page_size)
+                self.width, self.height = portrait(page_size)
             buffer = BytesIO()
             c = canvas.Canvas(buffer, pagesize=(page_width, page_height))
-            
+            self.c = c
             # Hitung jumlah kartu per halaman
             cards_per_row, cards_per_col = self.calculate_grid(page_width, page_height)
             cards_per_page = cards_per_row * cards_per_col

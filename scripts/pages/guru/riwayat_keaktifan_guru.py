@@ -10,14 +10,22 @@ class PageKeaktifanGuru(QWidget, Ui_Form):
         self.setupUi(self)
         self.parent = parent
         self.SQL = Model_Guru()
+        self.widget.setVisible(False)
+        self.plain_custom.setPlainText("r.id_guru, nama_lengkap")
         self.tbl_keaktifan.itemSelectionChanged.connect(self.table_guru_selected)
         self.tbl_keaktifan.itemChanged.connect(self.update_from_table)
         self.cbo_guru.textActivated.connect(self.cbo_guru_selected)
         self.btn_tapel_sebelumnya.clicked.connect(self.btn_tapel_sebelumnya_clicked)
+        self.btn_preview.clicked.connect(self.show_page)
 
     def show_page(self):
+        self.fill_list_kolom_guru()
         self.fill_table_guru()
         self.fill_cbo_guru()
+
+    def fill_list_kolom_guru(self):
+        data = self.SQL.get_kolom_tabel_guru()
+        populate_list_widget(self.list_nama_kolom, data)
 
     def fill_table_guru(self):
         data = self.SQL.get_keaktifan_guru(
@@ -31,7 +39,7 @@ class PageKeaktifanGuru(QWidget, Ui_Form):
         generate_table(
             data=data,
             table=self.tbl_keaktifan,
-            hidden_column=[0, 1,],
+            hidden_column=[0,],
             icon_akhir=":/icon/resources/icon/multiply.svg",
             fungsi_akhir=self.delete_guru
 
@@ -74,7 +82,13 @@ class PageKeaktifanGuru(QWidget, Ui_Form):
             print(e)
 
     def kolom(self):
-        return GURU.get(self.parent.cbo_kolom.currentText().lower(), GURU['default'])
+        self.widget.setVisible(False)
+        cbo_kolom = self.parent.cbo_kolom.currentText().lower()
+        kolom = GURU.get(cbo_kolom, GURU['default'])
+        if cbo_kolom == 'custom':
+            kolom = self.plain_custom.toPlainText()
+            self.widget.setVisible(True)
+        return kolom
     
     def fill_cbo_guru(self):
         data=self.SQL.get_pegawai_aktif()

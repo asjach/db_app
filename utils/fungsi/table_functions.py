@@ -3,11 +3,10 @@ from datetime import datetime, date
 from utils.database import ConnectDB
 from PySide6.QtWidgets import QTableWidget, QTableWidgetItem, QHeaderView, QPushButton, QApplication
 from PySide6.QtGui import QFontMetrics, QFont, QIcon
-from utils.fungsi.functions import show_message, date_to_text, text_to_date
+from utils.fungsi.functions import show_message, date_to_text, text_to_date, get_json_data, validate_sql_identifier
 from PySide6.QtCore import Qt
 import pandas as pd
 from utils.app_config import SEPARATOR_DESIMAL, SEPARATOR_RIBUAN, BASE_DIR
-from utils.fungsi.functions import get_json_data
 
 static_values = get_json_data(os.path.join(BASE_DIR, "utils/static_values.json"))
 
@@ -61,7 +60,7 @@ def generate_table(
         if mode_input:
             if column_names is None:
                 # Tabel kosong tanpa baris atau header lama
-                table.setRowCount(0)
+                table.setRowCount(1)
                 num_columns = (1 if icon_awal else 0) + (1 if icon_akhir else 0) or 1
                 table.setColumnCount(num_columns)
                 headers = [""] * num_columns
@@ -425,7 +424,6 @@ def handle_item_changed_v2(
 
     sukses = True
     con = ConnectDB()
-
     if is_last_row and must_insert:
         # Baris terakhir: coba insert jika semua kolom wajib terisi
         for col in must_insert:
@@ -507,17 +505,18 @@ def update_from_table(
     if key is None: 
         print("Error: Primary key tidak ditemukan.")
         return False
+    tabel_sql = validate_sql_identifier(tabel_sql)
     if updatable_column and not_updatable_column:
         common_columns = set(updatable_column).intersection(set(not_updatable_column))
         if common_columns:
             print(f"Error: Kolom berikut ada di kedua parameter: {', '.join(common_columns)}")
             return False
     sukses = False
-    nama_kolom = header_for_db(tabel_ui.horizontalHeaderItem(tabel_ui.currentColumn()).text())
     nilai = tabel_ui.item(tabel_ui.currentRow(), tabel_ui.currentColumn()).text()
-    nilai = convert_item_value(nilai, nama_kolom)[1]
+    nilai = convert_item_value(nilai, header_for_db(tabel_ui.horizontalHeaderItem(tabel_ui.currentColumn()).text()))[1]
     
     con = ConnectDB()
+    nama_kolom = validate_sql_identifier(header_for_db(tabel_ui.horizontalHeaderItem(tabel_ui.currentColumn()).text()))
     if updatable_column:
         if nama_kolom in updatable_column:
             sql = """UPDATE {} SET {} = %s WHERE {} = %s;""".format(tabel_sql, nama_kolom, key)
@@ -539,8 +538,10 @@ def insert_from_table(tabel_sql, row_data: dict):
     if not tabel_sql or not row_data:
         return False
     con = ConnectDB()
-    columns = ", ".join([key for key in row_data if row_data[key] not in [None, '']])
-    placeholders = ", ".join(["%s"] * len([key for key in row_data if row_data[key] not in [None, '']]))
+    tabel_sql = validate_sql_identifier(tabel_sql)
+    valid_columns = [validate_sql_identifier(key) for key in row_data if row_data[key] not in [None, '']]
+    columns = ", ".join(valid_columns)
+    placeholders = ", ".join(["%s"] * len(valid_columns))
     sql = f"INSERT INTO {tabel_sql} ({columns}) VALUES ({placeholders})"
     params = tuple(row_data[key] for key in row_data if row_data[key] not in [None, ''])
     return con.update_data(sql, params)
@@ -623,6 +624,8 @@ def convert_item_value(value, header_name, separator_ribuan=None, separator_desi
 
 def cek_eksistensi(conn, tabel_db, kolom_key, key_value):
     """Cek apakah key_value sudah ada di database"""
+    tabel_db = validate_sql_identifier(tabel_db)
+    kolom_key = validate_sql_identifier(kolom_key)
     sql = f"SELECT 1 FROM {tabel_db} WHERE {kolom_key} = %s LIMIT 1"
     result = conn.get_one_data(sql, (key_value,))
     return bool(result)
@@ -651,6 +654,8 @@ def generate_insert_queries(tabel_db, excel_file_path):
 
 def get_old_data(conn, tabel_db, kolom_key, key_value):
     """Mengambil data lama dari database berdasarkan primary key"""
+    tabel_db = validate_sql_identifier(tabel_db)
+    kolom_key = validate_sql_identifier(kolom_key)
     query = f"SELECT * FROM {tabel_db} WHERE {kolom_key} = %s"
     params = (key_value,)
     result = conn.get_one_data(query, params)

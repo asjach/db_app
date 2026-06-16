@@ -12,6 +12,7 @@ from PIL import Image
 
 
 import fitz  # PyMuPDF
+# pip install pymupdf
 
 class DokumenViewer(Ui_Dokumen_Viewer, QWidget):
     def __init__(self):
@@ -104,17 +105,18 @@ class DokumenViewer(Ui_Dokumen_Viewer, QWidget):
             print("Failed to load image!")
 
     def loadPDF(self, pdf_source, page=None):
-        self.page_control.setVisible(True)
-        if isinstance(pdf_source, bytes):
-            self.pdf_document = fitz.open("pdf", pdf_source)  # Load dari bytes
-        else:
-            self.pdf_document = fitz.open(pdf_source)  # Load dari file path
-        if page:
-            self.current_page = page
-        else:
-            self.current_page = 0
-            self.spin_page.setValue(self.current_page+1)
-        self.render_pdf_page(self.current_page)
+        if pdf_source:
+            self.page_control.setVisible(True)
+            if isinstance(pdf_source, bytes):
+                self.pdf_document = fitz.open("pdf", pdf_source)  # Load dari bytes
+            else:
+                self.pdf_document = fitz.open(pdf_source)  # Load dari file path
+            if page:
+                self.current_page = page
+            else:
+                self.current_page = 0
+                self.spin_page.setValue(self.current_page+1)
+            self.render_pdf_page(self.current_page)
 
     def zoom_x(self, value):
         old_zoom = self.zoomX

@@ -19,6 +19,7 @@ class DialogInputExcel(QDialog, Ui_Form):
         self.setSizeGripEnabled(True)
         self.SQL = Model_Preferensi()
         self._setup_connections()
+        self._fill_db_combobox()
 
     def _setup_connections(self):
         connections = [
@@ -40,6 +41,7 @@ class DialogInputExcel(QDialog, Ui_Form):
         self._fill_db_combobox()
 
     def _fill_db_combobox(self):
+        print("Mengisi combobox database...")
         databases = self.SQL.get_databases()
         for cbo in (self.cbo_db, self.cbo_save_to_db):
             populate_combobox(cbo, databases)

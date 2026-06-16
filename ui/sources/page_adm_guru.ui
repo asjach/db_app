@@ -158,19 +158,6 @@
             <property name="spacing">
              <number>5</number>
             </property>
-            <item row="0" column="1">
-             <widget class="QLabel" name="label">
-              <property name="font">
-               <font>
-                <family>Aptos Narrow</family>
-                <pointsize>11</pointsize>
-               </font>
-              </property>
-              <property name="text">
-               <string>Semester</string>
-              </property>
-             </widget>
-            </item>
             <item row="1" column="0">
              <widget class="QComboBox" name="cbo_kelas">
               <property name="minimumSize">
@@ -184,6 +171,32 @@
                 <family>Aptos Narrow</family>
                 <pointsize>11</pointsize>
                </font>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QLabel" name="label">
+              <property name="font">
+               <font>
+                <family>Aptos Narrow</family>
+                <pointsize>11</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>Semester</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="2">
+             <widget class="QLabel" name="label_18">
+              <property name="font">
+               <font>
+                <family>Aptos Narrow</family>
+                <pointsize>11</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>Guru</string>
               </property>
              </widget>
             </item>
@@ -229,19 +242,6 @@
               </item>
              </widget>
             </item>
-            <item row="0" column="2">
-             <widget class="QLabel" name="label_18">
-              <property name="font">
-               <font>
-                <family>Aptos Narrow</family>
-                <pointsize>11</pointsize>
-               </font>
-              </property>
-              <property name="text">
-               <string>Guru</string>
-              </property>
-             </widget>
-            </item>
             <item row="0" column="0">
              <widget class="QLabel" name="label_17">
               <property name="font">
@@ -252,6 +252,29 @@
               </property>
               <property name="text">
                <string>Kelas</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QLabel" name="label_19">
+              <property name="font">
+               <font>
+                <family>Aptos Narrow</family>
+                <pointsize>11</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>Teks Kelas</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QLineEdit" name="line_txt_kelas">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>24</height>
+               </size>
               </property>
              </widget>
             </item>

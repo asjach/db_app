@@ -16,8 +16,9 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QComboBox, QDoubleSpinBox, QGridLayout,
-    QLabel, QLayout, QPushButton, QRadioButton,
-    QSizePolicy, QSpacerItem, QSpinBox, QWidget)
+    QLabel, QLayout, QLineEdit, QPushButton,
+    QRadioButton, QSizePolicy, QSpacerItem, QSpinBox,
+    QWidget)
 
 class Ui_Form(object):
     def setupUi(self, Form):
@@ -73,18 +74,24 @@ class Ui_Form(object):
         self.gridLayout_2.setSpacing(5)
         self.gridLayout_2.setObjectName(u"gridLayout_2")
         self.gridLayout_2.setContentsMargins(0, 0, 0, 0)
-        self.label = QLabel(self.widget)
-        self.label.setObjectName(u"label")
-        self.label.setFont(font)
-
-        self.gridLayout_2.addWidget(self.label, 0, 1, 1, 1)
-
         self.cbo_kelas = QComboBox(self.widget)
         self.cbo_kelas.setObjectName(u"cbo_kelas")
         self.cbo_kelas.setMinimumSize(QSize(80, 24))
         self.cbo_kelas.setFont(font)
 
         self.gridLayout_2.addWidget(self.cbo_kelas, 1, 0, 1, 1)
+
+        self.label = QLabel(self.widget)
+        self.label.setObjectName(u"label")
+        self.label.setFont(font)
+
+        self.gridLayout_2.addWidget(self.label, 0, 1, 1, 1)
+
+        self.label_18 = QLabel(self.widget)
+        self.label_18.setObjectName(u"label_18")
+        self.label_18.setFont(font)
+
+        self.gridLayout_2.addWidget(self.label_18, 0, 2, 1, 1)
 
         self.cbo_guru = QComboBox(self.widget)
         self.cbo_guru.setObjectName(u"cbo_guru")
@@ -102,17 +109,23 @@ class Ui_Form(object):
 
         self.gridLayout_2.addWidget(self.cbo_semester, 1, 1, 1, 1)
 
-        self.label_18 = QLabel(self.widget)
-        self.label_18.setObjectName(u"label_18")
-        self.label_18.setFont(font)
-
-        self.gridLayout_2.addWidget(self.label_18, 0, 2, 1, 1)
-
         self.label_17 = QLabel(self.widget)
         self.label_17.setObjectName(u"label_17")
         self.label_17.setFont(font)
 
         self.gridLayout_2.addWidget(self.label_17, 0, 0, 1, 1)
+
+        self.label_19 = QLabel(self.widget)
+        self.label_19.setObjectName(u"label_19")
+        self.label_19.setFont(font)
+
+        self.gridLayout_2.addWidget(self.label_19, 2, 0, 1, 1)
+
+        self.line_txt_kelas = QLineEdit(self.widget)
+        self.line_txt_kelas.setObjectName(u"line_txt_kelas")
+        self.line_txt_kelas.setMinimumSize(QSize(0, 24))
+
+        self.gridLayout_2.addWidget(self.line_txt_kelas, 2, 1, 1, 1)
 
         self.gridLayout_2.setColumnStretch(2, 1)
 
@@ -606,11 +619,12 @@ class Ui_Form(object):
     def retranslateUi(self, Form):
         Form.setWindowTitle(QCoreApplication.translate("Form", u"Form", None))
         self.label.setText(QCoreApplication.translate("Form", u"Semester", None))
+        self.label_18.setText(QCoreApplication.translate("Form", u"Guru", None))
         self.cbo_semester.setItemText(0, QCoreApplication.translate("Form", u"Ganjil", None))
         self.cbo_semester.setItemText(1, QCoreApplication.translate("Form", u"Genap", None))
 
-        self.label_18.setText(QCoreApplication.translate("Form", u"Guru", None))
         self.label_17.setText(QCoreApplication.translate("Form", u"Kelas", None))
+        self.label_19.setText(QCoreApplication.translate("Form", u"Teks Kelas", None))
         self.cbo_kertas.setItemText(0, QCoreApplication.translate("Form", u"A4", None))
         self.cbo_kertas.setItemText(1, QCoreApplication.translate("Form", u"F4", None))
 

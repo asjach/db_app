@@ -17,16 +17,6 @@ class DialogDetailGuru(QDialog, Ui_Form):
         self.parent = parent
         self.id_guru = id_guru
         self.id = None
-        self.input_keluarga = (
-            self.line_nik_anak, self.line_nama_anak, self.cbo_jk_anak,
-            self.line_tmp_lahir_anak, self.line_tgl_lahir_anak, self.cbo_pendidikan_anak, 
-            self.cbo_pekerjaan_anak, self.cbo_status_anak,
-        )
-        self.input_riwayat_pendidikan = ( 
-            self.cbo_jenjang_sekolah, self.cbo_status_sekolah, self.line_nama_sekolah, 
-            self.line_alamat_sekolah, self.line_tahun_masuk, self.line_tahun_lulus, 
-            self.line_tgl_ijazah, self.line_nomor_ijazah, self.line_nem_ipk,
-        )
         self.init_detail_controls()
         self.setup_connection()
         self.fill_cbo_data_guru()
@@ -44,13 +34,6 @@ class DialogDetailGuru(QDialog, Ui_Form):
             self.cbo_status_sertifikasi:STATUS_SERTIFIKASI,
             self.cbo_jenjang_sertifikasi: JENJANG_SERTIFIKASI,
             self.cbo_status_kawin:STATUS_MENIKAH,
-            self.cbo_pendidikan_anak:PENDIDIKAN,
-
-            self.cbo_pekerjaan_anak:PEKERJAAN,
-            self.cbo_jk_anak:JK,
-            self.cbo_status_anak: STATUS_ANAK,
-            self.cbo_jenjang_sekolah:JENJANG_SEKOLAH,
-            self.cbo_status_sekolah:STATUS_SEKOLAH,
         }
         for combo, values in combo_detail_guru.items():
             combo.clear()
@@ -60,8 +43,6 @@ class DialogDetailGuru(QDialog, Ui_Form):
         self.btn_save_detail.clicked.connect(self.btn_save_clicked)
         self.line_search.textChanged.connect(self.fill_cbo_data_guru)
         self.cbo_daftar_guru.textActivated.connect(self.cbo_daftar_guru_selected)
-        self.btn_tambah_anak.clicked.connect(self.tambah_keluarga)
-        self.btn_tambah_sekolah.clicked.connect(self.tambah_riwayat_pendidikan)
         self.tbl_daftar_keluarga.itemChanged.connect(self.update_keluarga)
         self.tbl_pendidikan_formal.itemChanged.connect(self.update_riwayat_pendidikan)
         self.tbl_daftar_keluarga.itemSelectionChanged.connect(
@@ -107,102 +88,65 @@ class DialogDetailGuru(QDialog, Ui_Form):
         except Exception as e:
             QMessageBox.critical(self, "Error", f"Terjadi kesalahan: {e}")
 
-    def tambah_keluarga(self):
-        parameter = {
-            "id_guru": self.line_id_guru.text(),
-            "nik": self.line_nik_anak.text(),
-            "nama_lengkap": self.line_nama_anak.text(),
-            "jk": self.cbo_jk_anak.currentText(),
-            "tmp_lahir": self.line_tmp_lahir_anak.text(),
-            "tgl_lahir": text_to_date(self.line_tgl_lahir_anak.text()),
-            "pendidikan": self.cbo_pendidikan_anak.currentText(),
-            "pekerjaan": self.cbo_pekerjaan_anak.currentText(),
-            "status_keluarga": self.cbo_status_anak.currentText(),
-        }
-        sukses = self.SQL.insert_keluarga(**parameter)
+    def fill_tbl_keluarga(self, id_guru):
+        data, headers = self.SQL.get_keluarga(id_guru)
+        generate_table(
+            data = data,
+            table = self.tbl_daftar_keluarga,
+            icon_awal= ":/icon/resources/icon/multiply.svg",
+            fungsi_awal = self.delete_keluarga,
+            mode_input=True,
+            column_names=headers,
+        )
+
+    def update_keluarga(self, item):
+        sukses = handle_item_changed_v2(
+            tabel_ui=self.tbl_daftar_keluarga,
+            tabel_sql='guru_keluarga',
+            primary_key='id',
+            item=item,
+            must_insert=['id_guru', 'nama_lengkap'],
+            not_updatable_column=['id', 'id_guru'],
+        )
         if sukses:
             self.fill_tbl_keluarga(self.id_guru)
-            clear_inputs(self.input_keluarga)
-
-    def tambah_riwayat_pendidikan(self):
-        parameter = {
-            "id_guru": self.line_id_guru.text(),
-            "jenjang": self.cbo_jenjang_sekolah.currentText(),
-            "nama_sekolah": self.line_nama_sekolah.text(),
-            "status_sekolah": self.cbo_status_sekolah.currentText(),
-            "alamat_sekolah": self.line_alamat_sekolah.text(),
-            "tahun_masuk": self.line_tahun_masuk.text(),
-            "tahun_lulus": self.line_tahun_lulus.text(),
-            "ip_ijazah": self.line_nem_ipk.text(),
-            "tgl_ijazah": text_to_date(self.line_tgl_ijazah.text()),
-            "nomor_ijazah":self.line_nomor_ijazah.text()
-        }
-        sukses = self.SQL.insert_riwayat_pendidikan(**parameter)
-        if sukses:
-            self.fill_tbl_pendidikan_formal(self.id_guru)
-            clear_inputs(self.input_riwayat_pendidikan)
-
-    def update_keluarga(self):
-        parameter = {
-            "tabel_ui": self.tbl_daftar_keluarga,
-            "tabel_sql": "guru_keluarga",
-            "not_updatable_column": ['id','id_guru'],
-            "key": 'id',
-            "key_value": self.id
-        }
-        sukses = update_from_table(**parameter)
-        if sukses:
-            self.fill_tbl_keluarga(self.id_guru)
-
-    def update_riwayat_pendidikan(self):
-        parameter = {
-            "tabel_ui": self.tbl_pendidikan_formal,
-            "tabel_sql": 'guru_riwayat_pendidikan',
-            "not_updatable_column": ['id','id_guru'],
-            "key": 'id',
-            "key_value": self.id
-        }
-        sukses = update_from_table(**parameter)
-        if sukses:
-            self.fill_tbl_pendidikan_formal(self.id_guru)
-    
-    def delete_riwayat_pendidikan(self):
-        sukses = delete_by_id("guru_riwayat_pendidikan", "id", self.id)
-        if sukses:
-            self.fill_tbl_pendidikan_formal(self.id_guru)
 
     def delete_keluarga(self):
         sukses = delete_by_id("guru_keluarga", "id", self.id)
         if sukses:
            self.fill_tbl_keluarga(self.id_guru)
+
+    def fill_tbl_pendidikan_formal(self, id_guru):
+        data, headers = self.SQL.get_pendidikan_formal(id_guru)
+        generate_table(
+            data=data,
+            table=self.tbl_pendidikan_formal,
+            icon_awal= ":/icon/resources/icon/multiply.svg",
+            fungsi_awal=self.delete_riwayat_pendidikan,
+            mode_input=True, 
+            column_names=headers,
+        )
+        
+    def update_riwayat_pendidikan(self, item):
+        sukses = handle_item_changed_v2(
+            tabel_ui=self.tbl_pendidikan_formal,
+            tabel_sql='guru_pendidikan',
+            primary_key='id',
+            item=item,
+            must_insert=['id_guru', 'jenjang'],
+            not_updatable_column=['id', 'id_guru'],
+        )
+        if sukses:
+            self.fill_tbl_pendidikan_formal(self.id_guru)
+    
+    def delete_riwayat_pendidikan(self):
+        sukses = delete_by_id("guru_pendidikan", "id", self.id)
+        if sukses:
+            self.fill_tbl_pendidikan_formal(self.id_guru)
         
     def btn_save_clicked(self):
         self.save_to_db()
         self.close()
-
-    def fill_tbl_keluarga(self, id_guru):
-        get_params = {'id_guru': id_guru}
-        table_params = {
-            'icon_awal': ":/icon/resources/icon/multiply.svg",
-            'fungsi_awal':self.delete_keluarga
-        }
-        fill_table(
-            table_name=self.tbl_daftar_keluarga, 
-            get_function=self.SQL.get_keluarga, 
-            get_params=get_params, 
-            table_params=table_params)
-
-    def fill_tbl_pendidikan_formal(self, id_guru):
-        get_params = {'id_guru': id_guru}
-        table_params = {
-            'icon_awal': ":/icon/resources/icon/multiply.svg",
-            'fungsi_awal':self.delete_riwayat_pendidikan
-        }
-        fill_table(
-            table_name=self.tbl_daftar_keluarga, 
-            get_function=self.SQL.get_pendidikan_formal, 
-            get_params=get_params, 
-            table_params=table_params)
 
     def eventFilter(self, obj, event):
         if event.type() == QEvent.Wheel and isinstance(obj, QComboBox):
@@ -231,6 +175,7 @@ class DialogDetailGuru(QDialog, Ui_Form):
             (self.line_kel_desa, 'kel_desa'),
             (self.line_kecamatan, 'kecamatan'),
             (self.line_kab_kota, 'kab_kota'),
+            (self.line_provinsi, 'provinsi'),
             (self.cbo_jarak, 'jarak'),
             (self.cbo_transportasi, 'transportasi'),
             (self.cbo_waktu_tempuh, 'waktu_tempuh'),

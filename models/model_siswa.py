@@ -1,6 +1,12 @@
 from utils.database import ConnectDB
 # from utils.fungsi.db_functions import *
-from utils.fungsi.functions import tapel_berikutnya, measure_time
+from utils.fungsi.functions import (
+    build_in_clause,
+    measure_time,
+    tapel_berikutnya,
+    validate_sql_identifier,
+    validate_sql_order_by,
+)
 
 class Model_Siswa(ConnectDB):
     def __init__(self, database_name=None):
@@ -10,33 +16,85 @@ class Model_Siswa(ConnectDB):
                          status_awal='', status_akhir='',
                          search_by="Nama", search_text="", order_by='Nama'):
         order_by = self.opsi_order(order_by)
+        order_by = validate_sql_order_by(order_by)
         search_by = self.opsi_search(search_by)
+        search_by = validate_sql_identifier(search_by)
         sql = f"""  SELECT      id, nis_lokal, nama_lengkap, kelas FROM siswa_aktif
                     WHERE       jenjang = %s AND tapel = %s AND status_awal LIKE %s AND status_akhir LIKE %s AND {search_by} LIKE %s"""
-        if tingkat:sql += f" AND tingkat IN ({tingkat}) "
-        if kelas:sql += f" AND kelas IN ({kelas}) "
-        sql +=f" ORDER BY jenjang,tapel, tingkat, kelas, {order_by} "
-        params = (jenjang, tapel, f"%{status_awal}%",f"%{status_akhir}%", f"%{search_text}%")
-        return self.get_data(sql, params)      
+        params = [jenjang, tapel, f"%{status_awal}%", f"%{status_akhir}%", f"%{search_text}%"]
+        if tingkat:
+            placeholders, items = build_in_clause(tingkat)
+            if placeholders:
+                sql += f" AND tingkat IN ({placeholders}) "
+                params.extend(items)
+        if kelas:
+            placeholders, items = build_in_clause(kelas)
+            if placeholders:
+                sql += f" AND kelas IN ({placeholders}) "
+                params.extend(items)
+        sql += f" ORDER BY jenjang,tapel, tingkat, kelas, {order_by} "
+        return self.get_data(sql, tuple(params))      
 
 # BUKU INDUK
-    def get_all_siswa_aktif(self, search_by, search_text, order_by, opsi_kolom):
+    def get_all_siswa_aktif(self, search_by, search_text, order_by, opsi_kolom, opsi_data):
         search_by = self.opsi_search(search_by)
         order_by = self.opsi_order(order_by)
-        sql = f"""  SELECT      {opsi_kolom} FROM siswa 
-                    WHERE       {search_by} LIKE %s AND status_keaktifan = 'Aktif'
-                    ORDER BY    kelas_akhir, {order_by}"""
-        return self.get_data(sql, (f"%{search_text}%",))
+        opsi = opsi_data.lower()
+        if opsi == 'seluruh siswa aktif':
+            sql = f"""  SELECT      {opsi_kolom} FROM siswa 
+                        WHERE       {search_by} LIKE %s AND status_keaktifan = 'Aktif'
+                        ORDER BY    kelas_akhir, {order_by}"""
+            params = (f"%{search_text}%",)
+        elif opsi == 'siswa mi':
+            sql = f"""
+                SELECT      {opsi_kolom} FROM siswa
+                WHERE       {search_by} LIKE %s 
+                            AND status_keaktifan = 'Aktif'
+                            AND pilihan_jenjang LIKE '%MI%'
+                ORDER BY    kelas_akhir, {order_by}
+            """
+            params = (f"%{search_text}%",)
+        elif opsi == 'siswa md':
+            sql = f"""
+                SELECT      {opsi_kolom} FROM siswa
+                WHERE       {search_by} LIKE %s 
+                            AND status_keaktifan = 'Aktif'
+                            AND pilihan_jenjang LIKE '%MD%'
+                ORDER BY    kelas_akhir, {order_by}
+            """
+            params = (f"%{search_text}%",)
+        elif opsi == 'siswa mi saja':
+            sql = f"""
+                SELECT      {opsi_kolom} FROM siswa
+                WHERE       {search_by} LIKE %s 
+                            AND status_keaktifan = 'Aktif'
+                            AND pilihan_jenjang = 'MI Saja'
+                ORDER BY    kelas_akhir, {order_by}
+            """
+            params = (f"%{search_text}%",)
+        elif opsi == 'siswa md saja':
+            sql = f"""
+                SELECT      {opsi_kolom} FROM siswa
+                WHERE       {search_by} LIKE %s 
+                            AND status_keaktifan = 'Aktif'
+                            AND pilihan_jenjang = 'MD Saja'
+                ORDER BY    kelas_akhir, {order_by}
+            """
+            params = (f"%{search_text}%",)
+        return self.get_data(sql, params)
 
     def get_all_siswa(self, search_by, search_text, order_by, opsi_kolom):
         search_by = self.opsi_search(search_by)
         order_by = self.opsi_order(order_by)
         sql = f"""  SELECT      {opsi_kolom} FROM siswa 
                     WHERE       {search_by} LIKE %s 
-                    ORDER BY    kelas_akhir, {order_by} LIMIT 100"""
+                    ORDER BY    kelas_akhir, {order_by}"""
         return self.get_data(sql, (f"%{search_text}%",))
     
 # DAFTAR KELAS
+    def get_kolom_siswa(self):
+        return self.get_table_columns('siswa')
+    
     def get_daftar_kelas(self, jenjang, tapel, tingkat=None,  kelas=None, 
                          search_by=None, search=None, order_by=None, opsi_kolom=None):
         order_by = self.opsi_order(order_by)
@@ -46,22 +104,47 @@ class Model_Siswa(ConnectDB):
                     WHERE   jenjang = %s AND tapel = %s AND is_active = 'Ya' """
         params = [jenjang, tapel]
         if kelas:
-            sql += " AND kelas IN ({})".format(kelas)
+            placeholders, items = build_in_clause(kelas)
+            if placeholders:
+                sql += f" AND kelas IN ({placeholders})"
+                params.extend(items)
         if tingkat:
-            sql += " AND tingkat IN ({})".format(tingkat)
+            placeholders, items = build_in_clause(tingkat)
+            if placeholders:
+                sql += f" AND tingkat IN ({placeholders})"
+                params.extend(items)
         if search and search_by:
+            search_by = validate_sql_identifier(search_by)
             sql += " AND {} LIKE %s ".format(search_by)
             params.append(f'%{search}%')
+        order_by = validate_sql_order_by(order_by)
         sql += f" ORDER BY    jenjang, tapel, tingkat, kelas, {order_by}"
         return self.get_data(sql, tuple(params))
     
     def update_riwayat_siswa(self, id, nama_kolom, nilai):
         if nama_kolom == 'no':
             nama_kolom = 'no_urut'
+        nama_kolom = validate_sql_identifier(nama_kolom)
         return self.update_data(f"UPDATE siswa_riwayat SET {nama_kolom} = %s WHERE id = %s", (nilai, id))
     
     def update_biodata_siswa(self, nama_kolom, nilai, nis_lokal):
-        return self.update_data("UPDATE siswa SET {} = %s WHERE nis_lokal = %s".format(nama_kolom), (nilai, nis_lokal))
+        nama_kolom = validate_sql_identifier(nama_kolom)
+        return self.update_data(f"UPDATE siswa SET {nama_kolom} = %s WHERE nis_lokal = %s", (nilai, nis_lokal))
+
+    def update_no_urut(self, id, nilai):
+        sql = """UPDATE siswa_riwayat SET no_urut = %s WHERE id = %s"""
+        params = (nilai, id)
+        return self.update_data(sql, params)
+
+    def update_nis_kemenag(self, nis_lokal, nis_kemenag):
+        sql = """
+            UPDATE siswa
+            SET
+                nis_kemenag = %s
+            WHERE nis_lokal = %s
+        """
+        params = (nis_kemenag, nis_lokal)
+        return self.update_data(sql, params)
     
 ## REKAP SISWA
     def rekap_pertapel(self, jenjang):
@@ -82,15 +165,25 @@ class Model_Siswa(ConnectDB):
 ##  PINDAH KELAS
     def list_siswa_pindah_kelas(self, jenjang, tapel, tingkat, kelas, order_by, search_by, search_text=None, kolom=""):
         order_by = self.opsi_order(order_by)
+        order_by = validate_sql_order_by(order_by)
         search_by = self.opsi_search(search_by)
+        search_by = validate_sql_identifier(search_by)
         params = []
         sql = f"""  SELECT      tingkat, {kolom}
                     FROM        siswa_riwayat r 
                     INNER JOIN  siswa s ON s.nis_lokal = r.nis_lokal
                     WHERE       jenjang = %s AND tapel = %s AND r.is_active ='Ya' AND status_akhir ='Aktif' """
         params.extend([jenjang, tapel])
-        if tingkat:sql += f" AND tingkat = {tingkat} "
-        if kelas:sql += f" AND kelas = '{kelas}' "
+        if tingkat:
+            placeholders, items = build_in_clause(tingkat)
+            if placeholders:
+                sql += f" AND tingkat IN ({placeholders}) "
+                params.extend(items)
+        if kelas:
+            placeholders, items = build_in_clause(kelas)
+            if placeholders:
+                sql += f" AND kelas IN ({placeholders}) "
+                params.extend(items)
         if search_text and search_by:
             sql += f" AND {search_by} LIKE %s "
             params.append(f'%{search_text}%')
@@ -103,15 +196,25 @@ class Model_Siswa(ConnectDB):
 ##  MI ke MD   
     def get_mi_only(self, tapel, tingkat=None, kelas=None, order_by='Nama', search_by='Nama', search_text = None):
         order_by = self.opsi_order(order_by)
+        order_by = validate_sql_order_by(order_by)
         search_by = self.opsi_search(search_by)
+        search_by = validate_sql_identifier(search_by)
         sql = f"""  SELECT      r.id, r.nis_lokal, nama_lengkap, kelas, pilihan_jenjang
                     FROM        siswa_riwayat r
                     INNER JOIN  siswa s ON s.nis_lokal = r.nis_lokal
                     WHERE       jenjang = 'MI' AND tapel = %s AND r.is_active = 'Ya' AND r.nis_lokal NOT IN
                                 (SELECT     nr.nis_lokal FROM siswa_riwayat nr WHERE jenjang='MD' AND tapel = %s) """
         params = [tapel, tapel]
-        if tingkat:sql += f" AND tingkat IN ({tingkat}) "
-        if kelas:sql += f" AND kelas IN ({kelas}) "
+        if tingkat:
+            placeholders, items = build_in_clause(tingkat)
+            if placeholders:
+                sql += f" AND tingkat IN ({placeholders}) "
+                params.extend(items)
+        if kelas:
+            placeholders, items = build_in_clause(kelas)
+            if placeholders:
+                sql += f" AND kelas IN ({placeholders}) "
+                params.extend(items)
         if search_text and search_by:
             sql += f" AND {search_by} LIKE %s "
             params.append(f"%{search_text}%")
@@ -165,7 +268,9 @@ class Model_Siswa(ConnectDB):
 ##  MUTASI MASUK
     def daftar_calon_siswa(self, jenjang, tapel, opsi_kolom, search_by, search='', is_active='', order_by='Nama'):
         order_by = self.opsi_order(order_by)
+        order_by = validate_sql_order_by(order_by)
         search_by = self.opsi_search(search_by)
+        search_by = validate_sql_identifier(search_by)
         sql = """   SELECT {} FROM siswa_psb
                     WHERE       jenjang LIKE %s AND tapel LIKE %s  AND {} LIKE %s AND is_active LIKE %s 
                     ORDER BY    jenjang, tapel, is_active, {}""".format(opsi_kolom, search_by, order_by)
@@ -609,8 +714,9 @@ class Model_Siswa(ConnectDB):
         return self.get_data(sql, (nis_lokal,))
 
     def update_identitas_siswa(self, **data):
-        placeholders = ", ".join(["{} = %s".format(column) for column in data.keys()])
-        sql = "UPDATE siswa SET {} WHERE nis_lokal= %s".format(placeholders)
+        columns = [validate_sql_identifier(column) for column in data.keys()]
+        placeholders = ", ".join([f"{column} = %s" for column in columns])
+        sql = f"UPDATE siswa SET {placeholders} WHERE nis_lokal= %s"
         params = tuple(data.values()) + (data["nis_lokal"],)
         return self.update_data(sql, params)
     

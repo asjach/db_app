@@ -52,7 +52,7 @@ GURU = {
         FLOOR(DATEDIFF(CURDATE(), g.tmt_pegawai) / 365), ' tahun ',
         FLOOR((DATEDIFF(CURDATE(), g.tmt_pegawai) % 365) / 30), ' bulan') AS masa_kerja
     ''',
-
+    "custom": "*"
 }
 BUKU_INDUK= {
     "default": """nis_lokal, nama_lengkap, nama_singkat, no_urut as no, nisn, nik, 

@@ -1190,6 +1190,9 @@
            <property name="text">
             <string>Lengkap</string>
            </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
           </widget>
          </item>
          <item row="5" column="2">
@@ -1198,7 +1201,7 @@
             <string>Singkat</string>
            </property>
            <property name="checked">
-            <bool>true</bool>
+            <bool>false</bool>
            </property>
           </widget>
          </item>

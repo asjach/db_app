@@ -29,7 +29,7 @@ class PageMapel(QWidget, Ui_Form):
     def show_page(self):
         self.txt_jenjang = self.parent.str_jenjang
         self.txt_tapel = self.parent.cbo_tapel.currentText()
-        self.txt_tingkat = self.parent.not_quoted_tingkat
+        self.txt_tingkat = self.parent.str_tingkat
         self.txt_kelas = self.parent.str_kelas
         self.fill_cbo_guru()
         self.fill_cbo_kegiatan()
@@ -152,7 +152,7 @@ class PageMapel(QWidget, Ui_Form):
         table_selected(self.tbl_list_mapel, self, self.parent)
 
     def salin_dari_pas(self):
-        if self.cbo_kegiatan.currentText() == 'PAT':
+        if self.cbo_kegiatan.currentText() in ['PAT', 'ASAT', 'PSAT']:
             sukses = self.SQL.insert_by_kegiatan_mapel(
                 self.txt_jenjang,
                 self.txt_tapel,

@@ -556,12 +556,13 @@ class Ui_Form(object):
 
         self.lengkap_radio = QRadioButton(self.widget_3)
         self.lengkap_radio.setObjectName(u"lengkap_radio")
+        self.lengkap_radio.setChecked(True)
 
         self.gridLayout_2.addWidget(self.lengkap_radio, 5, 1, 1, 1)
 
         self.singkat_radio = QRadioButton(self.widget_3)
         self.singkat_radio.setObjectName(u"singkat_radio")
-        self.singkat_radio.setChecked(True)
+        self.singkat_radio.setChecked(False)
 
         self.gridLayout_2.addWidget(self.singkat_radio, 5, 2, 1, 1)
 

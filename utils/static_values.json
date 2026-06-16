@@ -105,13 +105,16 @@
     "KTP",
     "Ijazah",
     "Nilai Ijazah",
+    "Transkrip Nilai",
     "Foto",
+    "Foto Pas",
     "Surat",
     "Buku Rekening",
     "NPWP",
     "Kartu KIP",
     "Tanda Tangan",
-    "Tanda Tangan Rapor"
+    "Tanda Tangan Rapor",
+    "Sertifikat Pendidik"
   ],
   "TEMPLATE_KETERANGAN": {
     "Formulir": [
@@ -208,8 +211,23 @@
       "S3"
     ],
     "Nilai Ijazah": [
-      "JENJANG",
-      "Rapor"
+      "SD",
+      "MI",
+      "MD",
+      "MTs",
+      "SMP",
+      "MLN",
+      "MA",
+      "SMA"
+    ],
+        "Transkrip Nilai": [
+      "D1",
+      "D2",
+      "D3",
+      "D4",
+      "S1",
+      "S2",
+      "S3"
     ],
     "Foto": [
       "Pas",
@@ -699,7 +717,9 @@
     "UAS",
     "ASS",
     "ASAS",
-    "ASAT"
+    "ASAT",
+    "PSAS",
+    "PSAT"
   ],
   "UJIAN": [
     "UAP",

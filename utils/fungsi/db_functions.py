@@ -1,6 +1,6 @@
 from utils.database import ConnectDB
 from PySide6.QtWidgets import QMessageBox, QLineEdit, QComboBox, QPlainTextEdit, QLabel, QDoubleSpinBox
-from utils.fungsi.functions import text_to_date
+from utils.fungsi.functions import text_to_date, validate_sql_identifier
 
 def value_from_db(key):
     con = ConnectDB()
@@ -35,11 +35,11 @@ def delete_by_id(table_sql, id_name, id_value):
     msg.setText(f"Pilih \"Ya\" untuk menghapus data terpiilh\nID\t: {id_name} value: {id_value}")
     aksi = msg.exec()
     if aksi == QMessageBox.Ok:
-        if id_name == 'id':
-            sql = "DELETE FROM {} WHERE {} = {}".format(table_sql, id_name, id_value)
-        elif id_name in ['id_guru', 'nis_lokal']:
-            sql = "DELETE FROM {} WHERE {} = '{}'".format(table_sql, id_name, id_value)
-        return con.update_data(sql)
+        table_sql = validate_sql_identifier(table_sql)
+        id_name = validate_sql_identifier(id_name)
+        sql = "DELETE FROM {} WHERE {} = %s".format(table_sql, id_name)
+        params = (id_value,)
+        return con.update_data(sql, params)
     else:
         return False
     
@@ -48,7 +48,10 @@ def update_from_controls(tabel_sql, key_column, key_value, **data):
     if not data:
         raise ValueError("Tidak ada data untuk diperbarui.")
     con = ConnectDB()
-    placeholders = ", ".join([f"{column} = %s" for column in data.keys()])
+    tabel_sql = validate_sql_identifier(tabel_sql)
+    key_column = validate_sql_identifier(key_column)
+    columns = [validate_sql_identifier(column) for column in data.keys()]
+    placeholders = ", ".join([f"{column} = %s" for column in columns])
     sql = f"UPDATE {tabel_sql} SET {placeholders} WHERE {key_column} = %s"
     params = tuple(data.values()) + (key_value,)
     return con.update_data(sql, params)
@@ -75,6 +78,7 @@ def list_from_db(key, tipedata="str")->list:
 
 def get_field_list(table_name):
     con = ConnectDB()
+    table_name = validate_sql_identifier(table_name)
     sql = "DESCRIBE {}".format(table_name)
     data = con.get_data(sql)
     fields = [field['Field'] for field in data]

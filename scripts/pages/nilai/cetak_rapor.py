@@ -234,7 +234,7 @@ class PageCetakRapor(QWidget, Ui_Form):
         current_settings = json.dumps(self.nilai_setting())
         self.SQL.update_setting_rapor(self.cbo_kelas.currentData(), current_settings)
     
-    def show_pdf(self, limit=True):
+    def show_pdf(self, limit=1):
         id_kelas = self.cbo_kelas.currentData()
         id_kegiatan = self.cbo_kegiatan.currentData()
         nis_lokal = self.nis_lokal if self.nis_lokal else ''
@@ -257,8 +257,12 @@ class PageCetakRapor(QWidget, Ui_Form):
 
     def save_pdf(self):
         kelas = self.cbo_kelas.currentText()
-        namafile = f"rapor kelas {kelas}"
+        
+        namafile = f"Rapor Kelas {kelas} {self.parent.str_jenjang} Tapel {self.parent.cbo_tapel.currentText()}"
         save_pdf(self, self.pdf_data, namafile)
 
     def print_pdf(self):
         print_with_foxit(self.pdf_data, )
+
+    def kirim_wa(self):
+        ...

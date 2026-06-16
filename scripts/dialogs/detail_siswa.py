@@ -123,8 +123,7 @@ class DialogDetailSiswa(QDialog, Ui_Form):
         data = self.SQL.get_dokumen_path(nis_lokal)
         if data:
             for item in data:
-                folder = DIREKTORI_DOKUMEN
-                filepath = f"{folder}/siswa/{item['namafile']}"
+                filepath = str((DIREKTORI_DOKUMEN / "siswa" / item['namafile']).resolve())
                 combo.blockSignals(True)
                 combo.addItem(f'{item['jenis_dokumen']}', userData=filepath)
                 combo.blockSignals(False)
@@ -386,6 +385,7 @@ class DialogDetailSiswa(QDialog, Ui_Form):
             (self.pilihan_jenjang_cbo,"pilihan_jenjang"),
             (self.emis_cbo,"status_emis"),
             (self.vervalpd_cbo,"status_vervalpd"),
+            (self.plain_catatan, "catatan"),
         ]
 
     def fill_combobox(self):

@@ -74,8 +74,8 @@ class PageLihatDokumen(QWidget, Ui_Form):
 
     def tbl_daftar_dokumen_selected(self):
         table_selected(self.tbl_daftar_dokumen, self, self.parent)
-        target = self.cbo_target.currentText()
-        path = os.path.join(DIREKTORI_DOKUMEN, target, self.namafile)
+        target = self.cbo_target.currentText().lower()
+        path = str((DIREKTORI_DOKUMEN / target / self.namafile).resolve())
         self.show_dokumen(path)
 
     def show_dokumen(self, path):

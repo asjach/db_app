@@ -30,7 +30,7 @@ class PageMutasiKeluar(Ui_Form, QWidget):
         self._dynamic_attributs()
         self.fill_tabel_daftar_siswa()
         self.fill_tabel_siswa_keluar()
-    
+
     def fill_tabel_daftar_siswa(self):
         data = self.SQL.list_siswa_aktif(
             jenjang=self.parent.str_jenjang,
@@ -86,7 +86,7 @@ class PageMutasiKeluar(Ui_Form, QWidget):
             self.id,
         )
         self.show_page()
-    
+
     def update_from_tabel(self):
         params = {
             "tabel_ui": self.tbl_siswa_keluar,

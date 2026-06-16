@@ -15,57 +15,82 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QAbstractItemView, QApplication, QGridLayout, QHBoxLayout,
-    QHeaderView, QPlainTextEdit, QPushButton, QSizePolicy,
-    QTableWidget, QTableWidgetItem, QWidget)
+from PySide6.QtWidgets import (QAbstractItemView, QApplication, QGridLayout, QHeaderView,
+    QListView, QListWidget, QListWidgetItem, QPushButton,
+    QSizePolicy, QSplitter, QTableWidget, QTableWidgetItem,
+    QVBoxLayout, QWidget)
+
+from scripts.widgets.custom import DropPlainTextEdit
 
 class Ui_Form(object):
     def setupUi(self, Form):
         if not Form.objectName():
             Form.setObjectName(u"Form")
-        Form.resize(1105, 677)
+        Form.resize(1105, 738)
         self.gridLayout = QGridLayout(Form)
+        self.gridLayout.setSpacing(5)
         self.gridLayout.setObjectName(u"gridLayout")
-        self.gridLayout.setHorizontalSpacing(0)
-        self.gridLayout.setVerticalSpacing(5)
-        self.gridLayout.setContentsMargins(0, 0, 0, 0)
-        self.tbl_widget = QTableWidget(Form)
+        self.gridLayout.setContentsMargins(1, 1, 1, 1)
+        self.splitter = QSplitter(Form)
+        self.splitter.setObjectName(u"splitter")
+        self.splitter.setOrientation(Qt.Horizontal)
+        self.tbl_widget = QTableWidget(self.splitter)
         self.tbl_widget.setObjectName(u"tbl_widget")
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        sizePolicy.setHorizontalStretch(1)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.tbl_widget.sizePolicy().hasHeightForWidth())
+        self.tbl_widget.setSizePolicy(sizePolicy)
         self.tbl_widget.setLineWidth(0)
         self.tbl_widget.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.tbl_widget.setShowGrid(True)
+        self.splitter.addWidget(self.tbl_widget)
         self.tbl_widget.verticalHeader().setMinimumSectionSize(24)
         self.tbl_widget.verticalHeader().setDefaultSectionSize(24)
-
-        self.gridLayout.addWidget(self.tbl_widget, 1, 0, 1, 1)
-
-        self.widget_custom = QWidget(Form)
+        self.widget_custom = QWidget(self.splitter)
         self.widget_custom.setObjectName(u"widget_custom")
-        self.widget_custom.setMinimumSize(QSize(0, 60))
-        self.widget_custom.setMaximumSize(QSize(16777215, 60))
-        self.horizontalLayout = QHBoxLayout(self.widget_custom)
-        self.horizontalLayout.setSpacing(5)
-        self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
-        self.plain_custom = QPlainTextEdit(self.widget_custom)
-        self.plain_custom.setObjectName(u"plain_custom")
+        self.widget_custom.setMinimumSize(QSize(300, 0))
+        self.verticalLayout = QVBoxLayout(self.widget_custom)
+        self.verticalLayout.setSpacing(5)
+        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.verticalLayout.setContentsMargins(1, 1, 1, 1)
+        self.list_kolom = QListWidget(self.widget_custom)
+        self.list_kolom.setObjectName(u"list_kolom")
+        self.list_kolom.setAcceptDrops(False)
+        self.list_kolom.setDragEnabled(True)
+        self.list_kolom.setDragDropOverwriteMode(False)
+        self.list_kolom.setDragDropMode(QAbstractItemView.DragDrop)
+        self.list_kolom.setDefaultDropAction(Qt.MoveAction)
+        self.list_kolom.setResizeMode(QListView.Adjust)
+        self.list_kolom.setLayoutMode(QListView.Batched)
+        self.list_kolom.setSpacing(0)
+        self.list_kolom.setViewMode(QListView.IconMode)
+        self.list_kolom.setWordWrap(False)
+        self.list_kolom.setSelectionRectVisible(False)
 
-        self.horizontalLayout.addWidget(self.plain_custom)
+        self.verticalLayout.addWidget(self.list_kolom)
+
+        self.plain_custom = DropPlainTextEdit(self.widget_custom)
+        self.plain_custom.setObjectName(u"plain_custom")
+        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Expanding)
+        sizePolicy1.setHorizontalStretch(0)
+        sizePolicy1.setVerticalStretch(0)
+        sizePolicy1.setHeightForWidth(self.plain_custom.sizePolicy().hasHeightForWidth())
+        self.plain_custom.setSizePolicy(sizePolicy1)
+        self.plain_custom.setAcceptDrops(True)
+        self.plain_custom.setTextInteractionFlags(Qt.LinksAccessibleByMouse|Qt.TextEditable|Qt.TextEditorInteraction|Qt.TextSelectableByKeyboard|Qt.TextSelectableByMouse)
+
+        self.verticalLayout.addWidget(self.plain_custom)
 
         self.btn_preview = QPushButton(self.widget_custom)
         self.btn_preview.setObjectName(u"btn_preview")
-        sizePolicy = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Preferred)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.btn_preview.sizePolicy().hasHeightForWidth())
-        self.btn_preview.setSizePolicy(sizePolicy)
-        self.btn_preview.setMinimumSize(QSize(80, 0))
-        self.btn_preview.setMaximumSize(QSize(80, 16777215))
+        self.btn_preview.setMinimumSize(QSize(0, 40))
 
-        self.horizontalLayout.addWidget(self.btn_preview)
+        self.verticalLayout.addWidget(self.btn_preview)
 
+        self.splitter.addWidget(self.widget_custom)
 
-        self.gridLayout.addWidget(self.widget_custom, 0, 0, 1, 1)
+        self.gridLayout.addWidget(self.splitter, 0, 0, 1, 1)
 
 
         self.retranslateUi(Form)
@@ -75,6 +100,7 @@ class Ui_Form(object):
 
     def retranslateUi(self, Form):
         Form.setWindowTitle(QCoreApplication.translate("Form", u"Form", None))
-        self.btn_preview.setText(QCoreApplication.translate("Form", u"preview", None))
+        self.plain_custom.setPlainText("")
+        self.btn_preview.setText(QCoreApplication.translate("Form", u"Preview", None))
     # retranslateUi
 

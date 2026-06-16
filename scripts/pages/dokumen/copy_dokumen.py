@@ -76,7 +76,7 @@ class PageCopyDokumen(QWidget, Ui_Form):
         try:
             # Validasi input
             folder_tujuan = self.line_tujuan.text().strip()
-            folder_asal = os.path.join(DIREKTORI_DOKUMEN.strip(), self.cbo_target.currentText().lower())
+            folder_asal = str((DIREKTORI_DOKUMEN / self.cbo_target.currentText().lower()).resolve())
             
             if not folder_tujuan or not folder_asal:
                 raise ValueError("Folder asal atau tujuan tidak boleh kosong")

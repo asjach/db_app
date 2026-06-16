@@ -18,6 +18,8 @@ class PageInputNilai(QWidget, Ui_Form):
         super().__init__(parent)
         self.setupUi(self)
         self.parent = parent
+        self.last_jenjang = None
+        self.last_tapel = None
         # self.cbo_jenjang = self.parent.cbo_jenjang
         self.cbo_tapel = self.parent.cbo_tapel
         self.SQL = Model_Nilai()
@@ -36,8 +38,23 @@ class PageInputNilai(QWidget, Ui_Form):
         self.btn_browse.clicked.connect(self.browse_btn_clicked)
         self.btn_save.clicked.connect(self.save_btn_clicked)
 
-    def show_page(self): 
-        self.fill_kegiatan_cbo()
+    # def show_page(self): 
+    #     self.fill_kegiatan_cbo()
+    #     self.show_data_nilai_in_table()
+    def show_page(self):
+
+        current_jenjang = self.parent.str_jenjang
+        current_tapel = self.cbo_tapel.currentText()
+
+        if (
+            current_jenjang != self.last_jenjang
+            or current_tapel != self.last_tapel
+        ):
+            self.fill_kegiatan_cbo()
+
+            self.last_jenjang = current_jenjang
+            self.last_tapel = current_tapel
+
         self.show_data_nilai_in_table()
         
 # CBO KEGIATAN
@@ -72,7 +89,7 @@ class PageInputNilai(QWidget, Ui_Form):
 
 # TEMPLATE NILAI
     def btn_template_nilai_clicked(self):
-        jenjang = self.parent.cbo_jenjang.currentText()
+        jenjang = self.parent.str_jenjang
         data_siswa = self.get_data_siswa()
         if self.pte_default_path.toPlainText() !=  '':
             if jenjang == 'MI':
@@ -112,26 +129,33 @@ class PageInputNilai(QWidget, Ui_Form):
         
     def get_rekap_nilai(self):
         list_kelas = self.parent.str_kelas
-        list_tingkat = self.parent.not_quoted_tingkat
+        list_tingkat = self.parent.str_tingkat
         jenjang = self.parent.str_jenjang
         tapel = self.cbo_tapel.currentText()
         tingkat = list_tingkat
         kelas = list_kelas
         kegiatan = self.cbo_kegiatan.currentText()
         data_mapel = self.SQL.get_list_mapel(jenjang, tapel, kegiatan, tingkat, kelas, )
-        print(data_mapel)
         if data_mapel:
             mapel_list = [mapel['mapel'] for mapel in data_mapel]
             kolom_mapel = ", ".join([f"MAX(CASE WHEN mapel = '{mapel}' THEN nilai END) AS `{mapel}`" for mapel in mapel_list])
         else:
             kolom_mapel = ""
-        data = self.SQL.get_nilai_by_kegiatan(kolom_mapel, jenjang, tapel, tingkat, kelas, kegiatan)
+        data = self.SQL.get_nilai_by_kegiatan(
+            kolom_mapel=kolom_mapel, 
+            jenjang=jenjang, 
+            tapel=tapel, 
+            tingkat=tingkat, 
+            kelas=kelas, 
+            kegiatan=kegiatan, 
+            order=self.parent.cbo_order_by.currentText(), 
+            opsi_nama='lengkap')
         generate_table(data=data,table=self.input_tbl)
 
     def get_rekap_catatan(self):
         jenjang = self.parent.str_jenjang
         tapel = self.cbo_tapel.currentText()
-        tingkat = self.parent.not_quoted_tingkat
+        tingkat = self.parent.str_tingkat
         kelas = self.parent.str_kelas
         kegiatan = self.cbo_kegiatan.currentText()
         data = self.SQL.get_catatan_by_kegiatan(jenjang, tapel, tingkat, kelas, kegiatan)
@@ -140,7 +164,7 @@ class PageInputNilai(QWidget, Ui_Form):
     def get_rekap_nilai_catatan(self):
         jenjang = self.parent.str_jenjang
         tapel = self.cbo_tapel.currentText()
-        tingkat = self.parent.not_quoted_tingkat
+        tingkat = self.parent.str_tingkat
         kelas = self.parent.str_kelas
         kegiatan = self.cbo_kegiatan.currentText()
         data_mapel = self.SQL.get_list_mapel(jenjang, tapel, kegiatan, tingkat, kelas, )
@@ -308,10 +332,18 @@ class PageInputNilai(QWidget, Ui_Form):
                 )
 
             # Apply conditional formatting
-            for col_name in additional_columns:
-                col_idx = all_columns.index(col_name) + 1
-                col_letter = get_column_letter(col_idx)
-                ws.conditional_formatting.add(f"{col_letter}2:{col_letter}{len(df_kelas) + 1}", red_rule)
+            if not df_kelas.empty:
+
+                start_row = 2
+                end_row = len(df_kelas) + 1
+
+                for col_name in additional_columns:
+                    col_idx = all_columns.index(col_name) + 1
+                    col_letter = get_column_letter(col_idx)
+
+                    range_cf = f"{col_letter}{start_row}:{col_letter}{end_row}"
+
+                    ws.conditional_formatting.add(range_cf, red_rule)
 
             # Adjust column widths
             for col_idx, col_name in enumerate(all_columns, start=1):
@@ -412,10 +444,18 @@ class PageInputNilai(QWidget, Ui_Form):
                 )
 
             # Apply conditional formatting
-            for col_name in additional_columns:
-                col_idx = all_columns.index(col_name) + 1
-                col_letter = get_column_letter(col_idx)
-                ws.conditional_formatting.add(f"{col_letter}2:{col_letter}{len(df_kelas) + 1}", red_rule)
+            if not df_kelas.empty:
+
+                start_row = 2
+                end_row = len(df_kelas) + 1
+
+                for col_name in additional_columns:
+                    col_idx = all_columns.index(col_name) + 1
+                    col_letter = get_column_letter(col_idx)
+
+                    range_cf = f"{col_letter}{start_row}:{col_letter}{end_row}"
+
+                    ws.conditional_formatting.add(range_cf, red_rule)
 
             # Adjust column widths
             for col_idx, col_name in enumerate(all_columns, start=1):
@@ -440,8 +480,8 @@ class PageInputNilai(QWidget, Ui_Form):
 
         # Define columns
         base_columns = ["no_urut", "nis_lokal", "nama_lengkap", "kelas"]
-        additional_columns = ['sakit', 'ijin', 'alpa', 'catatan_walas']
-        if kegiatan == 'PAT':
+        additional_columns = ['sakit', 'ijin', 'alpa', 'catatan_walas', 'ekskul1', 'ekskul2', 'ekskul3', 'ekskul4', 'ekskul5']
+        if kegiatan in ['PAT', 'ASAT', 'PSAT', 'UKK']:
             additional_columns.append('status_naik')
         all_columns = base_columns + additional_columns
 
@@ -495,7 +535,7 @@ class PageInputNilai(QWidget, Ui_Form):
                     )
 
             # Add data validation for status_naik if applicable
-            if kegiatan == 'PAT':
+            if kegiatan in ['PAT', 'ASAT', 'PSAT', 'UKK']:
                 status_col_idx = all_columns.index('status_naik') + 1
                 status_col_letter = get_column_letter(status_col_idx)
                 dv = DataValidation(type="list", formula1='"Naik,Tidak Naik"', allow_blank=True)
@@ -524,9 +564,10 @@ class PageInputNilai(QWidget, Ui_Form):
         kegiatan = self.cbo_kegiatan.currentText()
         kolom = ["id_kelas", "id_kegiatan", "no_urut", "id_peserta", "nis_lokal", "nama_lengkap", "kelas"]
         list_of_dict_mapel = self.SQL.get_list_mapel(jenjang, tapel, kegiatan, '', '')
+        kolom_ekskul = self.SQL.all_ekskul()
         merge_mapel = list(dict.fromkeys(d['mapel'] for d in list_of_dict_mapel))
-        kolom_tambahan = merge_mapel + ['rata_rata', 'jumlah', 'ranking', 'sakit', 'ijin', 'alpa', 'ranking', 'catatan_walas']
-        if kegiatan in ['PAT']:
+        kolom_tambahan = merge_mapel + ['rata_rata', 'jumlah', 'ranking', 'sakit', 'ijin', 'alpa', 'ranking', 'catatan_walas'] + kolom_ekskul
+        if kegiatan in ['PAT', 'ASAT', 'PSAT', 'UKK']:
             kolom_tambahan = kolom_tambahan + ['status_naik']
         df = pd.DataFrame(data, columns=kolom)
         for col in kolom_tambahan:
@@ -563,86 +604,252 @@ class PageInputNilai(QWidget, Ui_Form):
         wb.save(filename)
         open_in_explorer(filename)
 
+
     def save_operation(self, data):
         MAPEL_NILAI = self.SQL.all_mapel()
+        EKSKUL_FIELDS = self.SQL.all_ekskul()
         KEGIATAN_FIELDS = ['no_urut', 'sakit', 'ijin', 'alpa', 'catatan_walas', 'ranking', 'status_naik']
-        nilai_keys = [(row['id_peserta'], mapel) for row in data for mapel in MAPEL_NILAI if mapel in row]
-        existing_nilai_dict = self.SQL.cek_nilai_bulk(nilai_keys)
+        VALID_EKSKUL = {'A', 'B', 'C', 'D', 'E', 'F'}
+
+        # ====== PREPARE KEYS ======
+        nilai_keys = [
+            (row['id_peserta'], mapel)
+            for row in data for mapel in MAPEL_NILAI if mapel in row
+        ]
+
+        ekskul_keys = [
+            (row['id_peserta'], ekskul)
+            for row in data for ekskul in EKSKUL_FIELDS if ekskul in row
+        ]
+
         peserta_keys = [row['id_peserta'] for row in data]
+
+        existing_nilai_dict = self.SQL.cek_nilai_bulk(nilai_keys)
+        existing_ekskul_dict = self.SQL.cek_ekskul_bulk(ekskul_keys)
         existing_peserta_dict = self.SQL.cek_peserta_bulk(peserta_keys)
+
         insert_nilai_data = []
         update_nilai_data = []
+        insert_ekskul_data = []
+        update_ekskul_data = []
         insert_peserta_data = []
         update_peserta_data = []
+
+        # ====== PROCESS DATA ======
         for row in data:
             id_peserta = int(row['id_peserta'])
             id_kelas = int(row['id_kelas'])
             id_kegiatan = int(row['id_kegiatan'])
-            mapel_keys = [key for key in row.keys() if key in MAPEL_NILAI]
-            for nama_mapel in mapel_keys:
+
+            # ========================
+            # NILAI MAPEL
+            # ========================
+            for nama_mapel in (k for k in row if k in MAPEL_NILAI):
                 nilai = row[nama_mapel]
+
                 if isinstance(nilai, str):
                     nilai = nilai.strip()
-                if not nilai or nilai == '':
+
+                if not nilai:
                     nilai = None
                 else:
                     try:
-                        nilai = float(str(nilai))
+                        nilai = float(nilai)
                     except ValueError:
                         nilai = None
-                nilai_key = (id_peserta, nama_mapel)
-                if nilai_key in existing_nilai_dict:
-                    id, nilai_db = existing_nilai_dict[nilai_key]
+
+                key = (id_peserta, nama_mapel)
+
+                if key in existing_nilai_dict:
+                    id_db, nilai_db = existing_nilai_dict[key]
                     if nilai != nilai_db:
-                        update_nilai_data.append((nilai, id))
+                        update_nilai_data.append((nilai, id_db))
                 else:
                     insert_nilai_data.append((id_peserta, nama_mapel, nilai))
-            
-            peserta_data = {field: row.get(field) for field in KEGIATAN_FIELDS}
-            peserta_key = id_peserta
-            
-            if peserta_key in existing_peserta_dict:
-                existing_data = existing_peserta_dict[peserta_key]
-                if any(peserta_data[field] != existing_data[field] for field in KEGIATAN_FIELDS):
+
+            # ========================
+            # NILAI EKSKUL (EXCEL)
+            # ========================
+            ekskul_values = {}
+
+            for nama_ekskul in EKSKUL_FIELDS:
+                if nama_ekskul not in row:
+                    continue
+
+                predikat = row[nama_ekskul]
+
+                if isinstance(predikat, str):
+                    predikat = predikat.strip().upper()
+
+                if predikat in VALID_EKSKUL:
+                    ekskul_values[nama_ekskul] = predikat
+
+            # insert/update hanya jika ada minimal 1 nilai ekskul
+            if ekskul_values:
+                for nama_ekskul, predikat in ekskul_values.items():
+                    key = (id_peserta, nama_ekskul)
+
+                    if key in existing_ekskul_dict:
+                        id_db, nilai_db = existing_ekskul_dict[key]
+                        if predikat != nilai_db:
+                            update_ekskul_data.append((predikat, id_db))
+                    else:
+                        insert_ekskul_data.append(
+                            (id_peserta, nama_ekskul, predikat)
+                        )
+
+            # ========================
+            # DATA KEGIATAN PESERTA
+            # ========================
+            peserta_data = {f: row.get(f) for f in KEGIATAN_FIELDS}
+
+            if id_peserta in existing_peserta_dict:
+                existing = existing_peserta_dict[id_peserta]
+                if any(peserta_data[f] != existing[f] for f in KEGIATAN_FIELDS):
                     update_peserta_data.append((
-                        peserta_data['no_urut'], 
-                        peserta_data['sakit'], 
+                        peserta_data['no_urut'],
+                        peserta_data['sakit'],
                         peserta_data['ijin'],
-                        peserta_data['alpa'], 
-                        peserta_data['catatan_walas'], 
+                        peserta_data['alpa'],
+                        peserta_data['catatan_walas'],
                         peserta_data['ranking'],
                         peserta_data['status_naik'],
                         id_peserta
                     ))
             else:
                 insert_peserta_data.append((
-                    id_peserta, id_kelas, id_kegiatan,
-                    peserta_data['no_urut'], 
-                    peserta_data['sakit'], 
+                    id_peserta,
+                    id_kelas,
+                    id_kegiatan,
+                    peserta_data['no_urut'],
+                    peserta_data['sakit'],
                     peserta_data['ijin'],
-                    peserta_data['alpa'], 
+                    peserta_data['alpa'],
                     peserta_data['catatan_walas'],
                     peserta_data['ranking'],
-                    peserta_data['status_naik'],
+                    peserta_data['status_naik']
                 ))
-        pesan_insert_nilai = ''
-        pesan_update_nilai = ''
-        pesan_insert_peserta = ''
-        pesan_update_peserta = ''
+
+        # ====== EXECUTE BULK QUERY ======
+        pesan = []
+
         if insert_nilai_data:
             self.SQL.insert_nilai_bulk(insert_nilai_data)
-            pesan_insert_nilai = f"Bulk inserted {len(insert_nilai_data)} records to nilai_angka"
+            pesan.append(f"Bulk inserted {len(insert_nilai_data)} records to nilai_angka")
+
         if update_nilai_data:
             self.SQL.update_nilai_bulk(update_nilai_data)
-            pesan_update_nilai = f"Bulk updated {len(update_nilai_data)} records in nilai_angka"
+            pesan.append(f"Bulk updated {len(update_nilai_data)} records in nilai_angka")
+
+        if insert_ekskul_data:
+            self.SQL.insert_ekskul_bulk(insert_ekskul_data)
+            pesan.append(f"Bulk inserted {len(insert_ekskul_data)} records to nilai_ekskul")
+
+        if update_ekskul_data:
+            self.SQL.update_ekskul_bulk(update_ekskul_data)
+            pesan.append(f"Bulk updated {len(update_ekskul_data)} records in nilai_ekskul")
+
         if insert_peserta_data:
             self.SQL.insert_peserta_bulk(insert_peserta_data)
-            pesan_insert_peserta = f"Bulk inserted {len(insert_peserta_data)} records to kegiatan_peserta"
+            pesan.append(f"Bulk inserted {len(insert_peserta_data)} records to kegiatan_peserta")
+
         if update_peserta_data:
             self.SQL.update_peserta_bulk(update_peserta_data)
-            pesan_update_peserta = f"Bulk updated {len(update_peserta_data)} records in kegiatan_peserta"
+            pesan.append(f"Bulk updated {len(update_peserta_data)} records in kegiatan_peserta")
+
         pesan_sukses(
             judul="Berhasil Insert Data",
-            pesan=f'{pesan_insert_nilai}\n{pesan_update_nilai}\n{pesan_insert_peserta}\n{pesan_update_peserta}'
+            pesan="\n".join(pesan)
         )
+
         self.show_page()
+
+
+    # def save_operation(self, data):
+    #     MAPEL_NILAI = self.SQL.all_mapel()
+    #     KEGIATAN_FIELDS = ['no_urut', 'sakit', 'ijin', 'alpa', 'catatan_walas', 'ranking', 'status_naik']
+    #     EKSKUL_FIELDS = self.SQL.all_ekskul()
+    #     nilai_keys = [(row['id_peserta'], mapel) for row in data for mapel in MAPEL_NILAI if mapel in row]
+    #     ekskul_keys = [(row['id_peserta'], ekskul) for row in data for ekskul in EKSKUL_FIELDS if ekskul in row]
+    #     existing_nilai_dict = self.SQL.cek_nilai_bulk(nilai_keys)
+    #     existing_ekskul_dict = self.SQL.cek_ekskul_bulk(ekskul_keys)
+    #     peserta_keys = [row['id_peserta'] for row in data]
+    #     existing_peserta_dict = self.SQL.cek_peserta_bulk(peserta_keys)
+    #     insert_nilai_data = []
+    #     update_nilai_data = []
+    #     insert_ekskul_data = []
+    #     update_ekskul_data = []
+    #     insert_peserta_data = []
+    #     update_peserta_data = []
+    #     for row in data:
+    #         id_peserta = int(row['id_peserta'])
+    #         id_kelas = int(row['id_kelas'])
+    #         id_kegiatan = int(row['id_kegiatan'])
+    #         mapel_keys = [key for key in row.keys() if key in MAPEL_NILAI]
+    #         for nama_mapel in mapel_keys:
+    #             nilai = row[nama_mapel]
+    #             if isinstance(nilai, str):
+    #                 nilai = nilai.strip()
+    #             if not nilai or nilai == '':
+    #                 nilai = None
+    #             else:
+    #                 try:
+    #                     nilai = float(str(nilai))
+    #                 except ValueError:
+    #                     nilai = None
+    #             nilai_key = (id_peserta, nama_mapel)
+    #             if nilai_key in existing_nilai_dict:
+    #                 id, nilai_db = existing_nilai_dict[nilai_key]
+    #                 if nilai != nilai_db:
+    #                     update_nilai_data.append((nilai, id))
+    #             else:
+    #                 insert_nilai_data.append((id_peserta, nama_mapel, nilai))
+            
+    #         peserta_data = {field: row.get(field) for field in KEGIATAN_FIELDS}
+    #         peserta_key = id_peserta
+            
+    #         if peserta_key in existing_peserta_dict:
+    #             existing_data = existing_peserta_dict[peserta_key]
+    #             if any(peserta_data[field] != existing_data[field] for field in KEGIATAN_FIELDS):
+    #                 update_peserta_data.append((
+    #                     peserta_data['no_urut'], 
+    #                     peserta_data['sakit'], 
+    #                     peserta_data['ijin'],
+    #                     peserta_data['alpa'], 
+    #                     peserta_data['catatan_walas'], 
+    #                     peserta_data['ranking'],
+    #                     peserta_data['status_naik'],
+    #                     id_peserta
+    #                 ))
+    #         else:
+    #             insert_peserta_data.append((
+    #                 id_peserta, id_kelas, id_kegiatan,
+    #                 peserta_data['no_urut'], 
+    #                 peserta_data['sakit'], 
+    #                 peserta_data['ijin'],
+    #                 peserta_data['alpa'], 
+    #                 peserta_data['catatan_walas'],
+    #                 peserta_data['ranking'],
+    #                 peserta_data['status_naik'],
+    #             ))
+    #     pesan_insert_nilai = ''
+    #     pesan_update_nilai = ''
+    #     pesan_insert_peserta = ''
+    #     pesan_update_peserta = ''
+    #     if insert_nilai_data:
+    #         self.SQL.insert_nilai_bulk(insert_nilai_data)
+    #         pesan_insert_nilai = f"Bulk inserted {len(insert_nilai_data)} records to nilai_angka"
+    #     if update_nilai_data:
+    #         self.SQL.update_nilai_bulk(update_nilai_data)
+    #         pesan_update_nilai = f"Bulk updated {len(update_nilai_data)} records in nilai_angka"
+    #     if insert_peserta_data:
+    #         self.SQL.insert_peserta_bulk(insert_peserta_data)
+    #         pesan_insert_peserta = f"Bulk inserted {len(insert_peserta_data)} records to kegiatan_peserta"
+    #     if update_peserta_data:
+    #         self.SQL.update_peserta_bulk(update_peserta_data)
+    #         pesan_update_peserta = f"Bulk updated {len(update_peserta_data)} records in kegiatan_peserta"
+    #     pesan_sukses(
+    #         judul="Berhasil Insert Data",
+    #         pesan=f'{pesan_insert_nilai}\n{pesan_update_nilai}\n{pesan_insert_peserta}\n{pesan_update_peserta}'
+    #     )
+    #     self.show_page()

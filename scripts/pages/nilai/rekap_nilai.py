@@ -82,7 +82,7 @@ class PageRekapNilai(Ui_Form, QWidget):
             raise ValueError("Parent widget is required for initialization")
             
         # self.cbo_jenjang = self.parent.cbo_jenjang
-        self.cbo_tapel = self.parent.cbo_tapel
+        # self.cbo_tapel = self.parent.cbo_tapel
         # self.cbo_tingkat = self.parent.cbo_tingkat
         # self.cbo_kelas = self.parent.cbo_kelas
         
@@ -147,6 +147,8 @@ class PageRekapNilai(Ui_Form, QWidget):
         self.pertama_radio.clicked.connect(self.opsi_selected)
         self.tiga_besar_radio.clicked.connect(self.opsi_selected)
         self.perkelas_radio.clicked.connect(self.opsi_selected)
+        self.lengkap_radio.clicked.connect(self.opsi_selected)
+        self.singkat_radio.clicked.connect(self.opsi_selected)
 
     def _create_default_settings(self) -> Dict[str, Any]:
         """Create default settings dictionary"""
@@ -183,26 +185,13 @@ class PageRekapNilai(Ui_Form, QWidget):
             logger.error(f"Failed to show page: {str(e)}")
 
     def fill_kegiatan_tbl(self):
-        """Populate activities table with data"""
-        try:
-            current_tapel = self.cbo_tapel.currentText()
-            if not current_tapel:
-                raise ValueError("Tahun pelajaran tidak valid")
-                
-            data = self.SQL.get_kegiatan_riwayat(current_tapel)
-            if not data:
-                logger.warning("No activity data found for current tapel")
-                return
-                
-            generate_table(
+        data, nama_kolom = self.SQL.get_kegiatan_riwayat(self.parent.cbo_tapel.currentText())   
+        generate_table(
                 data=data,
                 table=self.kegiatan_tbl,
                 hidden_column=[0,5],
                 stretch_column=4,
             )
-        except Exception as e:
-            logger.error(f"Failed to fill kegiatan table: {str(e)}")
-            raise
 
     def kegiatan_tbl_selected(self):
         """Handle selection change in activities table"""
@@ -527,7 +516,7 @@ class PageRekapNilai(Ui_Form, QWidget):
                 f"MAX(CASE WHEN mapel = '{mapel}' THEN nilai END) AS `{mapel}`" 
                 for mapel in mapel_list
             )
-            
+            nama = 'lengkap' if self.lengkap_radio.isChecked() else 'ringkas'
             return self.SQL.get_nilai_by_kegiatan(
                 kolom_mapel, 
                 self.jenjang, 
@@ -535,7 +524,8 @@ class PageRekapNilai(Ui_Form, QWidget):
                 self.tingkat, 
                 self.kelas, 
                 self.kegiatan, 
-                self.parent.cbo_order_by.currentText()
+                self.parent.cbo_order_by.currentText(), 
+                nama
             )
         except Exception as e:
             logger.error(f"Failed to get grade summary: {str(e)}")

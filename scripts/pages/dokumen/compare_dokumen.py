@@ -139,9 +139,8 @@ class PageCompareDokumen(QWidget, Ui_Form):
         data_dokumen = self.cbo_daftar_dokumen.currentData()
         if data_dokumen and isinstance(data_dokumen, dict):
             namafile = data_dokumen.get('namafile', '')
-            dokumen_path = DIREKTORI_DOKUMEN
-            if namafile and dokumen_path:
-                path = f"{dokumen_path}/{target}/{namafile}"
+            if namafile:
+                path = str((DIREKTORI_DOKUMEN / target / namafile).resolve())
                 self.dokumen_viewer1.loadFile(path)
             else:
                 self.dokumen_viewer1.close_file()
@@ -228,7 +227,7 @@ class PageCompareDokumen(QWidget, Ui_Form):
         jenis_dokumen = self.cbo_jenis_dokumen.currentText()
         keterangan = self.cbo_opsi_keterangan.currentText()
         namafile = create_namafile2(nama_lengkap, nomor_induk, jenis_dokumen, keterangan, source_path)
-        dest_folder = f"{DIREKTORI_DOKUMEN}/{self.cbo_target.currentText().lower()}"
+        dest_folder = str((DIREKTORI_DOKUMEN / self.cbo_target.currentText().lower()).resolve())
         dest_path = os.path.normpath(os.path.join(dest_folder, namafile))
         
         sukses = False

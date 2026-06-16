@@ -77,6 +77,7 @@ class Ui_Form(object):
 
         self.widget_3 = QWidget(self.widget_2)
         self.widget_3.setObjectName(u"widget_3")
+        self.widget_3.setMaximumSize(QSize(500, 16777215))
         self.gridLayout_3 = QGridLayout(self.widget_3)
         self.gridLayout_3.setObjectName(u"gridLayout_3")
         self.gridLayout_3.setContentsMargins(0, 0, 0, 0)

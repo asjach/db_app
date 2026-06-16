@@ -65,6 +65,8 @@ class PageAdmGuru(QWidget, Ui_Form):
             cbo.currentIndexChanged.connect(self.start_timer)
         for radio in self.radio:
             radio.toggled.connect(self.start_timer)
+        self.line_txt_kelas.textChanged.connect(self.start_timer)
+        self.cbo_kelas.activated.connect(self.cbo_kelas_selected)
         self.btn_print.clicked.connect(self.print_pdf)
         self.btn_save_pdf.clicked.connect(self.save_pdf)
 
@@ -95,7 +97,8 @@ class PageAdmGuru(QWidget, Ui_Form):
         )
         populate_combobox(cbo_widget=self.cbo_guru,data=data_guru)
         
-    @measure_time
+    def cbo_kelas_selected(self):
+        self.line_txt_kelas.setText(self.cbo_kelas.currentText())
     def generated_pdf(self):
         data_siswa = self.MODEL.get_daftar_nama_siswa(
             jenjang=self.parent.str_jenjang,
@@ -149,7 +152,7 @@ class PageAdmGuru(QWidget, Ui_Form):
             'jenjang': self.parent.str_jenjang,
             'tapel': self.parent.str_tapel,
             'semester': self.cbo_semester.currentText(),
-            'kelas': self.cbo_kelas.currentText(),
+            'kelas': self.line_txt_kelas.text(),
             'data_siswa': data_siswa
         }
         
