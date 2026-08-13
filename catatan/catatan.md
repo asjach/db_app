@@ -1,26 +1,34 @@
 # Windows
+membuat env: `python -m venv venv`
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+aktiviasi env: `venv\Scripts\activate.ps1`
+eksekuasi: `python app.py`
 
 # Linux
+membuat env: `python -m venv lvenv`
+aktiviasi env: `source lvenv/bin/activate.fish` atau `. lvenv/bin/activate.fish`
+eksekuasi: `python app.py`
 
 # MacOs
+membuat env: `python -m venv mvenv`
+aktivasi env: `source mvenv/bin/activate`
+eksekuasi: 
 
 
 
 
-python -m venv venv
-python -m venv lvenv
-Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
-yay
-windows: `venv\Scripts\activate.ps1`
-linux di fish: `source lvenv/bin/activate.fish` atau `. lvenv/bin/activate.fish`
-
-pip install pandas mysql-connector-python PySide6 openpyxl Send2Trash dotenv reportlab PyPDF2 PyMuPDF
+# Packages:
+`pip install pandas mysql-connector-python PySide6 openpyxl Send2Trash dotenv reportlab PyPDF2 PyMuPDF`
 
 pip freeze > requirements.txt
 pip install -r requirements.txt
 
-## convert ui to py
 
+# convert resources
+pyside6-rcc -o resources_rc.py resources.qrc
+
+
+## convert ui to py
 pyside6-uic -o ui/ui_main.py ui/sources/main.ui
 pyside6-uic -o ui/ui_widgets.py ui/sources/widgets.ui
 pyside6-uic -o ui/ui_main_2.py ui/sources/main_2.ui
@@ -86,5 +94,4 @@ pyside6-uic -o ui/ui_dialog_static_values.py ui/sources/dialog_static_values.ui
 pyside6-uic -o ui/ui_widget_image_viewer.py ui/sources/widget_image_viewer.ui
 pyside6-uic -o ui/ui_widget_dokumen_viewer.py ui/sources/widget_dokumen_viewer.ui
 
-# convert resources
-pyside6-rcc -o resources_rc.py resources.qrc
+
