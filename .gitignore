@@ -91,6 +91,8 @@ ENV/
 .venv/
 env.bak/
 venv.bak/
+lvenv/
+mvenv/
 
 # Environment files
 .env
