@@ -13,6 +13,7 @@ eksekuasi: `python app.py`
 membuat env: `python -m venv mvenv`
 aktivasi env: `source mvenv/bin/activate`
 eksekuasi: `python3 app.py`
+test
 
 
 
