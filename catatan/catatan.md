@@ -10,7 +10,7 @@ aktiviasi env: `source lvenv/bin/activate.fish` atau `. lvenv/bin/activate.fish`
 eksekuasi: `python app.py`
 
 # MacOs
-membuat env: `python -m venv mvenv`
+membuat env: `python3 -m venv mvenv`
 aktivasi env: `source mvenv/bin/activate`
 eksekuasi: `python3 app.py`
 test
