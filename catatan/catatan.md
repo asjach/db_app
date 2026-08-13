@@ -1,3 +1,12 @@
+# Windows
+
+# Linux
+
+# MacOs
+
+
+
+
 python -m venv venv
 python -m venv lvenv
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
