@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'page_rekap_nilai.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.8.2
+## Created by: Qt User Interface Compiler version 6.11.1
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -24,7 +24,7 @@ class Ui_Form(object):
     def setupUi(self, Form):
         if not Form.objectName():
             Form.setObjectName(u"Form")
-        Form.resize(959, 853)
+        Form.resize(1010, 853)
         self.gridLayout = QGridLayout(Form)
         self.gridLayout.setObjectName(u"gridLayout")
         self.gridLayout.setHorizontalSpacing(5)
@@ -589,6 +589,12 @@ class Ui_Form(object):
         self.gridLayout_16.setSpacing(5)
         self.gridLayout_16.setObjectName(u"gridLayout_16")
         self.gridLayout_16.setContentsMargins(5, 5, 5, 5)
+        self.btn_save = QPushButton(self.widget_16)
+        self.btn_save.setObjectName(u"btn_save")
+        self.btn_save.setMinimumSize(QSize(0, 40))
+
+        self.gridLayout_16.addWidget(self.btn_save, 1, 0, 1, 1)
+
         self.radio_auto_open = QRadioButton(self.widget_16)
         self.radio_auto_open.setObjectName(u"radio_auto_open")
         self.radio_auto_open.setChecked(True)
@@ -602,17 +608,17 @@ class Ui_Form(object):
 
         self.gridLayout_16.addWidget(self.btn_print, 1, 2, 1, 1)
 
-        self.btn_save = QPushButton(self.widget_16)
-        self.btn_save.setObjectName(u"btn_save")
-        self.btn_save.setMinimumSize(QSize(0, 40))
-
-        self.gridLayout_16.addWidget(self.btn_save, 1, 0, 1, 1)
-
         self.btn_excel = QPushButton(self.widget_16)
         self.btn_excel.setObjectName(u"btn_excel")
         self.btn_excel.setMinimumSize(QSize(0, 40))
 
         self.gridLayout_16.addWidget(self.btn_excel, 1, 1, 1, 1)
+
+        self.btn_send_wa = QPushButton(self.widget_16)
+        self.btn_send_wa.setObjectName(u"btn_send_wa")
+        self.btn_send_wa.setMinimumSize(QSize(0, 40))
+
+        self.gridLayout_16.addWidget(self.btn_send_wa, 1, 3, 1, 1)
 
 
         self.gridLayout_5.addWidget(self.widget_16, 7, 0, 1, 1)
@@ -700,9 +706,10 @@ class Ui_Form(object):
         self.lengkap_radio.setText(QCoreApplication.translate("Form", u"Lengkap", None))
         self.singkat_radio.setText(QCoreApplication.translate("Form", u"Singkat", None))
         self.label_13.setText(QCoreApplication.translate("Form", u"Ukuran Font", None))
+        self.btn_save.setText(QCoreApplication.translate("Form", u"Save PDF", None))
         self.radio_auto_open.setText(QCoreApplication.translate("Form", u"Buka Otomatis File PDF", None))
         self.btn_print.setText(QCoreApplication.translate("Form", u"PRINT", None))
-        self.btn_save.setText(QCoreApplication.translate("Form", u"Save PDF", None))
         self.btn_excel.setText(QCoreApplication.translate("Form", u"Save Excel", None))
+        self.btn_send_wa.setText(QCoreApplication.translate("Form", u"Kirim WA", None))
     # retranslateUi
 

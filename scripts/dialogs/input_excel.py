@@ -164,6 +164,7 @@ class DialogInputExcel(QDialog, Ui_Form):
             cursor.close()
             con.close_connection()
 
+
     def _execute_update(self):
         db_name = self.cbo_save_to_db.currentText()
         table_name = self.cbo_sheet.currentText()
@@ -174,82 +175,274 @@ class DialogInputExcel(QDialog, Ui_Form):
             QMessageBox.warning(self, "Peringatan", "Semua field harus diisi.")
             return
 
+        con = None
+        cursor = None
+
         try:
-            # Load data from Excel dengan konversi tipe data yang tepat
-            df = pd.read_excel(source_file, sheet_name=table_name, dtype=str)  # Baca semua sebagai string dulu
-            
-            # Konversi ke tipe data yang sesuai
-            for col in df.columns:
-                if col in static_values['KOLOM_ANGKA']:
-                    df[col] = pd.to_numeric(df[col], errors='coerce').astype('Int64')  # Int64 mendukung NaN
-                elif col in static_values['KOLOM_FLOAT']:
-                    df[col] = pd.to_numeric(df[col], errors='coerce')
-                elif col in static_values['KOLOM_TANGGAL']:
-                    df[col] = pd.to_datetime(df[col], errors='coerce').dt.strftime('%Y-%m-%d')
-                elif col in static_values['KOLOM_CURRENCY']:
-                    # Hilangkan karakter non-numeric lalu konversi ke float
-                    df[col] = df[col].astype(str).str.replace(r'[^\d.]', '', regex=True)
-                    df[col] = pd.to_numeric(df[col], errors='coerce')
-            
-            # Convert NaN values to None (akan menjadi NULL di database)
-            df = df.where(pd.notnull(df), None)
-            
+            # ============================
+            # Load Excel
+            # ============================
+            df = pd.read_excel(
+                source_file,
+                sheet_name=table_name,
+                dtype=str
+            )
+
             if key_column not in df.columns:
-                QMessageBox.critical(self, "Error", f"Kolom '{key_column}' tidak ditemukan di sheet.")
+                QMessageBox.critical(
+                    self,
+                    "Error",
+                    f"Kolom key '{key_column}' tidak ditemukan."
+                )
                 return
 
-            # Connect to database
+            # ============================
+            # Konversi tipe data
+            # ============================
+            for col in df.columns:
+
+                if col in static_values["KOLOM_ANGKA"]:
+                    df[col] = pd.to_numeric(
+                        df[col],
+                        errors="coerce"
+                    ).astype("Int64")
+
+                elif col in static_values["KOLOM_FLOAT"]:
+                    df[col] = pd.to_numeric(
+                        df[col],
+                        errors="coerce"
+                    )
+
+                elif col in static_values["KOLOM_CURRENCY"]:
+                    df[col] = (
+                        df[col]
+                        .astype(str)
+                        .str.replace(r"[^\d.-]", "", regex=True)
+                    )
+                    df[col] = pd.to_numeric(
+                        df[col],
+                        errors="coerce"
+                    )
+
+                elif col in static_values["KOLOM_TANGGAL"]:
+                    df[col] = (
+                        pd.to_datetime(
+                            df[col],
+                            errors="coerce"
+                        )
+                        .dt.strftime("%Y-%m-%d")
+                    )
+
+            # ============================
+            # Connect DB
+            # ============================
             con = ConnectDB(db_name)
             con.connect()
             cursor = con.my_cursor
 
-            # Get column names from database table
-            columns = self.SQL.get_column_names(table_name)
-            valid_columns = [col for col in df.columns if col in columns and col != key_column]
+            db_columns = self.SQL.get_column_names(table_name)
+
+            valid_columns = [
+                c
+                for c in df.columns
+                if c in db_columns and c != key_column
+            ]
 
             if not valid_columns:
-                QMessageBox.warning(self, "Peringatan", "Tidak ada kolom yang valid untuk diupdate.")
+                QMessageBox.warning(
+                    self,
+                    "Peringatan",
+                    "Tidak ada kolom yang dapat diupdate."
+                )
                 return
 
-            # Generate update queries
-            queries = []
-            for _, row in df.iterrows():
-                set_clause = ", ".join([f"{col} = %s" for col in valid_columns])
-                query = f"UPDATE {table_name} SET {set_clause} WHERE {key_column} = %s"
-                
-                # Handle parameter dengan tipe data yang tepat
-                params = []
-                for col in valid_columns:
-                    val = row[col]
-                    if val is None:
-                        params.append(None)
-                    elif col in static_values['KOLOM_TANGGAL'] and isinstance(val, str):
-                        params.append(val)  # Tanggal sudah dalam format string
-                    elif col in static_values['KOLOM_ANGKA'] and isinstance(val, (int, np.integer)):
-                        params.append(int(val))
-                    elif col in (static_values['KOLOM_FLOAT'] + static_values['KOLOM_CURRENCY']) and isinstance(val, (float, np.floating)):
-                        params.append(float(val))
-                    else:
-                        params.append(str(val) if val is not None else None)
-                
-                params.append(row[key_column] if pd.notnull(row[key_column]) else None)
-                queries.append((query, params))
+            # ============================
+            # Build query (cukup sekali)
+            # ============================
+            set_clause = ", ".join(
+                f"{c}=%s"
+                for c in valid_columns
+            )
 
-            # Execute updates
-            self.progress_save.setMaximum(len(queries))
+            query = f"""
+                UPDATE {table_name}
+                SET {set_clause}
+                WHERE {key_column}=%s
+            """
+
+            # ============================
+            # Build parameter
+            # ============================
+            params_list = []
+
+            for row in df.itertuples(index=False):
+
+                row_dict = row._asdict()
+
+                params = []
+
+                for col in valid_columns:
+
+                    value = row_dict[col]
+
+                    if pd.isna(value):
+                        value = None
+
+                    params.append(value)
+
+                key_value = row_dict[key_column]
+
+                if pd.isna(key_value):
+                    continue
+
+                params.append(key_value)
+
+                params_list.append(tuple(params))
+
+            if not params_list:
+                QMessageBox.information(
+                    self,
+                    "Informasi",
+                    "Tidak ada data untuk diupdate."
+                )
+                return
+
+            # ============================
+            # Execute
+            # ============================
+            self.progress_save.setMaximum(len(params_list))
             self.progress_save.setValue(0)
 
-            for i, (query, params) in enumerate(queries, 1):
-                cursor.execute(query, params)
-                self.progress_save.setValue(i)
+            batch_size = 500
+
+            total = 0
+
+            for i in range(0, len(params_list), batch_size):
+
+                batch = params_list[i:i + batch_size]
+
+                cursor.executemany(query, batch)
+
+                total += len(batch)
+
+                self.progress_save.setValue(total)
 
             con.my_connector.commit()
-            QMessageBox.information(self, "Sukses", "Data berhasil diupdate di database.")
+
+            QMessageBox.information(
+                self,
+                "Sukses",
+                f"{total} data berhasil diupdate."
+            )
 
         except Exception as e:
-            con.my_connector.rollback()
-            QMessageBox.critical(self, "Error", f"Terjadi kesalahan: {str(e)}")
+
+            if con:
+                con.my_connector.rollback()
+
+            QMessageBox.critical(
+                self,
+                "Error",
+                str(e)
+            )
 
         finally:
-            cursor.close()
-            con.close_connection()
+
+            if cursor:
+                cursor.close()
+
+            if con:
+                con.close_connection()
+
+
+
+
+    # def _execute_update(self):
+    #     db_name = self.cbo_save_to_db.currentText()
+    #     table_name = self.cbo_sheet.currentText()
+    #     key_column = self.cbo_key.currentText()
+    #     source_file = self.line_source.text()
+
+    #     if not all([db_name, table_name, key_column, source_file]):
+    #         QMessageBox.warning(self, "Peringatan", "Semua field harus diisi.")
+    #         return
+
+    #     try:
+    #         # Load data from Excel dengan konversi tipe data yang tepat
+    #         df = pd.read_excel(source_file, sheet_name=table_name, dtype=str)  # Baca semua sebagai string dulu
+            
+    #         # Konversi ke tipe data yang sesuai
+    #         for col in df.columns:
+    #             if col in static_values['KOLOM_ANGKA']:
+    #                 df[col] = pd.to_numeric(df[col], errors='coerce').astype('Int64')  # Int64 mendukung NaN
+    #             elif col in static_values['KOLOM_FLOAT']:
+    #                 df[col] = pd.to_numeric(df[col], errors='coerce')
+    #             elif col in static_values['KOLOM_TANGGAL']:
+    #                 df[col] = pd.to_datetime(df[col], errors='coerce').dt.strftime('%Y-%m-%d')
+    #             elif col in static_values['KOLOM_CURRENCY']:
+    #                 # Hilangkan karakter non-numeric lalu konversi ke float
+    #                 df[col] = df[col].astype(str).str.replace(r'[^\d.]', '', regex=True)
+    #                 df[col] = pd.to_numeric(df[col], errors='coerce')
+            
+    #         # Convert NaN values to None (akan menjadi NULL di database)
+    #         df = df.where(pd.notnull(df), None)
+            
+    #         if key_column not in df.columns:
+    #             QMessageBox.critical(self, "Error", f"Kolom '{key_column}' tidak ditemukan di sheet.")
+    #             return
+
+    #         # Connect to database
+    #         con = ConnectDB(db_name)
+    #         con.connect()
+    #         cursor = con.my_cursor
+
+    #         # Get column names from database table
+    #         columns = self.SQL.get_column_names(table_name)
+    #         valid_columns = [col for col in df.columns if col in columns and col != key_column]
+
+    #         if not valid_columns:
+    #             QMessageBox.warning(self, "Peringatan", "Tidak ada kolom yang valid untuk diupdate.")
+    #             return
+
+    #         # Generate update queries
+    #         queries = []
+    #         for _, row in df.iterrows():
+    #             set_clause = ", ".join([f"{col} = %s" for col in valid_columns])
+    #             query = f"UPDATE {table_name} SET {set_clause} WHERE {key_column} = %s"
+                
+    #             # Handle parameter dengan tipe data yang tepat
+    #             params = []
+    #             for col in valid_columns:
+    #                 val = row[col]
+    #                 if val is None:
+    #                     params.append(None)
+    #                 elif col in static_values['KOLOM_TANGGAL'] and isinstance(val, str):
+    #                     params.append(val)  # Tanggal sudah dalam format string
+    #                 elif col in static_values['KOLOM_ANGKA'] and isinstance(val, (int, np.integer)):
+    #                     params.append(int(val))
+    #                 elif col in (static_values['KOLOM_FLOAT'] + static_values['KOLOM_CURRENCY']) and isinstance(val, (float, np.floating)):
+    #                     params.append(float(val))
+    #                 else:
+    #                     params.append(str(val) if val is not None else None)
+                
+    #             params.append(row[key_column] if pd.notnull(row[key_column]) else None)
+    #             queries.append((query, params))
+
+    #         # Execute updates
+    #         self.progress_save.setMaximum(len(queries))
+    #         self.progress_save.setValue(0)
+
+    #         for i, (query, params) in enumerate(queries, 1):
+    #             cursor.execute(query, params)
+    #             self.progress_save.setValue(i)
+
+    #         con.my_connector.commit()
+    #         QMessageBox.information(self, "Sukses", "Data berhasil diupdate di database.")
+
+    #     except Exception as e:
+    #         con.my_connector.rollback()
+    #         QMessageBox.critical(self, "Error", f"Terjadi kesalahan: {str(e)}")
+
+    #     finally:
+    #         cursor.close()
+    #         con.close_connection()

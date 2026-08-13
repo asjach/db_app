@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>959</width>
+    <width>1010</width>
     <height>853</height>
    </rect>
   </property>
@@ -1249,6 +1249,19 @@
          <property name="spacing">
           <number>5</number>
          </property>
+         <item row="1" column="0">
+          <widget class="QPushButton" name="btn_save">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>40</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Save PDF</string>
+           </property>
+          </widget>
+         </item>
          <item row="2" column="0">
           <widget class="QRadioButton" name="radio_auto_open">
            <property name="text">
@@ -1275,19 +1288,6 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="0">
-          <widget class="QPushButton" name="btn_save">
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>40</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>Save PDF</string>
-           </property>
-          </widget>
-         </item>
          <item row="1" column="1">
           <widget class="QPushButton" name="btn_excel">
            <property name="minimumSize">
@@ -1298,6 +1298,19 @@
            </property>
            <property name="text">
             <string>Save Excel</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="3">
+          <widget class="QPushButton" name="btn_send_wa">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>40</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Kirim WA</string>
            </property>
           </widget>
          </item>

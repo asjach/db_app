@@ -110,6 +110,7 @@ class PageCetakRapor(QWidget, Ui_Form):
         self.fill_tbl_siswa()
         self.show_pdf()
 
+
     def fill_tbl_siswa(self):
         data = self.SQL.get_siswa_aktif(
             self.parent.str_jenjang,
@@ -157,6 +158,7 @@ class PageCetakRapor(QWidget, Ui_Form):
         self.update_setting_rapor()
 
     def nilai_setting(self):
+
         return {
             'kertas': self.cbo_kertas.currentText(),
             'orientasi': self.cbo_orientasi.currentText(),
@@ -263,6 +265,7 @@ class PageCetakRapor(QWidget, Ui_Form):
 
     def print_pdf(self):
         print_with_foxit(self.pdf_data, )
+        
 
     def kirim_wa(self):
         ...

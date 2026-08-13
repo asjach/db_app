@@ -1,10 +1,19 @@
 import json
+import os
 from typing import Optional, Dict, List, Any, Union
-from PySide6.QtWidgets import QWidget, QMainWindow, QMessageBox, QVBoxLayout
+from PySide6.QtWidgets import QWidget, QMainWindow, QMessageBox, QVBoxLayout, QInputDialog
 from PySide6.QtCore import QTimer, Signal, QObject
 from reportlab.lib.pagesizes import A4, GOV_LEGAL
 from ui.ui_page_rekap_nilai import Ui_Form
-from utils.fungsi.general_functions import generate_table, table_selected, save_pdf, print_with_foxit, format_cell_data, header_for_table
+from utils.fungsi.general_functions import (
+    generate_table,
+    table_selected,
+    save_pdf,
+    print_with_foxit,
+    format_cell_data,
+    header_for_table
+)
+
 from models.model_nilai import Model_Nilai
 from template.rekap_nilai import TemplateRekapNilai
 from scripts.widgets.dokumen_viewer import DokumenViewer
@@ -808,6 +817,8 @@ class PageRekapNilai(Ui_Form, QWidget):
             self._show_error("Error", f"Gagal mencetak PDF: {str(e)}")
             logger.error(f"Failed to print PDF: {str(e)}")
 
+
+
     def _show_error(self, title: str, message: str):
         """Show error message dialog"""
         QMessageBox.critical(self, title, message)
@@ -816,3 +827,4 @@ class PageRekapNilai(Ui_Form, QWidget):
         """Handle PDF ready signal"""
         self.pdf_data = pdf_data
         self.viewer.loadPDF(pdf_data)
+

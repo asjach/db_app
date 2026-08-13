@@ -13,12 +13,15 @@ from utils.static_values import *
 from utils.fungsi.general_functions import *
 from resources.color_var import THEMES
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# from utils.whatsapp.whatsapp_sender import WhatsAppSender
+from pathlib import Path
+import logging
 
 
 class MainWindow(Ui_MainWindow, QMainWindow):
     def __init__(self, parent=None):
         super().__init__(parent)
-        
+
 
         register_all_windows_fonts()
         self.setupUi(self)
@@ -32,6 +35,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.initialize_class()
         self.connect_signals()
         self.initialize_components()
+
 
     # ----------------------------------------------------------------------
     # INITIALIZATION
@@ -109,7 +113,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
 
     def initialize_menu(self):
         self.menu_bar = QMenuBar()
-        
+
 
         # --- Santri ---
         self.menu_santri = QMenu("Santri", self)
@@ -353,7 +357,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.str_tingkat = get_selected_list_widget_item(self.list_tingkat, 'not_quoted')
         self.requery_kelas()
 
-    
+
     def requery_kelas(self):
         self.list_kelas.clear()
         data_kelas = self.model_main.get_kelas(

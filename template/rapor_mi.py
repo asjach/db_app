@@ -536,17 +536,7 @@ class TemplateRapor:
                 ("TEXTCOLOR", (0, 0), (-1, 0), colors.black),
                 ])
         
-        if data['semester'] == "Genap":
-            paragraf(self, teks5, x = 132, y=128, w= 70, h=8, font='Aptos Bold', size=14, alignment=TA_LEFT)
-            tabel(
-                obj=self, 
-                x=120, 
-                y=128, 
-                data=data_kenaikan,
-                col_width=[75*mm],
-                row_height=19, 
-                styles=style_kenaikan
-            )
+        
         tinggi = 75
         #  TABEL EKSKUL
         paragraf(self, teks1, x = 20, y=tinggi, w= 100, h=8, font='Aptos Bold', size=12, alignment=TA_LEFT)
@@ -561,6 +551,21 @@ class TemplateRapor:
         # # TABEL ABSENSI
         paragraf(self, teks2, x = 20, y=tinggi, w= 100, h=8, font='Aptos Bold', size=12, alignment=TA_LEFT)
         h_tabel = tabel(self, 22, tinggi, data_absensi, [30 * mm, 60 * mm], None, style_kehadiran)
+        
+        # print(tinggi)
+        if data['semester'] == "Genap":
+            # y = 128
+            paragraf(self, teks5, x = 132, y=tinggi, w= 70, h=8, font='Aptos Bold', size=14, alignment=TA_LEFT)
+            tabel(
+                obj=self, 
+                x=120, 
+                y=tinggi, 
+                data=data_kenaikan,
+                col_width=[75*mm],
+                row_height=19, 
+                styles=style_kenaikan
+            )
+
         tinggi += 10 + h_tabel/mm
         # # tulisan catatan wali kelas
         paragraf(self, teks3, x = 20, y=tinggi, w= 100, h=8, font='Aptos Bold', size=12, alignment=TA_LEFT)

@@ -329,40 +329,81 @@ def save_pdf(parent, pdf_buffer, judul_default: str, auto_open=None):
         else: return
 
 
+# def print_with_foxit(pdf_file, opsi=True):
+#     path_to_foxit = r"C:\Program Files\Foxit Software\Foxit PDF Reader\FoxitPDFReader.exe"
+#     if opsi:
+#         status_dialog = "/p"
+#     else:
+#         status_dialog = "/pdialog"
+#     if isinstance(pdf_file, (QByteArray, bytes)):
+#         with open("temp.pdf", "wb") as f:
+#             file = f.write(pdf_file)
+#         if file:
+#             try:
+#                 subprocess.run(
+#                     [
+#                         path_to_foxit,
+#                         f"{status_dialog}",
+#                         "temp.pdf",
+#                     ],
+#                     check=True,
+#                 )
+#             except subprocess.CalledProcessError as e:
+#                 print(f"Error printing {pdf_file}: {e}")
+#         tempfile = os.path.abspath("temp.pdf")
+#         os.remove(tempfile)
+#     elif isinstance(pdf_file, str):
+#         try:
+#             subprocess.run(
+#                 [
+#                     path_to_foxit,
+#                     f"{status_dialog}",
+#                     pdf_file,
+#                 ],
+#                 check=True,
+#             )
+#         except subprocess.CalledProcessError as e:
+#             print(f"Error printing {pdf_file}: {e}")
+#     else:
+#         return
+
+
 def print_with_foxit(pdf_file, opsi=True):
-    path_to_foxit = r"C:\Program Files\Foxit Software\Foxit PDF Reader\FoxitPDFReader.exe"
-    if opsi:
-        status_dialog = "/p"
-    else:
-        status_dialog = "/pdialog"
+    foxit_paths = [
+        r"C:\Program Files\Foxit Software\Foxit PDF Reader\FoxitPDFReader.exe",
+        r"C:\Program Files (x86)\Foxit Software\Foxit PDF Reader\FoxitPDFReader.exe",
+    ]
+
+    # Cari path Foxit yang tersedia
+    path_to_foxit = next((p for p in foxit_paths if os.path.exists(p)), None)
+
+    if path_to_foxit is None:
+        raise FileNotFoundError("Foxit PDF Reader tidak ditemukan.")
+
+    status_dialog = "/p" if opsi else "/pdialog"
+
     if isinstance(pdf_file, (QByteArray, bytes)):
-        with open("temp.pdf", "wb") as f:
-            file = f.write(pdf_file)
-        if file:
-            try:
-                subprocess.run(
-                    [
-                        path_to_foxit,
-                        f"{status_dialog}",
-                        "temp.pdf",
-                    ],
-                    check=True,
-                )
-            except subprocess.CalledProcessError as e:
-                print(f"Error printing {pdf_file}: {e}")
-        tempfile = os.path.abspath("temp.pdf")
-        os.remove(tempfile)
+        temp_pdf = "temp.pdf"
+
+        with open(temp_pdf, "wb") as f:
+            f.write(pdf_file)
+
+        try:
+            subprocess.run(
+                [path_to_foxit, status_dialog, temp_pdf],
+                check=True,
+            )
+        except subprocess.CalledProcessError as e:
+            print(f"Error printing {temp_pdf}: {e}")
+        finally:
+            if os.path.exists(temp_pdf):
+                os.remove(temp_pdf)
+
     elif isinstance(pdf_file, str):
         try:
             subprocess.run(
-                [
-                    path_to_foxit,
-                    f"{status_dialog}",
-                    pdf_file,
-                ],
+                [path_to_foxit, status_dialog, pdf_file],
                 check=True,
             )
         except subprocess.CalledProcessError as e:
             print(f"Error printing {pdf_file}: {e}")
-    else:
-        return

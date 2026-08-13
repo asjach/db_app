@@ -776,6 +776,34 @@ class Model_Nilai(ConnectDB):
         row_count = self.update_data(sql, data)
         return row_count
 
+    def delete_nilai_bulk(self, ids):
+        if not ids:
+            return
+
+        sql = """
+            DELETE FROM nilai_angka
+            WHERE id = %s
+        """
+
+        data = [(id_db,) for id_db in ids]
+
+        row_count = self.update_data(sql, data)
+        return row_count
+        
+    def delete_ekskul_bulk(self, ids):
+        if not ids:
+            return
+
+        sql = """
+            DELETE FROM nilai_ekskul
+            WHERE id = %s
+        """
+
+        data = [(id_db,) for id_db in ids]
+
+        row_count = self.update_data(sql, data)
+        return row_count
+
     def insert_ekskul_bulk(self, data):
         if not data:
             return
