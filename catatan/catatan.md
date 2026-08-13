@@ -12,7 +12,7 @@ eksekuasi: `python app.py`
 # MacOs
 membuat env: `python -m venv mvenv`
 aktivasi env: `source mvenv/bin/activate`
-eksekuasi: 
+eksekuasi: `python3 app.py`
 
 
 
