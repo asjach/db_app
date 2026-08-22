@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'main.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.8.2
+## Created by: Qt User Interface Compiler version 6.11.1
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -19,7 +19,8 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
 from PySide6.QtWidgets import (QAbstractItemView, QAbstractScrollArea, QApplication, QComboBox,
     QGridLayout, QHBoxLayout, QLineEdit, QListWidget,
     QListWidgetItem, QMainWindow, QPushButton, QSizePolicy,
-    QSpacerItem, QTabWidget, QVBoxLayout, QWidget)
+    QSpacerItem, QSpinBox, QTabWidget, QVBoxLayout,
+    QWidget)
 import resources_rc
 
 class Ui_MainWindow(object):
@@ -146,6 +147,17 @@ class Ui_MainWindow(object):
         self.horizontalLayout.setSpacing(20)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.horizontalLayout.setContentsMargins(5, 5, 5, 5)
+        self.spin_fontsize = QSpinBox(self.widget)
+        self.spin_fontsize.setObjectName(u"spin_fontsize")
+        self.spin_fontsize.setMinimumSize(QSize(50, 24))
+        self.spin_fontsize.setMaximumSize(QSize(50, 24))
+        self.spin_fontsize.setFrame(False)
+        self.spin_fontsize.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.spin_fontsize.setReadOnly(False)
+        self.spin_fontsize.setValue(13)
+
+        self.horizontalLayout.addWidget(self.spin_fontsize)
+
         self.widget_2 = QWidget(self.widget)
         self.widget_2.setObjectName(u"widget_2")
         self.widget_2.setMinimumSize(QSize(450, 28))
@@ -192,7 +204,7 @@ class Ui_MainWindow(object):
         self.cbo_kolom.setMaximumSize(QSize(110, 24))
         self.cbo_kolom.setFont(font)
         self.cbo_kolom.setMaxVisibleItems(30)
-        self.cbo_kolom.setSizeAdjustPolicy(QComboBox.AdjustToContents)
+        self.cbo_kolom.setSizeAdjustPolicy(QComboBox.SizeAdjustPolicy.AdjustToContents)
 
         self.horizontalLayout.addWidget(self.cbo_kolom)
 
@@ -207,7 +219,7 @@ class Ui_MainWindow(object):
         font1.setPointSize(9)
         font1.setBold(False)
         self.frame_search.setFont(font1)
-        self.frame_search.setInputMethodHints(Qt.ImhHiddenText)
+        self.frame_search.setInputMethodHints(Qt.InputMethodHint.ImhHiddenText)
         self.gridLayout_6 = QGridLayout(self.frame_search)
         self.gridLayout_6.setObjectName(u"gridLayout_6")
         self.gridLayout_6.setHorizontalSpacing(1)
@@ -217,9 +229,7 @@ class Ui_MainWindow(object):
         self.cbo_search_by.setObjectName(u"cbo_search_by")
         self.cbo_search_by.setMinimumSize(QSize(100, 24))
         self.cbo_search_by.setMaximumSize(QSize(100, 24))
-        font2 = QFont()
-        font2.setPointSize(9)
-        self.cbo_search_by.setFont(font2)
+        self.cbo_search_by.setFont(font1)
         self.cbo_search_by.setEditable(False)
         self.cbo_search_by.setFrame(False)
 
@@ -234,11 +244,11 @@ class Ui_MainWindow(object):
         self.line_search.setSizePolicy(sizePolicy1)
         self.line_search.setMinimumSize(QSize(120, 24))
         self.line_search.setMaximumSize(QSize(120, 24))
-        self.line_search.setFont(font2)
+        self.line_search.setFont(font1)
         self.line_search.setFrame(True)
         self.line_search.setClearButtonEnabled(True)
 
-        self.gridLayout_6.addWidget(self.line_search, 0, 0, 1, 2, Qt.AlignRight)
+        self.gridLayout_6.addWidget(self.line_search, 0, 0, 1, 2, Qt.AlignmentFlag.AlignRight)
 
         self.btn_info = QPushButton(self.frame_search)
         self.btn_info.setObjectName(u"btn_info")
@@ -283,10 +293,10 @@ class Ui_MainWindow(object):
         self.btn_refresh.setSizePolicy(sizePolicy3)
         self.btn_refresh.setMinimumSize(QSize(24, 24))
         self.btn_refresh.setMaximumSize(QSize(16777215, 24))
-        font3 = QFont()
-        font3.setFamilies([u"Aptos Narrow"])
-        font3.setPointSize(11)
-        self.btn_refresh.setFont(font3)
+        font2 = QFont()
+        font2.setFamilies([u"Aptos Narrow"])
+        font2.setPointSize(11)
+        self.btn_refresh.setFont(font2)
         icon2 = QIcon()
         icon2.addFile(u":/dark/resources/icon/dark/refresh.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.btn_refresh.setIcon(icon2)
@@ -309,13 +319,13 @@ class Ui_MainWindow(object):
         self.list_tingkat.setSizePolicy(sizePolicy4)
         self.list_tingkat.setMinimumSize(QSize(0, 180))
         self.list_tingkat.setMaximumSize(QSize(30, 180))
-        font4 = QFont()
-        font4.setFamilies([u"Aptos Narrow"])
-        font4.setPointSize(10)
-        self.list_tingkat.setFont(font4)
-        self.list_tingkat.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.list_tingkat.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.list_tingkat.setSelectionMode(QAbstractItemView.ExtendedSelection)
+        font3 = QFont()
+        font3.setFamilies([u"Aptos Narrow"])
+        font3.setPointSize(10)
+        self.list_tingkat.setFont(font3)
+        self.list_tingkat.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.list_tingkat.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.list_tingkat.setSelectionMode(QAbstractItemView.SelectionMode.ExtendedSelection)
 
         self.verticalLayout.addWidget(self.list_tingkat)
 
@@ -325,10 +335,10 @@ class Ui_MainWindow(object):
         self.list_kelas.setSizePolicy(sizePolicy3)
         self.list_kelas.setMinimumSize(QSize(0, 0))
         self.list_kelas.setMaximumSize(QSize(30, 16777215))
-        self.list_kelas.setFont(font4)
-        self.list_kelas.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.list_kelas.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.list_kelas.setSelectionMode(QAbstractItemView.ExtendedSelection)
+        self.list_kelas.setFont(font3)
+        self.list_kelas.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.list_kelas.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.list_kelas.setSelectionMode(QAbstractItemView.SelectionMode.ExtendedSelection)
 
         self.verticalLayout.addWidget(self.list_kelas)
 
@@ -339,11 +349,11 @@ class Ui_MainWindow(object):
         sizePolicy3.setHeightForWidth(self.list_jenjang.sizePolicy().hasHeightForWidth())
         self.list_jenjang.setSizePolicy(sizePolicy3)
         self.list_jenjang.setMaximumSize(QSize(30, 70))
-        self.list_jenjang.setFont(font4)
-        self.list_jenjang.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.list_jenjang.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.list_jenjang.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
-        self.list_jenjang.setSelectionMode(QAbstractItemView.ExtendedSelection)
+        self.list_jenjang.setFont(font3)
+        self.list_jenjang.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.list_jenjang.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.list_jenjang.setSizeAdjustPolicy(QAbstractScrollArea.SizeAdjustPolicy.AdjustToContents)
+        self.list_jenjang.setSelectionMode(QAbstractItemView.SelectionMode.ExtendedSelection)
         self.list_jenjang.setUniformItemSizes(True)
 
         self.verticalLayout.addWidget(self.list_jenjang)
@@ -353,7 +363,9 @@ class Ui_MainWindow(object):
 
         self.main_tab = QTabWidget(self.widget_3)
         self.main_tab.setObjectName(u"main_tab")
-        self.main_tab.setFont(font2)
+        font4 = QFont()
+        font4.setPointSize(9)
+        self.main_tab.setFont(font4)
         self.main_tab.setTabsClosable(True)
 
         self.gridLayout_7.addWidget(self.main_tab, 0, 1, 1, 1)
@@ -428,26 +440,26 @@ class Ui_MainWindow(object):
         __sortingEnabled = self.list_tingkat.isSortingEnabled()
         self.list_tingkat.setSortingEnabled(False)
         ___qlistwidgetitem = self.list_tingkat.item(0)
-        ___qlistwidgetitem.setText(QCoreApplication.translate("MainWindow", u"1", None));
+        ___qlistwidgetitem.setText(QCoreApplication.translate("MainWindow", u"1", None))
         ___qlistwidgetitem1 = self.list_tingkat.item(1)
-        ___qlistwidgetitem1.setText(QCoreApplication.translate("MainWindow", u"2", None));
+        ___qlistwidgetitem1.setText(QCoreApplication.translate("MainWindow", u"2", None))
         ___qlistwidgetitem2 = self.list_tingkat.item(2)
-        ___qlistwidgetitem2.setText(QCoreApplication.translate("MainWindow", u"3", None));
+        ___qlistwidgetitem2.setText(QCoreApplication.translate("MainWindow", u"3", None))
         ___qlistwidgetitem3 = self.list_tingkat.item(3)
-        ___qlistwidgetitem3.setText(QCoreApplication.translate("MainWindow", u"4", None));
+        ___qlistwidgetitem3.setText(QCoreApplication.translate("MainWindow", u"4", None))
         ___qlistwidgetitem4 = self.list_tingkat.item(4)
-        ___qlistwidgetitem4.setText(QCoreApplication.translate("MainWindow", u"5", None));
+        ___qlistwidgetitem4.setText(QCoreApplication.translate("MainWindow", u"5", None))
         ___qlistwidgetitem5 = self.list_tingkat.item(5)
-        ___qlistwidgetitem5.setText(QCoreApplication.translate("MainWindow", u"6", None));
+        ___qlistwidgetitem5.setText(QCoreApplication.translate("MainWindow", u"6", None))
         self.list_tingkat.setSortingEnabled(__sortingEnabled)
 
 
         __sortingEnabled1 = self.list_jenjang.isSortingEnabled()
         self.list_jenjang.setSortingEnabled(False)
         ___qlistwidgetitem6 = self.list_jenjang.item(0)
-        ___qlistwidgetitem6.setText(QCoreApplication.translate("MainWindow", u"MI", None));
+        ___qlistwidgetitem6.setText(QCoreApplication.translate("MainWindow", u"MI", None))
         ___qlistwidgetitem7 = self.list_jenjang.item(1)
-        ___qlistwidgetitem7.setText(QCoreApplication.translate("MainWindow", u"MD", None));
+        ___qlistwidgetitem7.setText(QCoreApplication.translate("MainWindow", u"MD", None))
         self.list_jenjang.setSortingEnabled(__sortingEnabled1)
 
     # retranslateUi

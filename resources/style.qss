@@ -73,6 +73,7 @@ QMenuBar QMenu::item:disabled{
 */
 QTabWidget>QWidget{
     background: var(--surface3);
+    font-size: 12px;
 } 
 QTabWidget::pane {
 		background-color: var(--surface3);
@@ -380,7 +381,7 @@ QHeaderView {
   min-height: 1em;
   font-weight: bold;
   font-family: 'Aptos Narrow';
-  font-size: 11pt;
+  font-size: 12pt;
   padding: 0px 0px;
   margin: 0px;
   /* border:none; */

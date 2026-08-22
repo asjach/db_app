@@ -43,7 +43,7 @@ class PageDaftarKelas(QWidget, Ui_Form):
             opsi_kolom=self._opsi_kolom,
             order_by=self.parent.str_order_by,
         )
-        generate_table(data, self.tbl_widget)
+        generate_table(data, self.tbl_widget, font_size=self.parent.spin_fontsize.value())
 
     def _tbl_selected(self):
         table_selected(self.tbl_widget, self, self.parent)

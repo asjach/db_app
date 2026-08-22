@@ -38,7 +38,7 @@
         <height>15</height>
        </size>
       </property>
-      <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,0,0,0,0,0">
+      <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,0,0,0,0,0,0">
        <property name="spacing">
         <number>20</number>
        </property>
@@ -54,6 +54,34 @@
        <property name="bottomMargin">
         <number>5</number>
        </property>
+       <item>
+        <widget class="QSpinBox" name="spin_fontsize">
+         <property name="minimumSize">
+          <size>
+           <width>50</width>
+           <height>24</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>50</width>
+           <height>24</height>
+          </size>
+         </property>
+         <property name="frame">
+          <bool>false</bool>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignmentFlag::AlignCenter</set>
+         </property>
+         <property name="readOnly">
+          <bool>false</bool>
+         </property>
+         <property name="value">
+          <number>13</number>
+         </property>
+        </widget>
+       </item>
        <item>
         <widget class="QWidget" name="widget_2" native="true">
          <property name="minimumSize">
@@ -89,10 +117,10 @@
           </font>
          </property>
          <property name="orientation">
-          <enum>Qt::Horizontal</enum>
+          <enum>Qt::Orientation::Horizontal</enum>
          </property>
          <property name="sizeType">
-          <enum>QSizePolicy::Preferred</enum>
+          <enum>QSizePolicy::Policy::Preferred</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -182,7 +210,7 @@
           <number>30</number>
          </property>
          <property name="sizeAdjustPolicy">
-          <enum>QComboBox::AdjustToContents</enum>
+          <enum>QComboBox::SizeAdjustPolicy::AdjustToContents</enum>
          </property>
         </widget>
        </item>
@@ -194,10 +222,10 @@
           </font>
          </property>
          <property name="orientation">
-          <enum>Qt::Horizontal</enum>
+          <enum>Qt::Orientation::Horizontal</enum>
          </property>
          <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
+          <enum>QSizePolicy::Policy::Fixed</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -218,12 +246,11 @@
          <property name="font">
           <font>
            <pointsize>9</pointsize>
-           <weight>50</weight>
            <bold>false</bold>
           </font>
          </property>
          <property name="inputMethodHints">
-          <set>Qt::ImhHiddenText</set>
+          <set>Qt::InputMethodHint::ImhHiddenText</set>
          </property>
          <layout class="QGridLayout" name="gridLayout_6">
           <property name="leftMargin">
@@ -261,6 +288,7 @@
             <property name="font">
              <font>
               <pointsize>9</pointsize>
+              <bold>false</bold>
              </font>
             </property>
             <property name="editable">
@@ -271,7 +299,7 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="0" colspan="2" alignment="Qt::AlignRight">
+          <item row="0" column="0" colspan="2" alignment="Qt::AlignmentFlag::AlignRight">
            <widget class="QLineEdit" name="line_search">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -294,6 +322,7 @@
             <property name="font">
              <font>
               <pointsize>9</pointsize>
+              <bold>false</bold>
              </font>
             </property>
             <property name="frame">
@@ -446,13 +475,13 @@
              </font>
             </property>
             <property name="verticalScrollBarPolicy">
-             <enum>Qt::ScrollBarAlwaysOff</enum>
+             <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
             </property>
             <property name="horizontalScrollBarPolicy">
-             <enum>Qt::ScrollBarAlwaysOff</enum>
+             <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
             </property>
             <property name="selectionMode">
-             <enum>QAbstractItemView::ExtendedSelection</enum>
+             <enum>QAbstractItemView::SelectionMode::ExtendedSelection</enum>
             </property>
             <item>
              <property name="text">
@@ -513,13 +542,13 @@
              </font>
             </property>
             <property name="verticalScrollBarPolicy">
-             <enum>Qt::ScrollBarAlwaysOff</enum>
+             <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
             </property>
             <property name="horizontalScrollBarPolicy">
-             <enum>Qt::ScrollBarAlwaysOff</enum>
+             <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
             </property>
             <property name="selectionMode">
-             <enum>QAbstractItemView::ExtendedSelection</enum>
+             <enum>QAbstractItemView::SelectionMode::ExtendedSelection</enum>
             </property>
            </widget>
           </item>
@@ -544,16 +573,16 @@
              </font>
             </property>
             <property name="verticalScrollBarPolicy">
-             <enum>Qt::ScrollBarAlwaysOff</enum>
+             <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
             </property>
             <property name="horizontalScrollBarPolicy">
-             <enum>Qt::ScrollBarAlwaysOff</enum>
+             <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
             </property>
             <property name="sizeAdjustPolicy">
-             <enum>QAbstractScrollArea::AdjustToContents</enum>
+             <enum>QAbstractScrollArea::SizeAdjustPolicy::AdjustToContents</enum>
             </property>
             <property name="selectionMode">
-             <enum>QAbstractItemView::ExtendedSelection</enum>
+             <enum>QAbstractItemView::SelectionMode::ExtendedSelection</enum>
             </property>
             <property name="uniformItemSizes">
              <bool>true</bool>

@@ -105,6 +105,9 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.nis_lokal = None
         self.nis_index = None
 
+        #font size
+        self.font_size = self.spin_fontsize.value()
+
     def initialize_class(self):
         for config in TAB_CONFIG.values():
             attr_name = config["show_page"]
@@ -253,6 +256,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.list_kelas.itemSelectionChanged.connect(self.list_kelas_selected)
         self.cbo_search_by.currentIndexChanged.connect(self.cbo_search_by_selected)
         self.cbo_order_by.currentIndexChanged.connect(self.cbo_order_by_selected)
+        self.spin_fontsize.valueChanged.connect(self.requery_kelas)
 
         # Theme toggle
         self.actionDark_Mode.toggled.connect(self.toggle_theme)
@@ -497,7 +501,13 @@ class MainWindow(Ui_MainWindow, QMainWindow):
             self.setStyleSheet(self.style)
 
     def toggle_theme(self):
-        ThemeManager.apply_theme(self, 'dark', './resources/style.qss')
+        BASE_DIR = Path(__file__).resolve().parent.parent
+        ThemeManager.apply_theme(
+            self,
+            'dark',
+            str(BASE_DIR / 'resources' / 'style.qss')
+        )
+        # ThemeManager.apply_theme(self, 'dark', './resources/style.qss')
 
 
 # ----------------------------------------------------------------------

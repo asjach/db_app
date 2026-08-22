@@ -10,10 +10,14 @@ aktiviasi env: `source lvenv/bin/activate.fish` atau `. lvenv/bin/activate.fish`
 eksekuasi: `python app.py`
 
 # MacOs
-membuat env: `python3 -m venv mvenv`
+membuat env: `python3 -m venv mvenv` atau `arch -arm64 python3 -m venv mvenv`
 aktivasi env: `source mvenv/bin/activate`
 eksekuasi: `python3 app.py`
-test
+penyesuaian DB MacOs:
+    ```
+    SET GLOBAL innodb_strict_mode = 0;
+    SET SESSION innodb_strict_mode = 0;
+    ```
 
 
 
