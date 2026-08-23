@@ -18,7 +18,7 @@ penyesuaian DB MacOs:
     SET GLOBAL innodb_strict_mode = 0;
     SET SESSION innodb_strict_mode = 0;
     ```
-
+test
 
 
 
