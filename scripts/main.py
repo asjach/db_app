@@ -247,7 +247,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.actionInput_By_Excel.triggered.connect(lambda: DialogInputExcel(self).exec())
         self.actionExport_Excel.triggered.connect(lambda: DialogExportExcel(self).exec())
         self.actionStatic_Values.triggered.connect(lambda: Dialog_Static_Values(self).exec())
-        self.actionCari.triggered.connect(self.show_detail_siswa)
+        self.actionCari.triggered.connect(lambda: self.show_detail_siswa(None))
 
         # List selection
         self.list_jenjang.itemSelectionChanged.connect(self.list_jenjang_selected)
@@ -260,7 +260,9 @@ class MainWindow(Ui_MainWindow, QMainWindow):
 
         # Theme toggle
         self.actionDark_Mode.toggled.connect(self.toggle_theme)
-        self.btn_refresh.clicked.connect(self.toggle_theme)
+
+        # Refresh
+        self.btn_refresh.clicked.connect(self.requery_page)
 
     # ----------------------------------------------------------------------
     # TAB MANAGEMENT
@@ -275,7 +277,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         index = self.main_tab.addTab(page_instance, title)
         self.main_tab.setCurrentWidget(page_instance)
 
-        if title == "daftar_kelas":
+        if title == "Daftar Kelas":
             self.main_tab.tabBar().setTabButton(index, QTabBar.RightSide, None)
 
     def close_tab(self, index):
@@ -344,7 +346,10 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         populate_combobox(self.cbo_tapel, list_tapel)
 
     def list_jenjang_selected(self):
-        self.str_jenjang = self.list_jenjang.currentItem().text().strip()
+        item = self.list_jenjang.currentItem()
+        if item is None:
+            return
+        self.str_jenjang = item.text().strip()
         self.requery_kelas()
 
     def cbo_tapel_selected(self):
@@ -373,8 +378,11 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.delayed_requery()
 
     def list_kelas_selected(self):
+        item = self.list_kelas.currentItem()
+        if item is None:
+            return
         self.quoted_daftar_kelas = get_selected_list_widget_items(self.list_kelas, 'quoted')
-        self.str_kelas = self.list_kelas.currentItem().text()
+        self.str_kelas = item.text()
         self.data_kelas = get_selected_list_widget_data(self.list_kelas)
         self.delayed_requery()
 
@@ -419,7 +427,11 @@ class MainWindow(Ui_MainWindow, QMainWindow):
     # ----------------------------------------------------------------------
     def show_detail_siswa(self, tabel):
         self.EDIT_BIODATA = DialogDetailSiswa(self)
-        ThemeManager.apply_theme(self.EDIT_BIODATA, 'dark', './resources/style.qss')
+        ThemeManager.apply_theme(
+            self.EDIT_BIODATA,
+            'dark',
+            str(Path(__file__).resolve().parent.parent / 'resources' / 'style.qss')
+        )
         self.EDIT_BIODATA.show_dialog(
             tabel=tabel,
             nis_lokal=self.nis_lokal,
@@ -529,8 +541,4 @@ class ThemeManager:
 
         colors = THEMES[theme_name]
         qss = cls.load_qss(qss_file, colors)
-
-        if isinstance(app_or_widget, QApplication):
-            app_or_widget.setStyleSheet(qss)
-        else:
-            app_or_widget.setStyleSheet(qss)
+        app_or_widget.setStyleSheet(qss)
