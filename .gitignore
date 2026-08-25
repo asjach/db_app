@@ -93,6 +93,8 @@ env.bak/
 venv.bak/
 lvenv/
 mvenv/
+wvenv/
+
 
 # Environment files
 .env

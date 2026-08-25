@@ -1,3 +1,7 @@
+SET GLOBAL innodb_strict_mode = 0;
+SET SESSION innodb_strict_mode = 0;
+
+
 CREATE DATABASE  IF NOT EXISTS `main_db` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `main_db`;
 -- MySQL dump 10.13  Distrib 8.0.40, for Win64 (x86_64)

@@ -1,7 +1,7 @@
 # Windows
-membuat env: `python -m venv venv`
+membuat env: `python -m venv wvenv`
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
-aktiviasi env: `venv\Scripts\activate.ps1`
+aktiviasi env: `wvenv\Scripts\activate.ps1`
 eksekuasi: `python app.py`
 
 # Linux
