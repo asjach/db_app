@@ -171,6 +171,8 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         """Populate cbo_font with fonts from resources/font + system fonts."""
         from PySide6.QtGui import QFontDatabase
         families = set(QFontDatabase.families())
+        # Filter out bitmap fonts that cause Qt bearing errors
+        families = {f for f in families if "Bitmap" not in f}
 
         # Fonts present in resources/font
         local_fonts: List[str] = []

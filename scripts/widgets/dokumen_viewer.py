@@ -11,7 +11,8 @@ from PySide6.QtGui import QFont
 from PIL import Image
 
 
-import fitz  # PyMuPDF
+import pymupdf as fitz  # PyMuPDF
+
 # pip install pymupdf
 
 class DokumenViewer(Ui_Dokumen_Viewer, QWidget):

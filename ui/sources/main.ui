@@ -166,12 +166,6 @@
            <height>24</height>
           </size>
          </property>
-         <property name="font">
-          <font>
-           <family>Segoe UI Semibold</family>
-           <pointsize>9</pointsize>
-          </font>
-         </property>
          <property name="maxVisibleItems">
           <number>30</number>
          </property>
@@ -191,12 +185,6 @@
            <height>24</height>
           </size>
          </property>
-         <property name="font">
-          <font>
-           <family>Segoe UI Semibold</family>
-           <pointsize>9</pointsize>
-          </font>
-         </property>
          <property name="maxVisibleItems">
           <number>30</number>
          </property>
@@ -215,12 +203,6 @@
            <width>110</width>
            <height>24</height>
           </size>
-         </property>
-         <property name="font">
-          <font>
-           <family>Segoe UI Semibold</family>
-           <pointsize>9</pointsize>
-          </font>
          </property>
          <property name="maxVisibleItems">
           <number>30</number>
@@ -484,12 +466,6 @@
               <height>180</height>
              </size>
             </property>
-            <property name="font">
-             <font>
-              <family>Aptos Narrow</family>
-              <pointsize>10</pointsize>
-             </font>
-            </property>
             <property name="verticalScrollBarPolicy">
              <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
             </property>
@@ -581,12 +557,6 @@
               <width>30</width>
               <height>70</height>
              </size>
-            </property>
-            <property name="font">
-             <font>
-              <family>Aptos Narrow</family>
-              <pointsize>10</pointsize>
-             </font>
             </property>
             <property name="verticalScrollBarPolicy">
              <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
