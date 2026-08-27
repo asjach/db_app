@@ -4,7 +4,7 @@ import os
 from typing import Any, Optional, Union, Dict, List, Tuple, Set, Callable
 from ui.ui_main import Ui_MainWindow
 # from ui.ui_widgets import Ui_Form
-from PySide6.QtCore import QTimer, QEvent, Qt
+from PySide6.QtCore import QTimer, QEvent, Qt, QSettings
 from PySide6.QtWidgets import (
     QMainWindow, QMenu, QTabBar, QWidget, QMenuBar, QTableWidget,
     QComboBox, QListWidget, QLineEdit, QPushButton, QSpinBox, QFrame,
@@ -113,18 +113,35 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.nis_lokal: Optional[str] = None
         self.nis_index: Optional[str] = None
 
+        self.load_preferences()
+        #font family from saved settings (load_preferences sets it)
         #font size
-        self.font_size: int = self.spin_fontsize.value()
-
-        #font family
-        self.font_family: str = "Aptos Narrow"
-
+        self.font_size = self.spin_fontsize.value()
         # Set the initial font size for the whole application
         self.update_font_size(self.font_size)
         self.update_font_family(self.font_family)
 
+    def load_preferences(self) -> None:
+        settings = QSettings("DBMIMD", "DatabaseMIMD")
+        saved_family = settings.value("font/family", "Aptos Narrow", type=str)
+        saved_size = settings.value("font/size", 10, type=int)
+        self.font_family = saved_family
+        self.font_size = saved_size
+        if hasattr(self, 'spin_fontsize') and self.spin_fontsize:
+            self.spin_fontsize.setValue(saved_size)
+
+    def save_preferences(self) -> None:
+        settings = QSettings("DBMIMD", "DatabaseMIMD")
+        settings.setValue("font/family", self.font_family)
+        settings.setValue("font/size", self.font_size)
+
+    def closeEvent(self, event):
+        self.save_preferences()
+        super().closeEvent(event)
+
     def update_font_size(self, size: int) -> None:
         """Set the application-wide font size and propagate to all widgets."""
+        self.font_size = size
         from PySide6.QtGui import QFont
         app = QApplication.instance()
         if app:
@@ -137,6 +154,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
             for widget in app.topLevelWidgets():
                 widget.setFont(current_font)
                 self._propagate_font(widget, current_font)
+        self.save_preferences()
 
     def _propagate_font(self, parent_widget: QWidget, font) -> None:
         """Recursively apply the given font to a widget and its children."""
@@ -166,6 +184,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         for widget in app.topLevelWidgets():
             widget.setFont(current_font)
             self._propagate_font(widget, current_font)
+        self.save_preferences()
 
     def fill_cbo_font(self) -> None:
         """Populate cbo_font with fonts from resources/font + system fonts."""
@@ -504,6 +523,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         if family:
             self.font_family = family
             self.update_font_family(family)
+            self.save_preferences()
 
     # ----------------------------------------------------------------------
     # DELAYED ACTIONS
