@@ -144,7 +144,7 @@ def generate_table(
                     table.horizontalHeader().setSectionResizeMode(col_index, QHeaderView.Stretch)
         adjust_column_widths(table, column_widths, headers, metrics, margin)
 
-    finalize_table(table, row_height)
+    finalize_table(table, font_size=font_size)
 
 def prepare_table(table: QTableWidget, clear=True):
     table.blockSignals(True)
@@ -153,9 +153,8 @@ def prepare_table(table: QTableWidget, clear=True):
     table.setUpdatesEnabled(False)
     
 
-def finalize_table(table: QTableWidget, row_height):
-    # table.resizeRowsToContents()
-    # table.verticalHeader().setMinimumSectionSize(row_height)
+def finalize_table(table: QTableWidget, font_size=10):
+    row_height = max(24, font_size * 2 )
     table.verticalHeader().setDefaultSectionSize(row_height)
     table.verticalHeader().setDefaultAlignment(Qt.AlignRight)
     table.setUpdatesEnabled(True)

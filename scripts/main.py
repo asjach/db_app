@@ -49,6 +49,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
     # INITIALIZATION
     # ----------------------------------------------------------------------
     def initialize_components(self) -> None:
+        """Inisialisasi komponen UI: delegate list, alignment combo, isi font, dan tab default."""
         # Delegate para list widget
         self.list_tingkat.setItemDelegate(CenteredDelegate())
         self.list_kelas.setItemDelegate(CenteredDelegate())
@@ -71,6 +72,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.add_tab(page, "Daftar Kelas")
 
     def initialize_variables(self) -> None:
+        """Inisialisasi variabel state, model, timer, dan preferensi pengguna."""
         path_json = BASE_DIR / "utils" / "static_values.json"
         self.static_values: Dict[str, Any] = get_json_data(str(path_json))
 
@@ -122,6 +124,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.update_font_family(self.font_family)
 
     def load_preferences(self) -> None:
+        """Muat pengaturan font dari QSettings."""
         settings = QSettings("DBMIMD", "DatabaseMIMD")
         saved_family = settings.value("font/family", "Aptos Narrow", type=str)
         saved_size = settings.value("font/size", 10, type=int)
@@ -131,16 +134,18 @@ class MainWindow(Ui_MainWindow, QMainWindow):
             self.spin_fontsize.setValue(saved_size)
 
     def save_preferences(self) -> None:
+        """Simpan pengaturan font ke QSettings."""
         settings = QSettings("DBMIMD", "DatabaseMIMD")
         settings.setValue("font/family", self.font_family)
         settings.setValue("font/size", self.font_size)
 
     def closeEvent(self, event):
+        """Tutup aplikasi dan simpan preferensi."""
         self.save_preferences()
         super().closeEvent(event)
 
     def update_font_size(self, size: int) -> None:
-        """Set the application-wide font size and propagate to all widgets."""
+        """Setel ukuran font aplikasi secara keseluruhan dan propagasi ke semua widget."""
         self.font_size = size
         from PySide6.QtGui import QFont
         app = QApplication.instance()
@@ -155,6 +160,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
                 widget.setFont(current_font)
                 self._propagate_font(widget, current_font)
         self.save_preferences()
+        self.requery_page()
 
     def _propagate_font(self, parent_widget: QWidget, font) -> None:
         """Recursively apply the given font to a widget and its children."""
@@ -234,12 +240,14 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.cbo_font.view().setItemDelegate(delegate)
 
     def initialize_class(self) -> None:
+        """Fungsi initialize_class."""
         for config in TAB_CONFIG.values():
             attr_name = config["show_page"]
             page_class = config["page_class"]
             setattr(self, attr_name, page_class(self))
 
     def initialize_menu(self) -> None:
+        """Fungsi initialize_menu."""
         self.menu_bar = QMenuBar()
 
         # --- Santri ---
@@ -335,6 +343,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
     # SIGNALS
     # ----------------------------------------------------------------------
     def connect_signals(self) -> None:
+        """Fungsi connect_signals."""
         self.tabel_tabel()
 
         # Event filter para all tables
@@ -393,6 +402,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
     # TAB MANAGEMENT
     # ----------------------------------------------------------------------
     def add_tab(self, page_class: Union[type, QWidget], title: str) -> None:
+        """Fungsi add_tab."""
         existing_tabs: List[str] = [self.main_tab.tabText(i) for i in range(self.main_tab.count())]
         if title in existing_tabs:
             self.main_tab.setCurrentIndex(existing_tabs.index(title))
@@ -406,9 +416,11 @@ class MainWindow(Ui_MainWindow, QMainWindow):
             self.main_tab.tabBar().setTabButton(index, QTabBar.RightSide, None)
 
     def close_tab(self, index: int) -> None:
+        """Fungsi close_tab."""
         self.main_tab.removeTab(index)
 
     def tab_index_changed(self) -> None:
+        """Fungsi tab_index_changed."""
         current_index: int = self.main_tab.currentIndex()
         if current_index == -1:
             return
@@ -461,16 +473,19 @@ class MainWindow(Ui_MainWindow, QMainWindow):
     # QUERY & FILTER
     # ----------------------------------------------------------------------
     def requery_page(self) -> None:
+        """Fungsi requery_page."""
         tab_name: Optional[str] = self.main_tab.tabText(self.main_tab.currentIndex())
         config: Optional[Dict[str, Any]] = TAB_CONFIG.get(tab_name)
         if config and hasattr(self, config["show_page"]):
             getattr(self, config["show_page"]).show_page()
 
     def fill_cbo_tapel(self) -> None:
+        """Fungsi fill_cbo_tapel."""
         list_tapel = self.model_main.get_list_tapel()
         populate_combobox(self.cbo_tapel, list_tapel)
 
     def list_jenjang_selected(self) -> None:
+        """Fungsi list_jenjang_selected."""
         item = self.list_jenjang.currentItem()
         if item is None:
             return
@@ -478,12 +493,14 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.requery_kelas()
 
     def cbo_tapel_selected(self) -> None:
+        """Fungsi cbo_tapel_selected."""
         self.str_tapel = self.cbo_tapel.currentText()
         self.str_next_tapel = tapel_berikutnya(self.str_tapel)
         self.str_prev_tapel = tapel_sebelumnya(self.str_tapel)
         self.requery_kelas()
 
     def list_tingkat_selected(self) -> None:
+        """Fungsi list_tingkat_selected."""
         self.quoted_daftar_tingkat = get_selected_list_widget_items(self.list_tingkat, 'quoted')
         self.str_daftar_tingkat = get_selected_list_widget_items(self.list_tingkat, 'not_quoted')
         self.list_daftar_tingkat = get_selected_list_widget_items(self.list_tingkat)
@@ -492,6 +509,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.requery_kelas()
 
     def requery_kelas(self) -> None:
+        """Fungsi requery_kelas."""
         self.list_kelas.clear()
         data_kelas = self.model_main.get_kelas(
             jenjang=self.str_jenjang,
@@ -502,6 +520,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.delayed_requery()
 
     def list_kelas_selected(self) -> None:
+        """Fungsi list_kelas_selected."""
         item = self.list_kelas.currentItem()
         if item is None:
             return
@@ -511,24 +530,29 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.delayed_requery()
 
     def cbo_search_by_selected(self) -> None:
+        """Fungsi cbo_search_by_selected."""
         self.str_search_by = self.cbo_search_by.currentText()
         self.delayed_requery()
 
     def cbo_order_by_selected(self) -> None:
+        """Fungsi cbo_order_by_selected."""
         self.str_order_by = self.cbo_order_by.currentText()
         self.delayed_requery()
 
     def cbo_font_selected(self) -> None:
+        """Fungsi cbo_font_selected."""
         family = self.cbo_font.currentText()
         if family:
             self.font_family = family
             self.update_font_family(family)
             self.save_preferences()
+            self.requery_page()
 
     # ----------------------------------------------------------------------
     # DELAYED ACTIONS
     # ----------------------------------------------------------------------
     def delayed_action(self, interval: int = 200, update_text: Optional[str] = None, is_search: bool = False) -> None:
+        """Fungsi delayed_action."""
         if is_search and update_text != self.last_search_text:
             self.last_search_text = update_text
             interval = 100 if update_text == "" else 200
@@ -538,9 +562,11 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.requery_timer.start()
 
     def delayed_requery(self) -> None:
+        """Fungsi delayed_requery."""
         self.delayed_action(interval=200)
 
     def delayed_search(self) -> None:
+        """Fungsi delayed_search."""
         self.delayed_action(update_text=self.line_search.text(), is_search=True)
 
     @property
@@ -556,6 +582,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
     # DETAIL DIALOGS
     # ----------------------------------------------------------------------
     def show_detail_siswa(self, tabel: Optional[QTableWidget]) -> None:
+        """Tampilkan dialog detail siswa."""
         self.EDIT_BIODATA = DialogDetailSiswa(self)
         self.EDIT_BIODATA.finished.connect(lambda: self.cleanup_dialog(self.EDIT_BIODATA, 'EDIT_BIODATA'))
         ThemeManager.apply_theme(
@@ -571,12 +598,14 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.EDIT_BIODATA.showMaximized()
 
     def show_detail_guru(self) -> None:
+        """Tampilkan dialog detail guru."""
         self.DETAIL_GURU = DialogDetailGuru(self)
         self.DETAIL_GURU.finished.connect(lambda: self.cleanup_dialog(self.DETAIL_GURU, 'DETAIL_GURU'))
         self.DETAIL_GURU.show_dialog(self.id_guru)
         self.DETAIL_GURU.showMaximized()
 
     def cleanup_dialog(self, dialog: Any, attribute_name: str) -> None:
+        """Hapus referensi dialog dari atribut saat dialog ditutup."""
         if hasattr(self, attribute_name):
             current_dialog = getattr(self, attribute_name)
             if current_dialog is dialog:
@@ -586,6 +615,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
     # EVENT FILTER
     # ----------------------------------------------------------------------
     def eventFilter(self, source: QWidget, event: QEvent) -> bool:
+        """Tangani event konteks menu dan salin/tempel pada tabel."""
         if event.type() == QEvent.ContextMenu:
             self.handle_context_menu(source)
             action: Optional[QAction] = self.cmenu.exec(source.mapToGlobal(event.pos()))
@@ -608,6 +638,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         return super().eventFilter(source, event)
 
     def handle_context_menu(self, source: QWidget) -> None:
+        """Tampilkan item menu konteks sesuai dengan sumber tabel."""
         self.cmenu.clear()
         if source in self.tabel_siswa:
             self.cmenu.addAction(self.detail_siswa_action)
@@ -622,6 +653,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
     # TABLE COLLECTION
     # ----------------------------------------------------------------------
     def tabel_tabel(self) -> None:
+        """Kumpulkan semua tabel siswa, guru, dan nilai dari halaman terkait."""
         siswa_pages: List[str] = [
             "BUKU_INDUK_SISWA", "CEKLIS_EMIS", "DK", "NAIK", "LULUS",
             "MUTASI_KELUAR", "PINDAH_KELAS", "MI2MD", "REKAP_SISWA"
@@ -650,6 +682,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
     # STYLING
     # ----------------------------------------------------------------------
     def toggle_theme(self) -> None:
+        """Ganti tema gelap/terang dan terapkan gaya QSS."""
         ThemeManager.apply_theme(
             self,
             'dark',
