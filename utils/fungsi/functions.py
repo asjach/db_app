@@ -57,7 +57,7 @@ def validate_sql_order_by(expression):
         return expression
     parts = [part.strip() for part in expression.split(",") if part.strip()]
     for part in parts:
-        if not re.match(r"^[A-Za-z0-9_ ]+$", part):
+        if not re.match(r"^[A-Za-z0-9_. ]+$", part):
             raise ValueError(f"Invalid ORDER BY expression: {expression}")
     return ", ".join(parts)
 

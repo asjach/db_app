@@ -7,7 +7,8 @@ from ui.ui_main import Ui_MainWindow
 from PySide6.QtCore import QTimer, QEvent, Qt
 from PySide6.QtWidgets import (
     QMainWindow, QMenu, QTabBar, QWidget, QMenuBar, QTableWidget,
-    QComboBox, QListWidget, QLineEdit, QPushButton, QSpinBox, QFrame
+    QComboBox, QListWidget, QLineEdit, QPushButton, QSpinBox, QFrame,
+    QApplication
 )
 from PySide6.QtGui import QAction
 from models.model_main import Model_Main
@@ -112,6 +113,30 @@ class MainWindow(Ui_MainWindow, QMainWindow):
 
         #font size
         self.font_size: int = self.spin_fontsize.value()
+
+        # Set the initial font size for the whole application
+        self.update_font_size(self.font_size)
+
+    def update_font_size(self, size: int) -> None:
+        """Set the application-wide font size and propagate to all widgets."""
+        from PySide6.QtGui import QFont
+        app = QApplication.instance()
+        if app:
+            current_font = app.font()
+            current_font.setPointSize(size)
+            app.setFont(current_font)
+
+            # Force update on all top-level widgets so any widget that ignored
+            # the application font picks up the new size immediately.
+            for widget in app.topLevelWidgets():
+                widget.setFont(current_font)
+                self._propagate_font(widget, current_font)
+
+    def _propagate_font(self, parent_widget: QWidget, font) -> None:
+        """Recursively apply the given font to a widget and its children."""
+        parent_widget.setFont(font)
+        for child in parent_widget.findChildren(QWidget):
+            child.setFont(font)
 
     def initialize_class(self) -> None:
         for config in TAB_CONFIG.values():
@@ -260,7 +285,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.list_kelas.itemSelectionChanged.connect(self.list_kelas_selected)
         self.cbo_search_by.currentIndexChanged.connect(self.cbo_search_by_selected)
         self.cbo_order_by.currentIndexChanged.connect(self.cbo_order_by_selected)
-        self.spin_fontsize.valueChanged.connect(self.requery_kelas)
+        self.spin_fontsize.valueChanged.connect(self.update_font_size)
 
         # Theme toggle
         self.actionDark_Mode.toggled.connect(self.toggle_theme)
