@@ -8,9 +8,10 @@ from PySide6.QtCore import QTimer, QEvent, Qt
 from PySide6.QtWidgets import (
     QMainWindow, QMenu, QTabBar, QWidget, QMenuBar, QTableWidget,
     QComboBox, QListWidget, QLineEdit, QPushButton, QSpinBox, QFrame,
-    QApplication
+    QApplication, QStyledItemDelegate, QStyleOptionViewItem
 )
-from PySide6.QtGui import QAction
+from PySide6.QtGui import QFont, QFontDatabase, QPainter, QFontMetrics, QAction
+from PySide6.QtCore import QSize
 from models.model_main import Model_Main
 from scripts.dialogs.detail_siswa import DialogDetailSiswa
 from scripts.dialogs.detail_guru import DialogDetailGuru
@@ -34,7 +35,6 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         register_all_windows_fonts()
         self.setupUi(self)
         self.main_tab.setCornerWidget(self.btn_info, Qt.TopRightCorner)
-        self.toggle_theme()
         self.showMaximized()
 
         # Initialization
@@ -43,6 +43,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.initialize_class()
         self.connect_signals()
         self.initialize_components()
+        self.toggle_theme()
 
     # ----------------------------------------------------------------------
     # INITIALIZATION
@@ -58,6 +59,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
             right_combo(combo)
 
         self.fill_cbo_tapel()
+        self.fill_cbo_font()
 
         # Default selection
         self.list_jenjang.setCurrentRow(0)
@@ -108,14 +110,18 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.quoted_daftar_kelas: Optional[str] = None
         self.data_kelas: Optional[Dict[str, Any]] = None
         self.str_kelas: Optional[str] = None
-        self.nis_local: Optional[str] = None
+        self.nis_lokal: Optional[str] = None
         self.nis_index: Optional[str] = None
 
         #font size
         self.font_size: int = self.spin_fontsize.value()
 
+        #font family
+        self.font_family: str = "Aptos Narrow"
+
         # Set the initial font size for the whole application
         self.update_font_size(self.font_size)
+        self.update_font_family(self.font_family)
 
     def update_font_size(self, size: int) -> None:
         """Set the application-wide font size and propagate to all widgets."""
@@ -137,6 +143,74 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         parent_widget.setFont(font)
         for child in parent_widget.findChildren(QWidget):
             child.setFont(font)
+
+    def update_font_family(self, family: str) -> None:
+        """Set the application-wide font family and propagate to all widgets."""
+        from PySide6.QtGui import QFont, QFontDatabase
+        app = QApplication.instance()
+        if app is None:
+            return
+
+        # If the requested family isn't loaded, try to load it from resources/font.
+        if family not in QFontDatabase.families():
+            for path in (BASE_DIR / "resources" / "font").glob(f"{family}*"):
+                if path.suffix.lower() in {".ttf", ".otf"}:
+                    QFontDatabase.addApplicationFont(str(path))
+                    break
+
+        current_font = app.font()
+        current_font.setFamily(family)
+        current_font.setPointSize(self.font_size)
+        app.setFont(current_font)
+
+        for widget in app.topLevelWidgets():
+            widget.setFont(current_font)
+            self._propagate_font(widget, current_font)
+
+    def fill_cbo_font(self) -> None:
+        """Populate cbo_font with fonts from resources/font + system fonts."""
+        from PySide6.QtGui import QFontDatabase
+        families = set(QFontDatabase.families())
+
+        # Fonts present in resources/font
+        local_fonts: List[str] = []
+        font_dir = BASE_DIR / "resources" / "font"
+        if font_dir.exists():
+            for path in sorted(font_dir.glob("*.ttf")):
+                name = path.stem
+                # Strip common style suffixes to get the base family name
+                for suffix in (" Bold Italic", " Bold", " Italic", " Narrow Bold Italic", " Narrow Bold", " Narrow Italic", " Narrow", " Regular"):
+                    if name.endswith(suffix):
+                        name = name[: -len(suffix)]
+                        break
+                local_fonts.append(name)
+
+        # Combine: local fonts first, then system-only fonts
+        combined: List[str] = []
+        seen: Set[str] = set()
+        for f in local_fonts:
+            if f not in seen:
+                combined.append(f)
+                seen.add(f)
+        for f in sorted(families):
+            if f not in seen:
+                combined.append(f)
+                seen.add(f)
+
+        self.cbo_font.blockSignals(True)
+        self.cbo_font.clear()
+        self.cbo_font.addItems(combined)
+        # Default selection
+        if self.font_family in combined:
+            self.cbo_font.setCurrentText(self.font_family)
+        elif combined:
+            self.cbo_font.setCurrentIndex(0)
+            self.font_family = self.cbo_font.currentText()
+        self.cbo_font.blockSignals(False)
+        # Set delegate to display each font in its own typeface
+        delegate = FontItemDelegate(self.cbo_font)
+        self.cbo_font.setItemDelegate(delegate)
+        self.cbo_font.view().setItemDelegate(delegate)
 
     def initialize_class(self) -> None:
         for config in TAB_CONFIG.values():
@@ -286,6 +360,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.cbo_search_by.currentIndexChanged.connect(self.cbo_search_by_selected)
         self.cbo_order_by.currentIndexChanged.connect(self.cbo_order_by_selected)
         self.spin_fontsize.valueChanged.connect(self.update_font_size)
+        self.cbo_font.currentIndexChanged.connect(self.cbo_font_selected)
 
         # Theme toggle
         self.actionDark_Mode.toggled.connect(self.toggle_theme)
@@ -422,6 +497,12 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.str_order_by = self.cbo_order_by.currentText()
         self.delayed_requery()
 
+    def cbo_font_selected(self) -> None:
+        family = self.cbo_font.currentText()
+        if family:
+            self.font_family = family
+            self.update_font_family(family)
+
     # ----------------------------------------------------------------------
     # DELAYED ACTIONS
     # ----------------------------------------------------------------------
@@ -461,8 +542,8 @@ class MainWindow(Ui_MainWindow, QMainWindow):
             str(Path(__file__).resolve().parent.parent / 'resources' / 'style.qss')
         )
         self.EDIT_BIODATA.show_dialog(
+            nis_lokal=self.nis_lokal,
             tabel=tabel,
-            nis_local=self.nis_local,
             nis_index=self.nis_index
         )
         self.EDIT_BIODATA.showMaximized()
@@ -553,6 +634,34 @@ class MainWindow(Ui_MainWindow, QMainWindow):
             str(BASE_DIR / 'resources' / 'style.qss')
         )
         # ThemeManager.apply_theme(self, 'dark', './resources/style.qss')
+
+
+class FontItemDelegate(QStyledItemDelegate):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self._font_cache = {}
+
+    def initStyleOption(self, option, index):
+        super().initStyleOption(option, index)
+        text = index.data()
+        if text not in self._font_cache:
+            font = QFont(text)
+            self._font_cache[text] = font
+        else:
+            font = self._font_cache[text]
+        option.font = font
+
+    def sizeHint(self, option, index):
+        text = index.data()
+        if text not in self._font_cache:
+            font = QFont(text)
+            self._font_cache[text] = font
+        else:
+            font = self._font_cache[text]
+        fm = QFontMetrics(font)
+        width = fm.horizontalAdvance(text) + 20
+        height = fm.height() + 4
+        return QSize(width, height)
 
 
 # ----------------------------------------------------------------------

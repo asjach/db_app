@@ -147,6 +147,13 @@ class Ui_MainWindow(object):
         self.horizontalLayout.setSpacing(20)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.horizontalLayout.setContentsMargins(5, 5, 5, 5)
+        self.cbo_font = QComboBox(self.widget)
+        self.cbo_font.setObjectName(u"cbo_font")
+        self.cbo_font.setMinimumSize(QSize(150, 0))
+        self.cbo_font.setMaximumSize(QSize(150, 16777215))
+
+        self.horizontalLayout.addWidget(self.cbo_font)
+
         self.spin_fontsize = QSpinBox(self.widget)
         self.spin_fontsize.setObjectName(u"spin_fontsize")
         self.spin_fontsize.setMinimumSize(QSize(50, 24))
