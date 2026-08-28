@@ -4,7 +4,7 @@ from utils.database import ConnectDB
 from PySide6.QtWidgets import QTableWidget, QTableWidgetItem, QHeaderView, QPushButton, QApplication
 from PySide6.QtGui import QFontMetrics, QFont, QIcon
 from utils.fungsi.functions import show_message, date_to_text, text_to_date, get_json_data, validate_sql_identifier
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, QSettings
 import pandas as pd
 from utils.app_config import SEPARATOR_DESIMAL, SEPARATOR_RIBUAN, BASE_DIR
 
@@ -20,8 +20,8 @@ def generate_table(
     margin=24,
     row_height=24,
     max_column_size=1000,
-    font_family="Segoe UI",
-    font_size=10,
+    font_family=None,
+    font_size=None,
     icon_awal=None,
     icon_akhir=None,
     fungsi_awal=None,
@@ -38,6 +38,13 @@ def generate_table(
     - Jika mode_input=True dan data kosong serta column_names diisi, tambah satu baris kosong.
     - Jika mode_input=False dan data kosong, tabel dihapus.
     """
+    # Ambil nilai default dari QSettings jika tidak diberikan
+    settings = QSettings("DBMIMD", "DatabaseMIMD")
+    if font_family is None:
+        font_family = settings.value("font/family", "Segoe UI")
+    if font_size is None:
+        font_size = int(settings.value("font/size", 10))
+
     if left_column is None:
         left_column = static_values['LEFT_COLUMN']
     if separator_desimal is None:
@@ -54,97 +61,95 @@ def generate_table(
 
     # Selalu bersihkan tabel sepenuhnya sebelum memulai
     prepare_table(table)
-    table.clear()  # Hapus isi dan header
+    try:
+        table.clear()  # Hapus isi dan header
 
-    if not data:
-        if mode_input:
-            if column_names is None:
-                # Tabel kosong tanpa baris atau header lama
-                table.setRowCount(1)
-                num_columns = (1 if icon_awal else 0) + (1 if icon_akhir else 0) or 1
-                table.setColumnCount(num_columns)
-                headers = [""] * num_columns
-                table.setHorizontalHeaderLabels(headers)
-                table.setFont(QFont(font_family, font_size))
-            else:
-                # Tambah satu baris kosong
-                table.setRowCount(1)
-                num_columns = len(column_names) + (1 if icon_awal else 0) + (1 if icon_akhir else 0)
-                table.setColumnCount(num_columns)
-                headers = []
-                if icon_awal:
-                    headers.append("")
-                headers.extend(column_names)
-                if icon_akhir:
-                    headers.append("")
-                table.setHorizontalHeaderLabels(headers)
-                table.setFont(QFont(font_family, font_size))
-                add_empty_row(table, 0, headers, icon_awal, icon_akhir, fungsi_awal, fungsi_akhir)
-        else:
-            # Mode biasa: hapus tabel sepenuhnya
-            table.setRowCount(0)
-            table.setColumnCount(0)
-            # finalize_table(table)
-            return
-    else:
-        # Logika untuk data tidak kosong (tidak diubah karena tidak relevan dengan bug)
-        table.setRowCount(len(data) + (1 if mode_input else 0))
-        num_columns = len(data[0]) + (1 if icon_awal else 0) + (1 if icon_akhir else 0)
-        table.setColumnCount(num_columns)
-
-        headers = []
-        if icon_awal:
-            headers.append("")
-        headers.extend(header_for_table(data[0].keys()))
-        if icon_akhir:
-            headers.append("")
-
-        table.setHorizontalHeaderLabels(headers)
-        table.setFont(QFont(font_family, font_size))
-        metrics = QFontMetrics(table.font())
-        column_widths = [0] * len(headers)
-
-        for row_num, row_data in enumerate(data):
-            if icon_awal:
-                add_icon_button(table, row_num, 0, icon_awal, fungsi_awal)
-            start_col = 1 if icon_awal else 0
-            for col_num, (key, item_data) in enumerate(row_data.items(), start_col):
-                apply_format = kolom_currency and key in kolom_currency
-                item_data = format_cell_data(
-                    item_data,
-                    zero=zero,
-                    separator_ribuan=separator_ribuan if apply_format else None,
-                    separator_desimal=separator_desimal if apply_format else None
-                )
-                item = QTableWidgetItem(item_data)
-                key = header_for_db(key)
-                if isinstance(key, str) and key.lower() in left_column:
-                    align = Qt.AlignLeft | Qt.AlignVCenter
-                elif isinstance(key, str) and key.lower() in kolom_currency:
-                    align = Qt.AlignRight | Qt.AlignVCenter
+        if not data:
+            if mode_input:
+                if column_names is None:
+                    # Tabel kosong tanpa baris atau header lama
+                    table.setRowCount(1)
+                    num_columns = (1 if icon_awal else 0) + (1 if icon_akhir else 0) or 1
+                    table.setColumnCount(num_columns)
+                    headers = [""] * num_columns
+                    table.setHorizontalHeaderLabels(headers)
+                    table.setFont(QFont(font_family, font_size))
                 else:
-                    align = Qt.AlignHCenter | Qt.AlignVCenter
-                item.setTextAlignment(align)
-                table.setItem(row_num, col_num, item)
-                update_column_width(metrics, column_widths, col_num, item_data, max_column_size)
+                    # Tambah satu baris kosong
+                    table.setRowCount(1)
+                    num_columns = len(column_names) + (1 if icon_awal else 0) + (1 if icon_akhir else 0)
+                    table.setColumnCount(num_columns)
+                    headers = []
+                    if icon_awal:
+                        headers.append("")
+                    headers.extend(column_names)
+                    if icon_akhir:
+                        headers.append("")
+                    table.setHorizontalHeaderLabels(headers)
+                    table.setFont(QFont(font_family, font_size))
+                    add_empty_row(table, 0, headers, icon_awal, icon_akhir, fungsi_awal, fungsi_akhir)
+            else:
+                # Mode biasa: hapus tabel sepenuhnya
+                table.setRowCount(0)
+                table.setColumnCount(0)
+        else:
+            table.setRowCount(len(data) + (1 if mode_input else 0))
+            num_columns = len(data[0]) + (1 if icon_awal else 0) + (1 if icon_akhir else 0)
+            table.setColumnCount(num_columns)
+
+            headers = []
+            if icon_awal:
+                headers.append("")
+            headers.extend(header_for_table(data[0].keys()))
             if icon_akhir:
-                add_icon_button(table, row_num, len(headers) - 1, icon_akhir, fungsi_akhir)
+                headers.append("")
 
-        if mode_input:
-            add_empty_row(table, len(data), headers, icon_awal, icon_akhir, fungsi_awal, fungsi_akhir)
+            table.setHorizontalHeaderLabels(headers)
+            table.setFont(QFont(font_family, font_size))
+            metrics = QFontMetrics(table.font())
+            column_widths = [0] * len(headers)
 
-        if hidden_column:
-            for col_index in hidden_column:
-                table.setColumnHidden(col_index, True)
-        if stretch_column is not None:
-            if isinstance(stretch_column, int):
-                table.horizontalHeader().setSectionResizeMode(stretch_column, QHeaderView.Stretch)
-            elif isinstance(stretch_column, (list, tuple)):
-                for col_index in stretch_column:
-                    table.horizontalHeader().setSectionResizeMode(col_index, QHeaderView.Stretch)
-        adjust_column_widths(table, column_widths, headers, metrics, margin)
+            for row_num, row_data in enumerate(data):
+                if icon_awal:
+                    add_icon_button(table, row_num, 0, icon_awal, fungsi_awal)
+                start_col = 1 if icon_awal else 0
+                for col_num, (key, item_data) in enumerate(row_data.items(), start_col):
+                    apply_format = kolom_currency and key in kolom_currency
+                    item_data = format_cell_data(
+                        item_data,
+                        zero=zero,
+                        separator_ribuan=separator_ribuan if apply_format else None,
+                        separator_desimal=separator_desimal if apply_format else None
+                    )
+                    item = QTableWidgetItem(item_data)
+                    key = header_for_db(key)
+                    if isinstance(key, str) and key.lower() in left_column:
+                        align = Qt.AlignLeft | Qt.AlignVCenter
+                    elif isinstance(key, str) and key.lower() in kolom_currency:
+                        align = Qt.AlignRight | Qt.AlignVCenter
+                    else:
+                        align = Qt.AlignHCenter | Qt.AlignVCenter
+                    item.setTextAlignment(align)
+                    table.setItem(row_num, col_num, item)
+                    update_column_width(metrics, column_widths, col_num, item_data, max_column_size)
+                if icon_akhir:
+                    add_icon_button(table, row_num, len(headers) - 1, icon_akhir, fungsi_akhir)
 
-    finalize_table(table, font_size=font_size)
+            if mode_input:
+                add_empty_row(table, len(data), headers, icon_awal, icon_akhir, fungsi_awal, fungsi_akhir)
+
+            if hidden_column:
+                for col_index in hidden_column:
+                    table.setColumnHidden(col_index, True)
+            if stretch_column is not None:
+                if isinstance(stretch_column, int):
+                    table.horizontalHeader().setSectionResizeMode(stretch_column, QHeaderView.Stretch)
+                elif isinstance(stretch_column, (list, tuple)):
+                    for col_index in stretch_column:
+                        table.horizontalHeader().setSectionResizeMode(col_index, QHeaderView.Stretch)
+            adjust_column_widths(table, column_widths, headers, metrics, margin)
+    finally:
+        finalize_table(table, font_size=font_size)
 
 def prepare_table(table: QTableWidget, clear=True):
     table.blockSignals(True)
@@ -417,7 +422,13 @@ def handle_item_changed_v2(
     if header_item is None:
         print(f"Kolom pada indeks {col} tidak memiliki header.")
         return False
-    nama_kolom = header_for_db(header_item.text())
+    try:
+        nama_kolom = validate_sql_identifier(header_for_db(header_item.text()))
+        tabel_sql = validate_sql_identifier(tabel_sql)
+        primary_key = validate_sql_identifier(primary_key)
+    except ValueError as exc:
+        print(f"Identifier SQL tidak valid: {exc}")
+        return False
     nilai = item.text()
     nilai = convert_item_value(nilai, nama_kolom)[1]
 
@@ -456,33 +467,51 @@ def handle_item_changed_v2(
 
 
 def get_row_data(tabel_ui: QTableWidget, numeric_fields=None, date_fields=None, row=None):
-    if tabel_ui is None: 
+    if tabel_ui is None:
         return {}
+    if row is None:
+        row = tabel_ui.currentRow()
     if numeric_fields is None:
         numeric_fields = static_values['KOLOM_ANGKA']
     if date_fields is None:
         date_fields = static_values['KOLOM_TANGGAL']
-    column_count = tabel_ui.columnCount()
-    headers = [header_for_db(tabel_ui.horizontalHeaderItem(col).text()) for col in range(column_count)]
+
     row_data = {}
-    # if numeric_fields is None:
-    #     numeric_fields = []
-    # if date_fields is None:
-    #     date_fields = []
-    for col in range(column_count):
+    for col in range(tabel_ui.columnCount()):
+        header_item = tabel_ui.horizontalHeaderItem(col)
+        if header_item is None:
+            continue
+        header = header_for_db(header_item.text())
+        if not header:
+            continue
+
         item = tabel_ui.item(row, col)
-        cell_value = item.text() if item else None
-        if col in numeric_fields:
+        raw_value = item.text() if item else None
+        if raw_value is None or raw_value.strip() == "":
+            row_data[header] = None
+            continue
+
+        # Cocokkan berdasarkan nama kolom (benar) atau indeks (legacy)
+        is_numeric = header in numeric_fields or col in numeric_fields
+        is_date = header in date_fields or col in date_fields
+
+        if is_numeric:
             try:
-                cell_value = float(cell_value) if cell_value else None
+                cleaned = raw_value.strip()
+                if cleaned.lstrip("-").isdigit():
+                    row_data[header] = int(cleaned)
+                else:
+                    row_data[header] = float(cleaned)
             except ValueError:
-                cell_value = None
-        if col in date_fields:
+                row_data[header] = None
+        elif is_date:
             try:
-                cell_value = text_to_date(cell_value)
+                row_data[header] = text_to_date(raw_value)
             except ValueError:
-                cell_value = None
-        row_data[headers[col]] = cell_value
+                row_data[header] = None
+        else:
+            # Float/currency/string mengikuti convert_item_value
+            row_data[header] = convert_item_value(raw_value, header)[1]
     return row_data
 
 def findColumnByName(tabel: QTableWidget, nama_kolom_ui: str) -> int:
@@ -504,28 +533,42 @@ def update_from_table(
     if key is None: 
         print("Error: Primary key tidak ditemukan.")
         return False
-    tabel_sql = validate_sql_identifier(tabel_sql)
+    try:
+        tabel_sql = validate_sql_identifier(tabel_sql)
+        key = validate_sql_identifier(key)
+    except ValueError as exc:
+        print(f"Identifier SQL tidak valid: {exc}")
+        return False
     if updatable_column and not_updatable_column:
         common_columns = set(updatable_column).intersection(set(not_updatable_column))
         if common_columns:
             print(f"Error: Kolom berikut ada di kedua parameter: {', '.join(common_columns)}")
             return False
-    sukses = False
-    nilai = tabel_ui.item(tabel_ui.currentRow(), tabel_ui.currentColumn()).text()
-    nilai = convert_item_value(nilai, header_for_db(tabel_ui.horizontalHeaderItem(tabel_ui.currentColumn()).text()))[1]
-    
+
+    current_item = tabel_ui.item(tabel_ui.currentRow(), tabel_ui.currentColumn())
+    header_item = tabel_ui.horizontalHeaderItem(tabel_ui.currentColumn())
+    if current_item is None or header_item is None:
+        print("Error: Sel atau header aktif tidak ditemukan.")
+        return False
+
+    try:
+        nama_kolom = validate_sql_identifier(header_for_db(header_item.text()))
+    except ValueError as exc:
+        print(f"Identifier SQL tidak valid: {exc}")
+        return False
+
+    if updatable_column and nama_kolom not in updatable_column:
+        print(f"Kolom {nama_kolom} tidak dapat diupdate (bukan updatable_column).")
+        return False
+    if not_updatable_column and nama_kolom in not_updatable_column:
+        print(f"Kolom {nama_kolom} tidak dapat diupdate (not_updatable_column).")
+        return False
+
+    nilai = convert_item_value(current_item.text(), nama_kolom)[1]
     con = ConnectDB()
-    nama_kolom = validate_sql_identifier(header_for_db(tabel_ui.horizontalHeaderItem(tabel_ui.currentColumn()).text()))
-    if updatable_column:
-        if nama_kolom in updatable_column:
-            sql = """UPDATE {} SET {} = %s WHERE {} = %s;""".format(tabel_sql, nama_kolom, key)
-            params = (nilai, key_value)
-            sukses = con.update_data(sql, params)
-    elif not_updatable_column:
-        if nama_kolom not in not_updatable_column:
-            sql = """UPDATE {} SET {} = %s WHERE {} = %s;""".format(tabel_sql, nama_kolom, key)
-            params = (nilai, key_value)
-            sukses = con.update_data(sql, params)
+    sql = """UPDATE {} SET {} = %s WHERE {} = %s;""".format(tabel_sql, nama_kolom, key)
+    params = (nilai, key_value)
+    sukses = con.update_data(sql, params)
     if sukses: 
         print(f'Update berhasil: {nama_kolom} dengan nilai {nilai}')
     else:
@@ -824,24 +867,27 @@ def update_from_table_v2(
     if header_item is None:
         print(f"Kolom pada indeks {col} tidak memiliki header.")
         return False
-    nama_kolom = header_for_db(header_item.text())
+    try:
+        nama_kolom = validate_sql_identifier(header_for_db(header_item.text()))
+        tabel_sql = validate_sql_identifier(tabel_sql)
+        key = validate_sql_identifier(key)
+    except ValueError as exc:
+        print(f"Identifier SQL tidak valid: {exc}")
+        return False
+
+    if updatable_column and nama_kolom not in updatable_column:
+        print(f"Kolom {nama_kolom} tidak dapat diupdate (bukan updatable_column).")
+        return False
+    if not_updatable_column and nama_kolom in not_updatable_column:
+        print(f"Kolom {nama_kolom} tidak dapat diupdate (not_updatable_column).")
+        return False
 
     # Dapatkan nilai item
-    nilai = item.text()
-    nilai = convert_item_value(nilai, nama_kolom)[1]
-    
+    nilai = convert_item_value(item.text(), nama_kolom)[1]
     con = ConnectDB()
-    sukses = False
-    if updatable_column:
-        if nama_kolom in updatable_column:
-            sql = f"""UPDATE {tabel_sql} SET {nama_kolom} = %s WHERE {key} = %s;"""
-            params = (nilai, key_value)
-            sukses = con.update_data(sql, params)
-    elif not_updatable_column:
-        if nama_kolom not in not_updatable_column:
-            sql = f"""UPDATE {tabel_sql} SET {nama_kolom} = %s WHERE {key} = %s;"""
-            params = (nilai, key_value)
-            sukses = con.update_data(sql, params)
+    sql = f"""UPDATE {tabel_sql} SET {nama_kolom} = %s WHERE {key} = %s;"""
+    params = (nilai, key_value)
+    sukses = con.update_data(sql, params)
 
     if sukses: 
         print(f'Update berhasil: {nama_kolom} dengan nilai {nilai}')

@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QComboBox, QLineEdit, QDialog, QCompleter
+from PySide6.QtWidgets import QComboBox, QLineEdit, QDialog, QCompleter, QApplication, QWidget
 from ui.ui_dialog_detail_siswa import Ui_Form
 from utils.fungsi.general_functions import *
 from models.model_siswa import Model_Siswa
@@ -15,6 +15,12 @@ class DialogDetailSiswa(QDialog, Ui_Form):
         self.setWindowFlags(Qt.Window | Qt.WindowMinMaxButtonsHint | Qt.WindowCloseButtonHint)
         self.setSizeGripEnabled(True)
         self.parent = parent
+
+        # Terapkan font dari aplikasi
+        app = QApplication.instance()
+        if app:
+            self.setFont(app.font())
+            self._propagate_font(self, app.font())
         self.tabel = tabel
         self.nis_lokal = nis_lokal
         self.nis_index = nis_index
@@ -43,6 +49,12 @@ class DialogDetailSiswa(QDialog, Ui_Form):
             combo_box.installEventFilter(self)
         self.setup_connections()
         self.connect_btn_to_text_widget()
+
+    def _propagate_font(self, parent_widget, font):
+        """Recursively apply the given font to a widget and its children."""
+        parent_widget.setFont(font)
+        for child in parent_widget.findChildren(QWidget):
+            child.setFont(font)
 
     def setup_connections(self):
         self.init_controls()

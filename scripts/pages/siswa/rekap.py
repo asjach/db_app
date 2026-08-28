@@ -31,7 +31,7 @@ class PageRekapSiswa(QWidget, Ui_Form):
     def _fill_rekap_perrombel(self):
         self.tbl_rekap_rombel.setRowCount(0)
         data = self.SQL.rekap_perrombel(self.parent.str_jenjang, self.parent.str_tapel)
-        generate_table(data, self.tbl_rekap_rombel)
+        generate_table(data, self.tbl_rekap_rombel, font_size=self.parent.spin_fontsize.value())
         self._hitung_total(self.tbl_rekap_rombel, 4, 7)
 
     def _fill_rekap_usia(self):
