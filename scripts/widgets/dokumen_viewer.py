@@ -8,7 +8,6 @@ from PySide6.QtWidgets import QApplication, QWidget
 from PySide6.QtGui import QTransform
 from utils.fungsi.file_dialog_function import open_with_default_app, open_in_explorer
 from PySide6.QtGui import QFont
-from PIL import Image
 
 
 import pymupdf as fitz  # PyMuPDF
@@ -20,22 +19,24 @@ class DokumenViewer(Ui_Dokumen_Viewer, QWidget):
         super().__init__()
         self.setupUi(self)
         
-        self.pdf_document = None  # Objek PDF
         self.image_labels = []
         self.qimage = QImage()
-        self.qlabel_image = self.image_viwer_label
+        self.qlabel_image = self.image_viwer_label  # alias untuk label dari UI
         
-        self.label_width = self.image_viwer_label.width()
-        self.label_height = self.image_viwer_label.height()
+        self.label_width = self.qlabel_image.width()
+        self.label_height = self.qlabel_image.height()
         self.qimage_scaled = QImage()
         self.qpixmap = QPixmap()
         self.zoomX = 1
-        self.position = [0, 0]
+        self.position = (0, 0)  # gunakan tuple
         self.panFlag = True
         self.image_path = ""
         self.pdf_document = None
         self.current_page = 0
         self.page_control.setVisible(False)
+        self.wheel_count_up = 0
+        self.wheel_count_down = 0
+        self.rotation_angle = 0  # untuk rotasi PDF
         
         self.qlabel_image.setSizePolicy(
             QtWidgets.QSizePolicy.Ignored, QtWidgets.QSizePolicy.Ignored
@@ -78,11 +79,11 @@ class DokumenViewer(Ui_Dokumen_Viewer, QWidget):
         elif ext == ".pdf":
             self.loadPDF(filePath)
         else:
-            self.image_viwer_label.setText('Unsupported file format!')
+            self.qlabel_image.setText('Unsupported file format!')
             font = QFont()
             font.setPointSize(24)
-            self.image_viwer_label.setAlignment(Qt.AlignCenter)
-            self.image_viwer_label.setFont(font)
+            self.qlabel_image.setAlignment(Qt.AlignCenter)
+            self.qlabel_image.setFont(font)
             self.close_file()
 
     def loadImage(self, imagePath, zoom_factor=1):
@@ -95,13 +96,13 @@ class DokumenViewer(Ui_Dokumen_Viewer, QWidget):
         self.qpixmap = QPixmap(self.qlabel_image.size())
         if not self.qimage.isNull():
             self.zoomX = zoom_factor
-            self.position = [0, 0]
+            self.position = (0, 0)
             self.qimage_scaled = self.qimage.scaled(
                 int(self.qlabel_image.width() * self.zoomX),
                 int(self.qlabel_image.height() * self.zoomX),
                 QtCore.Qt.KeepAspectRatio,
             )
-            self.update()
+            self.refresh_display()
         else:
             print("Failed to load image!")
 
@@ -112,50 +113,13 @@ class DokumenViewer(Ui_Dokumen_Viewer, QWidget):
                 self.pdf_document = fitz.open("pdf", pdf_source)  # Load dari bytes
             else:
                 self.pdf_document = fitz.open(pdf_source)  # Load dari file path
-            if page:
+            if page is not None:
                 self.current_page = page
             else:
                 self.current_page = 0
-                self.spin_page.setValue(self.current_page+1)
+            self.spin_page.setValue(self.current_page + 1)
             self.render_pdf_page(self.current_page)
 
-    def zoom_x(self, value):
-        old_zoom = self.zoomX
-        self.zoomX = value
-        
-        # Hitung pusat pandangan saat ini
-        current_center_x = self.position[0] + self.qlabel_image.width() / 2
-        current_center_y = self.position[1] + self.qlabel_image.height() / 2
-        
-        if self.pdf_document and not self.qimage.isNull():
-            # Render ulang halaman PDF dengan DPI baru
-            self.render_pdf_page(self.current_page)
-        elif not self.qimage.isNull():
-            # Skalakan gambar untuk non-PDF
-            self.qimage_scaled = self.qimage.scaled(
-                int(self.qlabel_image.width() * self.zoomX),
-                int(self.qlabel_image.height() * self.zoomX),
-                QtCore.Qt.KeepAspectRatio,
-                QtCore.Qt.SmoothTransformation
-            )
-        else:
-            # No valid image or PDF loaded, exit early
-            return
-        
-        # Sesuaikan posisi agar pusat pandangan tetap
-        new_center_x = current_center_x * (self.zoomX / old_zoom)
-        new_center_y = current_center_y * (self.zoomX / old_zoom)
-        self.position = (
-            new_center_x - self.qlabel_image.width() / 2,
-            new_center_y - self.qlabel_image.height() / 2
-        )
-        
-        # Pastikan posisi tetap dalam batas gambar
-        self.position = (
-            max(0, min(self.position[0], self.qimage_scaled.width() - self.qlabel_image.width())),
-            max(0, min(self.position[1], self.qimage_scaled.height() - self.qlabel_image.height()))
-        )
-        self.update()
 
     def spin_page_changed(self):
         if self.spin_page.value() > len(self.pdf_document):
@@ -178,11 +142,11 @@ class DokumenViewer(Ui_Dokumen_Viewer, QWidget):
         self.qimage_scaled = QImage()
         self.image_path = ""
         self.zoomX = 1
-        self.position = [0, 0]
+        self.position = (0, 0)
         
         # Clear the display
-        self.image_viwer_label.clear()
-        self.update()
+        self.qlabel_image.clear()
+        self.refresh_display()
 
 
     def render_pdf_page(self, page_number):
@@ -206,15 +170,15 @@ class DokumenViewer(Ui_Dokumen_Viewer, QWidget):
         )
         
         # Pertahankan posisi relatif (misalnya, bagian bawah)
-        if self.position == [0, 0]:  # Hanya untuk halaman pertama
-            self.position = [0, self.qimage_scaled.height() - self.qlabel_image.height()]
+        if self.position == (0, 0):  # Hanya untuk halaman pertama
+            self.position = (0, self.qimage_scaled.height() - self.qlabel_image.height())
         
         # Pastikan posisi tetap dalam batas
         self.position = (
             max(0, min(self.position[0], self.qimage_scaled.width() - self.qlabel_image.width())),
             max(0, min(self.position[1], self.qimage_scaled.height() - self.qlabel_image.height()))
         )
-        self.update()
+        self.refresh_display()
 
     def next_page(self):
         if self.pdf_document and self.current_page < len(self.pdf_document) - 1:
@@ -227,7 +191,7 @@ class DokumenViewer(Ui_Dokumen_Viewer, QWidget):
             # self.render_pdf_page(self.current_page)
             self.spin_page.setValue(self.current_page+1)
 
-    def update(self):
+    def refresh_display(self):
         if not self.qimage_scaled.isNull():
             px, py = self.position
             px = (
@@ -274,15 +238,15 @@ class DokumenViewer(Ui_Dokumen_Viewer, QWidget):
         if self.pressed:
             dx, dy = x - self.pressed.x(), y - self.pressed.y()
             self.position = self.anchor[0] - dx, self.anchor[1] - dy
-            self.update()
+            self.refresh_display()
 
     def mouseReleaseAction(self, QMouseEvent):
         self.pressed = None
 
 
     def onResize(self, event):
-        self.label_width = self.image_viwer_label.width()
-        self.label_height = self.image_viwer_label.height()
+        self.label_width = self.qlabel_image.width()
+        self.label_height = self.qlabel_image.height()
         if not self.qimage.isNull():
             self.qpixmap = QPixmap(self.qlabel_image.size())
             self.qpixmap.fill(QtCore.Qt.transparent)
@@ -291,7 +255,7 @@ class DokumenViewer(Ui_Dokumen_Viewer, QWidget):
                 int(self.qlabel_image.height() * self.zoomX),
                 QtCore.Qt.KeepAspectRatio,
             )
-            self.update()
+            self.refresh_display()
         else:
             return
         
@@ -305,7 +269,7 @@ class DokumenViewer(Ui_Dokumen_Viewer, QWidget):
             int(self.qlabel_image.height() * self.zoomX),
             Qt.KeepAspectRatio,
         )
-        self.update()
+        self.refresh_display()
 
     def zoom_x(self, value):
         old_zoom = self.zoomX
@@ -340,7 +304,7 @@ class DokumenViewer(Ui_Dokumen_Viewer, QWidget):
             max(0, min(self.position[0], self.qimage_scaled.width() - self.qlabel_image.width())),
             max(0, min(self.position[1], self.qimage_scaled.height() - self.qlabel_image.height()))
         )
-        self.update()
+        self.refresh_display()
 
     def wheelEvent(self, event):
         delta_x, delta_y = event.angleDelta().x(), event.angleDelta().y()
@@ -351,7 +315,7 @@ class DokumenViewer(Ui_Dokumen_Viewer, QWidget):
 
         elif modifiers == Qt.AltModifier:  # Panning horizontal dengan Alt + Scroll
             self.position = (self.position[0] + (100 if delta_x < 0 else -100), self.position[1])
-            self.update()
+            self.refresh_display()
 
         elif self.pdf_document:  # Scroll untuk PDF
             current_y = self.position[1]
@@ -382,11 +346,11 @@ class DokumenViewer(Ui_Dokumen_Viewer, QWidget):
                         self.wheel_count_down = 0
                 self.wheel_count_up = 0  # Reset akumulator lawan arah
 
-            self.update()
+            self.refresh_display()
 
         else:  # Panning vertikal untuk gambar (non-PDF)
             self.position = (self.position[0], self.position[1] + (-100 if delta_y > 0 else 100))
-            self.update()
+            self.refresh_display()
 
     def zoom_in(self):
         self.zoomX += 0.25
@@ -399,7 +363,7 @@ class DokumenViewer(Ui_Dokumen_Viewer, QWidget):
                 QtCore.Qt.KeepAspectRatio,
                 QtCore.Qt.SmoothTransformation
             )
-        self.update()
+        self.refresh_display()
 
     def zoom_out(self):
         if self.zoomX > 0.5:
@@ -413,12 +377,5 @@ class DokumenViewer(Ui_Dokumen_Viewer, QWidget):
                     QtCore.Qt.KeepAspectRatio,
                     QtCore.Qt.SmoothTransformation
                 )
-            self.update()
+            self.refresh_display()
 
-    def gotoPage(self, page_number):
-        if self.pdf_document:
-            max_page = len(self.pdf_document) - 1
-            if 0 <= page_number <= max_page:
-                self.current_page = page_number
-                self.spin_page.setValue(self.current_page + 1)  # Sinkronisasi dengan spinbox
-                self.render_pdf_page(self.current_page)

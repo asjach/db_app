@@ -90,10 +90,24 @@ def open_in_explorer(filepath):
         print("File tidak ditemukan")
         return
     try:
-        if os.path.isfile(file_path):
-            subprocess.Popen(f'explorer /select,"{file_path}"', shell=True)
-        else:
-            subprocess.Popen(f'explorer "{file_path}"', shell=True)
+        system = platform.system()
+        if system == "Windows":
+            if os.path.isfile(file_path):
+                subprocess.Popen(f'explorer /select,"{file_path}"', shell=True)
+            else:
+                subprocess.Popen(f'explorer "{file_path}"', shell=True)
+        elif system == "Darwin":  # macOS
+            if os.path.isfile(file_path):
+                # -R: reveal in Finder (menyorot file di Finder)
+                subprocess.call(["open", "-R", file_path])
+            else:
+                subprocess.call(["open", file_path])
+        else:  # Linux dan Unix lainnya
+            if os.path.isfile(file_path):
+                folder = os.path.dirname(file_path)
+                subprocess.call(["xdg-open", folder])
+            else:
+                subprocess.call(["xdg-open", file_path])
     except Exception as e:
         print(f"Gagal membuka file: {e}")
 
